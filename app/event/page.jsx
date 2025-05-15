@@ -1,4 +1,4 @@
-import EventPage from '../../components/EventPage';
+import EventPage from '../../components/event/EventPage';
 
 export default async function Page() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event`, {

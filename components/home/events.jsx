@@ -1,5 +1,5 @@
 import {VStack,Grid} from '@chakra-ui/react';
-import Event from './element/event';
+import Event from '../element/event';
 
 export default function Events(){
     return <VStack w='100%' bg='#f9f9f9' pt='80px' pb='50px'>

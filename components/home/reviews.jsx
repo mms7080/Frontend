@@ -1,5 +1,5 @@
 import {VStack,Grid} from '@chakra-ui/react';
-import Review from './element/review';
+import Review from '../element/review';
 
 export default function Reviews(){
     return <VStack w='100%' bg='#f1f1f1' pt='80px' pb='50px'>

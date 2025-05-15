@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from '@chakra-ui/react';
-import Header from './header';
-import Footer from './footer';
+import { Header,Footer } from '..';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';

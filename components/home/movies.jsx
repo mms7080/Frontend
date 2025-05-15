@@ -1,5 +1,5 @@
 import {VStack,Grid} from '@chakra-ui/react';
-import Movie from './element/movie';
+import Movie from '../element/movie';
 
 export default function Movies(){
     return <VStack w='100%' bg='#141414' pt='80px' pb='50px'>
