@@ -43,7 +43,7 @@ export default function EventPage({ serverEvents }) {
             <Text fontSize="xl" fontWeight="bold" mb={4} borderLeft="4px solid #5f0080" pl={2}>
               {category}
             </Text>
-            <Flex wrap="wrap" gap={6}>
+            <Flex wrap="wrap" gap={120}>
               {items.map((event, idx) => (
                 <Box
                   key={idx}
@@ -56,7 +56,7 @@ export default function EventPage({ serverEvents }) {
                   _hover={{ boxShadow: 'xl', transform: 'translateY(-5px)' }}
                   border="1px solid #eee"
                 >
-                  <Box w="100%" h="140px" overflow="hidden">
+                  <Box w="100%" h="200px" overflow="hidden">
                     <img
                       src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
                       alt={event.title}
