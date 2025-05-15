@@ -54,13 +54,13 @@ export default function Swipers(){
                 style={{width:'100%',height:'100%'}}
             >
                 <SwiperSlide>
-                    <Image objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Flip/Flip_1920774.png" />
+                    <Image loading='lazy' objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Flip/Flip_1920774.png" />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <Image objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Cat/Cat_1920774.jpg" />
+                    <Image loading='lazy' objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Cat/Cat_1920774.jpg" />
                 </SwiperSlide>
                 <SwiperSlide>
-                    <Image objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Secret/Secret_19207745.png" />
+                    <Image loading='lazy' objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Secret/Secret_19207745.png" />
                 </SwiperSlide>
             </Swiper>
         </VStack>;
