@@ -1,14 +1,17 @@
-import react from 'react';
-import {Flex,Box,VStack,Input,HStack,Button} from '@chakra-ui/react';
+"use client";
+
+import React,{useState,useEffect} from 'react';
+import {Flex,Box,VStack,Input,HStack,Button,Text} from '@chakra-ui/react';
 
 import {Header,Footer} from '../../components';
 
-export const metadata = {
-    title: "회원가입",
-    description: "영화 예매 사이트 회원가입 페이지"
-};
+import {fetch} from '../../lib/client';
 
 export default function Homepage(){
+
+    useEffect(() => {
+        document.title = '회원가입';
+    },[]);
 
     let headerColor='black';
     let headerBg='#F9F9F9';
@@ -16,21 +19,173 @@ export default function Homepage(){
     let footerBg='#F9F9F9';
     let footerBorder='#ccc';
 
+    const [id,setId]=useState('');
+    const [idMessage,setIdMessage]=useState('');/* 아이디 입력창 밑의 메세지 */
+    const [isIdAvailable,setIsIdAvailable]=useState(null);/* 아이디 유효성 여부 */
+    const [idCheck,setIdCheck]=useState(false);/* 아이디 중복확인 여부 */
+    const [pw,setPw]=useState('');
+    const [pwMessage,setPwMessage]=useState('');/* 비밀번호 입력창 밑의 메세지 */
+    const [isPwAvailable,setIsPwAvailable]=useState(null);/* 비밀번호 유효성 여부 */
+    const [pwr,setPwr]=useState('');
+    const [pwrMessage,setPwrMessage]=useState('');/* 비밀번호 확인 입력창 밑의 메세지 */
+    const [isPwrAvailable,setIsPwrAvailable]=useState(null);/* 비밀번호 확인이 비밀번호와 같은지 여부 */
+
+    const handleIdCheck=async ()=>{
+        try{
+            if(id.length==0){
+                alert('아이디를 입력해주세요.');
+                return;
+            }
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/idexist?id=${id}`);/* 아이디 중복 확인을 위한 fetch */
+            if(res){/* 중복된 아이디가 존재하면 res=true */
+                setIdMessage('❌ 이미 사용 중인 아이디입니다.');
+                setIdCheck(false);
+                setIsIdAvailable(false);
+            }else{/* 중복된 아이디가 존재하지 않으면 res=false */
+                setIdMessage('✅ 사용 가능한 아이디입니다.');
+                setIdCheck(true);
+                setIsIdAvailable(true);
+            }
+        }catch(err){
+            console.log(err);
+            setIdMessage('서버 오류로 확인할 수 없습니다.');
+            setIdCheck(false);
+            setIsIdAvailable(false);
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        if(!idCheck){
+            e.preventDefault();/* 아이디 중복 확인이 안되었으면 폼 제출 막기 */
+            alert('아이디 중복 확인을 완료해 주세요.');
+            return;
+        }
+    };
+
     return <>
         <Header headerColor={headerColor} headerBg={headerBg}></Header>
         <Box w='calc(100vw - 17px)' minW='1000px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%' bg='#F9F9F9'>
-                    <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post'>
-                        <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='0 2px 4px rgba(0, 0, 0, 0.05)'>
+                    <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>
+                        <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
                             <Flex w='840px' flexDirection='column' gap='15px' py='50px'>
                                 <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>회원가입</span>
                                 <label htmlFor='id'>아이디<span style={{color:'#FF0000'}}>*</span></label>
-                                <Input id="id" name="id" minLength='4' maxLength='16' placeholder='영문 소문자와 숫자 조합 (4~16자)' required/>
+                                <Flex w='100%' gap='15px'>
+                                    <Input
+                                        w='675px'
+                                        id="id"
+                                        name="id"
+                                        minLength="4"
+                                        maxLength="16"
+                                        placeholder="영문 소문자와 숫자 조합 (4~16자)"
+                                        onChange={(e)=>{
+                                            setId(e.target.value);
+                                            setIsIdAvailable(null);/* 아이디 값 바꾸면 유효성 여부를 다시 체크해야 함 */
+                                            setIdMessage('');
+                                            setIdCheck(false);/* 아이디 값이 바뀌면 아이디 중복 확인 여부를 false로 함 */
+                                        }}
+                                        required
+                                    />
+                                    <Button w='150px' onClick={handleIdCheck} type="button">
+                                        아이디 중복 확인
+                                    </Button>
+                                </Flex>
+                                {idMessage && (
+                                    <Text
+                                    fontSize="sm"
+                                    color={isIdAvailable ? '#0E870E' : '#FF2222'}
+                                    mt="-10px"
+                                    ml="5px"
+                                    >
+                                    {idMessage}
+                                    </Text>
+                                )}
                                 <label htmlFor='pw'>비밀번호<span style={{color:'#FF0000'}}>*</span></label>
-                                <Input id="pw" name="pw" minLength='10' type="password" placeholder='비밀번호를 입력하세요 (10자 이상)' required/>
+                                <Input
+                                    id="pw"
+                                    name="pw"
+                                    minLength='10'
+                                    type="password"
+                                    placeholder='비밀번호를 입력하세요 (10자 이상)'
+                                    required
+                                    onChange={(e)=>{
+                                        const value=e.target.value;
+                                        setPw(value);
+                                        setIsPwAvailable(null);/* 비밀번호 값이 바뀌면 다시 유효성 여부를 검사 */
+                                        if(!value||value.length<10){
+                                            setIsPwAvailable(false);
+                                            if(value.length>=5)
+                                                setPwMessage('⚠️ 비밀번호가 약합니다. (최소 10자 필요)');
+                                            else
+                                                setPwMessage('');
+                                        }
+                                        else{
+                                            setIsPwAvailable(true);
+                                            setPwMessage('✅ 강한 비밀번호입니다!');
+                                        }
+                                        if(value.length>0){
+                                            if(pwr===value){/* 비밀번호를 바꾸다가 비밀번호 확인과 일치할 경우를 대비한 코드 */
+                                                setPwrMessage('✅ 비밀번호가 일치합니다.');
+                                                setIsPwrAvailable(true);
+                                            }
+                                            else{
+                                                setPwrMessage('❌ 비밀번호가 일치하지 않습니다.');
+                                                setIsPwrAvailable(false);
+                                            }
+                                        }else{
+                                            setPwrMessage('');
+                                            setIsPwrAvailable(false);
+                                        }
+                                    }}
+                                />
+                                {pwMessage && (
+                                        <Text
+                                        fontSize="sm"
+                                        color={isPwAvailable ? '#0E870E' : '#FFB62F'}
+                                        mt="-10px"
+                                        ml="5px"
+                                        >
+                                        {pwMessage}
+                                        </Text>
+                                    )}
                                 <label htmlFor='pwr'>비밀번호 확인<span style={{color:'#FF0000'}}>*</span></label>
-                                <Input id="pwr" name="pwr" minLength='10' type="password" placeholder='비밀번호를 다시 입력하세요' required/>
+                                <Input 
+                                id="pwr"
+                                name="pwr"
+                                minLength='10'
+                                type="password"
+                                placeholder='비밀번호를 다시 입력하세요'
+                                required
+                                onChange={(e)=>{
+                                    const value=e.target.value;
+                                    setPwr(value);
+                                    if(value.length>0){
+                                        if(pw===value){/* 비밀번호와 비밀번호 확인이 일치할 경우 */
+                                            setPwrMessage('✅ 비밀번호가 일치합니다.');
+                                            setIsPwrAvailable(true);
+                                        }
+                                        else{
+                                            setPwrMessage('❌ 비밀번호가 일치하지 않습니다.');
+                                            setIsPwrAvailable(false);
+                                        }
+                                    }else{
+                                        setPwrMessage('');
+                                        setIsPwrAvailable(false);
+                                    }
+                                }}
+                                />
+                                {pwrMessage && (
+                                    <Text
+                                    fontSize="sm"
+                                    color={isPwrAvailable ? '#0E870E' : '#FF2222'}
+                                    mt="-10px"
+                                    ml="5px"
+                                    >
+                                    {pwrMessage}
+                                    </Text>
+                                )}
                                 <label htmlFor='name'>이름<span style={{color:'#FF0000'}}>*</span></label>
                                 <Input id="name" name="name" placeholder='이름을 입력하세요' required/>
                                 <label htmlFor='area_code'>전화번호<span style={{color:'#FF0000'}}>*</span></label>

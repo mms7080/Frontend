@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 import {Flex,Box,VStack,Input,Button} from '@chakra-ui/react';
 
 import {Header,Footer} from '../../components';
