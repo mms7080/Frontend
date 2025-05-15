@@ -17,15 +17,15 @@ export default function Header({ userInfo }) {
       w="calc(100vw - 17px)"
       minW="1000px"
       h="100px"
-      justifyContent="space-between"
       alignItems="center"
       bg={headerBg}
       p="40px"
+      position='relative'
       boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
       borderBottom="1px solid rgba(0, 0, 0, 0.1)"
     >
       {/* 로고 */}
-      <Flex flexDirection="column" lineHeight="30px">
+      <Flex flexDirection="column" lineHeight="30px" flex='1'>
         <Link href="/home" style={{ textDecoration: 'none' }}>
           <span style={{ color: headerColor, fontSize: 24, letterSpacing: 3, cursor: 'pointer' }}>
             FILMORA
@@ -35,7 +35,7 @@ export default function Header({ userInfo }) {
       </Flex>
 
       {/* 메뉴 */}
-      <Flex gap="20px" fontSize="20px">
+      <Flex gap="20px" fontSize="20px" position='absolute' left='50%' transform='translateX(-50%)'>
         {['영화', '예매', '극장', '스토어', '공지'].map((menu, idx) => (
           <Box
             key={idx}
@@ -55,7 +55,7 @@ export default function Header({ userInfo }) {
       </Flex>
 
       {/* 유저 정보 */}
-      <Flex gap="15px" fontSize="15px">
+      <Flex gap="15px" fontSize="15px" flex='1' justifyContent='flex-end'>
         {userInfo ? (
           <>
             <span style={{ color: headerColor }}>{userInfo.name}님 환영합니다</span>
