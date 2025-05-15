@@ -38,7 +38,7 @@ export default function Homepage(){
                                 <Button type='submit' fontSize='17px' w='100%' bg='#2d2d2d' mt='30px'>로그인</Button>
                                 <Button fontSize='17px' w='100%' bg='#FEE500' color='black'>카카오 로그인</Button>
                                 <Button fontSize='17px' w='100%' bg='#03C75A'>네이버 로그인</Button>
-                                <Button fontSize='17px' w='100%' bg='#aaa'>구글 로그인</Button>
+                                <Button fontSize='17px' w='100%' bg='#4285F4'>구글 로그인</Button>
                             </Flex>
                         </form>
                         <span style={{color:'#555'}}>아직 회원이 아니신가요?</span>
