@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text, Button } from '@chakra-ui/react';
 import Header from './header';
 import Footer from './footer';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,9 +10,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
+const categories = ['전체','추천','메가Pick', '영화', '극장', '제휴/할인', '시사회/무대인사'];
+
 export default function EventPage({ serverEvents }) {
   const [events] = useState(serverEvents || {});
   const [user, setUser] = useState(null);
+  const [activeCategory, setActiveCategory] = useState('전체');
 
   useEffect(() => {
     document.title = '진행중인 이벤트 - 필모라';
@@ -35,6 +38,10 @@ export default function EventPage({ serverEvents }) {
     })();
   }, []);
 
+  const filteredEvents = activeCategory === '전체'
+    ? Object.entries(events)
+    : Object.entries(events).filter(([category]) => category === activeCategory);
+
   return (
     <>
       <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
@@ -48,10 +55,10 @@ export default function EventPage({ serverEvents }) {
           modules={[Navigation, Pagination, Autoplay]}
           navigation
           pagination={{ clickable: true }}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          loop={true}
           spaceBetween={30}
           slidesPerView={2}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
-          loop
         >
           {(events['추천'] || []).map((event, idx) => (
             <SwiperSlide key={idx}>
@@ -81,18 +88,38 @@ export default function EventPage({ serverEvents }) {
         </Swiper>
       </Box>
 
+      {/* Category Tabs */}
+      <Box bg="white" pt={10} pb={6} px={6} maxW="1280px" mx="auto">
+        <Flex gap={2} borderBottom="1px solid #5f0080">
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant="ghost"
+              borderBottom={activeCategory === category ? '2px solid #5f0080' : '1px solid transparent'}
+              borderRadius="0"
+              fontWeight={activeCategory === category ? 'bold' : 'normal'}
+              color={activeCategory === category ? '#5f0080' : 'black'}
+              onClick={() => setActiveCategory(category)}
+              _hover={{ bg: 'transparent', color: '#5f0080' }}
+            >
+              {category}
+            </Button>
+          ))}
+        </Flex>
+      </Box>
+
       {/* 기존 이벤트 목록 */}
       <Box bg="white" py={12} px={6} maxW="1280px" mx="auto">
         <Text fontSize="2xl" fontWeight="bold" mb={8} borderBottom="2px solid #333" pb={2}>
           진행중인 이벤트
         </Text>
 
-        {Object.entries(events).map(([category, items]) => (
+        {filteredEvents.map(([category, items]) => (
           <Box key={category} mb={16}>
-            <Text fontSize="xl" fontWeight="bold" mb={4} borderLeft="4px solid #5f0080" pl={2}>
+            <Text fontSize="xl" fontWeight="bold" mt={16} mb={4} borderLeft="4px solid #5f0080" pl={2}>
               {category}
             </Text>
-            <Flex wrap="wrap" gap={142}>
+            <Flex wrap="wrap" gap={143}>
               {items.map((event, idx) => (
                 <Box
                   key={idx}
@@ -126,6 +153,7 @@ export default function EventPage({ serverEvents }) {
           </Box>
         ))}
       </Box>
+
       <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
     </>
   );
