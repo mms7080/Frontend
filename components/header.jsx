@@ -1,6 +1,7 @@
 'use client';
 
-import { Flex } from '@chakra-ui/react';
+import Link from 'next/link';
+import { Flex, Box } from '@chakra-ui/react';
 import { FiUser } from 'react-icons/fi';
 import { usePathname } from 'next/navigation';
 
@@ -9,6 +10,7 @@ export default function Header({ userInfo }) {
   const isHome = pathname === '/' || pathname.startsWith('/home');
   const headerBg = isHome ? '#1a1a1a' : 'white';
   const headerColor = isHome ? 'white' : 'black';
+  const hoverColor = isHome ? 'black' : 'gray.500';
 
   return (
     <Flex
@@ -22,20 +24,37 @@ export default function Header({ userInfo }) {
       boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
       borderBottom="1px solid rgba(0, 0, 0, 0.1)"
     >
+      {/* 로고 */}
       <Flex flexDirection="column" lineHeight="30px">
-        <span style={{ color: headerColor, fontSize: 24, letterSpacing: 3 }}>FILMORA</span>
+        <Link href="/home" style={{ textDecoration: 'none' }}>
+          <span style={{ color: headerColor, fontSize: 24, letterSpacing: 3, cursor: 'pointer' }}>
+            FILMORA
+          </span>
+        </Link>
         <span style={{ color: '#ccc', fontSize: 10, letterSpacing: 2 }}>MEET PLAY SHARE</span>
       </Flex>
 
+      {/* 메뉴 */}
       <Flex gap="20px" fontSize="20px">
-        <span style={{ color: headerColor }}>영화</span>
-        <span style={{ color: headerColor }}>예매</span>
-        <span style={{ color: headerColor }}>극장</span>
-        <span style={{ color: headerColor }}>이벤트</span>
-        <span style={{ color: headerColor }}>스토어</span>
-        <span style={{ color: headerColor }}>혜택</span>
+        {['영화', '예매', '극장', '스토어', '공지'].map((menu, idx) => (
+          <Box
+            key={idx}
+            color={headerColor}
+            cursor="pointer"
+            _hover={{ color: hoverColor }}
+          >
+            {menu}
+          </Box>
+        ))}
+
+        <Link href="/event" style={{ textDecoration: 'none' }}>
+          <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+            이벤트
+          </Box>
+        </Link>
       </Flex>
 
+      {/* 유저 정보 */}
       <Flex gap="15px" fontSize="15px">
         {userInfo ? (
           <>
