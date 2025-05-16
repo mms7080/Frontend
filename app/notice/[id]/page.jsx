@@ -39,7 +39,7 @@ export default function NoticeDetailPage() {
           fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`),
           fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice`),
         ]);
-        if (!detailRes.ok || !listRes.ok) throw new Error("데이터 불러오기 실패");
+        if (!detailRes.ok || !listRes.ok) throw new Error('데이터 불러오기 실패');
         const data = await detailRes.json();
         const list = await listRes.json();
         setNotice(data);
@@ -53,7 +53,7 @@ export default function NoticeDetailPage() {
         }
       } catch (err) {
         console.error(err);
-        alert("공지사항을 불러오는 데 실패했습니다.");
+        alert('공지사항을 불러오는 데 실패했습니다.');
       }
     };
     fetchData();
@@ -65,132 +65,153 @@ export default function NoticeDetailPage() {
     <>
       <Header headerColor="black" headerBg="#f9f9f9" userInfo={user} />
 
-      <main>
-        <h1>📢 NOTICE</h1>
-        <table className="detail-table">
-          <tbody>
-            <tr>
-              <th>제목</th>
-              <td>{notice.title}</td>
-            </tr>
-            <tr>
-              <th>작성자</th>
-              <td>{notice.writer}</td>
-            </tr>
-            <tr>
-              <th>작성일</th>
-              <td>{notice.createdAt?.slice(0, 10)}</td>
-            </tr>
-          </tbody>
-        </table>
+      <main className="detail-wrapper">
+        <h1 className="notice-title">📢 공지사항</h1>
 
-        <div className="content">
-          <p>{notice.content}</p>
-        </div>
+        <div className="detail-box">
+          <table className="detail-table">
+            <tbody>
+              <tr>
+                <th>제목</th>
+                <td>{notice.title}</td>
+              </tr>
+              <tr>
+                <th>작성자</th>
+                <td>{notice.writer}</td>
+              </tr>
+              <tr>
+                <th>작성일</th>
+                <td>{notice.createdAt?.slice(0, 10)}</td>
+              </tr>
+            </tbody>
+          </table>
 
-        <div className="main-buttons-container">
-          <div className="navigation-buttons">
-            {prevId ? (
-              <button onClick={() => router.push(`/notice/${prevId}`)}>이전글</button>
-            ) : (
-              <button disabled style={{ opacity: 0.5 }}>이전글</button>
-            )}
-            {nextId ? (
-              <button onClick={() => router.push(`/notice/${nextId}`)}>다음글</button>
-            ) : (
-              <button disabled style={{ opacity: 0.5 }}>다음글</button>
-            )}
+          <div className="content">
+            <p>{notice.content}</p>
           </div>
-          <div className="delete-buttons">
-            <button>수정</button>
+
+          <div className="main-buttons-container">
+            <div className="navigation-buttons">
+              {prevId ? (
+                <button onClick={() => router.push(`/notice/${prevId}`)}>이전글</button>
+              ) : (
+                <button disabled className="disabled-btn">이전글</button>
+              )}
+              {nextId ? (
+                <button onClick={() => router.push(`/notice/${nextId}`)}>다음글</button>
+              ) : (
+                <button disabled className="disabled-btn">다음글</button>
+              )}
+            </div>
+              <div className="delete-buttons">
+                  <button onClick={() => router.push(`/notice/edit/${id}`)}>수정</button>
+              </div>
+
           </div>
-        </div>
 
-
-        <div className="inven-buttons">
-          <button onClick={() => router.push('/notice')}>목록</button>
+          <div className="inven-buttons">
+            <button onClick={() => router.push('/notice')}>목록</button>
+          </div>
         </div>
       </main>
-      <div style={{ height: '230px' }} />
+
       <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
 
       <style jsx>{`
-        body {
-          margin: 0;
-          padding: 0;
+        .detail-wrapper {
+          width: 100%;
+          max-width: 1200px;
+          margin: 50px auto;
+          padding: 0 20px;
+          font-family: 'Segoe UI', sans-serif;
         }
-        main {
-          width: 80%;
-          margin: 20px auto;
-        }
-        h1 {
-          font-size: 24px;
-          text-align: center;
+
+        .notice-title {
+          font-size: 30px;
+          font-weight: bold;
           color: #333;
-          margin-bottom: 20px;
+          text-align: center;
+          margin-bottom: 30px;
+          border-bottom: 2px solid #ccc;
+          padding-bottom: 10px;
         }
+
+        .detail-box {
+          background-color: #fff;
+          border: 1px solid #e0e0e0;
+          border-radius: 8px;
+          padding: 30px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
         .detail-table {
           width: 100%;
           border-collapse: collapse;
-          margin-bottom: 20px;
+          margin-bottom: 24px;
+          font-size: 15px;
         }
-        .detail-table th, .detail-table td {
-          padding: 10px;
-          border-top: 1px solid #ddd;
+
+        .detail-table th,
+        .detail-table td {
+          padding: 12px 14px;
           border-bottom: 1px solid #ddd;
-          border-left: none;
-          border-right: none;
+        }
+
+        .detail-table th {
+          background-color: #f4f4f4;
+          font-weight: bold;
+          width: 20%;
           text-align: left;
         }
-        .detail-table th {
-          background-color: #f9f9f9;
-          font-weight: bold;
-          width: 15%;
-        }
+
         .content {
           padding: 20px;
-          border: 1px solid #ddd;
-          background-color: #f9f9f9;
-          margin-bottom: 20px;
-          line-height: 1.8;
+          border: 1px solid #eee;
+          border-radius: 4px;
+          background-color: #fafafa;
+          white-space: pre-line;
+          line-height: 1.7;
+          margin-bottom: 30px;
         }
+
         .main-buttons-container {
           display: flex;
           justify-content: space-between;
-          align-items: center;
           margin-bottom: 20px;
         }
+
         .navigation-buttons,
         .delete-buttons {
           display: flex;
+          gap: 10px;
         }
+
         .navigation-buttons button,
-        .delete-buttons button {
-          padding: 10px 20px;
-          font-size: 14px;
-          border: 1px solid #ddd;
-          background-color: #fff;
-          cursor: pointer;
-          margin: 0 5px;
-        }
-        .navigation-buttons button:hover,
-        .delete-buttons button:hover {
-          background-color: #f5f5f5;
-        }
-        .inven-buttons {
-          text-align: center;
-          margin-bottom: 40px;
-        }
+        .delete-buttons button,
         .inven-buttons button {
           padding: 10px 20px;
           font-size: 14px;
-          border: 1px solid #ddd;
+          border: 1px solid #ccc;
+          border-radius: 4px;
           background-color: #fff;
           cursor: pointer;
-          margin: 0 5px;
+          transition: background-color 0.2s;
         }
+
+        .navigation-buttons button:hover,
+        .delete-buttons button:hover,
         .inven-buttons button:hover {
-          background-color: #f5f5f5;
+          background-color: #f0f0f0;
+        }
+
+        .disabled-btn {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+
+        .inven-buttons {
+          text-align: center;
+          margin-top: 20px;
         }
       `}</style>
     </>

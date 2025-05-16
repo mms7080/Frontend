@@ -8,9 +8,8 @@ export default function NoticePage({ notices }) {
   const [searchOption, setSearchOption] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filtered, setFiltered] = useState([]);
-  const [user, setUser] = useState(null); // 👈 로그인 사용자 상태
+  const [user, setUser] = useState(null);
 
-  // 로그인 사용자 정보 불러오기
   useEffect(() => {
     (async () => {
       try {
@@ -26,7 +25,6 @@ export default function NoticePage({ notices }) {
     })();
   }, []);
 
-  // 검색 필터 적용
   useEffect(() => {
     const sorted = [...notices].sort((a, b) => b.id - a.id);
     setFiltered(
@@ -44,36 +42,51 @@ export default function NoticePage({ notices }) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} /> {/* 👈 여기도 user 전달 */}
+      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
-        <h1 style={{ fontSize: '24px', textAlign: 'center', marginBottom: '24px' }}>📢 NOTICE</h1>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px', fontFamily: 'sans-serif' }}>
+        <h1 style={{
+          fontSize: '30px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          color: '#222',
+          marginBottom: '36px',
+          borderBottom: '2px solid #ccc',
+          paddingBottom: '10px'
+        }}>
+          📢 NOTICE
+        </h1>
 
-        <div style={{ textAlign: 'right', marginBottom: '16px' }}>
+        <div style={{ textAlign: 'right', marginBottom: '24px' }}>
           <button
             style={{
-              backgroundColor: '#555',
+              backgroundColor: '#333',
               color: 'white',
-              padding: '8px 16px',
+              padding: '10px 20px',
               border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer'
+              borderRadius: '5px',
+              cursor: 'pointer',
+              fontSize: '14px',
+              transition: 'background-color 0.3s'
             }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#111'}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#333'}
             onClick={() => window.location.href = '/notice/new'}
           >
-            공지 작성
+            ✏️ 공지 작성
           </button>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '32px' }}>
           <select
             value={searchOption}
             onChange={(e) => setSearchOption(e.target.value)}
             style={{
-              padding: '8px',
+              padding: '10px',
               borderRadius: '4px',
-              border: '1px solid #ccc',
-              fontSize: '14px'
+              border: '1px solid #aaa',
+              fontSize: '15px',
+              width: '140px'
             }}
           >
             <option value="title">제목</option>
@@ -83,11 +96,11 @@ export default function NoticePage({ notices }) {
           </select>
           <input
             style={{
-              padding: '8px',
-              width: '300px',
+              padding: '10px',
+              width: '320px',
               borderRadius: '4px',
-              border: '1px solid #ccc',
-              fontSize: '14px'
+              border: '1px solid #aaa',
+              fontSize: '15px'
             }}
             placeholder="검색어를 입력하세요"
             value={searchKeyword}
@@ -95,31 +108,39 @@ export default function NoticePage({ notices }) {
           />
         </div>
 
-        <table style={{ width: '100%', borderCollapse: 'collapse', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-          <thead style={{ backgroundColor: '#f0f0f0' }}>
+        <table style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          boxShadow: '0 4px 10px rgba(0,0,0,0.05)'
+        }}>
+          <thead style={{ backgroundColor: '#f7f7f7' }}>
             <tr>
-              <th style={{ padding: '12px', borderBottom: '1px solid #ddd' }}>번호</th>
-              <th style={{ padding: '12px', borderBottom: '1px solid #ddd' }}>제목</th>
-              <th style={{ padding: '12px', borderBottom: '1px solid #ddd' }}>작성자</th>
-              <th style={{ padding: '12px', borderBottom: '1px solid #ddd' }}>관리</th>
+              <th style={{ padding: '14px', borderBottom: '1px solid #ddd', width: '10%' }}>번호</th>
+              <th style={{ padding: '14px', borderBottom: '1px solid #ddd' }}>제목</th>
+              <th style={{ padding: '14px', borderBottom: '1px solid #ddd', width: '20%' }}>작성자</th>
+              <th style={{ padding: '14px', borderBottom: '1px solid #ddd', width: '15%' }}>관리</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan="4" style={{ textAlign: 'center', padding: '16px' }}>📭 공지사항이 없습니다.</td>
+                <td colSpan="4" style={{ textAlign: 'center', padding: '20px', fontSize: '15px' }}>📭 공지사항이 없습니다.</td>
               </tr>
             ) : (
               filtered.map((notice) => (
                 <tr key={notice.id} style={{ borderBottom: '1px solid #eee' }}>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{notice.id}</td>
-                  <td style={{ padding: '12px' }}>
-                    <a href={`/notice/${notice.id}`} style={{ textDecoration: 'none', color: '#333' }}>
+                  <td style={{ padding: '14px', textAlign: 'center' }}>{notice.id}</td>
+                  <td style={{ padding: '14px' }}>
+                    <a href={`/notice/${notice.id}`} style={{
+                      color: 'black',
+                      textDecoration: 'none',
+                      fontWeight: '500'
+                    }}>
                       {notice.title}
                     </a>
                   </td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>{notice.writer}</td>
-                  <td style={{ padding: '12px', textAlign: 'center' }}>
+                  <td style={{ padding: '14px', textAlign: 'center' }}>{notice.writer}</td>
+                  <td style={{ padding: '14px', textAlign: 'center' }}>
                     <button
                       style={{
                         backgroundColor: '#e53e3e',
@@ -128,7 +149,7 @@ export default function NoticePage({ notices }) {
                         border: 'none',
                         borderRadius: '4px',
                         cursor: 'pointer',
-                        fontSize: '12px'
+                        fontSize: '13px'
                       }}
                       onClick={async () => {
                         if (confirm('정말 삭제하시겠습니까?')) {
@@ -153,12 +174,10 @@ export default function NoticePage({ notices }) {
             )}
           </tbody>
         </table>
-        
       </div>
-            
+
       <div style={{ height: '230px' }} />
-       <Footer footerBg="white" footerColor="black" />
-      
+      <Footer footerBg="white" footerColor="black" />
     </>
   );
 }

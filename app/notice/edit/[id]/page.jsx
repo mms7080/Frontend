@@ -1,52 +1,44 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import Header from '../../../components/Header';
-import Footer from '../../../components/Footer';
+import { useParams, useRouter } from 'next/navigation';
+import Header from '../../../../components/Header';
+import Footer from '../../../../components/Footer';
 
-export default function NoticeCreatePage() {
+export default function NoticeEditPage() {
+  const { id } = useParams();
   const router = useRouter();
-  const [title, setTitle] = useState('');
-  const [writer, setWriter] = useState('');
-  const [content, setContent] = useState('');
   const [user, setUser] = useState(null);
+  const [notice, setNotice] = useState({ title: '', content: '', writer: '' });
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: 'include',
-        });
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setUser(data);
-        setWriter(data.username || data.name || data.userId || '');
-      } catch (e) {
-        console.log('로그인 정보 없음');
-      }
-    };
-    fetchUser();
-  }, []);
+    (async () => {
+      const userRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+        credentials: 'include',
+      });
+      const userData = await userRes.json();
+      setUser(userData);
+    })();
 
-  const handleSubmit = async () => {
-    if (!title || !writer || !content) {
-      alert('모든 항목을 입력해주세요.');
-      return;
-    }
+    (async () => {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`);
+      const data = await res.json();
+      setNotice(data);
+    })();
+  }, [id]);
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/create`, {
-      method: 'POST',
+  const handleUpdate = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`, {
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify({ title, writer, content }),
+      body: JSON.stringify(notice),
     });
-
     if (res.ok) {
-      alert('공지사항이 등록되었습니다.');
-      router.push('/notice');
+      alert('수정 완료');
+      router.push(`/notice/${id}`);
     } else {
-      alert('등록 실패');
+      alert('수정 실패');
     }
   };
 
@@ -55,34 +47,34 @@ export default function NoticeCreatePage() {
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
 
       <main className="form-container">
-        <h1>📝 공지사항 작성</h1>
+        <h1>🛠️ 공지사항 수정</h1>
 
         <div className="form-group">
           <label>제목</label>
           <input
             placeholder="제목을 입력하세요"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={notice.title}
+            onChange={(e) => setNotice({ ...notice, title: e.target.value })}
           />
 
           <label>작성자</label>
           <input
             placeholder="작성자 이름"
-            value={writer}
-            onChange={(e) => setWriter(e.target.value)}
+            value={notice.writer}
+            onChange={(e) => setNotice({ ...notice, writer: e.target.value })}
           />
 
           <label>내용</label>
           <textarea
             placeholder="공지사항 내용을 입력하세요"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
+            value={notice.content}
+            onChange={(e) => setNotice({ ...notice, content: e.target.value })}
             rows={10}
           />
 
           <div className="button-group">
-            <button className="submit-btn" onClick={handleSubmit}>등록하기</button>
-            <button className="cancel-btn" onClick={() => router.push('/notice')}>취소</button>
+            <button className="submit-btn" onClick={handleUpdate}>수정 완료</button>
+            <button className="cancel-btn" onClick={() => router.push(`/notice/${id}`)}>취소</button>
           </div>
         </div>
       </main>
