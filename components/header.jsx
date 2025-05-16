@@ -61,16 +61,16 @@ export default function Header({ userInfo }) {
           <>
             <span style={{ color: headerColor }}>{userInfo.name}님 환영합니다</span>
             <span style={{ color: headerColor }}>
-              <a href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>로그아웃</a>
+              <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>로그아웃</Link>
             </span>
           </>
         ) : (
           <>
             <span style={{ color: headerColor }}>
-              <a href="/signin">로그인</a>
+              <Link href="/signin">로그인</Link>
             </span>
             <span style={{ color: headerColor }}>
-              <a href="/join">회원가입</a>
+              <Link href="/join">회원가입</Link>
             </span>
           </>
         )}

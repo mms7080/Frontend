@@ -1,4 +1,5 @@
-import {Box,Flex} from "@chakra-ui/react";
+import {Flex} from "@chakra-ui/react";
+import {Tooltip} from "./ui/tooltip"
 import {FaCaretUp,FaCaretDown,FaHome} from 'react-icons/fa';
 
 export default function FixedRightSideNavigator() {
@@ -22,15 +23,21 @@ export default function FixedRightSideNavigator() {
       right="0"
       zIndex='2'
     >
-        <Flex w='50px' h='50px' borderRadius='5px' justifyContent='center' alignItems='center' onClick={() => handleScroll("up")} transition='all 0.25s ease-in 0s' _hover={{bg:'#E5E5E5',cursor:'pointer'}}>{/* 아래로 스크롤 작동 */}
+      <Tooltip content="위로" positioning={{placement:"left"}} showArrow openDelay={100} closeDelay={100}>
+        <Flex w='50px' h='50px' borderRadius='5px' justifyContent='center' alignItems='center' onClick={()=>handleScroll("up")} transition='all 0.25s ease-in 0s' _hover={{bg:'#E5E5E5',cursor:'pointer'}}>{/* 아래로 스크롤 작동 */}
             <FaCaretUp size='50px' color='gray'/>
         </Flex>
-        <Flex w='50px' h='50px' borderRadius='5px' justifyContent='center' alignItems='center' onClick={() => handleScroll("up")} transition='all 0.25s ease-in 0s' _hover={{bg:'#E5E5E5',cursor:'pointer'}}>{/* 아래로 스크롤 작동 */}
+      </Tooltip>
+      <Tooltip content="즐겨찾기" positioning={{placement:"left"}} showArrow openDelay={100} closeDelay={100}>
+        <Flex w='50px' h='50px' borderRadius='5px' justifyContent='center' alignItems='center' onClick={()=>alert("Ctrl+D를 눌러 이 페이지를 즐겨찾기에 추가하세요")} transition='all 0.25s ease-in 0s' _hover={{bg:'#E5E5E5',cursor:'pointer'}}>{/* 아래로 스크롤 작동 */}
             <FaHome size='30px' color='gray'/>
         </Flex>
-        <Flex w='50px' h='50px' borderRadius='5px' justifyContent='center' alignItems='center' onClick={() => handleScroll("down")} transition='all 0.25s ease-in 0s' _hover={{bg:'#E5E5E5',cursor:'pointer'}}>{/* 아래로 스크롤 작동 */}
+      </Tooltip>
+      <Tooltip content="아래로" positioning={{placement:"left"}} showArrow openDelay={100} closeDelay={100}>
+        <Flex w='50px' h='50px' borderRadius='5px' justifyContent='center' alignItems='center' onClick={()=>handleScroll("down")} transition='all 0.25s ease-in 0s' _hover={{bg:'#E5E5E5',cursor:'pointer'}}>{/* 아래로 스크롤 작동 */}
             <FaCaretDown size='50px'  color='gray'/>
         </Flex>
+      </Tooltip>
     </Flex>
   );
 }
