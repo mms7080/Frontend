@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Flex, Box } from '@chakra-ui/react';
 import { FiUser } from 'react-icons/fi';
 import { usePathname } from 'next/navigation';
+import Navigator from './navigator';
 
 export default function Header({ userInfo }) {
   const pathname = usePathname();
@@ -12,7 +13,7 @@ export default function Header({ userInfo }) {
   const headerColor = isHome ? 'white' : 'black';
   const hoverColor = isHome ? 'black' : 'gray.500';
 
-  return (
+  return <>
     <Flex
       w="calc(100vw - 17px)"
       minW="1000px"
@@ -77,5 +78,6 @@ export default function Header({ userInfo }) {
         <FiUser size={25} color={headerColor} style={{ bottom: 5, position: 'relative' }} />
       </Flex>
     </Flex>
-  );
+    <Navigator/>
+  </>;
 }
