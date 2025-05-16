@@ -41,4 +41,5 @@ export default function Homepage(){
         </Box>
         <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>
         </>;
+        // 종현 테스트
 }
