@@ -21,7 +21,7 @@ export default function NoticeCreatePage() {
         if (!res.ok) throw new Error();
         const data = await res.json();
         setUser(data);
-        setWriter(data.username || data.name || data.userId || '');
+        setWriter(data.name || '');
       } catch (e) {
         console.log('로그인 정보 없음');
       }
@@ -67,9 +67,9 @@ export default function NoticeCreatePage() {
 
           <label>작성자</label>
           <input
-            placeholder="작성자 이름"
             value={writer}
-            onChange={(e) => setWriter(e.target.value)}
+            readOnly
+            style={{ backgroundColor: '#eee', cursor: 'not-allowed' }}
           />
 
           <label>내용</label>

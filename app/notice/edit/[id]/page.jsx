@@ -61,7 +61,8 @@ export default function NoticeEditPage() {
           <input
             placeholder="작성자 이름"
             value={notice.writer}
-            onChange={(e) => setNotice({ ...notice, writer: e.target.value })}
+            readOnly
+            style={{ backgroundColor: '#eee', cursor: 'not-allowed' }}
           />
 
           <label>내용</label>
