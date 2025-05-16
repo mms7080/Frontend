@@ -8,9 +8,27 @@ export default function NoticePage({ notices }) {
   const [searchOption, setSearchOption] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filtered, setFiltered] = useState([]);
+  const [user, setUser] = useState(null); // 👈 로그인 사용자 상태
 
+  // 로그인 사용자 정보 불러오기
   useEffect(() => {
-    const sorted = [...notices].sort((a, b) => b.id - a.id); // 최신글 먼저 정렬
+    (async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+          credentials: 'include',
+        });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        setUser(data);
+      } catch (e) {
+        console.log('로그인 정보 없음');
+      }
+    })();
+  }, []);
+
+  // 검색 필터 적용
+  useEffect(() => {
+    const sorted = [...notices].sort((a, b) => b.id - a.id);
     setFiltered(
       sorted.filter(n => {
         const target =
@@ -26,9 +44,9 @@ export default function NoticePage({ notices }) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" />
+      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} /> {/* 👈 여기도 user 전달 */}
 
-      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '40px 20px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '40px 20px' }}>
         <h1 style={{ fontSize: '24px', textAlign: 'center', marginBottom: '24px' }}>📢 NOTICE</h1>
 
         <div style={{ textAlign: 'right', marginBottom: '16px' }}>
@@ -41,7 +59,7 @@ export default function NoticePage({ notices }) {
               borderRadius: '4px',
               cursor: 'pointer'
             }}
-            onClick={() => window.location.href = '/notices/new'}
+            onClick={() => window.location.href = '/notice/new'}
           >
             공지 작성
           </button>
@@ -112,10 +130,20 @@ export default function NoticePage({ notices }) {
                         cursor: 'pointer',
                         fontSize: '12px'
                       }}
-                      onClick={() =>
-                        confirm('삭제하시겠습니까?') &&
-                        alert('✅ TODO: 삭제 API 연결 필요')
-                      }
+                      onClick={async () => {
+                        if (confirm('정말 삭제하시겠습니까?')) {
+                          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${notice.id}`, {
+                            method: 'DELETE',
+                            credentials: 'include'
+                          });
+                          if (res.ok) {
+                            alert('삭제 완료');
+                            location.reload();
+                          } else {
+                            alert('삭제 실패');
+                          }
+                        }
+                      }}
                     >
                       삭제
                     </button>
@@ -125,11 +153,12 @@ export default function NoticePage({ notices }) {
             )}
           </tbody>
         </table>
+        
       </div>
-
-      <div style={{ height: '80px' }} /> {/* 여유 공간 */}
-
-      <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
+            
+      <div style={{ height: '230px' }} />
+       <Footer footerBg="white" footerColor="black" />
+      
     </>
   );
 }

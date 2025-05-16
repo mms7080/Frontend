@@ -13,16 +13,16 @@ export default function Footer() {
   return (
     <Flex
       w="100%"
-      minW="1900px"
       bg={footerBg}
       color="#aaa"
       justifyContent="space-between"
-      px="400px"
+      px={{ base: '20px', md: '60px', lg: '100px', xl: '200px', '2xl': '300px' }}
       py="30px"
       fontSize="11px"
       borderTop={`1px solid ${footerBorder}`}
+      flexWrap="wrap"
     >
-      <Flex flexDirection="column" lineHeight="18px">
+      <Flex flexDirection="column" lineHeight="18px" mb="20px">
         <h5 style={{ fontSize: 14, color: footerColor }}>고객센터</h5>
         <Box w="40px" h="2px" bg="#00c3ff" mb="5px"></Box>
         <span>1544-1234</span>
@@ -30,15 +30,15 @@ export default function Footer() {
         <span>점심시간 | 오후 12:00 ~ 오후 1:30</span>
         <span>토/일/공휴일 휴무</span>
       </Flex>
-      <Flex flexDirection="column" lineHeight="18px">
+      <Flex flexDirection="column" lineHeight="18px" mb="20px">
         <h5 style={{ fontSize: 14, color: footerColor }}>주소 안내</h5>
         <Box w="40px" h="2px" bg="#00c3ff" mb="5px"></Box>
         <span>서울특별시 강남구 테헤란로 87길 22 도심공항터미널 건물 408호</span>
       </Flex>
-      <Flex flexDirection="column" lineHeight="18px">
+      <Flex flexDirection="column" lineHeight="18px" mb="20px">
         <h5 style={{ fontSize: 14, color: footerColor }}>빠른 메뉴</h5>
         <Box w="40px" h="2px" bg="#00c3ff" mb="5px"></Box>
-        <HStack>
+        <HStack spacing={2}>
           <Button w="60px" h="30px" color="white" bg="#2d2d2d" border="1px solid #444" fontSize="10px" borderRadius="5px">
             예매 내역
           </Button>
@@ -47,13 +47,13 @@ export default function Footer() {
           </Button>
         </HStack>
       </Flex>
-      <Flex flexDirection="column" lineHeight="18px">
+      <Flex flexDirection="column" lineHeight="18px" mb="20px">
         <h5 style={{ fontSize: 14, color: footerColor }}>회사 정보</h5>
         <Box w="40px" h="2px" bg="#00c3ff" mb="5px"></Box>
         <span>이용약관</span>
         <span>개인정보처리방침</span>
         <span>사이트 이용가이드</span>
-        <HStack>
+        <HStack spacing={2} mt="8px">
           <a href="https://instagram.com" target="_blank">
             <Image
               w="20px"

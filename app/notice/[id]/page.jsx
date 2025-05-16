@@ -67,9 +67,8 @@ export default function NoticeDetailPage({ params }) {
         <div className="inven-buttons">
           <button onClick={() => window.history.back()}>목록</button>
         </div>
-        <br></br><br></br><br></br><br></br><br></br><br></br><br></br><br></br>
       </main>
-
+      <div style={{ height: '230px' }} />
       <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
 
       <style jsx>{`
