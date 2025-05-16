@@ -7,11 +7,12 @@ import Footer from '../Footer';
 export default function NoticePage({ notices }) {
   const [searchOption, setSearchOption] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [filtered, setFiltered] = useState(notices || []);
+  const [filtered, setFiltered] = useState([]);
 
   useEffect(() => {
+    const sorted = [...notices].sort((a, b) => b.id - a.id); // 최신글 먼저 정렬
     setFiltered(
-      notices.filter(n => {
+      sorted.filter(n => {
         const target =
           searchOption === 'title' ? n.title :
           searchOption === 'content' ? n.content :
@@ -95,7 +96,7 @@ export default function NoticePage({ notices }) {
                 <tr key={notice.id} style={{ borderBottom: '1px solid #eee' }}>
                   <td style={{ padding: '12px', textAlign: 'center' }}>{notice.id}</td>
                   <td style={{ padding: '12px' }}>
-                    <a href={`/notices/view/${notice.id}`} style={{ textDecoration: 'none', color: '#333' }}>
+                    <a href={`/notice/${notice.id}`} style={{ textDecoration: 'none', color: '#333' }}>
                       {notice.title}
                     </a>
                   </td>
@@ -125,13 +126,8 @@ export default function NoticePage({ notices }) {
           </tbody>
         </table>
       </div>
-       <br></br>
-        <br></br>
-         <br></br>
-          <br></br>
-           <br></br>
-            <br></br>
-             <br></br>
+
+      <div style={{ height: '80px' }} /> {/* 여유 공간 */}
 
       <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
     </>

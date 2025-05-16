@@ -37,7 +37,7 @@ export default function Header({ userInfo }) {
 
       {/* 메뉴 */}
       <Flex gap="20px" fontSize="20px" position='absolute' left='50%' transform='translateX(-50%)'>
-        {['영화', '예매', '극장', '스토어', '공지'].map((menu, idx) => (
+        {['영화', '예매', '극장', '스토어'].map((menu, idx) => (
           <Box
             key={idx}
             color={headerColor}
@@ -47,6 +47,11 @@ export default function Header({ userInfo }) {
             {menu}
           </Box>
         ))}
+        <Link href="/notice" style={{ textDecoration: 'none' }}>
+          <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+            공지
+          </Box>
+        </Link>
 
         <Link href="/event" style={{ textDecoration: 'none' }}>
           <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
