@@ -3,7 +3,7 @@ import '../styles/globals.css';
 import { Provider } from '/components/ui/provider'
 
 export default function Layout({children}) {
-      return <html>            
+      return <html suppressHydrationWarning>            
       <head>
 
       </head>
