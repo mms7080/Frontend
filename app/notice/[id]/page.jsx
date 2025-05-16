@@ -1,35 +1,67 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 
-
-
 export default function NoticeDetailPage({ params }) {
   const { id } = params;
+  const router = useRouter();
   const [notice, setNotice] = useState(null);
+  const [user, setUser] = useState(null);
+  const [allNotices, setAllNotices] = useState([]);
+  const [prevId, setPrevId] = useState(null);
+  const [nextId, setNextId] = useState(null);
 
   useEffect(() => {
-    const fetchNotice = async () => {
+    (async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`);
-        if (!res.ok) throw new Error("데이터 불러오기 실패");
-        const data = await res.json();
+        const userRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+          credentials: 'include',
+        });
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          setUser(userData);
+        }
+      } catch (err) {
+        console.log('로그인 정보 없음');
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [detailRes, listRes] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`),
+          fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice`),
+        ]);
+        if (!detailRes.ok || !listRes.ok) throw new Error("데이터 불러오기 실패");
+        const data = await detailRes.json();
+        const list = await listRes.json();
         setNotice(data);
+        setAllNotices(list);
+
+        const sorted = list.sort((a, b) => b.id - a.id);
+        const currentIndex = sorted.findIndex(n => n.id === Number(id));
+        if (currentIndex !== -1) {
+          setPrevId(sorted[currentIndex + 1]?.id || null);
+          setNextId(sorted[currentIndex - 1]?.id || null);
+        }
       } catch (err) {
         console.error(err);
         alert("공지사항을 불러오는 데 실패했습니다.");
       }
     };
-    fetchNotice();
+    fetchData();
   }, [id]);
 
   if (!notice) return <div>로딩 중...</div>;
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f9f9f9" />
+      <Header headerColor="black" headerBg="#f9f9f9" userInfo={user} />
 
       <main>
         <h1>📢 NOTICE</h1>
@@ -54,18 +86,27 @@ export default function NoticeDetailPage({ params }) {
           <p>{notice.content}</p>
         </div>
 
-        <div className="main-buttons-container">
-          <div className="navigation-buttons">
-            <button disabled>이전글</button>
-            <button disabled>다음글</button>
-          </div>
-          <div className="delete-buttons">
-            <button>수정</button>
-          </div>
+       <div className="main-buttons-container">
+        <div className="navigation-buttons">
+          {prevId ? (
+            <button onClick={() => router.push(`/notice/${prevId}`)}>이전글</button>
+          ) : (
+            <button disabled style={{ opacity: 0.5 }}>이전글</button>
+          )}
+          {nextId ? (
+            <button onClick={() => router.push(`/notice/${nextId}`)}>다음글</button>
+          ) : (
+            <button disabled style={{ opacity: 0.5 }}>다음글</button>
+          )}
         </div>
+        <div className="delete-buttons">
+          <button>수정</button>
+        </div>
+      </div>
+
 
         <div className="inven-buttons">
-          <button onClick={() => window.history.back()}>목록</button>
+           <button onClick={() => router.push('/notice')}>목록</button>
         </div>
       </main>
       <div style={{ height: '230px' }} />
