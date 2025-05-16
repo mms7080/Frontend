@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 
-export default function NoticeDetailPage({ params }) {
-  const { id } = params;
+export default function NoticeDetailPage() {
+  const params = useParams();
+  const id = params?.id;
   const router = useRouter();
   const [notice, setNotice] = useState(null);
   const [user, setUser] = useState(null);
@@ -86,27 +88,27 @@ export default function NoticeDetailPage({ params }) {
           <p>{notice.content}</p>
         </div>
 
-       <div className="main-buttons-container">
-        <div className="navigation-buttons">
-          {prevId ? (
-            <button onClick={() => router.push(`/notice/${prevId}`)}>이전글</button>
-          ) : (
-            <button disabled style={{ opacity: 0.5 }}>이전글</button>
-          )}
-          {nextId ? (
-            <button onClick={() => router.push(`/notice/${nextId}`)}>다음글</button>
-          ) : (
-            <button disabled style={{ opacity: 0.5 }}>다음글</button>
-          )}
+        <div className="main-buttons-container">
+          <div className="navigation-buttons">
+            {prevId ? (
+              <button onClick={() => router.push(`/notice/${prevId}`)}>이전글</button>
+            ) : (
+              <button disabled style={{ opacity: 0.5 }}>이전글</button>
+            )}
+            {nextId ? (
+              <button onClick={() => router.push(`/notice/${nextId}`)}>다음글</button>
+            ) : (
+              <button disabled style={{ opacity: 0.5 }}>다음글</button>
+            )}
+          </div>
+          <div className="delete-buttons">
+            <button>수정</button>
+          </div>
         </div>
-        <div className="delete-buttons">
-          <button>수정</button>
-        </div>
-      </div>
 
 
         <div className="inven-buttons">
-           <button onClick={() => router.push('/notice')}>목록</button>
+          <button onClick={() => router.push('/notice')}>목록</button>
         </div>
       </main>
       <div style={{ height: '230px' }} />
