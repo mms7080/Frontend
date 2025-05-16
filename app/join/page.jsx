@@ -60,6 +60,11 @@ export default function Homepage(){
             alert('아이디 중복 확인을 완료해 주세요.');
             return;
         }
+        if(!isPwrAvailable){
+            e.preventDefault();/* 비밀번호 확인과 비밀번호가 일치되지 않았으면 폼 제출 막기 */
+            alert('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
+            return;
+        }
     };
 
     return <>
