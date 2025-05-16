@@ -1,6 +1,6 @@
 import React from 'react';
 import {Flex,Box,VStack,Input,Button} from '@chakra-ui/react';
-
+import Link from 'next/link';
 import {Header,Footer} from '../../components';
 
 export const metadata = {
@@ -23,7 +23,7 @@ export default function Homepage(){
                 <VStack w='100%'>
                     <Flex w='400px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
                         <span style={{fontSize:15,letterSpacing:1,alignSelf:'flex-start'}}>
-                            <span style={{color:'#551A8B'}}>홈</span>
+                            <span style={{color:'#551A8B'}}><Link href="/home" style={{textDecoration:'underline'}}>홈</Link></span>
                             <span style={{color:'#555'}}>&gt;로그인</span>
                         </span>
                         <span style={{fontSize:28,marginBottom:10}}>로그인</span>
