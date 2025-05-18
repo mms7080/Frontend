@@ -18,7 +18,7 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-export default function Movie({ likeNumber, src, name, rate, releaseDate }) {
+export default function Movie({ name, rate, releaseDate, likeNumber, src }) {
   const [liked, likedController] = useState(false);
   const likeChange = () => {likedController(!liked)};
 
