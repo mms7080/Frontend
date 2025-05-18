@@ -86,7 +86,7 @@ export default function Find_id(){
                                 <label htmlFor="name">이름</label>
                                 <Input id="name" name="name" placeholder="이름" required onInput={e=>setFormData(f=>({...f,name:e.target.value}))}/>
                                 {layout==='email'?<EmailLayout/>:<PhoneLayout/>}
-                                <Button bg='#2d2d2d' type="submit" onClick={(e)=>{
+                                <Button bg='#2d2d2d' type="submit" mt='20px' onClick={(e)=>{
                                     e.preventDefault();
                                     handleFindID();
                                 }}>아이디 찾기</Button>
