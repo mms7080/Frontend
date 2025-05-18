@@ -11,7 +11,7 @@ export default function Header({ userInfo }) {
   const isHome = pathname === '/' || pathname.startsWith('/home');
   const headerBg = isHome ? '#1a1a1a' : 'white';
   const headerColor = isHome ? 'white' : 'black';
-  const hoverColor = isHome ? 'black' : 'gray.500';
+  const hoverColor = 'gray.500';
 
   return <>
     <Flex
