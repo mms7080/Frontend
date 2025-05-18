@@ -8,7 +8,7 @@ export const metadata = {
     description: "영화 예매 사이트 로그인 페이지"
 };
 
-export default function Homepage(){
+export default function Signin(){
 
     let headerColor='black';
     let headerBg='#F9F9F9';
@@ -33,7 +33,10 @@ export default function Homepage(){
                                 <Input id="pw" name="pw" type="password" placeholder='비밀번호' required/>
                                 <Flex w='100%' justifyContent='space-between' fontSize='15px' color='#555'>
                                     <span><input id="rl" type="checkbox" name="remember-login"/><label htmlFor='rl'>&nbsp;&nbsp;아이디 저장</label></span>
-                                    <span>아이디 찾기 / 비밀번호 재설정</span>
+                                    <span>
+                                        <Link href='/find_id'><span>아이디 찾기</span></Link>/
+                                        <Link href='/find_pw'><span>비밀번호 재설정</span></Link>
+                                    </span>
                                 </Flex>
                                 <Button type='submit' fontSize='17px' w='100%' bg='#2d2d2d' mt='30px'>로그인</Button>
                                 <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/kakao`}>
@@ -48,7 +51,11 @@ export default function Homepage(){
                             </Flex>
                         </form>
                         <span style={{color:'#555'}}>아직 회원이 아니신가요?</span>
-                        <Button bg='#2d2d2d'>회원가입</Button>
+                        <Button bg='#2d2d2d'>
+                            <Link href='/join'>
+                                회원가입
+                            </Link>
+                        </Button>
                     </Flex>
                 </VStack>
             </Flex>
