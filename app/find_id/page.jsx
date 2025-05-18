@@ -74,6 +74,9 @@ export default function Find_id(){
                                         <RadioGroup.ItemIndicator />
                                         <RadioGroup.ItemText>이메일</RadioGroup.ItemText>
                                     </RadioGroup.Item>
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
                                     <RadioGroup.Item id="method_phone_number" name="method" type="radio" value="phone_number">
                                         <RadioGroup.ItemHiddenInput />
                                         <RadioGroup.ItemIndicator />

@@ -34,8 +34,8 @@ export default function Signin(){
                                 <Flex w='100%' justifyContent='space-between' fontSize='15px' color='#555'>
                                     <span><input id="rl" type="checkbox" name="remember-login"/><label htmlFor='rl'>&nbsp;&nbsp;아이디 저장</label></span>
                                     <span>
-                                        <Link href='/find_id'><span>아이디 찾기</span></Link>/
-                                        <Link href='/find_pw'><span>비밀번호 재설정</span></Link>
+                                        <Link href='/find_id'><span>아이디 찾기&nbsp;&nbsp;</span></Link>/
+                                        <Link href='/find_pw'><span>&nbsp;&nbsp;비밀번호 재설정</span></Link>
                                     </span>
                                 </Flex>
                                 <Button type='submit' fontSize='17px' w='100%' bg='#2d2d2d' mt='30px'>로그인</Button>
