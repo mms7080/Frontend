@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Header from '../Header';
-import Footer from '../Footer';
+import { Header,Footer } from '..';
 
 export default function NoticePage({ notices }) {
   const [searchOption, setSearchOption] = useState('title');
