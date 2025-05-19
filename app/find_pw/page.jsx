@@ -140,7 +140,7 @@ export default function Find_pw(){
 
                                 <Input name='id' type='hidden' value={foundID}/>
 
-                                <label htmlFor="pw">비밀번호</label>
+                                <label htmlFor="pw">새 비밀번호</label>
                                 <Input
                                 id="pw"
                                 name="pw"
