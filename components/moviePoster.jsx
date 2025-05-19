@@ -27,7 +27,7 @@ export default function MoviePoster({ onMovieSelect, selectedMovie }) {
                         _hover={{ transform: "scale(1.05)" }}
                         transition="transform 0.2s"
                         onClick={() => onMovieSelect(movie)}
-                        border={selectedMovie?.id === movie.id ? "3px solid blue" : "none"}
+                        border={selectedMovie?.id === movie.id ? "3px solid purple" : "none"}
                     />
                     {selectedMovie?.id === movie.id && (
                         <Text fontWeight="bold" mt="5px">{movie.title}</Text>

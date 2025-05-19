@@ -22,6 +22,9 @@ export default function BookingPage(){
 
     return <>
         <Header headerColor={headerColor} headerBg={headerBg}></Header>
+
+        <span style={{color:'#555', textAlign:'center'}}>영화 예매</span>
+
         <VStack spacing="20px" p="20px">
                 {selectedMovie && selectedMovie.title && (
                     <Text fontSize="2xl" fontWeight="bold" mb="20px">
@@ -33,10 +36,10 @@ export default function BookingPage(){
             <MoviePoster onMovieSelect={setSelectedMovie} selectedMovie={selectedMovie} />
 
             {/* 날짜 선택 (영화 선택 후 표시) */}
-            {selectedMovie && <DateSelector selectedMovie={selectedMovie} onDateSelect={setSelectedDate} />}
+            {selectedMovie && <DateSelector selectedMovie={selectedMovie} selectedDate={selectedDate} onDateSelect={setSelectedDate} />}
 
             {/* 시간 선택 (날짜 선택 후 표시) */}
-            {selectedDate && <TimeSelector selectedDate={selectedDate} onTimeSelect={console.log} />}
+            {selectedDate && <TimeSelector selectedDate={selectedDate} selectedMovie={selectedMovie} onTimeSelect={console.log} />}
         </VStack>
         <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>
     </>
