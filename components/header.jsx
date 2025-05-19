@@ -36,29 +36,39 @@ export default function Header({ userInfo }) {
       </Flex>
 
       {/* 메뉴 */}
-      <Flex gap="20px" fontSize="20px" position='absolute' left='50%' transform='translateX(-50%)'>
-        {['영화', '예매', '극장', '스토어'].map((menu, idx) => (
-          <Box
-            key={idx}
-            color={headerColor}
-            cursor="pointer"
-            _hover={{ color: hoverColor }}
-          >
-            {menu}
-          </Box>
-        ))}
-        <Link href="/notice" style={{ textDecoration: 'none' }}>
-          <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
-            공지
-          </Box>
-        </Link>
+     <Flex gap="20px" fontSize="20px" position='absolute' left='50%' transform='translateX(-50%)'>
+  <Link href="/movie" style={{ textDecoration: 'none' }}>
+    <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+      영화
+    </Box>
+  </Link>
+      <Link href="/booking" style={{ textDecoration: 'none' }}>
+        <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+          예매
+        </Box>
+      </Link>
 
-        <Link href="/event" style={{ textDecoration: 'none' }}>
-          <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
-            이벤트
-          </Box>
-        </Link>
-      </Flex>
+      <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+        극장
+      </Box>
+
+      <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+        스토어
+      </Box>
+
+      <Link href="/notice" style={{ textDecoration: 'none' }}>
+        <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+          공지
+        </Box>
+      </Link>
+
+      <Link href="/event" style={{ textDecoration: 'none' }}>
+        <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+          이벤트
+        </Box>
+      </Link>
+    </Flex>
+
 
       {/* 유저 정보 */}
       <Flex gap="15px" fontSize="15px" flex='1' justifyContent='flex-end'>
