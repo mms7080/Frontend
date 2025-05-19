@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Flex, Image, Box, Text } from '@chakra-ui/react';
+import React from 'react';
+import { Flex, Image, Box } from '@chakra-ui/react';
 
 const movies = [
     { id: 1, title: "필즈 오브 데스티니", poster: "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg" },
@@ -13,10 +13,19 @@ const movies = [
 ];
 
 export default function MoviePoster({ onMovieSelect, selectedMovie }) {
+
     return (
-        <Flex overflowX="auto" p="10px" gap="15px">
+        <Flex 
+            w="65%" 
+            overflowX="auto" 
+            p="10px" 
+            gap="15px" 
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            flexDirection="row"
+        >
             {movies.map(movie => (
-                <Box key={movie.id} textAlign="center">
+                <Box key={movie.id} textAlign="center" minW="120px" flexShrink="0">
                     <Image 
                         src={movie.poster} 
                         alt={movie.title} 
@@ -27,11 +36,8 @@ export default function MoviePoster({ onMovieSelect, selectedMovie }) {
                         _hover={{ transform: "scale(1.05)" }}
                         transition="transform 0.2s"
                         onClick={() => onMovieSelect(movie)}
-                        border={selectedMovie?.id === movie.id ? "3px solid purple" : "none"}
+                        border={selectedMovie?.id === movie.id ? "5px solid purple" : "none"}
                     />
-                    {selectedMovie?.id === movie.id && (
-                        <Text fontWeight="bold" mt="5px">{movie.title}</Text>
-                    )}
                 </Box>
             ))}
         </Flex>

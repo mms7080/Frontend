@@ -3,10 +3,10 @@ import { Box, Wrap, WrapItem } from '@chakra-ui/react';
 
 const times = ["12:00", "14:30", "17:00", "19:30", "22:00"];        // 실험용 데이터 - 추후에 fetch로 백엔드 데이터 가져올 예정
 
-export default function TimeSelector({ selectedDate, selectedTime, onTimeSelect }) {
+export default function TimeSelector({ selectedTime, onTimeSelect }) {
     return (
         <Box 
-            w="90%" 
+            w="65%" 
             p="20px" 
             bg="white" 
             borderRadius="15px" 
@@ -19,6 +19,7 @@ export default function TimeSelector({ selectedDate, selectedTime, onTimeSelect 
                         p="10px" 
                         borderRadius="10px" 
                         bg={selectedTime === time ? "purple" : "gray.200"} 
+                        color={selectedTime === time ? "white" : "black"}
                         cursor="pointer"
                         onClick={() => onTimeSelect(time)}
                         _hover={{ bg: "purple", color: "white" }}

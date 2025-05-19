@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, HStack, Text } from '@chakra-ui/react';
 
-const dates = ["2025-05-01", "2025-05-02", "2025-05-03", "2025-05-04"];     // 실험용 데이터 - 추후에 fetch로 백엔드 데이터 가져올 예정
+const dates = ["05/01(목)", "05/02(금)", "05/03(토)", "05/04(일)"];     // 실험용 데이터 - 추후에 fetch로 백엔드 데이터 가져올 예정
 
-export default function DateSelector({ selectedMovie, selectedDate, onDateSelect }) {
+export default function DateSelector({ selectedDate, onDateSelect }) {
     return (
         <Box
-            w="90%" 
+            w="65%" 
             p="20px" 
             bg="white" 
             borderRadius="15px" 
@@ -19,6 +19,7 @@ export default function DateSelector({ selectedMovie, selectedDate, onDateSelect
                         p="10px" 
                         borderRadius="10px" 
                         bg={selectedDate === date ? "purple" : "gray.200"} 
+                        color={selectedDate === date ? "white" : "black"}
                         cursor="pointer"
                         onClick={() => onDateSelect(date)}
                         _hover={{ bg: "purple", color: "white" }}
