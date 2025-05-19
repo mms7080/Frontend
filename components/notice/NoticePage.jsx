@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Header,Footer } from '..';
+import { Header, Footer } from '..';
 
 export default function NoticePage({ notices }) {
   const [searchOption, setSearchOption] = useState('title');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filtered, setFiltered] = useState([]);
   const [user, setUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   useEffect(() => {
     (async () => {
@@ -26,18 +28,23 @@ export default function NoticePage({ notices }) {
 
   useEffect(() => {
     const sorted = [...notices].sort((a, b) => b.id - a.id);
-    setFiltered(
-      sorted.filter(n => {
-        const target =
-          searchOption === 'title' ? n.title :
-          searchOption === 'content' ? n.content :
-          searchOption === 'author' ? n.writer :
-          searchOption === 'title_content' ? `${n.title} ${n.content}` :
-          '';
-        return target?.toLowerCase().includes(searchKeyword.toLowerCase());
-      })
-    );
+    const result = sorted.filter(n => {
+      const target =
+        searchOption === 'title' ? n.title :
+        searchOption === 'content' ? n.content :
+        searchOption === 'author' ? n.writer :
+        searchOption === 'title_content' ? `${n.title} ${n.content}` : '';
+      return target?.toLowerCase().includes(searchKeyword.toLowerCase());
+    });
+    setFiltered(result);
+    setCurrentPage(1);
   }, [searchKeyword, searchOption, notices]);
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+  const currentItems = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <>
@@ -121,12 +128,12 @@ export default function NoticePage({ notices }) {
             </tr>
           </thead>
           <tbody>
-            {filtered.length === 0 ? (
+            {currentItems.length === 0 ? (
               <tr>
                 <td colSpan="4" style={{ textAlign: 'center', padding: '20px', fontSize: '15px' }}>📭 공지사항이 없습니다.</td>
               </tr>
             ) : (
-              filtered.map((notice) => (
+              currentItems.map((notice) => (
                 <tr key={notice.id} style={{ borderBottom: '1px solid #eee' }}>
                   <td style={{ padding: '14px', textAlign: 'center' }}>{notice.id}</td>
                   <td style={{ padding: '14px' }}>
@@ -173,6 +180,59 @@ export default function NoticePage({ notices }) {
             )}
           </tbody>
         </table>
+
+        {/* 페이지네이션 */}
+        <div style={{ textAlign: 'center', marginTop: '40px' }}>
+          {currentPage > 1 && (
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              style={{
+                margin: '0 6px',
+                padding: '8px 12px',
+                backgroundColor: '#eee',
+                color: 'black',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              &lt;
+            </button>
+          )}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              style={{
+                margin: '0 6px',
+                padding: '8px 14px',
+                backgroundColor: currentPage === page ? '#333' : '#eee',
+                color: currentPage === page ? 'white' : 'black',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              {page}
+            </button>
+          ))}
+          {currentPage < totalPages && (
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              style={{
+                margin: '0 6px',
+                padding: '8px 12px',
+                backgroundColor: '#eee',
+                color: 'black',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              &gt;
+            </button>
+          )}
+        </div>
       </div>
 
       <div style={{ height: '230px' }} />
