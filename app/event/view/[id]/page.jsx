@@ -79,6 +79,7 @@ export default function EventDetailPage() {
               ))}
             </Flex>
 
+           
             {/* 버튼 영역 */}
             <Flex
               direction={buttonDirection}
@@ -126,6 +127,33 @@ export default function EventDetailPage() {
                 다음글 →
               </Button>
             </Flex>
+
+            {/* 삭제 버튼만 별도로 우측 정렬 */}
+            <Flex justify="flex-end" mt={4}>
+              <Button
+                onClick={async () => {
+                  const confirmed = window.confirm('정말로 삭제하시겠습니까?');
+                  if (!confirmed) return;
+
+                  const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${event.id}`, {
+                    method: 'DELETE',
+                  });
+
+                  if (res.ok) {
+                    alert('이벤트가 삭제되었습니다.');
+                    router.push('/event');
+                  } else {
+                    alert('삭제에 실패했습니다.');
+                  }
+                }}
+                variant="outline"
+                colorScheme="red"
+                fontWeight="bold"
+              >
+                 삭제
+              </Button>
+            </Flex>
+
           </>
         ) : (
           <Flex justify="center" align="center" minH="200px">
