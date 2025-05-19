@@ -3,8 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { Box, Text, Heading, Spinner } from '@chakra-ui/react';
-// import Header from '../../../components/header';
-// import Footer from '../../../components/footer';
+import {Header,Footer} from '../../../../components';
 
 
 
@@ -37,7 +36,7 @@ export default function EventDetailPage() {
 
   return (
     <>
-      {/* <Header headerColor="black" headerBg="white" /> */}
+      <Header headerColor="black" headerBg="white" />
 
       <Box maxW="800px" mx="auto" mt={20} p={8}>
         {loading ? (
@@ -59,7 +58,7 @@ export default function EventDetailPage() {
         )}
       </Box>
 
-       {/* <Footer footerColor="black" footerBg="white" footerBorder="#ccc" />  */}
+       <Footer footerColor="black" footerBg="white" footerBorder="#ccc" />
     </>
   );
 }
