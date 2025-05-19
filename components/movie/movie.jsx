@@ -18,7 +18,7 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-export default function Movie({ name, rate, releaseDate, likeNumber, src }) {
+export default function Movie({ title, rate, releaseDate, likeNumber, image }) {
   const [liked, likedController] = useState(false);
   const likeChange = () => {likedController(!liked)};
 
@@ -45,7 +45,7 @@ export default function Movie({ name, rate, releaseDate, likeNumber, src }) {
         w='100%' 
         h='400px' 
         borderRadius='6px' 
-        src={src} 
+        src={image} 
         loading='lazy'
       />
       <Box w="100%" p="3">
@@ -64,7 +64,7 @@ export default function Movie({ name, rate, releaseDate, likeNumber, src }) {
             whiteSpace: "normal"
           }}
         >
-          <Kbd variant='subtle' colorPalette={rateColor}>{rate}</Kbd> {name}
+          <Kbd variant='subtle' colorPalette={rateColor}>{rate}</Kbd> {title}
         </Text>
       </Box>
       <Text px='3' pb='3' fontSize='md'>개봉일 {releaseDate}</Text>
