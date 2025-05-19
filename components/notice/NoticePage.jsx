@@ -68,7 +68,7 @@ export default function NoticePage({ notices }) {
             style={{
               backgroundColor: '#333',
               color: 'white',
-              padding: '10px 20px',
+              padding: '6px 20px',
               border: 'none',
               borderRadius: '5px',
               cursor: 'pointer',
@@ -79,7 +79,7 @@ export default function NoticePage({ notices }) {
             onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#333'}
             onClick={() => window.location.href = '/notice/new'}
           >
-            ✏️ 공지 작성
+            + 공지 등록
           </button>
         </div>
 
