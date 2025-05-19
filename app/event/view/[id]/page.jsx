@@ -1,22 +1,24 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { Box, Text, Heading, Spinner } from '@chakra-ui/react';
-import {Header,Footer} from '../../../../components';
-
-
-
-
-
-
-
-
-
+import { useParams, useRouter } from 'next/navigation';
+import {
+  Box,
+  Text,
+  Heading,
+  Spinner,
+  Button,
+  Flex,
+  useBreakpointValue,
+  Image,
+} from '@chakra-ui/react';
+import { Header, Footer } from '../../../../components';
 
 export default function EventDetailPage() {
   const { id } = useParams();
+  const router = useRouter();
   const [event, setEvent] = useState(null);
+  const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export default function EventDetailPage() {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/raw`);
         const data = await res.json();
+        setAllEvents(data);
         const found = data.find(e => e.id === Number(id));
         setEvent(found);
       } catch {
@@ -34,31 +37,106 @@ export default function EventDetailPage() {
     })();
   }, [id]);
 
+  const currentIndex = allEvents.findIndex(e => e.id === Number(id));
+  const prev = currentIndex > 0 ? allEvents[currentIndex - 1] : null;
+  const next = currentIndex < allEvents.length - 1 ? allEvents[currentIndex + 1] : null;
+
+  const buttonDirection = useBreakpointValue({ base: 'column', md: 'row' });
+
   return (
     <>
       <Header headerColor="black" headerBg="white" />
 
-      <Box maxW="800px" mx="auto" mt={20} p={8}>
+      <Box maxW="800px" mx="auto" mt={20} p={[4, 6]}>
         {loading ? (
-          <Spinner />
+          <Flex justify="center" align="center" minH="300px">
+            <Spinner size="xl" color="purple.500" />
+          </Flex>
         ) : event ? (
           <>
-            <Heading mb={4}>{event.title}</Heading>
-            <Text fontSize="sm" color="gray.500" mb={2}>{event.date}</Text>
-            <Box mb={6}>
-              <img
-                src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
-                alt={event.title}
-                style={{ width: '100%', borderRadius: '8px' }}
-              />
-            </Box>
+            <Heading mb={4} fontSize={['xl', '2xl']}>{event.title}</Heading>
+            <Text fontSize="sm" color="gray.500" mb={4}>{event.date}</Text>
+
+            {/* ✅ 여러 이미지 보여주기 */}
+            <Flex gap={4} wrap="wrap" mb={8}>
+              {event.images?.map((img, idx) => (
+                <Box
+                  key={idx}
+                  flex="1 1 45%"
+                  minW="150px"
+                  border="1px solid #eee"
+                  borderRadius="md"
+                  overflow="hidden"
+                >
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${img}`}
+                    alt={`event-image-${idx}`}
+                    w="100%"
+                    h="auto"
+                    objectFit="cover"
+                  />
+                </Box>
+              ))}
+            </Flex>
+
+            {/* 버튼 영역 */}
+            <Flex
+              direction={buttonDirection}
+              justify="space-between"
+              gap={3}
+              mt={10}
+              wrap="wrap"
+            >
+              <Button
+                onClick={() => {
+                  if (!prev) return;
+                  router.push(`/event/view/${prev.id}`);
+                }}
+                isDisabled={!prev}
+                variant="outline"
+                w={['100%', 'auto']}
+                opacity={prev ? 1 : 0.5}
+                cursor={prev ? 'pointer' : 'not-allowed'}
+                _hover={prev ? {} : { bg: 'none' }}
+              >
+                ← 이전글
+              </Button>
+
+              <Button
+                onClick={() => router.push('/event')}
+                colorScheme="purple"
+                variant="solid"
+                w={['100%', 'auto']}
+              >
+                목록으로
+              </Button>
+
+              <Button
+                onClick={() => {
+                  if (!next) return;
+                  router.push(`/event/view/${next.id}`);
+                }}
+                isDisabled={!next}
+                variant="outline"
+                w={['100%', 'auto']}
+                opacity={next ? 1 : 0.5}
+                cursor={next ? 'pointer' : 'not-allowed'}
+                _hover={next ? {} : { bg: 'none' }}
+              >
+                다음글 →
+              </Button>
+            </Flex>
           </>
         ) : (
-          <Text>이벤트 정보를 찾을 수 없습니다.</Text>
+          <Flex justify="center" align="center" minH="200px">
+            <Text fontSize="lg" color="red.500">
+              이벤트 정보를 찾을 수 없습니다.
+            </Text>
+          </Flex>
         )}
       </Box>
 
-       <Footer footerColor="black" footerBg="white" footerBorder="#ccc" />
+      <Footer footerColor="black" footerBg="white" footerBorder="#ccc" />
     </>
   );
 }

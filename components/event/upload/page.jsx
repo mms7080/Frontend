@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Box, Input, Button, VStack, Text, Heading } from '@chakra-ui/react';
+import { Box, Input, Button, VStack, Text, Heading, Image, Flex } from '@chakra-ui/react';
 import { Header, Footer } from '../../';
 import { useRouter } from 'next/navigation';
 
@@ -10,7 +10,7 @@ export default function EventUploader() {
     title: '',
     date: '',
     category: '',
-    image: null,
+    images: [], // { file, url } 배열
   });
 
   const [user, setUser] = useState(null);
@@ -37,20 +37,27 @@ export default function EventUploader() {
   };
 
   const handleFileChange = (e) => {
-    setForm((prev) => ({ ...prev, image: e.target.files[0] }));
+    const files = Array.from(e.target.files);
+    const previews = files.map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+    setForm((prev) => ({ ...prev, images: previews }));
   };
 
   const handleSubmit = async () => {
-    if (!form.title || !form.date || !form.category || !form.image) {
+    const { title, date, category, images } = form;
+
+    if (!title || !date || !category || images.length === 0) {
       alert('모든 항목을 입력해주세요.');
       return;
     }
 
     const data = new FormData();
-    data.append('title', form.title);
-    data.append('date', form.date);
-    data.append('category', form.category);
-    data.append('image', form.image);
+    data.append('title', title);
+    data.append('date', date);
+    data.append('category', category);
+    images.forEach(({ file }) => data.append('images', file)); // 실제 파일만 전송
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/upload`, {
       method: 'POST',
@@ -59,7 +66,7 @@ export default function EventUploader() {
 
     if (res.ok) {
       alert('이벤트 업로드 성공!');
-      router.push('/event'); // 업로드 성공 후 /event로 이동
+      router.push('/event');
     } else {
       const error = await res.text();
       alert('업로드 실패: ' + error);
@@ -106,7 +113,28 @@ export default function EventUploader() {
 
           <Box w="100%">
             <Text fontWeight="bold" mb={1}>이미지 업로드</Text>
-            <Input type="file" accept="image/*" onChange={handleFileChange} />
+            <Input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleFileChange}
+            />
+            {/* ✅ 썸네일 미리보기 */}
+            {form.images.length > 0 && (
+              <Flex mt={3} gap={3} wrap="wrap">
+                {form.images.map((img, idx) => (
+                  <Box key={idx} w="100px" h="100px" border="1px solid #ccc" borderRadius="md" overflow="hidden">
+                    <Image
+                      src={img.url}
+                      alt={`preview-${idx}`}
+                      w="100%"
+                      h="100%"
+                      objectFit="cover"
+                    />
+                  </Box>
+                ))}
+              </Flex>
+            )}
           </Box>
 
           <Button w="100%" colorScheme="purple" onClick={handleSubmit}>
