@@ -90,7 +90,7 @@ export default function Header({ userInfo }) {
           </>
         )}
         <span style={{ color: '#ff4d4d' }}>빠른예매</span>
-        <FiUser size={25} color={headerColor} style={{ bottom: 5, position: 'relative' }} />
+        <Link href='/mypage'><FiUser size={25} color={headerColor} style={{ bottom: 5, position: 'relative' }} /></Link>
       </Flex>
     </Flex>
     <Navigator/>
