@@ -1,15 +1,16 @@
 'use client';
+
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from '@chakra-ui/react';
-import { Header,Footer } from '..';
+import { Header, Footer } from '..';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const categories = ['전체','추천','메가Pick', '영화', '극장', '제휴/할인', '시사회/무대인사'];
+const categories = ['전체', '추천', '메가Pick', '영화', '극장', '제휴/할인', '시사회/무대인사'];
 
 export default function EventPage({ serverEvents }) {
   const [events] = useState(serverEvents || {});
@@ -59,6 +60,10 @@ export default function EventPage({ serverEvents }) {
           loop={true}
           spaceBetween={30}
           slidesPerView={2}
+          onSwiper={(swiper) => {
+            swiper.el.addEventListener('mouseenter', () => swiper.autoplay.stop());
+            swiper.el.addEventListener('mouseleave', () => swiper.autoplay.start());
+          }}
         >
           {(events['추천'] || []).map((event, idx) => (
             <SwiperSlide key={idx}>
@@ -70,12 +75,14 @@ export default function EventPage({ serverEvents }) {
                 border="1px solid #eee"
                 maxW="600px"
                 mx="auto"
+                onClick={() => router.push(`/event/view/${event.id}`)}
+                _hover={{ cursor: 'pointer' }}
               >
                 <Box w="100%" h="280px" overflow="hidden">
                   <img
                     src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
                     alt={event.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }}
                   />
                 </Box>
                 <Box p={4}>
@@ -88,7 +95,6 @@ export default function EventPage({ serverEvents }) {
         </Swiper>
       </Box>
 
-         
       <Box bg="white" pt={10} pb={0} px={6} maxW="1280px" mx="auto" display="flex" justifyContent="flex-end">
         <Button
           onClick={() => router.push('/event/upload')}
@@ -143,12 +149,14 @@ export default function EventPage({ serverEvents }) {
                   transition="0.2s"
                   _hover={{ boxShadow: 'xl', transform: 'translateY(-5px)' }}
                   border="1px solid #eee"
+                  onClick={() => router.push(`/event/view/${event.id}`)}
+                  cursor="pointer"
                 >
                   <Box w="100%" h="200px" overflow="hidden">
                     <img
                       src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
                       alt={event.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', pointerEvents: 'none' }}
                     />
                   </Box>
                   <Box p={3}>
