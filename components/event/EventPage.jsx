@@ -1,5 +1,5 @@
 'use client';
-
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Box, Flex, Text, Button } from '@chakra-ui/react';
 import { Header,Footer } from '..';
@@ -15,6 +15,7 @@ export default function EventPage({ serverEvents }) {
   const [events] = useState(serverEvents || {});
   const [user, setUser] = useState(null);
   const [activeCategory, setActiveCategory] = useState('전체');
+  const router = useRouter();
 
   useEffect(() => {
     document.title = '진행중인 이벤트 - 필모라';
@@ -85,6 +86,18 @@ export default function EventPage({ serverEvents }) {
             </SwiperSlide>
           ))}
         </Swiper>
+      </Box>
+
+         
+      <Box bg="white" pt={10} pb={0} px={6} maxW="1280px" mx="auto" display="flex" justifyContent="flex-end">
+        <Button
+          onClick={() => router.push('/event/upload')}
+          colorScheme="purple"
+          size="sm"
+          mb={2}
+        >
+          + 이벤트 등록
+        </Button>
       </Box>
 
       {/* Category Tabs */}
