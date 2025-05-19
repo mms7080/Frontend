@@ -19,12 +19,32 @@ export default function EventDetailPage() {
   const router = useRouter();
   const [event, setEvent] = useState(null);
   const [allEvents, setAllEvents] = useState([]);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // ✅ 로그인 상태 불러오기
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/raw`);
+        const userRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+          credentials: 'include',
+        });
+        if (!userRes.ok) throw new Error();
+        const userInfo = await userRes.json();
+        setUser(userInfo);
+      } catch {
+        setUser(null);
+      }
+    })();
+  }, []);
+
+  // ✅ 이벤트 데이터 불러오기
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/raw`, {
+          credentials: 'include',
+        });
         const data = await res.json();
         setAllEvents(data);
         const found = data.find(e => e.id === Number(id));
@@ -45,7 +65,8 @@ export default function EventDetailPage() {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" />
+      {/* ✅ 로그인 정보 전달 */}
+      <Header headerColor="black" headerBg="white" userInfo={user} />
 
       <Box maxW="800px" mx="auto" mt={20} p={[4, 6]}>
         {loading ? (
@@ -79,7 +100,6 @@ export default function EventDetailPage() {
               ))}
             </Flex>
 
-           
             {/* 버튼 영역 */}
             <Flex
               direction={buttonDirection}
@@ -89,10 +109,7 @@ export default function EventDetailPage() {
               wrap="wrap"
             >
               <Button
-                onClick={() => {
-                  if (!prev) return;
-                  router.push(`/event/view/${prev.id}`);
-                }}
+                onClick={() => prev && router.push(`/event/view/${prev.id}`)}
                 isDisabled={!prev}
                 variant="outline"
                 w={['100%', 'auto']}
@@ -113,10 +130,7 @@ export default function EventDetailPage() {
               </Button>
 
               <Button
-                onClick={() => {
-                  if (!next) return;
-                  router.push(`/event/view/${next.id}`);
-                }}
+                onClick={() => next && router.push(`/event/view/${next.id}`)}
                 isDisabled={!next}
                 variant="outline"
                 w={['100%', 'auto']}
@@ -128,7 +142,7 @@ export default function EventDetailPage() {
               </Button>
             </Flex>
 
-            {/* 삭제 버튼만 별도로 우측 정렬 */}
+            {/* 삭제 버튼 */}
             <Flex justify="flex-end" mt={4}>
               <Button
                 onClick={async () => {
@@ -137,6 +151,7 @@ export default function EventDetailPage() {
 
                   const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${event.id}`, {
                     method: 'DELETE',
+                    credentials: 'include', // ✅ 삭제 요청에도 쿠키 포함
                   });
 
                   if (res.ok) {
@@ -150,10 +165,9 @@ export default function EventDetailPage() {
                 colorScheme="red"
                 fontWeight="bold"
               >
-                 삭제
+                삭제
               </Button>
             </Flex>
-
           </>
         ) : (
           <Flex justify="center" align="center" minH="200px">
