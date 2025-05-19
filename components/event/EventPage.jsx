@@ -190,21 +190,26 @@ export default function EventPage({ serverEvents }) {
 
       {/* Category Tabs */}
       <Box bg="white" pt={10} pb={2} px={6} maxW="1280px" mx="auto">
-        <Flex gap={2} borderBottom="1px solid #5f0080">
+        <Flex gap={2} borderBottom="1px solid #5f0080" flexWrap="wrap">
           {categories.map((category) => (
             <Button
               key={category}
               variant="ghost"
               borderBottom={
                 activeCategory === category
-                  ? "2px solid #5f0080"
-                  : "1px solid transparent"
+                  ? "3px solid #5f0080"
+                  : "2px solid transparent"
               }
               borderRadius="0"
               fontWeight={activeCategory === category ? "bold" : "normal"}
               color={activeCategory === category ? "#5f0080" : "black"}
               onClick={() => setActiveCategory(category)}
               _hover={{ bg: "transparent", color: "#5f0080" }}
+              fontSize="lg" // 글씨 크기 키우기
+              py={4} // 위아래 패딩 키우기
+              px={6} // 좌우 패딩 키우기
+              minW="120px" // 버튼 너비 확보
+              h="50px" // 높이 증가
             >
               {category}
             </Button>

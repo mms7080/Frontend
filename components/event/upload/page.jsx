@@ -1,16 +1,25 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Box, Input, Button, VStack, Text, Heading, Image, Flex } from '@chakra-ui/react';
-import { Header, Footer } from '../../';
-import { useRouter } from 'next/navigation';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import { useState, useEffect } from "react";
+import {
+  Box,
+  Input,
+  Button,
+  VStack,
+  Text,
+  Heading,
+  Image,
+  Flex,
+} from "@chakra-ui/react";
+import { Header, Footer } from "../../";
+import { useRouter } from "next/navigation";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function EventUploader() {
   const [form, setForm] = useState({
-    title: '',
-    category: '',
+    title: "",
+    category: "",
     images: [],
   });
 
@@ -22,14 +31,17 @@ export default function EventUploader() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: 'include',
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+          {
+            credentials: "include",
+          }
+        );
         if (!res.ok) throw new Error();
         const data = await res.json();
         setUser(data);
       } catch {
-        console.log('로그인 정보 없음');
+        console.log("로그인 정보 없음");
       }
     })();
   }, []);
@@ -49,10 +61,10 @@ export default function EventUploader() {
   };
 
   const formatDate = (date) => {
-    if (!date) return '';
+    if (!date) return "";
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}.${month}.${day}`;
   };
 
@@ -60,29 +72,32 @@ export default function EventUploader() {
     const { title, category, images } = form;
 
     if (!title || !startDate || !endDate || !category || images.length === 0) {
-      alert('모든 항목을 입력해주세요.');
+      alert("모든 항목을 입력해주세요.");
       return;
     }
 
     const formattedDate = `${formatDate(startDate)} ~ ${formatDate(endDate)}`;
 
     const data = new FormData();
-    data.append('title', title);
-    data.append('date', formattedDate);
-    data.append('category', category);
-    images.forEach(({ file }) => data.append('images', file));
+    data.append("title", title);
+    data.append("date", formattedDate);
+    data.append("category", category);
+    images.forEach(({ file }) => data.append("images", file));
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/upload`, {
-      method: 'POST',
-      body: data,
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/upload`,
+      {
+        method: "POST",
+        body: data,
+      }
+    );
 
     if (res.ok) {
-      alert('이벤트 업로드 성공!');
-      router.push('/event');
+      alert("이벤트 업로드 성공!");
+      router.push("/event");
     } else {
       const error = await res.text();
-      alert('업로드 실패: ' + error);
+      alert("업로드 실패: " + error);
     }
   };
 
@@ -104,10 +119,15 @@ export default function EventUploader() {
           📤 이벤트 등록
         </Heading>
 
-        <VStack spacing={5}>
+        <VStack spacing={8}>
+          {" "}
+          {/* spacing 값 증가 */}
           {/* 제목 */}
           <Box w="100%">
-            <Text fontWeight="bold" mb={1}>제목</Text>
+            <Text fontWeight="bold" mb={2}>
+              제목
+            </Text>{" "}
+            {/* mb 증가 */}
             <Input
               name="title"
               value={form.title}
@@ -115,11 +135,12 @@ export default function EventUploader() {
               onChange={handleChange}
             />
           </Box>
-
           {/* 날짜 선택기 */}
           <Box w="100%">
-            <Text fontWeight="bold" mb={1}>기간 선택</Text>
-            <Flex gap={3} alignItems="center">
+            <Text fontWeight="bold" mb={2}>
+              기간 선택
+            </Text>
+            <Flex gap={4} alignItems="center">
               <DatePicker
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
@@ -128,7 +149,12 @@ export default function EventUploader() {
                 endDate={endDate}
                 placeholderText="시작일"
                 dateFormat="yyyy.MM.dd"
-                className="chakra-input css-1c6xsvs"
+                style={{
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "6px",
+                  width: "140px",
+                }}
               />
               <Text>~</Text>
               <DatePicker
@@ -140,19 +166,31 @@ export default function EventUploader() {
                 minDate={startDate}
                 placeholderText="종료일"
                 dateFormat="yyyy.MM.dd"
-                className="chakra-input css-1c6xsvs"
+                style={{
+                  padding: "10px",
+                  border: "1px solid #ccc",
+                  borderRadius: "6px",
+                  width: "140px",
+                }}
               />
             </Flex>
           </Box>
-
           {/* 카테고리 */}
           <Box w="100%">
-            <Text fontWeight="bold" mb={1}>카테고리</Text>
+            <Text fontWeight="bold" mb={2}>
+              카테고리
+            </Text>
             <select
               name="category"
               value={form.category}
               onChange={handleChange}
-              style={{ width: '100%', padding: '10px', borderRadius: '6px' }}
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+                fontSize: "14px",
+              }}
             >
               <option value="">카테고리 선택</option>
               <option value="추천">추천</option>
@@ -163,19 +201,19 @@ export default function EventUploader() {
               <option value="시사회/무대인사">시사회/무대인사</option>
             </select>
           </Box>
-
           {/* 이미지 업로드 */}
           <Box w="100%">
-            <Text fontWeight="bold" mb={1}>이미지 업로드</Text>
+            <Text fontWeight="bold" mb={2}>
+              이미지 업로드
+            </Text>
             <Input
               type="file"
               accept="image/*"
               multiple
               onChange={handleFileChange}
             />
-            {/* 썸네일 미리보기 */}
             {form.images.length > 0 && (
-              <Flex mt={3} gap={3} wrap="wrap">
+              <Flex mt={4} gap={4} wrap="wrap">
                 {form.images.map((img, idx) => (
                   <Box
                     key={idx}
@@ -197,8 +235,8 @@ export default function EventUploader() {
               </Flex>
             )}
           </Box>
-
-          <Button w="100%" colorScheme="purple" onClick={handleSubmit}>
+          {/* 버튼 */}
+          <Button w="100%" colorScheme="purple" mt={4} onClick={handleSubmit}>
             이벤트 등록
           </Button>
         </VStack>
