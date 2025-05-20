@@ -6,11 +6,17 @@ import Link from 'next/link';
 export default function FixedRightSideNavigator() {
   /* 스크롤 이벤트 핸들러 */
   const handleScroll = (direction) => {
-    const amount = 400; /* 스크롤 이동 거리 */
-    window.scrollBy({
-      top: direction === "up" ? -amount : amount,
-      behavior: "smooth",
-    });
+    if (direction === "up") {
+      window.scrollTo({
+        top: 0, /* 윗쪽 끝으로 이동 */
+        behavior: "smooth",
+      });
+    } else {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight, /* 아래쪽 끝으로 이동 */
+        behavior: "smooth",
+      });
+    }
   };
   return (
     <Flex
