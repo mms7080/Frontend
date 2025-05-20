@@ -1,0 +1,148 @@
+/* BoxOffice.css */
+.boxoffice {
+    background-color: #141414;
+    color: white;
+    padding: 40px 20px;
+  }
+  
+  .boxoffice h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+  }
+  
+  .movie-grid {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  
+  .movie-card {
+    width: 280px;
+    position: relative;
+    background: #1e1e1e;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .movie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  .movie-card .rank {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    z-index: 1;
+  }
+  
+  .poster {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .poster .overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    padding: 15px;
+    font-size: 13px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .poster:hover .overlay {
+    opacity: 1;
+  }
+  
+  .poster .overlay .score {
+    color: #4dd0e1;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .poster img {
+    width: 100%;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  }
+  
+  .label {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 3px;
+    font-weight: bold;
+  }
+  
+  .rating {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 3px;
+    font-weight: bold;
+    z-index: 2;
+  }
+  
+  .label.purple {
+    background-color: #a020f0;
+  }
+  
+  .label.gray {
+    background-color: #444;
+  }
+  
+  .rating.orange {
+    background-color: #ff9900;
+  }
+  
+  .rating.yellow {
+    background-color: #ffc107;
+  }
+  
+  .rating.red {
+    background-color: #dc3545;
+  }
+  
+  .info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+  
+  .likes {
+    font-size: 14px;
+  }
+  
+  .movie-card button {
+    background-color: #00aaff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .movie-card button:hover {
+    background-color: #0099dd;
+    box-shadow: 0 0 10px rgba(0, 170, 255, 0.6);
+    transform: translateY(-2px);
+  }

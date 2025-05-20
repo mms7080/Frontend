@@ -4,7 +4,10 @@ import React,{useEffect,useState} from 'react';
 import {Text, Button, Flex, Box, Grid} from '@chakra-ui/react';
 
 import Movie from '../../components/movie/movie';
+import BoxOffice from '../../components/movie/boxoffice';
 import {Header,Footer} from '../../components';
+
+import {fetch} from '../../lib/client';
 
 const categories = ['전체영화', '개봉작', '상영예정작'];
 
@@ -12,17 +15,26 @@ export default function Moviepage(){
 
     const [activeCategory, setActiveCategory] = useState('전체영화');
     const [movies, setMovies] = useState([]);
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         document.title = '전체 영화 - 필모라라';
 
         (async () => {
             try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
+                setUser(res);
+            } catch(err) {
+                console.log("USER FETCH ERROR" + err.message);
+            }
+        })();
+
+        (async () => {
+            try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/get`);
-                const data = await res.json();
-                setMovies(Object.values(data));
+                setMovies(Object.values(res));
             } catch (err) {
-                console.log(err.message);
+                console.log("MOVIE FETCH ERROR" + err.message);
                 setMovies(
                     [
                         {id:1, title:'Fields of Destiny', rate:'', releaseDate:'0000.00.00', likeNumber:'5.3k', image:'https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg'},
@@ -48,7 +60,7 @@ export default function Moviepage(){
         });
     // console.log(filteredMovies);
     return <>
-        <Header headerColor="white" headerBg="#1a1a1a"/>
+        <Header headerColor="white" headerBg="#1a1a1a" userInfo={user}/>
         <Box bg="white" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
             <Box pb={6}>
                 <Flex gap={2} borderBottom="1px solid #5f0080">
