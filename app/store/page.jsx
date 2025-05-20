@@ -61,10 +61,10 @@ export default function MegaboxStorePage() {
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      <Box maxW="1200px" mx="auto" pt={20} px={4} pb={10}>
+      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
         <Heading
           mb={10}
-          fontSize="2xl"
+          fontSize={{ base: "xl", md: "2xl" }}
           fontWeight="bold"
           textAlign="center"
           color="#222"
@@ -74,7 +74,7 @@ export default function MegaboxStorePage() {
           🛍️ 스토어
         </Heading>
 
-        <Flex gap={3} mb={8} flexWrap="wrap" justify="center">
+        <Flex gap={2} mb={8} flexWrap="wrap" justify="center">
           {defaultCategories.map((category) => (
             <Button
               key={category}
@@ -100,7 +100,7 @@ export default function MegaboxStorePage() {
           <Box key={category} mb={12}>
             {activeCategory === "전체" && (
               <Text
-                fontSize="xl"
+                fontSize={{ base: "lg", md: "xl" }}
                 fontWeight="bold"
                 mb={4}
                 borderLeft="4px solid #6B46C1"
@@ -110,11 +110,16 @@ export default function MegaboxStorePage() {
               </Text>
             )}
 
-            <SimpleGrid columns={4} spacing={10} justifyItems="center">
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+              spacing={{ base: 6, md: 10 }}
+              justifyItems="center"
+            >
               {(storeData[category] || []).map((item) => (
                 <Box
                   key={item.id}
-                  w="280px"
+                  w="100%"
+                  maxW="280px"
                   borderWidth="1px"
                   borderRadius="lg"
                   bg="white"
@@ -135,8 +140,11 @@ export default function MegaboxStorePage() {
                       justifyContent="space-between"
                       alignItems="center"
                       mb={2}
+                      gap={2}
                     >
-                      <Text fontWeight="bold">{item.title}</Text>
+                      <Text fontWeight="bold" fontSize="15px" isTruncated>
+                        {item.title}
+                      </Text>
                       {item.badge && (
                         <span
                           style={{
@@ -145,13 +153,14 @@ export default function MegaboxStorePage() {
                             borderRadius: "4px",
                             padding: "2px 6px",
                             fontSize: "12px",
+                            whiteSpace: "nowrap",
                           }}
                         >
                           {item.badge}
                         </span>
                       )}
                     </Flex>
-                    <Text fontSize="13px" color="#666" mb={1}>
+                    <Text fontSize="13px" color="#666" mb={1} noOfLines={2}>
                       {item.subtitle}
                     </Text>
                     <Flex alignItems="baseline" gap={2} mb={2}>
@@ -187,7 +196,7 @@ export default function MegaboxStorePage() {
           </Box>
         ))}
       </Box>
-      <div style={{ height: "230px" }} />
+      <Box height={{ base: "100px", md: "230px" }} />
       <Footer footerBg="white" footerColor="black" />
     </>
   );

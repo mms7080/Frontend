@@ -82,7 +82,16 @@ export default function EventPage({ serverEvents }) {
     <>
       <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
 
-      <Box bg="white" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
+      <Box bg="white" pt={20} pb={10} px={{ base: 4, md: 6 }} maxW="1280px" mx="auto">
+        <Flex justify="flex-end" mb={4}>
+          <Button
+            colorScheme="purple"
+            onClick={() => router.push("/event/upload")}
+          >
+            + 이벤트 등록
+          </Button>
+        </Flex>
+
         <Text
           fontSize="xl"
           fontWeight="bold"
@@ -97,16 +106,16 @@ export default function EventPage({ serverEvents }) {
           navigation
           pagination={{ clickable: true }}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
-          loop={true}
-          spaceBetween={30}
-          slidesPerView={2}
+          loop
+          spaceBetween={20}
+          slidesPerView={1}
+          breakpoints={{
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+          }}
           onSwiper={(swiper) => {
-            swiper.el.addEventListener("mouseenter", () =>
-              swiper.autoplay.stop()
-            );
-            swiper.el.addEventListener("mouseleave", () =>
-              swiper.autoplay.start()
-            );
+            swiper.el.addEventListener("mouseenter", () => swiper.autoplay.stop());
+            swiper.el.addEventListener("mouseleave", () => swiper.autoplay.start());
           }}
         >
           {(events["추천"] || []).map((event, idx) => (
@@ -142,23 +151,15 @@ export default function EventPage({ serverEvents }) {
                     fontSize="xs"
                     fontWeight="bold"
                     color="white"
-                    bg={
-                      getEventStatus(event.date) === "종료됨"
-                        ? "gray.500"
-                        : "green.500"
-                    }
+                    bg={getEventStatus(event.date) === "종료됨" ? "gray.500" : "green.500"}
                     px={2}
                     py={0.5}
                     borderRadius="full"
                   >
                     {getEventStatus(event.date)}
                   </Text>
-                  <Text fontSize="lg" fontWeight="bold" mb={2}>
-                    {event.title}
-                  </Text>
-                  <Text fontSize="sm" color="gray.500">
-                    {event.date}
-                  </Text>
+                  <Text fontSize="lg" fontWeight="bold" mb={2}>{event.title}</Text>
+                  <Text fontSize="sm" color="gray.500">{event.date}</Text>
                 </Box>
               </Box>
             </SwiperSlide>
@@ -166,18 +167,13 @@ export default function EventPage({ serverEvents }) {
         </Swiper>
       </Box>
 
-      {/* 카테고리 탭 복구 */}
-      <Box bg="white" pt={10} pb={2} px={6} maxW="1280px" mx="auto">
+      <Box bg="white" pt={10} pb={2} px={{ base: 4, md: 6 }} maxW="1280px" mx="auto">
         <Flex gap={2} borderBottom="1px solid #5f0080" flexWrap="wrap">
           {categories.map((category) => (
             <Button
               key={category}
               variant="ghost"
-              borderBottom={
-                activeCategory === category
-                  ? "3px solid #5f0080"
-                  : "2px solid transparent"
-              }
+              borderBottom={activeCategory === category ? "3px solid #5f0080" : "2px solid transparent"}
               borderRadius="0"
               fontWeight={activeCategory === category ? "bold" : "normal"}
               color={activeCategory === category ? "#5f0080" : "black"}
@@ -203,38 +199,26 @@ export default function EventPage({ serverEvents }) {
             style={{
               width: "100%",
               maxWidth: "400px",
-              padding: "8px",
+              padding: "10px",
               border: "1px solid #ccc",
               borderRadius: "4px",
+              fontSize: "14px",
             }}
           />
         </Box>
       </Box>
 
-      <Box bg="white" py={12} px={6} maxW="1280px" mx="auto">
-        <Text
-          fontSize="2xl"
-          fontWeight="bold"
-          mb={8}
-          borderBottom="2px solid #333"
-          pb={2}
-        >
+      <Box bg="white" py={12} px={{ base: 4, md: 6 }} maxW="1280px" mx="auto">
+        <Text fontSize="2xl" fontWeight="bold" mb={8} borderBottom="2px solid #333" pb={2}>
           진행중인 이벤트
         </Text>
 
         {keywordFilteredEvents.map(([category, items]) => (
           <Box key={category} mb={16}>
-            <Text
-              fontSize="xl"
-              fontWeight="bold"
-              mt={16}
-              mb={4}
-              borderLeft="4px solid #5f0080"
-              pl={2}
-            >
+            <Text fontSize="xl" fontWeight="bold" mt={16} mb={4} borderLeft="4px solid #5f0080" pl={2}>
               {category}
             </Text>
-            <SimpleGrid columns={4} spacing={10} justifyItems="center">
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} justifyItems="center">
               {items.map((event, idx) => (
                 <Box
                   key={idx}
@@ -242,7 +226,8 @@ export default function EventPage({ serverEvents }) {
                   borderRadius="md"
                   overflow="hidden"
                   boxShadow="sm"
-                  width="280px"
+                  width="100%"
+                  maxW="280px"
                   transition="0.2s"
                   _hover={{ boxShadow: "xl", transform: "translateY(-5px)" }}
                   border="1px solid #eee"
@@ -264,11 +249,7 @@ export default function EventPage({ serverEvents }) {
                       fontSize="xs"
                       fontWeight="bold"
                       color="white"
-                      bg={
-                        getEventStatus(event.date) === "종료됨"
-                          ? "gray.600"
-                          : "green.500"
-                      }
+                      bg={getEventStatus(event.date) === "종료됨" ? "gray.600" : "green.500"}
                       px={2}
                       py={0.5}
                       borderRadius="full"
@@ -278,17 +259,10 @@ export default function EventPage({ serverEvents }) {
                     </Text>
                   </Box>
                   <Box p={3} minH="80px">
-                    <Text
-                      fontSize="sm"
-                      fontWeight="semibold"
-                      mb={1}
-                      noOfLines={2}
-                    >
+                    <Text fontSize="sm" fontWeight="semibold" mb={1} noOfLines={2}>
                       {event.title}
                     </Text>
-                    <Text fontSize="xs" color="gray.500">
-                      {event.date}
-                    </Text>
+                    <Text fontSize="xs" color="gray.500">{event.date}</Text>
                   </Box>
                 </Box>
               ))}
@@ -297,11 +271,7 @@ export default function EventPage({ serverEvents }) {
         ))}
       </Box>
 
-      <Footer
-        footerColor="white"
-        footerBg="#1a1a1a"
-        footerBorder="transparent"
-      />
+      <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
     </>
   );
 }
