@@ -2,7 +2,7 @@
 
 import React,{useState} from 'react';
 import { useRouter } from 'next/navigation';
-import {VStack,Text,Button,Box} from '@chakra-ui/react';
+import {VStack,Text,Button,Box, Flex} from '@chakra-ui/react';
 import MoviePoster from '../../components/moviePoster';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
@@ -32,8 +32,10 @@ export default function BookingPage(){
     return <>
         <Header headerColor={headerColor} headerBg={headerBg}></Header>
 
+        <Text fontSize="5xl" color="black" mb="20px" marginLeft="19%" marginTop="20px">빠른예매</Text>
+        
         <VStack spacing="20px" p="20px" overflow="visible">
-            <Text fontSize="5xl" color="black" mb="20px">예매</Text>
+            
             {selectedMovie && (
                 <Box textAlign="center" maxW="600px" mx="auto">
                     <Text fontSize="2xl" fontWeight="semibold">
@@ -91,7 +93,7 @@ export default function BookingPage(){
                 mt="auto"
                 alignSelf="center"
                 colorScheme={selectedTime ? 'purple' : 'gray'}
-                size="lg"
+                size="2xl"
                 onClick={handleProceed}
                 isDisabled={!selectedTime}
             >
