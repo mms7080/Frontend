@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Header from '../../../components/header';
 import Footer from '../../../components/footer';
 
@@ -19,15 +18,15 @@ export default function NoticeDetailPage() {
   useEffect(() => {
     (async () => {
       try {
-        const userRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
           credentials: 'include',
         });
-        if (userRes.ok) {
-          const userData = await userRes.json();
+        if (res.ok) {
+          const userData = await res.json();
           setUser(userData);
         }
-      } catch (err) {
-        console.log('로그인 정보 없음');
+      } catch {
+        setUser(null);
       }
     })();
   }, []);
@@ -65,155 +64,119 @@ export default function NoticeDetailPage() {
     <>
       <Header headerColor="black" headerBg="#f9f9f9" userInfo={user} />
 
-      <main className="detail-wrapper">
-        <h1 className="notice-title">📢 공지사항</h1>
+      <div style={{ maxWidth: '1200px', margin: '60px auto', padding: '30px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', fontFamily: 'Pretendard, sans-serif' }}>
+        <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: 'black', textAlign: 'center', marginBottom: '30px', borderBottom: '2px solid #6B46C1', paddingBottom: '10px' }}>공지사항</h1>
 
-        <div className="detail-box">
-          <table className="detail-table">
-            <tbody>
-              <tr>
-                <th>제목</th>
-                <td>{notice.title}</td>
-              </tr>
-              <tr>
-                <th>작성자</th>
-                <td>{notice.writer}</td>
-              </tr>
-              <tr>
-                <th>작성일</th>
-                <td>{notice.createdAt?.slice(0, 10)}</td>
-              </tr>
-            </tbody>
-          </table>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '24px' }}>
+          <tbody>
+            <tr>
+              <th style={thStyle}>제목</th>
+              <td style={tdStyle}>{notice.title}</td>
+            </tr>
+            <tr>
+              <th style={thStyle}>작성자</th>
+              <td style={tdStyle}>{notice.writer}</td>
+            </tr>
+            <tr>
+              <th style={thStyle}>작성일</th>
+              <td style={tdStyle}>{notice.createdAt?.slice(0, 10)}</td>
+            </tr>
+          </tbody>
+        </table>
 
-          <div className="content">
-            <p>{notice.content}</p>
-          </div>
-
-          <div className="main-buttons-container">
-            <div className="navigation-buttons">
-              {prevId ? (
-                <button onClick={() => router.push(`/notice/${prevId}`)}>이전글</button>
-              ) : (
-                <button disabled className="disabled-btn">이전글</button>
-              )}
-              {nextId ? (
-                <button onClick={() => router.push(`/notice/${nextId}`)}>다음글</button>
-              ) : (
-                <button disabled className="disabled-btn">다음글</button>
-              )}
-            </div>
-              <div className="delete-buttons">
-                  <button onClick={() => router.push(`/notice/edit/${id}`)}>수정</button>
-              </div>
-
-          </div>
-
-          <div className="inven-buttons">
-            <button onClick={() => router.push('/notice')}>목록</button>
-          </div>
+        <div style={{ whiteSpace: 'pre-line', lineHeight: '1.8', padding: '20px', backgroundColor: '#f9f5ff', border: '1px solid #e2d8f7', borderRadius: '6px', fontSize: '16px', color: '#333', marginBottom: '30px' }}>
+          {notice.content}
         </div>
-      </main>
 
-      <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              style={{ ...navBtn, ...(prevId ? {} : disabledStyle) }}
+              disabled={!prevId}
+              onClick={() => prevId && router.push(`/notice/${prevId}`)}
+              onMouseOver={e => prevId && (e.currentTarget.style.backgroundColor = '#f3e8ff')}
+              onMouseOut={e => prevId && (e.currentTarget.style.backgroundColor = '#fff')}
+            >
+              이전글
+            </button>
+            <button
+              style={{ ...navBtn, ...(nextId ? {} : disabledStyle) }}
+              disabled={!nextId}
+              onClick={() => nextId && router.push(`/notice/${nextId}`)}
+              onMouseOver={e => nextId && (e.currentTarget.style.backgroundColor = '#f3e8ff')}
+              onMouseOut={e => nextId && (e.currentTarget.style.backgroundColor = '#fff')}
+            >
+              다음글
+            </button>
+          </div>
+          <button
+            style={editBtn}
+            onClick={() => router.push(`/notice/edit/${id}`)}
+            onMouseOver={e => (e.currentTarget.style.backgroundColor = '#ddd')}
+            onMouseOut={e => (e.currentTarget.style.backgroundColor = '#eee')}
+          >
+            수정
+          </button>
+        </div>
 
-      <style jsx>{`
-        .detail-wrapper {
-          width: 100%;
-          max-width: 1200px;
-          margin: 50px auto;
-          padding: 0 20px;
-          font-family: 'Segoe UI', sans-serif;
-        }
+        <div style={{ textAlign: 'center' }}>
+          <button
+            onClick={() => router.push('/notice')}
+            style={{ ...editBtn, backgroundColor: '#6B46C1', color: '#fff' }}
+            onMouseOver={e => (e.currentTarget.style.backgroundColor = '#553C9A')}
+            onMouseOut={e => (e.currentTarget.style.backgroundColor = '#6B46C1')}
+          >
+            목록
+          </button>
+        </div>
+      </div>
 
-        .notice-title {
-          font-size: 30px;
-          font-weight: bold;
-          color: #333;
-          text-align: center;
-          margin-bottom: 30px;
-          border-bottom: 2px solid #ccc;
-          padding-bottom: 10px;
-        }
-
-        .detail-box {
-          background-color: #fff;
-          border: 1px solid #e0e0e0;
-          border-radius: 8px;
-          padding: 30px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .detail-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-bottom: 24px;
-          font-size: 15px;
-        }
-
-        .detail-table th,
-        .detail-table td {
-          padding: 12px 14px;
-          border-bottom: 1px solid #ddd;
-        }
-
-        .detail-table th {
-          background-color: #f4f4f4;
-          font-weight: bold;
-          width: 20%;
-          text-align: left;
-        }
-
-        .content {
-          padding: 20px;
-          border: 1px solid #eee;
-          border-radius: 4px;
-          background-color: #fafafa;
-          white-space: pre-line;
-          line-height: 1.7;
-          margin-bottom: 30px;
-        }
-
-        .main-buttons-container {
-          display: flex;
-          justify-content: space-between;
-          margin-bottom: 20px;
-        }
-
-        .navigation-buttons,
-        .delete-buttons {
-          display: flex;
-          gap: 10px;
-        }
-
-        .navigation-buttons button,
-        .delete-buttons button,
-        .inven-buttons button {
-          padding: 10px 20px;
-          font-size: 14px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          background-color: #fff;
-          cursor: pointer;
-          transition: background-color 0.2s;
-        }
-
-        .navigation-buttons button:hover,
-        .delete-buttons button:hover,
-        .inven-buttons button:hover {
-          background-color: #f0f0f0;
-        }
-
-        .disabled-btn {
-          opacity: 0.4;
-          cursor: not-allowed;
-        }
-
-        .inven-buttons {
-          text-align: center;
-          margin-top: 20px;
-        }
-      `}</style>
+      <div style={{ height: '200px' }} />
+      <Footer footerBg="white" footerColor="black" />
     </>
   );
 }
+
+const thStyle = {
+  textAlign: 'left',
+  padding: '12px 16px',
+  backgroundColor: '#f4f1fa',
+  width: '20%',
+  fontWeight: 'bold',
+  borderBottom: '1px solid #ddd',
+  color: '#6B46C1'
+};
+
+const tdStyle = {
+  padding: '12px 16px',
+  borderBottom: '1px solid #ddd',
+  color: '#444'
+};
+
+const navBtn = {
+  padding: '8px 16px',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  backgroundColor: '#fff',
+  cursor: 'pointer',
+  fontSize: '14px',
+  fontWeight: 'bold',
+  color: '#6B46C1',
+  transition: '0.3s all ease'
+};
+
+const editBtn = {
+  padding: '8px 16px',
+  borderRadius: '4px',
+  border: 'none',
+  backgroundColor: '#eee',
+  fontWeight: 'bold',
+  fontSize: '14px',
+  cursor: 'pointer',
+  transition: '0.3s all ease'
+};
+
+const disabledStyle = {
+  opacity: 0.4,
+  cursor: 'not-allowed'
+};

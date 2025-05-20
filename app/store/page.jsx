@@ -209,6 +209,8 @@ export default function MegaboxStorePage() {
                       fontWeight="bold"
                       borderRadius="6px"
                       fontSize="14px"
+                      transition="all 0.3s"
+                      _hover={{ bg: "#553C9A", transform: "scale(1.02)" }}
                       onClick={() => router.push(`/store/detail/${item.id}`)}
                     >
                       구매하기
