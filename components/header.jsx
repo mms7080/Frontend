@@ -51,10 +51,11 @@ export default function Header({ userInfo }) {
       <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
         극장
       </Box>
-
+      <Link href="/store" style={{ textDecoration: 'none' }}>
       <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
         스토어
       </Box>
+      </Link>
 
       <Link href="/notice" style={{ textDecoration: 'none' }}>
         <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
