@@ -65,34 +65,45 @@ export default function NoticePage({ notices }) {
     const regex = new RegExp(`(${searchKeyword})`, "gi");
     const parts = text.split(regex);
     return parts.map((part, i) =>
-      regex.test(part) ? <mark key={i} style={{ backgroundColor: "yellow" }}>{part}</mark> : part
+      regex.test(part) ? <mark key={i} style={{ backgroundColor: "#FBB6CE" }}>{part}</mark> : part
     );
   };
 
   const isNew = (createdAt) => {
     const created = new Date(createdAt);
     const now = new Date();
-    const diff = (now - created) / (1000 * 60 * 60 * 24); // 일 수 차이
+    const diff = (now - created) / (1000 * 60 * 60 * 24);
     return diff <= 3;
   };
 
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px", fontFamily: "sans-serif" }}>
-        <h1 style={{ fontSize: "30px", fontWeight: "bold", textAlign: "center", color: "#222", marginBottom: "36px", borderBottom: "2px solid #ccc", paddingBottom: "10px" }}>
-          📢 NOTICE
+      <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px", fontFamily: "'Pretendard', sans-serif" }}>
+        <h1 style={{ fontSize: "32px", fontWeight: "bold", textAlign: "center", color: "black", marginBottom: "40px", borderBottom: "3px solid #6B46C1", paddingBottom: "12px" }}>
+          공지사항
         </h1>
+
         <div style={{ textAlign: "right", marginBottom: "24px" }}>
           <button
-            style={{ backgroundColor: "#333", color: "white", padding: "6px 20px", border: "none", borderRadius: "5px", cursor: "pointer", fontSize: "14px", transition: "background-color 0.3s" }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#111"}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = "#333"}
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              padding: "8px 20px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "15px",
+              transition: "all 0.3s"
+            }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = "#553C9A"}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = "black"}
             onClick={() => window.location.href = "/notice/new"}
           >
             + 공지 등록
           </button>
         </div>
+
         <div style={{ display: "flex", justifyContent: "center", gap: "12px", marginBottom: "32px" }}>
           <select value={searchOption} onChange={(e) => setSearchOption(e.target.value)} style={{ padding: "10px", borderRadius: "4px", border: "1px solid #aaa", fontSize: "15px", width: "140px" }}>
             <option value="title">제목</option>
@@ -102,9 +113,10 @@ export default function NoticePage({ notices }) {
           </select>
           <input style={{ padding: "10px", width: "320px", borderRadius: "4px", border: "1px solid #aaa", fontSize: "15px" }} placeholder="검색어를 입력하세요" value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} />
         </div>
+
         <table style={{ width: "100%", borderCollapse: "collapse", boxShadow: "0 4px 10px rgba(0,0,0,0.05)" }}>
-          <thead style={{ backgroundColor: "#f7f7f7" }}>
-            <tr>
+          <thead style={{ backgroundColor: "#f1e8ff" }}>
+            <tr style={{ color: "#5f0080" }}>
               <th style={{ padding: "14px", borderBottom: "1px solid #ddd", width: "6%" }}>번호</th>
               <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>제목</th>
               <th style={{ padding: "14px", borderBottom: "1px solid #ddd", width: "12%" }}>작성자</th>
@@ -123,9 +135,19 @@ export default function NoticePage({ notices }) {
                 <tr key={notice.id} style={{ borderBottom: "1px solid #eee", backgroundColor: "#fff" }}>
                   <td style={{ padding: "14px", textAlign: "center", fontSize: "14px", color: "#666" }}>{notice.id}</td>
                   <td style={{ padding: "14px", fontWeight: "600", fontSize: "16px", lineHeight: "1.4", color: "#222" }}>
-                    <a href={`/notice/${notice.id}`} style={{ color: "#222", textDecoration: "none", display: "block", transition: "color 0.2s" }} onMouseOver={(e) => e.currentTarget.style.color = "#5f0080"} onMouseOut={(e) => e.currentTarget.style.color = "#222"}>
+                    <a
+                      href={`/notice/${notice.id}`}
+                      style={{
+                        color: "#222",
+                        textDecoration: "none",
+                        display: "block",
+                        transition: "color 0.2s"
+                      }}
+                      onMouseOver={(e) => (e.currentTarget.style.color = "#6B46C1")}
+                      onMouseOut={(e) => (e.currentTarget.style.color = "#222")}
+                    >
                       {highlightKeyword(notice.title)}
-                      {isNew(notice.createdAt) && <span style={{ backgroundColor: "red", color: "white", borderRadius: "6px", fontSize: "10px", padding: "2px 6px", marginLeft: "8px" }}>NEW</span>}
+                      {isNew(notice.createdAt) && <span style={{ backgroundColor: "#e53e3e", color: "white", borderRadius: "6px", fontSize: "10px", padding: "2px 6px", marginLeft: "8px" }}>NEW</span>}
                     </a>
                   </td>
                   <td style={{ padding: "14px", textAlign: "center", fontSize: "14px", color: "#555" }}>{notice.writer}</td>
@@ -155,15 +177,69 @@ export default function NoticePage({ notices }) {
             )}
           </tbody>
         </table>
+
         <div style={{ textAlign: "center", marginTop: "40px" }}>
           {currentPage > 1 && (
-            <button onClick={() => setCurrentPage(currentPage - 1)} style={{ margin: "0 6px", padding: "8px 12px", backgroundColor: "#eee", color: "black", border: "none", borderRadius: "4px", cursor: "pointer" }}>&lt;</button>
+            <button
+              onClick={() => setCurrentPage(currentPage - 1)}
+              style={{
+                margin: "0 6px",
+                padding: "8px 12px",
+                backgroundColor: "#eee",
+                color: "black",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                transition: "all 0.3s"
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#d3d3d3")}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#eee")}
+            >
+              &lt;
+            </button>
           )}
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button key={page} onClick={() => setCurrentPage(page)} style={{ margin: "0 6px", padding: "8px 14px", backgroundColor: currentPage === page ? "#333" : "#eee", color: currentPage === page ? "white" : "black", border: "none", borderRadius: "4px", cursor: "pointer" }}>{page}</button>
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              style={{
+                margin: "0 6px",
+                padding: "8px 14px",
+                backgroundColor: currentPage === page ? "#6B46C1" : "#eee",
+                color: currentPage === page ? "white" : "black",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                transition: "all 0.3s"
+              }}
+              onMouseOver={(e) => {
+                if (currentPage !== page) e.currentTarget.style.backgroundColor = "#d3d3d3";
+              }}
+              onMouseOut={(e) => {
+                if (currentPage !== page) e.currentTarget.style.backgroundColor = "#eee";
+              }}
+            >
+              {page}
+            </button>
           ))}
           {currentPage < totalPages && (
-            <button onClick={() => setCurrentPage(currentPage + 1)} style={{ margin: "0 6px", padding: "8px 12px", backgroundColor: "#eee", color: "black", border: "none", borderRadius: "4px", cursor: "pointer" }}>&gt;</button>
+            <button
+              onClick={() => setCurrentPage(currentPage + 1)}
+              style={{
+                margin: "0 6px",
+                padding: "8px 12px",
+                backgroundColor: "#eee",
+                color: "black",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                transition: "all 0.3s"
+              }}
+              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#d3d3d3")}
+              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#eee")}
+            >
+              &gt;
+            </button>
           )}
         </div>
       </div>
