@@ -55,19 +55,18 @@ export default function Find_id(){
             return;
         }
 
+        alert(`회원님의 아이디는 [${res.foundID}]입니다.]`)
         setFoundID(res.foundID);/* 객체에서 문자열만 꺼내서 저장 */
     }
 
     const EmailLayout=()=>{
         return <>
-                <label htmlFor="email">이메일</label>
                 <Input id="email" name="email" placeholder="example@email.com"/>
             </>;
     }
 
     const PhoneLayout=()=>{
         return <>
-                <label htmlFor="phone_number">휴대폰 번호</label>
                 <Input id="phone_number" name="phone_number" placeholder="01012345678"/>
             </>;
     }
@@ -87,7 +86,7 @@ export default function Find_id(){
                                 }}>
                                 <RadioGroup.Item id="method_email" name="method" type="radio" value="email">
                                     <RadioGroup.ItemHiddenInput />
-                                    <RadioGroup.ItemIndicator />
+                                    <RadioGroup.ItemIndicator style={{backgroundColor:'#352461'}}/>
                                     <RadioGroup.ItemText>이메일</RadioGroup.ItemText>
                                 </RadioGroup.Item>
                                 &nbsp;
@@ -95,14 +94,24 @@ export default function Find_id(){
                                 &nbsp;
                                 <RadioGroup.Item id="method_phone_number" name="method" type="radio" value="phone_number">
                                     <RadioGroup.ItemHiddenInput />
-                                    <RadioGroup.ItemIndicator />
+                                    <RadioGroup.ItemIndicator style={{backgroundColor:'#352461'}}/>
                                     <RadioGroup.ItemText>휴대폰 번호</RadioGroup.ItemText>
                                 </RadioGroup.Item>
                             </RadioGroup.Root>
-                            <label htmlFor="name">이름</label>
-                            <Input id="name" name="name" placeholder="이름"/>
-                            {layout==='email'?<EmailLayout/>:<PhoneLayout/>}
-                            <Button bg='#2d2d2d' mt='20px' onClick={handleFindID}>아이디 찾기</Button>
+                            <table>
+                                <tbody>
+                                    <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
+                                        <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름</label></td>
+                                        <td style={{width:605,height:50,paddingLeft:15}}><Input id="name" name="name" placeholder="이름"/></td>
+                                    </tr>
+                                    <tr style={{borderBottom:'1px solid #D1D5DD'}}>
+                                        <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}>{<label htmlFor={layout}>{layout==='email'?'이메일':'휴대폰 번호'}</label>}</td>
+                                        <td style={{width:605,height:50,paddingLeft:15}}>{layout==='email'?<EmailLayout/>:<PhoneLayout/>}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <Button bg='#352461' mt='20px' onClick={handleFindID}>아이디 찾기</Button>
                         </Flex>
                     </Box>
                 </VStack>
@@ -116,8 +125,12 @@ export default function Find_id(){
                 <VStack w='100%' bg='#F9F9F9'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
                         <Flex w='840px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
-                            <span>아이디 : {foundID}</span>
-                            <Button bg='#2d2d2d'>
+                            <Button bg='#352461' onClick={()=>setFoundID('')}>
+                                <Link href='/find_id'>
+                                    아이디 다시 찾기
+                                </Link>
+                            </Button>
+                            <Button bg='#352461'>
                                 <Link href='/signin'>
                                     로그인 화면으로 이동
                                 </Link>

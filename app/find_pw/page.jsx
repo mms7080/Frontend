@@ -78,14 +78,12 @@ export default function Find_pw(){
 
     const EmailLayout=()=>{
         return <>
-                <label htmlFor="email">이메일</label>
                 <Input id="email" name="email" placeholder="example@email.com"/>
             </>;
     }
 
     const PhoneLayout=()=>{
         return <>
-                <label htmlFor="phone_number">휴대폰 번호</label>
                 <Input id="phone_number" name="phone_number" placeholder="01012345678"/>
             </>;
     }
@@ -105,7 +103,7 @@ export default function Find_pw(){
                                 }}>
                                 <RadioGroup.Item id="method_email" name="method" type="radio" value="email">
                                     <RadioGroup.ItemHiddenInput />
-                                    <RadioGroup.ItemIndicator />
+                                    <RadioGroup.ItemIndicator style={{backgroundColor:'#352461'}}/>
                                     <RadioGroup.ItemText>이메일</RadioGroup.ItemText>
                                 </RadioGroup.Item>
                                 &nbsp;
@@ -113,16 +111,28 @@ export default function Find_pw(){
                                 &nbsp;
                                 <RadioGroup.Item id="method_phone_number" name="method" type="radio" value="phone_number">
                                     <RadioGroup.ItemHiddenInput />
-                                    <RadioGroup.ItemIndicator />
+                                    <RadioGroup.ItemIndicator style={{backgroundColor:'#352461'}}/>
                                     <RadioGroup.ItemText>휴대폰 번호</RadioGroup.ItemText>
                                 </RadioGroup.Item>
                             </RadioGroup.Root>
-                            <label htmlFor="name">아이디</label>
-                            <Input id="id" name="id" placeholder="아이디"/>
-                            <label htmlFor="name">이름</label>
-                            <Input id="name" name="name" placeholder="이름"/>
-                            {layout==='email'?<EmailLayout/>:<PhoneLayout/>}
-                            <Button bg='#2d2d2d' mt='20px' onClick={handleFindPW}>비밀번호 재설정</Button>
+                            <table>
+                                <tbody>
+                                    <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
+                                        <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="id">아이디</label></td>
+                                        <td style={{width:605,height:50,paddingLeft:15}}><Input id="id" name="id" placeholder="아이디"/></td>
+                                    </tr>
+                                    <tr style={{borderBottom:'1px solid #D1D5DD'}}>
+                                        <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름</label></td>
+                                        <td style={{width:605,height:50,paddingLeft:15}}><Input id="name" name="name" placeholder="이름"/></td>
+                                    </tr>
+                                    <tr style={{borderBottom:'1px solid #D1D5DD'}}>
+                                        <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}>{<label htmlFor={layout}>{layout==='email'?'이메일':'휴대폰 번호'}</label>}</td>
+                                        <td style={{width:605,height:50,paddingLeft:15}}>{layout==='email'?<EmailLayout/>:<PhoneLayout/>}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <Button bg='#352461' mt='20px' onClick={handleFindPW}>비밀번호 재설정</Button>
                         </Flex>
                     </Box>
                 </VStack>
@@ -140,92 +150,114 @@ export default function Find_pw(){
 
                                 <Input name='id' type='hidden' value={foundID}/>
 
-                                <label htmlFor="pw">새 비밀번호</label>
-                                <Input
-                                id="pw"
-                                name="pw"
-                                minLength='10'
-                                type="password"
-                                placeholder='비밀번호를 입력하세요 (10자 이상)'
-                                required
-                                onChange={(e)=>{
-                                    const value=e.target.value;
-                                    setPw(value);
-                                    setIsPwAvailable(null);/* 비밀번호 값이 바뀌면 다시 유효성 여부를 검사 */
-                                    if(!value||value.length<10){
-                                        setIsPwAvailable(false);
-                                        if(value.length>=5)
-                                            setPwMessage('⚠️ 비밀번호가 약합니다. (최소 10자 필요)');
-                                        else
-                                            setPwMessage('');
-                                    }
-                                    else{
-                                        setIsPwAvailable(true);
-                                        setPwMessage('✅ 강한 비밀번호입니다!');
-                                    }
-                                    if(value.length>0){
-                                        if(pwr===value){/* 비밀번호를 바꾸다가 비밀번호 확인과 일치할 경우를 대비한 코드 */
-                                            setPwrMessage('✅ 비밀번호가 일치합니다.');
-                                            setIsPwrAvailable(true);
-                                        }
-                                        else{
-                                            setPwrMessage('❌ 비밀번호가 일치하지 않습니다.');
-                                            setIsPwrAvailable(false);
-                                        }
-                                    }else{
-                                        setPwrMessage('');
-                                        setIsPwrAvailable(false);
-                                    }
-                                }}
-                                />
-                                {pwMessage && (
-                                    <Text
-                                    fontSize="sm"
-                                    color={isPwAvailable ? '#0E870E' : '#FFB62F'}
-                                    mt="-10px"
-                                    ml="5px"
-                                    >
-                                    {pwMessage}
-                                    </Text>
-                                )}
-
-                                <label htmlFor="pwr">비밀번호 확인</label>
-                                <Input 
-                                id="pwr"
-                                name="pwr"
-                                minLength='10'
-                                type="password"
-                                placeholder='비밀번호를 다시 입력하세요'
-                                required
-                                onChange={(e)=>{
-                                    const value=e.target.value;
-                                    setPwr(value);
-                                    if(value.length>0){
-                                        if(pw===value){/* 비밀번호와 비밀번호 확인이 일치할 경우 */
-                                            setPwrMessage('✅ 비밀번호가 일치합니다.');
-                                            setIsPwrAvailable(true);
-                                        }
-                                        else{
-                                            setPwrMessage('❌ 비밀번호가 일치하지 않습니다.');
-                                            setIsPwrAvailable(false);
-                                        }
-                                    }else{
-                                        setPwrMessage('');
-                                        setIsPwrAvailable(false);
-                                    }
-                                }}
-                                />
-                                {pwrMessage && (
-                                    <Text
-                                    fontSize="sm"
-                                    color={isPwrAvailable ? '#0E870E' : '#FF2222'}
-                                    mt="-10px"
-                                    ml="5px"
-                                    >
-                                    {pwrMessage}
-                                    </Text>
-                                )}
-                                <Button bg='#2d2d2d' mt='20px' type='submit'>비밀번호 재설정</Button>
+                                <table>
+                                    <tbody>
+                                        <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
+                                            <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pw'>아이디</label></td>
+                                            <td style={{width:605,height:50,paddingLeft:15,position:'relative'}}>
+                                                {foundID.substring(0,foundID.length-3)+'***'}
+                                            </td>
+                                        </tr>
+                                        <tr style={{borderBottom:'1px solid #D1D5DD'}}>
+                                            <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pw'>새 비밀번호</label></td>
+                                            <td style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
+                                                <Input
+                                                id="pw"
+                                                name="pw"
+                                                minLength='10'
+                                                type="password"
+                                                placeholder='비밀번호를 입력하세요 (10자 이상)'
+                                                required
+                                                onChange={(e)=>{
+                                                    const value=e.target.value;
+                                                    setPw(value);
+                                                    setIsPwAvailable(null);/* 비밀번호 값이 바뀌면 다시 유효성 여부를 검사 */
+                                                    if(!value||value.length<10){
+                                                        setIsPwAvailable(false);
+                                                        if(value.length>=5)
+                                                            setPwMessage('⚠️ 비밀번호가 약합니다. (최소 10자 필요)');
+                                                        else
+                                                            setPwMessage('');
+                                                    }
+                                                    else{
+                                                        setIsPwAvailable(true);
+                                                        setPwMessage('✅ 강한 비밀번호입니다!');
+                                                    }
+                                                    if(value.length>0){
+                                                        if(pwr===value){/* 비밀번호를 바꾸다가 비밀번호 확인과 일치할 경우를 대비한 코드 */
+                                                            setPwrMessage('✅ 비밀번호가 일치합니다.');
+                                                            setIsPwrAvailable(true);
+                                                        }
+                                                        else{
+                                                            setPwrMessage('❌ 비밀번호가 일치하지 않습니다.');
+                                                            setIsPwrAvailable(false);
+                                                        }
+                                                    }else{
+                                                        setPwrMessage('');
+                                                        setIsPwrAvailable(false);
+                                                    }
+                                                }}
+                                                />
+                                                {pwMessage && (
+                                                    <Text
+                                                    fontSize="sm"
+                                                    color={isPwAvailable ? '#0E870E' : '#FFB62F'}
+                                                    mt="-10px"
+                                                    ml="5px"
+                                                    position='absolute'
+                                                    bottom='0'
+                                                    >
+                                                    {pwMessage}
+                                                    </Text>
+                                                )}
+                                            </td>
+                                        </tr>
+                                        <tr style={{borderBottom:'1px solid #D1D5DD'}}>
+                                            <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="pwr">비밀번호 확인</label></td>
+                                            <td style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
+                                                <Input 
+                                                 id="pwr"
+                                                 name="pwr"
+                                                 minLength='10'
+                                                 type="password"
+                                                 placeholder='비밀번호를 다시 입력하세요'
+                                                 required
+                                                 onChange={(e)=>{
+                                                     const value=e.target.value;
+                                                     setPwr(value);
+                                                     if(value.length>0){
+                                                         if(pw===value){/* 비밀번호와 비밀번호 확인이 일치할 경우 */
+                                                             setPwrMessage('✅ 비밀번호가 일치합니다.');
+                                                             setIsPwrAvailable(true);
+                                                         }
+                                                         else{
+                                                             setPwrMessage('❌ 비밀번호가 일치하지 않습니다.');
+                                                             setIsPwrAvailable(false);
+                                                         }
+                                                     }else{
+                                                         setPwrMessage('');
+                                                         setIsPwrAvailable(false);
+                                                     }
+                                                 }}
+                                                 />
+                                                 {pwrMessage && (
+                                                     <Text
+                                                     fontSize="sm"
+                                                     color={isPwrAvailable ? '#0E870E' : '#FF2222'}
+                                                     mt="-10px"
+                                                     ml="5px"
+                                                     position='absolute'
+                                                     bottom='0'
+                                                     >
+                                                     {pwrMessage}
+                                                     </Text>
+                                                 )}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>     
+        
+                                <Button bg='#352461' mt='20px' type='submit'>비밀번호 재설정</Button>
                             </Flex>
                         </form>
                     </Box>
