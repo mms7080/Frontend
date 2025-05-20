@@ -74,8 +74,8 @@ export default function Find_id(){
     if(foundID===''){/* 아이디 찾기 이전에 보이는 부분 */
         return <>
             <Header headerColor={headerColor} headerBg={headerBg}></Header>
-            <Box w='calc(100vw - 17px)' minW='1000px'>
-                <VStack w='100%' bg='#F9F9F9'>
+            <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
+                <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
                         <Flex w='840px' flexDirection='column' gap='15px' py='50px'>
                             <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>아이디 찾기</span>
@@ -121,8 +121,8 @@ export default function Find_id(){
     }else{/* 찾은 아이디를 보여주는 부분 */
         return <>
             <Header headerColor={headerColor} headerBg={headerBg}></Header>
-            <Box w='calc(100vw - 17px)' minW='1000px'>
-                <VStack w='100%' bg='#F9F9F9'>
+            <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
+                <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
                         <Flex w='840px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
                             <Button bg='#352461' onClick={()=>setFoundID('')}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Flex,Box,VStack,Input,Button} from '@chakra-ui/react';
+import {Flex,Box,VStack,Input,Button,Image} from '@chakra-ui/react';
 import Link from 'next/link';
 import {Header,Footer} from '../../components';
 
@@ -18,7 +18,7 @@ export default function Signin(){
 
     return <>
         <Header headerColor={headerColor} headerBg={headerBg}></Header>
-        <Box w='calc(100vw - 17px)' minW='1000px'>
+        <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%'>
                     <Flex w='400px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
@@ -31,31 +31,36 @@ export default function Signin(){
                             <Flex w='400px' flexDirection='column' gap='15px'>
                                 <Input id="id" name="id" placeholder='아이디' required/>
                                 <Input id="pw" name="pw" type="password" placeholder='비밀번호' required/>
-                                <Flex w='100%' justifyContent='space-between' fontSize='15px' color='#555'>
+                                <Flex w='100%' justifyContent='flex-start' fontSize='15px' color='#555'>
                                     <span><input id="rl" type="checkbox" name="remember-login"/><label htmlFor='rl'>&nbsp;&nbsp;아이디 저장</label></span>
-                                    <span>
-                                        <Link href='/find_id'><span>아이디 찾기&nbsp;&nbsp;</span></Link>/
-                                        <Link href='/find_pw'><span>&nbsp;&nbsp;비밀번호 재설정</span></Link>
-                                    </span>
                                 </Flex>
-                                <Button type='submit' fontSize='17px' w='100%' bg='#2d2d2d' mt='30px'>로그인</Button>
-                                <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/kakao`}>
-                                    <Button fontSize='17px' w='100%' bg='#FEE500' color='black'>카카오 로그인</Button>
-                                </Link>
-                                <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/naver`}>
-                                    <Button fontSize='17px' w='100%' bg='#03C75A'>네이버 로그인</Button>
-                                </Link>
-                                <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/google`}>
-                                    <Button fontSize='17px' w='100%' bg='#4285F4'>구글 로그인</Button>
-                                </Link>
+                                <Button type='submit' fontSize='17px' w='100%' bg='#352461' mt='10px'>로그인</Button>
                             </Flex>
                         </form>
-                        <span style={{color:'#555'}}>아직 회원이 아니신가요?</span>
-                        <Button bg='#2d2d2d'>
+                        <Flex w='100%' gap='10px' justifyContent='center'>
                             <Link href='/join'>
                                 회원가입
                             </Link>
-                        </Button>
+                            <span>|</span>
+                            <Link href='/find_id'>
+                                아이디 찾기
+                            </Link>
+                            <span>|</span>
+                            <Link href='/find_pw'>
+                                비밀번호 재설정
+                            </Link>
+                        </Flex>
+                        <Flex w='100%' gap='50px' justifyContent='center'>
+                            <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/kakao`}>
+                                <Image w='35px' h='35px' objectFit='cover' borderRadius='50%' src='https://cdn-icons-png.freepik.com/512/3669/3669973.png'/>
+                            </Link>
+                            <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/naver`}>
+                                <Image w='35px' h='35px' objectFit='cover' borderRadius='50%' src='https://w7.pngwing.com/pngs/344/368/png-transparent-naver-round-logo-search-engines-thumbnail.png'/>
+                            </Link>
+                            <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/google`}>
+                                <Image w='35px' h='35px' objectFit='cover' borderRadius='50%' src='https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png'/>
+                            </Link>
+                        </Flex>
                     </Flex>
                 </VStack>
             </Flex>

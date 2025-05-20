@@ -230,7 +230,7 @@ export default function Join(){
                                         <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='area_code'>전화번호<span style={{color:'#FF0000'}}>*</span></label></td>
                                         <td style={{width:605,height:50,paddingLeft:15}}>
                                             <Flex justifyContent='space-between'>
-                                                <select id='area_code' name='area_code' style={{width:180,border:'1px solid #E4E4E7', borderRadius:5}} defaultValue='010' required>
+                                                <select id='area_code' name='area_code' style={{width:180,border:'1px solid #E4E4E7', borderRadius:5,fontSize:14}} defaultValue='010' required>
                                                     <option value="010">&nbsp;&nbsp;010</option>
                                                     <option value="011">&nbsp;&nbsp;011</option>
                                                     <option value="016">&nbsp;&nbsp;016</option>
@@ -249,7 +249,7 @@ export default function Join(){
                                             <Flex justifyContent='space-between'>
                                                 <Input w='280px' id="email_id" name="email_id" placeholder="example" required/>
                                                 <span style={{lineHeight:'40px'}}>@</span>
-                                                <select id="email_address" name="email_address" style={{width:280,border:'1px solid #E4E4E7',borderRadius:5}} defaultValue='naver.com' required>
+                                                <select id="email_address" name="email_address" style={{width:280,border:'1px solid #E4E4E7',borderRadius:5,fontSize:14}} defaultValue='naver.com' required>
                                                     <option value="naver.com">&nbsp;&nbsp;naver.com</option>
                                                     <option value="gmail.com">&nbsp;&nbsp;gmail.com</option>
                                                     <option value="daum.net">&nbsp;&nbsp;daum.net</option>
@@ -275,7 +275,7 @@ export default function Join(){
                                     <tr style={{borderBottom:'1px solid #D1D5DD'}}>
                                         <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="birthdate"><label htmlFor="gender">성별</label></label></td>
                                         <td style={{width:605,height:50,paddingLeft:15}}>
-                                            <select id="gender" name="gender" style={{height:40,border:'1px solid #E4E4E7',borderRadius:5}} defaultValue=''>
+                                            <select id="gender" name="gender" style={{height:40,border:'1px solid #E4E4E7',borderRadius:5,fontSize:14}} defaultValue=''>
                                                 <option value="" disabled>&nbsp;&nbsp;선택하세요</option>
                                                 <option value="남성">&nbsp;&nbsp;남성</option>
                                                 <option value="여성">&nbsp;&nbsp;여성</option>
