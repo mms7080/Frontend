@@ -131,6 +131,11 @@ export default function Find_id(){
                                 </Link>
                             </Button>
                             <Button bg='#352461'>
+                                <Link href='/find_pw'>
+                                    비밀번호 재설정
+                                </Link>
+                            </Button>
+                            <Button bg='#352461'>
                                 <Link href='/signin'>
                                     로그인 화면으로 이동
                                 </Link>

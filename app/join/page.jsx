@@ -103,7 +103,7 @@ export default function Join(){
                                             </Flex>
                                             {idMessage && (
                                                 <Text
-                                                fontSize='12px'
+                                                fontSize='sm'
                                                 color={isIdAvailable ? '#0E870E' : '#FF2222'}
                                                 mt="-10px"
                                                 ml="5px"
@@ -161,7 +161,7 @@ export default function Join(){
                                             />
                                             {pwMessage && (
                                                     <Text
-                                                    fontSize='12px'
+                                                    fontSize='sm'
                                                     color={isPwAvailable ? '#0E870E' : '#FFB62F'}
                                                     mt="-10px"
                                                     ml="5px"
@@ -203,7 +203,7 @@ export default function Join(){
                                             />
                                             {pwrMessage && (
                                                 <Text
-                                                fontSize="12px"
+                                                fontSize="sm"
                                                 color={isPwrAvailable ? '#0E870E' : '#FF2222'}
                                                 mt="-10px"
                                                 ml="5px"
