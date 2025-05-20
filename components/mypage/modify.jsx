@@ -32,7 +32,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
     };
 
     return <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/modify/logic`} method='post' onSubmit={handleSubmit}>
-                        <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
+                        <Box w='900px' px='30px' borderRadius='10px' bg='white'>
                             <Flex w='840px' flexDirection='column' gap='30px' py='50px'>
                                 <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>개인정보 수정</span>
                                 <span style={{fontSize:20}}>기본 정보</span>
