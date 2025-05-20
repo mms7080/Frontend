@@ -2,7 +2,7 @@
 
 import React,{useState} from 'react';
 import { useRouter } from 'next/navigation';
-import {VStack,Text,Button} from '@chakra-ui/react';
+import {VStack,Text,Button,Box} from '@chakra-ui/react';
 import MoviePoster from '../../components/moviePoster';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
@@ -33,12 +33,19 @@ export default function BookingPage(){
         <Header headerColor={headerColor} headerBg={headerBg}></Header>
 
         <VStack spacing="20px" p="20px" overflow="visible">
-            <Text fontSize="5xl" color="black" mb="20px">빠른예매</Text>
-                {selectedMovie && selectedMovie.title && (
-                    <Text fontSize="2xl">
-                        {selectedMovie.title}
+            <Text fontSize="5xl" color="black" mb="20px">예매</Text>
+            {selectedMovie && (
+                <Box textAlign="center" maxW="600px" mx="auto">
+                    <Text fontSize="2xl" fontWeight="semibold">
+                    {selectedMovie.title}
                     </Text>
-                )}
+                    {/* {selectedMovie.description && (
+                    <Text fontSize="md" color="gray.600" mt="2">
+                        {selectedMovie.description}
+                    </Text>
+                    )} */}
+                </Box>
+            )}
 
             {/* 영화 선택 */}
             <MoviePoster 
@@ -49,7 +56,16 @@ export default function BookingPage(){
                 }} 
                 selectedMovie={selectedMovie} 
             />
-            
+
+            {selectedMovie && (
+                <Box textAlign="center" maxW="600px" mx="auto">
+                    {selectedMovie.description && (
+                    <Text fontSize="md" color="gray.600" mt="2">
+                        {selectedMovie.description}
+                    </Text>
+                    )}
+                </Box>
+            )}
 
             {/* 날짜 선택 (영화 선택 후 표시) */}
             {selectedMovie && (
