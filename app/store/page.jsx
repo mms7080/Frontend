@@ -61,7 +61,13 @@ export default function MegaboxStorePage() {
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
+      <Box
+        maxW="1200px"
+        mx="auto"
+        pt={{ base: 10, md: 20 }}
+        px={{ base: 4 }}
+        pb={10}
+      >
         <Heading
           mb={10}
           fontSize={{ base: "xl", md: "2xl" }}
@@ -74,26 +80,44 @@ export default function MegaboxStorePage() {
           🛍️ 스토어
         </Heading>
 
-        <Flex gap={2} mb={8} flexWrap="wrap" justify="center">
-          {defaultCategories.map((category) => (
-            <Button
-              key={category}
-              onClick={() => setActiveCategory(category)}
-              style={{
-                backgroundColor:
-                  category === activeCategory ? "#6B46C1" : "#eee",
-                color: category === activeCategory ? "white" : "#333",
-                padding: "8px 16px",
-                borderRadius: "6px",
-                fontWeight: "bold",
-                fontSize: "14px",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              {category}
-            </Button>
-          ))}
+        <Flex
+          justify="space-between"
+          align="center"
+          wrap="wrap"
+          mb={8}
+          px={2} // 좌우 여백 추가 (선택사항)
+        >
+          {/* 카테고리 버튼 그룹 */}
+          <Flex gap={2} flexWrap="wrap">
+            {defaultCategories.map((category) => (
+              <Button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                style={{
+                  backgroundColor:
+                    category === activeCategory ? "#6B46C1" : "#eee",
+                  color: category === activeCategory ? "white" : "#333",
+                  padding: "8px 16px",
+                  borderRadius: "6px",
+                  fontWeight: "bold",
+                  fontSize: "14px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                {category}
+              </Button>
+            ))}
+          </Flex>
+
+          {/* 오른쪽에 위치한 등록 버튼 */}
+          <Button
+            colorScheme="purple"
+            onClick={() => router.push("/store/upload")}
+            mt={{ base: 4, md: 0 }} // 모바일일 때는 아래로 밀림
+          >
+            + 스토어 등록
+          </Button>
         </Flex>
 
         {categoryList.map((category) => (
