@@ -4,6 +4,8 @@ import {FaFilm,FaQuestion} from 'react-icons/fa';
 import {FiUser} from 'react-icons/fi';
 import {Header,Footer} from '../../components';
 import {fetch} from '../../lib/server';
+import {Modify} from '.';
+//import {Bookingcheck,Qna} from '.';
 
 export default async function Mypage(){
     
@@ -36,8 +38,7 @@ export default async function Mypage(){
         예매내역 확인 페이지(미구현)
       </Tabs.Content>
       <Tabs.Content value="modify">
-        
-
+        <Modify userInfo={res}></Modify>
       </Tabs.Content>
       <Tabs.Content value="qna">
         1:1 QnA 페이지(미구현)
