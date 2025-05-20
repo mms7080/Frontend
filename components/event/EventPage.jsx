@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Box, Flex, Text, Button } from "@chakra-ui/react";
+import {
+  Box, Flex, Text, Button, Image, SimpleGrid
+} from "@chakra-ui/react";
 import { Header, Footer } from "..";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
@@ -51,7 +53,6 @@ export default function EventPage({ serverEvents }) {
     })();
   }, []);
 
-  // 날짜 비교용 상태 계산 함수
   const getEventStatus = (dateRange) => {
     const now = new Date();
     const [startStr, endStr] = dateRange
@@ -61,7 +62,6 @@ export default function EventPage({ serverEvents }) {
     return now > endDate ? "종료됨" : "진행중";
   };
 
-  // 필터링 (카테고리 → 검색)
   const filteredEvents =
     activeCategory === "전체"
       ? Object.entries(events)
@@ -82,7 +82,6 @@ export default function EventPage({ serverEvents }) {
     <>
       <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
 
-      {/* Swiper Slider */}
       <Box bg="white" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
         <Text
           fontSize="xl"
@@ -167,28 +166,7 @@ export default function EventPage({ serverEvents }) {
         </Swiper>
       </Box>
 
-      {/* 등록 버튼 */}
-      <Box
-        bg="white"
-        pt={10}
-        pb={0}
-        px={6}
-        maxW="1280px"
-        mx="auto"
-        display="flex"
-        justifyContent="flex-end"
-      >
-        <Button
-          onClick={() => router.push("/event/upload")}
-          colorScheme="purple"
-          size="sm"
-          mb={2}
-        >
-          + 이벤트 등록
-        </Button>
-      </Box>
-
-      {/* Category Tabs */}
+      {/* 카테고리 탭 복구 */}
       <Box bg="white" pt={10} pb={2} px={6} maxW="1280px" mx="auto">
         <Flex gap={2} borderBottom="1px solid #5f0080" flexWrap="wrap">
           {categories.map((category) => (
@@ -205,18 +183,17 @@ export default function EventPage({ serverEvents }) {
               color={activeCategory === category ? "#5f0080" : "black"}
               onClick={() => setActiveCategory(category)}
               _hover={{ bg: "transparent", color: "#5f0080" }}
-              fontSize="lg" // 글씨 크기 키우기
-              py={4} // 위아래 패딩 키우기
-              px={6} // 좌우 패딩 키우기
-              minW="120px" // 버튼 너비 확보
-              h="50px" // 높이 증가
+              fontSize="lg"
+              py={4}
+              px={6}
+              minW="120px"
+              h="50px"
             >
               {category}
             </Button>
           ))}
         </Flex>
 
-        {/* 🔍 검색창 */}
         <Box mt={4} mb={4}>
           <input
             type="text"
@@ -234,7 +211,6 @@ export default function EventPage({ serverEvents }) {
         </Box>
       </Box>
 
-      {/* 기존 이벤트 목록 */}
       <Box bg="white" py={12} px={6} maxW="1280px" mx="auto">
         <Text
           fontSize="2xl"
@@ -258,7 +234,7 @@ export default function EventPage({ serverEvents }) {
             >
               {category}
             </Text>
-            <Flex wrap="wrap" gap={143}>
+            <SimpleGrid columns={4} spacing={10} justifyItems="center">
               {items.map((event, idx) => (
                 <Box
                   key={idx}
@@ -266,7 +242,7 @@ export default function EventPage({ serverEvents }) {
                   borderRadius="md"
                   overflow="hidden"
                   boxShadow="sm"
-                  width="200px"
+                  width="280px"
                   transition="0.2s"
                   _hover={{ boxShadow: "xl", transform: "translateY(-5px)" }}
                   border="1px solid #eee"
@@ -274,15 +250,12 @@ export default function EventPage({ serverEvents }) {
                   cursor="pointer"
                 >
                   <Box w="100%" h="200px" position="relative" overflow="hidden">
-                    <img
+                    <Image
                       src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
                       alt={event.title}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        pointerEvents: "none",
-                      }}
+                      w="100%"
+                      h="100%"
+                      objectFit="cover"
                     />
                     <Text
                       position="absolute"
@@ -304,7 +277,7 @@ export default function EventPage({ serverEvents }) {
                       {getEventStatus(event.date)}
                     </Text>
                   </Box>
-                  <Box p={3}>
+                  <Box p={3} minH="80px">
                     <Text
                       fontSize="sm"
                       fontWeight="semibold"
@@ -319,7 +292,7 @@ export default function EventPage({ serverEvents }) {
                   </Box>
                 </Box>
               ))}
-            </Flex>
+            </SimpleGrid>
           </Box>
         ))}
       </Box>

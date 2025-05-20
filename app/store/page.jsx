@@ -11,6 +11,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { Header, Footer } from "../../components";
+import { useRouter } from "next/navigation";
 
 const defaultCategories = ["전체", "티켓", "팝콘/음료/콤보", "포인트몰"];
 
@@ -18,6 +19,7 @@ export default function MegaboxStorePage() {
   const [storeData, setStoreData] = useState({});
   const [activeCategory, setActiveCategory] = useState(defaultCategories[0]);
   const [user, setUser] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -174,6 +176,7 @@ export default function MegaboxStorePage() {
                       fontWeight="bold"
                       borderRadius="6px"
                       fontSize="14px"
+                      onClick={() => router.push(`/store/detail/${item.id}`)}
                     >
                       구매하기
                     </Button>
