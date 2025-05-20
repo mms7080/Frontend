@@ -215,40 +215,6 @@ export default function MegaboxStorePage() {
                     >
                       구매하기
                     </Button>
-
-                    <Button
-                      w="100%"
-                      mt={2}
-                      bg="#e53e3e"
-                      color="white"
-                      py={2}
-                      fontWeight="bold"
-                      borderRadius="6px"
-                      fontSize="14px"
-                      transition="all 0.3s"
-                      _hover={{ bg: "#c53030", transform: "scale(1.02)" }}
-                      onClick={async () => {
-                        const confirmDelete = confirm("정말 삭제하시겠습니까?");
-                        if (!confirmDelete) return;
-
-                        try {
-                          const res = await fetch(
-                            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${item.id}`,
-                            {
-                              method: "DELETE",
-                              credentials: "include",
-                            }
-                          );
-                          if (!res.ok) throw new Error("삭제 실패");
-                          alert("삭제가 완료되었습니다!");
-                          location.reload();
-                        } catch (e) {
-                          alert("삭제 중 오류 발생: " + e.message);
-                        }
-                      }}
-                    >
-                      삭제
-                    </Button>
                   </Box>
                 </Box>
               ))}
