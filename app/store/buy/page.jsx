@@ -156,7 +156,7 @@ export default function PaymentPage() {
           justify-content: space-between;
           margin-top: 20px;
           font-size: 20px;
-          color: #00e0ff;
+          color: #9F7AEA;
         }
         .button-group {
           display: flex;
@@ -172,12 +172,12 @@ export default function PaymentPage() {
           font-weight: bold;
         }
         .button-group button.confirm {
-          background: #00c6ff;
+          background: #6B46C1;
           color: white;
           transition: background 0.3s ease;
         }
         .button-group button.confirm:hover {
-          background: #009ac6;
+          background: #553C9A;
         }
         .button-group button:disabled {
           opacity: 0.6;

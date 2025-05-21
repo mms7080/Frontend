@@ -147,7 +147,22 @@ export default function NoticePage({ notices }) {
                       onMouseOut={(e) => (e.currentTarget.style.color = "#222")}
                     >
                       {highlightKeyword(notice.title)}
-                      {isNew(notice.createdAt) && <span style={{ backgroundColor: "#e53e3e", color: "white", borderRadius: "6px", fontSize: "10px", padding: "2px 6px", marginLeft: "8px" }}>NEW</span>}
+                      {isNew(notice.createdAt) && (
+                        <span
+                          style={{
+                            backgroundColor: "#e53e3e",
+                            color: "white",
+                            borderRadius: "6px",
+                            fontSize: "10px",
+                            padding: "2px 6px",
+                            marginLeft: "8px",
+                            animation: "pulse-badge 1.2s ease-in-out infinite",
+                            display: "inline-block"
+                          }}
+                        >
+                          NEW
+                        </span>
+                      )}
                     </a>
                   </td>
                   <td style={{ padding: "14px", textAlign: "center", fontSize: "14px", color: "#555" }}>{notice.writer}</td>
@@ -178,69 +193,25 @@ export default function NoticePage({ notices }) {
           </tbody>
         </table>
 
+        <style jsx global>{`
+          @keyframes pulse-badge {
+            0% {
+              transform: scale(1);
+              opacity: 1;
+            }
+            50% {
+              transform: scale(1.25);
+              opacity: 0.6;
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+          }
+        `}</style>
+
         <div style={{ textAlign: "center", marginTop: "40px" }}>
-          {currentPage > 1 && (
-            <button
-              onClick={() => setCurrentPage(currentPage - 1)}
-              style={{
-                margin: "0 6px",
-                padding: "8px 12px",
-                backgroundColor: "#eee",
-                color: "black",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                transition: "all 0.3s"
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#d3d3d3")}
-              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#eee")}
-            >
-              &lt;
-            </button>
-          )}
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setCurrentPage(page)}
-              style={{
-                margin: "0 6px",
-                padding: "8px 14px",
-                backgroundColor: currentPage === page ? "#6B46C1" : "#eee",
-                color: currentPage === page ? "white" : "black",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                transition: "all 0.3s"
-              }}
-              onMouseOver={(e) => {
-                if (currentPage !== page) e.currentTarget.style.backgroundColor = "#d3d3d3";
-              }}
-              onMouseOut={(e) => {
-                if (currentPage !== page) e.currentTarget.style.backgroundColor = "#eee";
-              }}
-            >
-              {page}
-            </button>
-          ))}
-          {currentPage < totalPages && (
-            <button
-              onClick={() => setCurrentPage(currentPage + 1)}
-              style={{
-                margin: "0 6px",
-                padding: "8px 12px",
-                backgroundColor: "#eee",
-                color: "black",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                transition: "all 0.3s"
-              }}
-              onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#d3d3d3")}
-              onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#eee")}
-            >
-              &gt;
-            </button>
-          )}
+         
         </div>
       </div>
       <div style={{ height: "230px" }} />
