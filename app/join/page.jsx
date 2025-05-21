@@ -9,8 +9,17 @@ import {fetch} from '../../lib/client';
 
 export default function Join(){
 
+    const [user, setUser] = useState(null);
+
     useEffect(() => {
         document.title = '회원가입';
+
+        (async ()=>{
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
+                setUser(res);
+            } catch (e) {}
+        })();
     },[]);
 
     let headerColor='black';
@@ -68,7 +77,7 @@ export default function Join(){
     };
 
     return <>
-        <Header headerColor={headerColor} headerBg={headerBg}></Header>
+        <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}></Header>
         <Box w='calc(100vw - 17px)' minW='1000px'>
             <VStack w='100%' bg='#F9F9F9'>
                 <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>

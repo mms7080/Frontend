@@ -1,6 +1,6 @@
 "use client";
 
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {RadioGroup,Input,Box,VStack,Flex,Button,Text} from '@chakra-ui/react';
 import {Header,Footer} from '../../components';
 
@@ -13,6 +13,18 @@ export default function Find_pw(){
     let footerColor='black';
     let footerBg='#F9F9F9';
     let footerBorder='#ccc';
+    const [user, setUser] = useState(null);
+    
+    useEffect(() => {
+        document.title = '비밀번호 재설정';
+
+        (async ()=>{
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
+                setUser(res);
+            } catch (e) {}
+        })();
+    }, []);
 
     const [found,setFound]=useState(false);
     const [layout,setLayout]=useState('email');
@@ -90,7 +102,7 @@ export default function Find_pw(){
 
     if(!found){/* 비밀번호 재설정 이전에 보이는 부분 */
         return <>
-            <Header headerColor={headerColor} headerBg={headerBg}></Header>
+            <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}></Header>
             <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
                 <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>

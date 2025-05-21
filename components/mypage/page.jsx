@@ -5,6 +5,7 @@ import {FiUser} from 'react-icons/fi';
 import {Header,Footer} from '../../components';
 import {fetch} from '../../lib/server';
 import {Modify} from '.';
+
 //import {Bookingcheck,Qna} from '.';
 
 export default async function Mypage(){
@@ -14,7 +15,7 @@ export default async function Mypage(){
     let footerColor='black';
     let footerBg='#F9F9F9';
     let footerBorder='#ccc';
-
+    
     const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
 
      return <>

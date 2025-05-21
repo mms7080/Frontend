@@ -199,8 +199,9 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         </tr>
                                     </tbody>
                                 </table>
+                                <a style={{textAlign:'right',color:'#352461',textDecoration:'underline'}} href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`}>회원탈퇴</a>
 
-                                <Button mt='50px' type="submit" bg='#352461'>회원정보 수정</Button>
+                                <Button mt='10px' type="submit" bg='#352461'>회원정보 수정</Button>
                             </Flex>
                         </Box>
                     </form>;
