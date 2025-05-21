@@ -35,6 +35,10 @@ export default function EventUploader() {
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
           {
             credentials: "include",
+            headers: {
+              'accept': 'application/json;charset=UTF-8',
+              'Content-Type':'application/json'
+            }
           }
         );
         if (!res.ok) throw new Error();
