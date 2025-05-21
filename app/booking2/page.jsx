@@ -42,20 +42,45 @@ export default function Booking2Page() {
             <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}/>
         </Box>
 
-        <Text fontSize="5xl" color="black" textAlign="left" marginLeft="10%" marginTop="20px">
+        {/* <Text fontSize="5xl" color="black" textAlign="left" marginLeft="10%" marginTop="20px">
             빠른예매
-        </Text>
+        </Text> */}
+        <Box textAlign="left" ml="10%" mt="20px">
+            <Text fontSize="5xl" color="black">
+            빠른예매
+            </Text>
+            <Box w="160px" h="4px" bg="purple" mt="2" />
+        </Box>
 
         <Flex flex="1" align="center" justify="center" pt="5vh">
-            <Box maxW="1200px" w="100%" px={4}>
+            <style jsx global>{`
+            .swiper-slide:not(.swiper-slide-active) img {
+                filter: brightness(70%);
+            }
+            /* Navigation arrows color */
+            .swiper-button-next,
+            .swiper-button-prev {
+                color: purple; /* 원하는 화살표 색상 (보라 핑크 계열) */
+            }
+            /* Pagination bullets */
+            .swiper-pagination-bullet {
+                background: #ccc; /* 비활성 점 색상 */
+                opacity: 1;
+            }
+            .swiper-pagination-bullet-active {
+                background: purple; /* 활성 점 색상 (보라 핑크) */
+            }
+            `}</style>
+            <Box maxW="1550px" w="100%" px={4}>
             <Swiper
                 modules={[Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay]}
                 effect="coverflow"
                 grabCursor
                 centeredSlides
+                speed={800}
                 slidesPerView={3}
-                spaceBetween={30}
-                coverflowEffect={{ rotate: 50, stretch: 0, depth: 100, modifier: 1, slideShadows: true }}
+                spaceBetween={0}
+                coverflowEffect={{ rotate: 0, stretch: 50, depth: 200, modifier: 1, slideShadows: true }}
                 pagination={{ clickable: true }}
                 navigation
                 loop
@@ -69,7 +94,7 @@ export default function Booking2Page() {
                 {movies.map(movie => (
                 <SwiperSlide
                     key={movie.id}
-                    style={{ width: '300px', height: '500px', display: 'flex', justifyContent: 'center' }}
+                    style={{ width: '350px', height: '650px', display: 'flex', justifyContent: 'center' }}
                 >
                     <img
                     src={movie.poster}
