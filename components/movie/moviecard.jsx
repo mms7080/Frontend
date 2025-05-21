@@ -18,7 +18,7 @@ const MovieCard = ({ movie, onBooking }) => {
         {movie.label && (
           <span className={`label ${
             movie.label == "MEGA ONLY" ? "purple" :
-            movie.label == "Dolby" ? "gray" : "white"
+            movie.label == "Dolby" ? "gray" : "none"
           }`}>{movie.label}</span>
         )}
         {movie.rate && (
@@ -26,7 +26,7 @@ const MovieCard = ({ movie, onBooking }) => {
             movie.rate == "ALL" ? "green" :
             movie.rate == "12" ? "yellow" :
             movie.rate == "15" ? "orange" :
-            movie.rate == "19" ? "red" : "white"
+            movie.rate == "19" ? "red" : "none"
           }`}>{movie.rate}</span>
         )}
       </div>

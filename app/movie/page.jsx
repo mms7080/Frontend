@@ -25,7 +25,7 @@ export default function Moviepage(){
                 const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
                 setUser(res);
             } catch(err) {
-                console.log("USER FETCH ERROR" + err.message);
+                console.log("USER FETCH ERROR! : " + err.message);
             }
         })();
 
@@ -34,17 +34,17 @@ export default function Moviepage(){
                 const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/get`);
                 setMovies(Object.values(res));
             } catch (err) {
-                console.log("MOVIE FETCH ERROR" + err.message);
+                console.log("MOVIE FETCH ERROR! : " + err.message);
                 setMovies(
                     [
                         {id:1, rank:1, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'Fields of Destiny', rate:"12", releaseDate:'2023.05.16', likeNumber:'5.3k', image:'https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg'},
                         {id:2, rank:2, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'Killer Advice', rate:"19", releaseDate:'2021.02.05', likeNumber:'2.1k', image:'https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700796426/catalog/1600659718750367744/iqmiudmmo6s7zcofwmpf.jpg'},
-                        {id:3, rank:3, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'InterStella', rate:"15", releaseDate:'2014.11.06', likeNumber:'1.5k', image:'https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false'},
+                        {id:3, rank:3, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'InterStella', rate:"12", releaseDate:'2014.11.06', likeNumber:'1.5k', image:'https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false'},
                         {id:4, rank:4, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'My Name is Alfred Hitchcock', rate:"ALL", releaseDate:'2022.09.05', likeNumber:'1.3k', image:'https://www.mvtimes.com/mvt/uploads/2024/11/film-my-name-alfred-hitchcock-2.jpg'},
                         {id:5, rank:5, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", label:"MEGA ONLY", title:'어벤져스 엔드게임', rate:"15", releaseDate:'2019.04.24', likeNumber:'986', image:'https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'},
                         {id:6, rank:6, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'범죄도시 4', rate:"15", releaseDate:'2024.04.24', likeNumber:'734', image:'https://i.namu.wiki/i/KwJ2dfIySu2k8JWlK3nD-gS7A9G-2I2EWKkNjoVRqaHabjK88STUo8FXi545XV6Pe8ERSX5DjF4e5k0IkOvznQ.webp'},
                         {id:7, rank:7, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'귀멸의칼날 무한성편', releaseDate:'2025.08.22', rate:"19", likeNumber:'521', image:'https://i.namu.wiki/i/YvPBZ1kzk8Dku4HhOC2FGB7xKVXj5bpg8cSdRWsAZg-3Knqu5LcWJchrZDIVmz-08V3OV9uFLMfCRNCZRcnTxQ.webp'},
-                        {id:8, rank:8, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", label:"Dolby", title:'승부', rate:"15", releaseDate:'2025.03.26', likeNumber:'342', image:'https://img.megabox.co.kr/SharedImg/2025/03/27/O6RnDMOAnUw6geDdlaAXRlkqgy0mSSDb_420.jpg'}
+                        {id:8, rank:8, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", label:"Dolby", title:'승부', rate:"12", releaseDate:'2025.03.26', likeNumber:'342', image:'https://img.megabox.co.kr/SharedImg/2025/03/27/O6RnDMOAnUw6geDdlaAXRlkqgy0mSSDb_420.jpg'}
                     ]
                 )
             }
@@ -95,8 +95,8 @@ export default function Moviepage(){
                     />
                 ))}
             </Box>
-            <Box pt={10}>
-                <Button w='100%'>더보기</Button>
+            <Box pt={10} >
+                <Button w='100%' bg="#1e1e1e" _hover={{border:"1px solid gray"}}>더보기</Button>
             </Box>
         </Box>
         <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
