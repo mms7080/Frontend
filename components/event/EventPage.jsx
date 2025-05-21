@@ -14,8 +14,7 @@ import "swiper/css/pagination";
 
 const categories = [
   "전체",
-  "추천",
-  "메가Pick",
+  "Pick",
   "영화",
   "극장",
   "제휴/할인",
@@ -105,7 +104,7 @@ export default function EventPage({ serverEvents }) {
           modules={[Navigation, Pagination, Autoplay]}
           navigation
           pagination={{ clickable: true }}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          autoplay={{ delay: 2000, disableOnInteraction: false }}
           loop
           spaceBetween={20}
           slidesPerView={1}
@@ -118,7 +117,7 @@ export default function EventPage({ serverEvents }) {
             swiper.el.addEventListener("mouseleave", () => swiper.autoplay.start());
           }}
         >
-          {(events["추천"] || []).map((event, idx) => (
+          {(events["Pick"] || []).map((event, idx) => (
             <SwiperSlide key={idx}>
               <Box
                 bg="white"
@@ -126,12 +125,12 @@ export default function EventPage({ serverEvents }) {
                 overflow="hidden"
                 boxShadow="md"
                 border="1px solid #eee"
-                maxW="600px"
+                maxW="400px"
                 mx="auto"
                 onClick={() => router.push(`/event/view/${event.id}`)}
                 _hover={{ cursor: "pointer" }}
               >
-                <Box w="100%" h="280px" overflow="hidden">
+                <Box w="100%" h="400px" overflow="hidden">
                   <img
                     src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
                     alt={event.title}
@@ -189,6 +188,12 @@ export default function EventPage({ serverEvents }) {
             </Button>
           ))}
         </Flex>
+      </Box>
+
+      <Box bg="white" py={12} px={{ base: 4, md: 6 }} maxW="1280px" mx="auto">
+        <Text fontSize="2xl" fontWeight="bold" mb={8} borderBottom="2px solid #333" pb={2}>
+          진행중인 이벤트
+        </Text>
 
         <Box mt={4} mb={4}>
           <input
@@ -206,12 +211,6 @@ export default function EventPage({ serverEvents }) {
             }}
           />
         </Box>
-      </Box>
-
-      <Box bg="white" py={12} px={{ base: 4, md: 6 }} maxW="1280px" mx="auto">
-        <Text fontSize="2xl" fontWeight="bold" mb={8} borderBottom="2px solid #333" pb={2}>
-          진행중인 이벤트
-        </Text>
 
         {keywordFilteredEvents.map(([category, items]) => (
           <Box key={category} mb={16}>
@@ -227,14 +226,14 @@ export default function EventPage({ serverEvents }) {
                   overflow="hidden"
                   boxShadow="sm"
                   width="100%"
-                  maxW="280px"
+                  maxW="243px"
                   transition="0.2s"
                   _hover={{ boxShadow: "xl", transform: "translateY(-5px)" }}
                   border="1px solid #eee"
                   onClick={() => router.push(`/event/view/${event.id}`)}
                   cursor="pointer"
                 >
-                  <Box w="100%" h="200px" position="relative" overflow="hidden">
+                  <Box w="100%" h="243px" position="relative" overflow="hidden">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
                       alt={event.title}
