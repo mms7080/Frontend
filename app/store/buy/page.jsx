@@ -1,8 +1,10 @@
+// app/store/buy/page.jsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header, Footer } from "../../../components";
+import { loadTossPayments } from "@tosspayments/payment-sdk";
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -12,7 +14,6 @@ export default function PaymentPage() {
   const qty = parseInt(searchParams.get("qty") || "1");
 
   const [product, setProduct] = useState(null);
-  const [selectedCard, setSelectedCard] = useState("");
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -37,28 +38,21 @@ export default function PaymentPage() {
   const totalPrice = unitPrice * qty;
 
   const handlePayment = async () => {
-    if (!selectedCard) return alert("결제수단을 선택해주세요");
     setLoading(true);
     try {
-      const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId: id,
-          quantity: qty,
-          card: selectedCard,
-          userId: user?.id || "guest",
-          amount: totalPrice,
-        }),
-      });
-      if (!response.ok) throw new Error("결제 실패");
+      const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
+      const orderId = `order-${Date.now()}`;
 
-      alert("결제가 완료되었습니다!");
-      router.push("/store");
+      toss.requestPayment("카드", {
+        amount: totalPrice,
+        orderId,
+        orderName: product.title,
+        customerName: user?.name || "비회원",
+        successUrl: `${window.location.origin}/store/payment/success?userId=${user?.id || "guest"}&productId=${product.id}`,
+        failUrl: `${window.location.origin}/store/payment/fail`,
+      });
     } catch (error) {
-      alert("가상 결제 API 오류: " + error.message);
+      alert("Toss 결제 실패: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -85,18 +79,6 @@ export default function PaymentPage() {
           <strong>{totalPrice.toLocaleString()}원</strong>
         </div>
 
-        <div className="payment-method">
-          <h3>💼 결제 수단</h3>
-          <select
-            value={selectedCard}
-            onChange={(e) => setSelectedCard(e.target.value)}
-          >
-            <option value="">카드를 선택하세요</option>
-            <option value="card1">💳 우리카드</option>
-            <option value="card2">💳 국민카드</option>
-          </select>
-        </div>
-
         <div className="payment-summary">
           <div className="summary-row">
             <span>상품금액</span>
@@ -111,7 +93,6 @@ export default function PaymentPage() {
             <span>최종 결제금액</span>
             <strong>{totalPrice.toLocaleString()}원</strong>
           </div>
-          <p className="payment-method-text">사용 카드: {selectedCard || "없음"}</p>
           <div className="button-group">
             <button onClick={() => router.back()} disabled={loading}>
               이전
@@ -130,7 +111,6 @@ export default function PaymentPage() {
           max-width: 900px;
           margin: 50px auto;
           padding: 20px;
-          font-family: 'Pretendard', sans-serif;
         }
         h2 {
           font-size: 24px;
@@ -158,17 +138,6 @@ export default function PaymentPage() {
           font-size: 14px;
           color: #444;
         }
-        .payment-method {
-          margin-top: 40px;
-        }
-        select {
-          margin-top: 10px;
-          padding: 12px;
-          width: 100%;
-          font-size: 15px;
-          border-radius: 6px;
-          border: 1px solid #ccc;
-        }
         .payment-summary {
           margin-top: 50px;
           background: linear-gradient(to right, #232526, #414345);
@@ -188,11 +157,6 @@ export default function PaymentPage() {
           margin-top: 20px;
           font-size: 20px;
           color: #00e0ff;
-        }
-        .payment-method-text {
-          margin-top: 10px;
-          font-size: 13px;
-          color: #aaa;
         }
         .button-group {
           display: flex;
