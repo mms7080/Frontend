@@ -30,7 +30,7 @@ export default function MoviePoster({ onMovieSelect, selectedMovie }) {
 
     return (
         <Flex 
-            w="65%" 
+            w="100%" 
             overflowX="auto" 
             p="10px" 
             gap="15px" 
