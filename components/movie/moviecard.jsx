@@ -12,13 +12,22 @@ const MovieCard = ({ movie, onBooking }) => {
             {movie.title} <br /> <br />
             {movie.description}<br /> <br />
             관람평 <span className="score">{movie.score}</span>
+            {/* <br /> <br />개봉일 <span>{movie.releaseDate}</span> */}
           </p>
         </div>
         {movie.label && (
-          <span className={`label ${movie.label.type}`}>{movie.label.text}</span>
+          <span className={`label ${
+            movie.label == "MEGA ONLY" ? "purple" :
+            movie.label == "Dolby" ? "gray" : "white"
+          }`}>{movie.label}</span>
         )}
         {movie.rate && (
-          <span className={`rate ${movie.rate.type}`}>{movie.rate.text}</span>
+          <span className={`rate ${
+            movie.rate == "ALL" ? "green" :
+            movie.rate == "12" ? "yellow" :
+            movie.rate == "15" ? "orange" :
+            movie.rate == "19" ? "red" : "white"
+          }`}>{movie.rate}</span>
         )}
       </div>
       <div className="info">

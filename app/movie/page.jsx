@@ -3,7 +3,7 @@
 import React,{useEffect,useState} from 'react';
 import {Button, Flex, Box, Grid} from '@chakra-ui/react';
 
-// import Movie from '../../components/movie/movie';
+import Movie from '../../components/movie/movie';
 import {Header,Footer} from '../../components';
 
 import {fetch} from '../../lib/client';
@@ -37,24 +37,24 @@ export default function Moviepage(){
                 console.log("MOVIE FETCH ERROR" + err.message);
                 setMovies(
                     [
-                        {id:1, rank:1, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'Fields of Destiny', rate:{ type: "yellow", text: "12" }, releaseDate:'2023.05.16', likeNumber:'5.3k', image:'https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg'},
-                        {id:2, rank:2, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'Killer Advice', rate:{ type: "red", text: "19" }, releaseDate:'2021.02.05', likeNumber:'2.1k', image:'https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700796426/catalog/1600659718750367744/iqmiudmmo6s7zcofwmpf.jpg'},
-                        {id:3, rank:3, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'InterStella', rate:{ type: "orange", text: "15" }, releaseDate:'2014.11.06', likeNumber:'1.5k', image:'https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false'},
-                        {id:4, rank:4, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'My Name is Alfred Hitchcock', rate:{ type: "green", text: "ALL" }, releaseDate:'0000.00.00', likeNumber:'1.3k', image:'https://www.mvtimes.com/mvt/uploads/2024/11/film-my-name-alfred-hitchcock-2.jpg'},
-                        {id:5, rank:5, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", label: { type: "purple", text: "MEGA ONLY" }, title:'어벤져스 엔드게임', rate:{ type: "orange", text: "15" }, releaseDate:'2019.04.24', likeNumber:'986', image:'https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'},
-                        {id:6, rank:6, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'범죄도시 4', rate:{ type: "orange", text: "15" }, releaseDate:'2024.04.24', likeNumber:'734', image:'https://i.namu.wiki/i/KwJ2dfIySu2k8JWlK3nD-gS7A9G-2I2EWKkNjoVRqaHabjK88STUo8FXi545XV6Pe8ERSX5DjF4e5k0IkOvznQ.webp'},
-                        {id:7, rank:7, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'귀멸의칼날 무한성편', releaseDate:'2025.08.22', rate:{ type: "red", text: "19" }, likeNumber:'521', image:'https://i.namu.wiki/i/YvPBZ1kzk8Dku4HhOC2FGB7xKVXj5bpg8cSdRWsAZg-3Knqu5LcWJchrZDIVmz-08V3OV9uFLMfCRNCZRcnTxQ.webp'},
-                        {id:8, rank:8, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", label: { type: "gray", text: "Dolby" }, title:'승부', rate:{ type: "orange", text: "15" }, releaseDate:'2025.03.26', likeNumber:'342', image:'https://img.megabox.co.kr/SharedImg/2025/03/27/O6RnDMOAnUw6geDdlaAXRlkqgy0mSSDb_420.jpg'}
+                        {id:1, rank:1, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'Fields of Destiny', rate:"12", releaseDate:'2023.05.16', likeNumber:'5.3k', image:'https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg'},
+                        {id:2, rank:2, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'Killer Advice', rate:"19", releaseDate:'2021.02.05', likeNumber:'2.1k', image:'https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700796426/catalog/1600659718750367744/iqmiudmmo6s7zcofwmpf.jpg'},
+                        {id:3, rank:3, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'InterStella', rate:"15", releaseDate:'2014.11.06', likeNumber:'1.5k', image:'https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false'},
+                        {id:4, rank:4, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'My Name is Alfred Hitchcock', rate:"ALL", releaseDate:'2022.09.05', likeNumber:'1.3k', image:'https://www.mvtimes.com/mvt/uploads/2024/11/film-my-name-alfred-hitchcock-2.jpg'},
+                        {id:5, rank:5, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", label:"MEGA ONLY", title:'어벤져스 엔드게임', rate:"15", releaseDate:'2019.04.24', likeNumber:'986', image:'https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'},
+                        {id:6, rank:6, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'범죄도시 4', rate:"15", releaseDate:'2024.04.24', likeNumber:'734', image:'https://i.namu.wiki/i/KwJ2dfIySu2k8JWlK3nD-gS7A9G-2I2EWKkNjoVRqaHabjK88STUo8FXi545XV6Pe8ERSX5DjF4e5k0IkOvznQ.webp'},
+                        {id:7, rank:7, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", title:'귀멸의칼날 무한성편', releaseDate:'2025.08.22', rate:"19", likeNumber:'521', image:'https://i.namu.wiki/i/YvPBZ1kzk8Dku4HhOC2FGB7xKVXj5bpg8cSdRWsAZg-3Knqu5LcWJchrZDIVmz-08V3OV9uFLMfCRNCZRcnTxQ.webp'},
+                        {id:8, rank:8, description:"타노스 위협으로부터 몸을 지키기 위해 거대한 벽을 쌓고 그 안에서...", score:"9.8", label:"Dolby", title:'승부', rate:"15", releaseDate:'2025.03.26', likeNumber:'342', image:'https://img.megabox.co.kr/SharedImg/2025/03/27/O6RnDMOAnUw6geDdlaAXRlkqgy0mSSDb_420.jpg'}
                     ]
                 )
             }
         })();
     }, []);
 
-      const handleBooking = (movieId) => {
-    console.log(`영화 ID ${movieId} 예매하기`);
-    // 여기에 예매 로직 추가
-  };
+    const handleBooking = (movieId) => {
+        console.log(`영화 ID ${movieId} 예매하기`);
+        // 여기에 예매 로직 추가
+    };
 
     // console.log(movies);
     const filteredMovies = activeCategory === '전체영화' ? movies : 
@@ -66,20 +66,20 @@ export default function Moviepage(){
     // console.log(filteredMovies);
     return <>
         <Header headerColor="white" headerBg="#1a1a1a" userInfo={user}/>
-        <Box bg="white" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
+        <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
             <Box pb={6}>
-                <Flex gap={2} borderBottom="1px solid #5f0080">
+                <Flex gap={2} borderBottom="1px solid white">
                     {categories.map((category) => (
                         <Button
                             key={category}
                             variant="ghost"
-                            borderBottom={activeCategory === category ? '2px solid #5f0080' : '1px solid transparent'}
+                            borderBottom={activeCategory === category ? '2px solid white' : '1px solid transparent'}
                             borderRadius="0"
-                            fontSize={'xl'}
-                            fontWeight={activeCategory === category ? 'bold' : 'normal'}
-                            color={activeCategory === category ? '#5f0080' : 'black'}
+                            fontSize={'2xl'}
+                            fontWeight={'normal'}
+                            color={activeCategory === category ? 'white' : 'gray.500'}
                             onClick={() => setActiveCategory(category)}
-                            _hover={{ bg: 'transparent', color: '#5f0080' }}
+                            _hover={{ bg: 'transparent', color: 'white' }}
                         >
                             {category}
                         </Button>
@@ -94,6 +94,9 @@ export default function Moviepage(){
                         onBooking={handleBooking}
                     />
                 ))}
+            </Box>
+            <Box pt={10}>
+                <Button w='100%'>더보기</Button>
             </Box>
         </Box>
         <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
