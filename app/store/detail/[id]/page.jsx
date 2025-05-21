@@ -133,15 +133,19 @@ export default function StoreDetailPage() {
               <Text fontSize="2xl" fontWeight="bold" color="purple.600">
                 {totalPrice}원
               </Text>
-              <Button
-                w={{ base: "100%", sm: "120px" }}
-                fontWeight="bold"
-                bg="#6B46C1"
-                color="white"
-                _hover={{ bg: "#5A38A6" }}
-              >
-                구매
-              </Button>
+<Button
+  w={{ base: "100%", sm: "120px" }}
+  fontWeight="bold"
+  bg="#6B46C1"
+  color="white"
+  _hover={{ bg: "#5A38A6" }}
+  onClick={() => {
+    router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
+  }}
+>
+  구매
+</Button>
+
             </Flex>
           </Box>
         </Flex>
