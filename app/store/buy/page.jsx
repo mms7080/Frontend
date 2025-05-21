@@ -1,4 +1,4 @@
-// app/store/buy/page.jsx
+
 "use client";
 
 import { useState, useEffect } from "react";
