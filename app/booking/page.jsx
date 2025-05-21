@@ -35,19 +35,6 @@ export default function BookingPage(){
         <Text fontSize="5xl" color="black" mb="20px" marginLeft="19%" marginTop="20px">빠른예매</Text>
         
         <VStack spacing="20px" p="20px" overflow="visible">
-            
-            {selectedMovie && (
-                <Box textAlign="center" maxW="600px" mx="auto">
-                    <Text fontSize="2xl" fontWeight="semibold">
-                    {selectedMovie.title}
-                    </Text>
-                    {/* {selectedMovie.description && (
-                    <Text fontSize="md" color="gray.600" mt="2">
-                        {selectedMovie.description}
-                    </Text>
-                    )} */}
-                </Box>
-            )}
 
             {/* 영화 선택 */}
             <MoviePoster 
@@ -60,14 +47,27 @@ export default function BookingPage(){
             />
 
             {selectedMovie && (
-                <Box textAlign="center" maxW="600px" mx="auto">
-                    {selectedMovie.description && (
-                    <Text fontSize="md" color="gray.600" mt="2">
-                        {selectedMovie.description}
-                    </Text>
-                    )}
-                </Box>
+            <Box
+                w="65%"
+                p="20px"
+                bg="purple"
+                borderRadius="15px"
+                boxShadow="0 0 15px rgba(0, 0, 0, 0.1)"
+                textAlign="center"
+                mx="auto"
+            >
+                <Text fontSize="2xl" fontWeight="semibold" color="white">
+                {selectedMovie.title}
+                </Text>
+                {selectedMovie.description && (
+                <Text fontSize="md" color="white" mt="2">
+                    {selectedMovie.description}
+                </Text>
+                )}
+            </Box>
             )}
+
+            
 
             {/* 날짜 선택 (영화 선택 후 표시) */}
             {selectedMovie && (
