@@ -32,6 +32,10 @@ export default function Moviepage(){
         (async () => {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/get`);
+                for(let movie of res) {
+                    if(movie.likeNumber > 999)
+                        movie.likeNumber = Math.floor(movie.likeNumber / 100) / 10 + 'k';
+                }
                 setMovies(Object.values(res));
             } catch (err) {
                 console.log("MOVIE FETCH ERROR! : " + err.message);
