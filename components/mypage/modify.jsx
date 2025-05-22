@@ -5,11 +5,12 @@ import {Flex,Box,VStack,Input,HStack,Button,Text} from '@chakra-ui/react';
 
 export default function Modify({userInfo}) {/* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
 
-    const [address_detail,setAddressDetail]=useState(userInfo.address_detail);
     const [phone,setPhone] = useState(userInfo.phone);
     const [email,setEmail] = useState(userInfo.email);
     const [birthdate,setBirthdate] = useState(userInfo.birthdate);
-    const [gender,setGender] = useState(userInfo.gender);
+    const [zipcode,setZipcode]=useState(userInfo.zipcode);
+    const [address,setAddress]=useState(userInfo.address);
+    const [address_detail,setAddressDetail]=useState(userInfo.address_detail);
 
     const [pw,setPw]=useState('');
     const [pwMessage,setPwMessage]=useState('');/* 비밀번호 입력창 밑의 메세지 */
@@ -191,8 +192,8 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                             <td style={{width:235,height:140,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="address_detail">주소</label></td>
                                             <td style={{width:605,height:140,paddingLeft:15}}>
                                                <Flex flexDirection='column' gap='5px'>
-                                                    <Input id="zipcode" name="zipcode" value={userInfo.zipcode} readOnly/>
-                                                    <Input id="address" name="address" value={userInfo.address} readOnly/>
+                                                    <Input id="zipcode" name="zipcode" value={zipcode} onChange={(e)=>setZipcode(e.target.value)}/>
+                                                    <Input id="address" name="address" value={address} onChange={(e)=>setAddress(e.target.value)}/>
                                                     <Input id="address_detail" name="address_detail" value={address_detail} onChange={(e)=>setAddressDetail(e.target.value)}/>
                                                 </Flex>
                                             </td>
