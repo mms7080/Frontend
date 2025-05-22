@@ -88,6 +88,14 @@ export default function Find_pw(){
         setFound(true);/* 객체에서 문자열만 꺼내서 저장 */
     }
 
+    const changePassword=async (e)=>{
+        if(!isPwrAvailable){
+            e.preventDefault();/* 비밀번호 확인과 비밀번호가 일치되지 않았으면 폼 제출 막기 */
+            alert('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
+            return;
+        }
+    }
+
     const EmailLayout=()=>{
         return <>
                 <Input id="email" name="email" placeholder="example@email.com"/>
@@ -157,7 +165,7 @@ export default function Find_pw(){
             <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
                 <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
-                        <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/set_pw/logic`} method='post'>
+                        <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/set_pw/logic`} method='post' onSubmit={changePassword}>
                             <Flex w='840px' flexDirection='column' gap='15px' py='50px'>
 
                                 <Input name='id' type='hidden' value={foundID}/>
