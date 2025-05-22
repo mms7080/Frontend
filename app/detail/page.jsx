@@ -60,6 +60,11 @@ export default function detail(){
                                 <span style={{fontSize:20}}>👥 594,416명</span>
                             </Flex>
                         </Flex>
+                        <Flex fontSize='18px'>
+                            인피니티 워 이후 절반만 살아남은 지구의 마지막 희망이 된 어벤져스<br/>
+                            사라진 이들을 되살리기위해 어벤져스의 모든 것을 걸었다!<br/>
+                            살아남은 자들이 준비하는, 운명을 바꿀 최후의 전쟁이 펼쳐진다!
+                        </Flex>
                     </Flex>
 
                     <VStack pt='80px'>
@@ -73,13 +78,38 @@ export default function detail(){
                         <Flex w='840px' flexDirection='column' gap='30px' pt='40px' pb='80px'>
                             <span style={{textAlign:'center',fontSize:28}}><b>영화 소개</b></span>
                             <span>
-                            마블 시네마틱 유니버스(MCU)의 피날레!<br/>
-    어벤져스: 엔드게임은 지난 10년간 이어져온 마블 히어로들의 여정을 마무리하는 작품으로, 팬들의 감동과 기대를 한 몸에 받은 대작입니다.<br/><br/>
+                            어벤져스: 엔드게임<br/><br/>
+전 세계적인 찬사를 받은 '인피니티 사가'의 최종편. 이 극적인 마지막 결전에서 어벤져스는 우주 최강 악당 '타노스'와 대결한다. 끔찍한 사건으로 세계 인구의 절반이 사라지고 계급 간에 붕괴까지 일어난 상황, 남은 히어로들은 앞으로 나아가기 위해 고군분투하는데... 이들은 우주의 질서와 화합, 사랑하는 이들을 되찾기 위해 힘을 합쳐야 한다. 로버트 다우니 주니어, 크리스 에반스, 마크 러팔로, 크리스 헴스워스, 스칼렛 요한슨, 제레미 레너, 돈 치들, 폴 러드, 베네딕트 컴버배치, 채드윅 보즈먼, 브리 라슨, 톰 홀랜드, 카렌 길런, 조 샐다나, 에반젤린 릴리가 출연하는 마블 스튜디오의 '어벤져스: 엔드게임'은 케빈 파이기가 제작, 앤소니 루소와 조 루소가 감독을 맡았다. 루이스 데스포지토, 빅토리아 알론소, 마이클 그릴로, 트린 트란, 존 파브로, 제임스 건, 스탠 리가 제작 총괄을 맡았고 크리스토퍼 마커스와 스티븐 맥필리가 각본을 썼다. 일부 빛이 깜빡이는 장면이나 패턴은 광과민성 시청자들에게 영향을 미칠 수 있다.
 
-    인피니티 워에서 타노스의 손에 의해 우주의 절반이 사라지고, 살아남은 히어로들은 시간과 공간을 넘나드는 최후의 반격을 준비합니다.<br/><br/>
 
-    팀워크, 희생, 그리고 진정한 영웅의 의미를 그린 이 작품은 팬들에게 깊은 여운을 남기며, 히어로 영화의 새로운 기준을 제시합니다.<br/><br/>
+
+일부 섬광 장면이 빛에 민감한 시청자에게 영향을 줄 수 있음.
                             </span>
+                            <Flex w='60%' justifyContent='space-between'>
+                                <Flex flexDirection='column'>
+                                    <span>러닝 타임:</span>
+                                    <span>3시간 5분</span>
+                                    <span>공개일:</span>
+                                    <span>2019</span>
+                                    <span>장르:</span>
+                                    <span>슈퍼 히어로어드벤처, 액션SF판타지</span>
+                                    <span>관람 등급:</span>
+                                    <Flex bg='#E4B533' w='25px' h='25px' borderRadius='5px' justifyContent='center' alignItems='center' color='white' fontSize='18px'>12</Flex>
+                                </Flex>
+                                <Flex flexDirection='column'>
+                                    <span>감독:</span>
+                                    <span>안소니 루소조 루소</span>
+                                    <span>출연:</span>
+                                    <span>로버트 다우니 주니어</span>
+                                    <span>크리스 에반스</span>
+                                    <span>마크 러팔로</span>
+                                    <span>크리스 헴스워스</span>
+                                    <span>스칼렛 요한슨</span>
+                                    <span>제레미 레너</span>
+                                </Flex>
+                                
+                            </Flex>
+                            <span></span>
                         </Flex>
                     </Box>
                 </VStack>
