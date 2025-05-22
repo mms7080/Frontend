@@ -26,9 +26,7 @@ export default function MegaboxStorePage() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
-          }
+          { credentials: "include" }
         );
         if (!res.ok) throw new Error();
         const data = await res.json();
@@ -61,13 +59,7 @@ export default function MegaboxStorePage() {
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      <Box
-        maxW="1200px"
-        mx="auto"
-        pt={{ base: 10, md: 20 }}
-        px={{ base: 4 }}
-        pb={10}
-      >
+      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
         <Heading
           mb={10}
           fontSize={{ base: "xl", md: "2xl" }}
@@ -80,14 +72,7 @@ export default function MegaboxStorePage() {
           🛍️ 스토어
         </Heading>
 
-        <Flex
-          justify="space-between"
-          align="center"
-          wrap="wrap"
-          mb={8}
-          px={2} // 좌우 여백 추가 (선택사항)
-        >
-          {/* 카테고리 버튼 그룹 */}
+        <Flex justify="space-between" align="center" wrap="wrap" mb={8} px={2}>
           <Flex gap={2} flexWrap="wrap">
             {defaultCategories.map((category) => (
               <Button
@@ -109,12 +94,10 @@ export default function MegaboxStorePage() {
               </Button>
             ))}
           </Flex>
-
-          {/* 오른쪽에 위치한 등록 버튼 */}
           <Button
             colorScheme="purple"
             onClick={() => router.push("/store/upload")}
-            mt={{ base: 4, md: 0 }} // 모바일일 때는 아래로 밀림
+            mt={{ base: 4, md: 0 }}
           >
             + 스토어 등록
           </Button>
@@ -187,20 +170,51 @@ export default function MegaboxStorePage() {
                     <Text fontSize="13px" color="#666" mb={1} noOfLines={2}>
                       {item.subtitle}
                     </Text>
-                    <Flex alignItems="baseline" gap={2} mb={2}>
+
+                    {/* 🔽 가격 강조 영역 전체 교체된 부분 */}
+                    <Flex
+                      alignItems="center"
+                      gap={2}
+                      mb={2}
+                      flexWrap="wrap"
+                      bg="#FAF5FF"
+                      px={2}
+                      py={1}
+                      borderRadius="6px"
+                    >
                       {item.originalPrice && (
-                        <Text
-                          fontSize="13px"
-                          color="#aaa"
-                          textDecoration="line-through"
-                        >
-                          {item.originalPrice}
-                        </Text>
+                        <>
+                          <Text
+                            fontSize="13px"
+                            color="#aaa"
+                            textDecoration="line-through"
+                            fontWeight="normal"
+                          >
+                            {item.originalPrice}
+                          </Text>
+                          <Text
+                            fontSize="12px"
+                            color="red"
+                            fontWeight="semibold"
+                            bg="#FED7D7"
+                            px={2}
+                            py={0.5}
+                            borderRadius="4px"
+                          >
+                            할인중
+                          </Text>
+                        </>
                       )}
-                      <Text fontSize="16px" fontWeight="bold" color="#6B46C1">
+                      <Text
+                        fontSize="18px"
+                        fontWeight="bold"
+                        color="#6B46C1"
+                        letterSpacing="-0.5px"
+                      >
                         {item.price}
                       </Text>
                     </Flex>
+
                     <Button
                       w="100%"
                       bg="#6B46C1"
