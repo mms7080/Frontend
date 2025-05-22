@@ -1,7 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
+import { createIcon } from '@chakra-ui/react';
 import './moviecard.css';
 
+const HeartIcon = createIcon({
+  displayName: "HeartIcon",
+  path: (
+    <>
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path
+        stroke="#00aaff"
+        strokeWidth="1.5"
+        fill="currentColor"
+        d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"
+      />
+    </>
+  ),
+  viewBox: "0 0 28 28"
+});
+
 const MovieCard = ({ movie, onBooking }) => {
+
+  const [liked, likedController] = useState(false);
+  const likeChange = () => {likedController(!liked)};
+
   return (
     <div className="movie-card">
       <span className="rank">{movie.rank}</span>
@@ -12,7 +33,7 @@ const MovieCard = ({ movie, onBooking }) => {
             {movie.title} <br /> <br />
             {movie.description}<br /> <br />
             관람평 <span className="score">{movie.score}</span>
-            {/* <br /> <br />개봉일 <span>{movie.releaseDate}</span> */}
+            <br /> <br />개봉일 <span>{movie.releaseDate}</span>
           </p>
         </div>
         {movie.label && (
@@ -31,8 +52,16 @@ const MovieCard = ({ movie, onBooking }) => {
         )}
       </div>
       <div className="info">
-        <div className="likes">❤️ {movie.likeNumber}</div>
-        <button onClick={() => onBooking(movie.id)}>예매</button>
+        <button 
+          className="like-button"
+          onClick={likeChange}
+        >
+          <HeartIcon size="lg" color={liked ? "#00aaff" : "transparent"} />
+          <div className="likes">
+            {movie.likeNumber}
+          </div>
+        </button>
+        <button className="reserve-button" onClick={() => onBooking(movie.id)}>예매</button>
       </div>
     </div>
   );
