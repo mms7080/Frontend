@@ -85,27 +85,27 @@ export default function detail(){
 
 일부 섬광 장면이 빛에 민감한 시청자에게 영향을 줄 수 있음.
                             </span>
-                            <Flex w='60%' justifyContent='space-between'>
-                                <Flex flexDirection='column'>
+                            <Flex w='100%'>
+                                <Flex w='50%' flexDirection='column'>
                                     <span>러닝 타임:</span>
-                                    <span>3시간 5분</span>
+                                    <span style={{color:'#6D6D96'}}>3시간 5분</span>
                                     <span>공개일:</span>
-                                    <span>2019</span>
+                                    <span style={{color:'#6D6D96'}}>2019년 4월 24일</span>
                                     <span>장르:</span>
-                                    <span>슈퍼 히어로어드벤처, 액션SF판타지</span>
+                                    <span style={{color:'#6D6D96'}}>슈퍼 히어로어드벤처, 액션SF판타지</span>
                                     <span>관람 등급:</span>
                                     <Flex bg='#E4B533' w='25px' h='25px' borderRadius='5px' justifyContent='center' alignItems='center' color='white' fontSize='18px'>12</Flex>
                                 </Flex>
-                                <Flex flexDirection='column'>
+                                <Flex w='50%' flexDirection='column'>
                                     <span>감독:</span>
-                                    <span>안소니 루소조 루소</span>
+                                    <span style={{color:'#6D6D96'}}>안소니 루소조 루소</span>
                                     <span>출연:</span>
-                                    <span>로버트 다우니 주니어</span>
-                                    <span>크리스 에반스</span>
-                                    <span>마크 러팔로</span>
-                                    <span>크리스 헴스워스</span>
-                                    <span>스칼렛 요한슨</span>
-                                    <span>제레미 레너</span>
+                                    <span style={{color:'#6D6D96'}}>로버트 다우니 주니어</span>
+                                    <span style={{color:'#6D6D96'}}>크리스 에반스</span>
+                                    <span style={{color:'#6D6D96'}}>마크 러팔로</span>
+                                    <span style={{color:'#6D6D96'}}>크리스 헴스워스</span>
+                                    <span style={{color:'#6D6D96'}}>스칼렛 요한슨</span>
+                                    <span style={{color:'#6D6D96'}}>제레미 레너</span>
                                 </Flex>
                                 
                             </Flex>
