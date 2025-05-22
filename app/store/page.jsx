@@ -201,7 +201,7 @@ export default function MegaboxStorePage() {
                             py={0.5}
                             borderRadius="4px"
                           >
-                            할인중
+                            SALE
                           </Text>
                         </>
                       )}
