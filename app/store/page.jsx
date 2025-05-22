@@ -56,6 +56,9 @@ export default function MegaboxStorePage() {
   const categoryList =
     activeCategory === "전체" ? sortedKeys : [activeCategory];
 
+  const formatPrice = (price) =>
+    new Intl.NumberFormat("ko-KR").format(price) + "원";
+
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
@@ -171,7 +174,6 @@ export default function MegaboxStorePage() {
                       {item.subtitle}
                     </Text>
 
-                    {/* 🔽 가격 강조 영역 전체 교체된 부분 */}
                     <Flex
                       alignItems="center"
                       gap={2}
@@ -190,7 +192,7 @@ export default function MegaboxStorePage() {
                             textDecoration="line-through"
                             fontWeight="normal"
                           >
-                            {item.originalPrice}
+                            {formatPrice(item.originalPrice)}
                           </Text>
                           <Text
                             fontSize="12px"
@@ -211,7 +213,7 @@ export default function MegaboxStorePage() {
                         color="#6B46C1"
                         letterSpacing="-0.5px"
                       >
-                        {item.price}
+                        {formatPrice(item.price)}
                       </Text>
                     </Flex>
 

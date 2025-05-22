@@ -144,12 +144,12 @@ export default function StoreUploadPage() {
 
           <div style={{ display: "flex", gap: "10px" }}>
             <div style={{ flex: 1 }}>
-              <label>가격</label>
+              <label>판매가격</label>
               <input
                 type="text"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                placeholder="예: 14,000원"
+                placeholder="예: 14000"
                 style={inputStyle}
               />
             </div>
@@ -159,7 +159,7 @@ export default function StoreUploadPage() {
                 type="text"
                 value={originalPrice}
                 onChange={(e) => setOriginalPrice(e.target.value)}
-                placeholder="예: 16,000원"
+                placeholder="예: 16000"
                 style={inputStyle}
               />
             </div>
@@ -182,7 +182,7 @@ export default function StoreUploadPage() {
                 type="text"
                 value={badgeColor}
                 onChange={(e) => setBadgeColor(e.target.value)}
-                placeholder="예: #FF5733"
+                placeholder="예: #FF5733 or black 등등"
                 style={inputStyle}
               />
             </div>
