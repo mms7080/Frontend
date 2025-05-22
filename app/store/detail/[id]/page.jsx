@@ -79,8 +79,7 @@ export default function StoreDetailPage() {
 
           <Box flex="1">
             <Text fontSize="sm" color="purple.600" fontWeight="bold" mb={2}>
-              ⚠️ 일부 특별관(부티크, 돌비 등) 및 쿠폰 사용불가 극장에서는 사용이
-              제한됩니다.
+              ⚠️ 일부 특별관(부티크, 돌비 등) 및 쿠폰 사용불가 극장에서는 사용이 제한됩니다.
             </Text>
             <Text fontSize="sm" mb={5}>
               <b>유효기간:</b> 구매일로부터 1년 / 교환권 등록 후 10일 이내 사용
@@ -97,9 +96,14 @@ export default function StoreDetailPage() {
               <Text fontWeight="bold" fontSize="md">
                 수량선택
               </Text>
-              <select
+              <input
+                type="number"
+                min="1"
                 value={quantity}
-                onChange={(e) => setQuantity(Number(e.target.value))}
+                onChange={(e) => {
+                  const value = Number(e.target.value);
+                  if (value >= 1) setQuantity(value);
+                }}
                 style={{
                   width: "80px",
                   padding: "6px 8px",
@@ -107,13 +111,7 @@ export default function StoreDetailPage() {
                   border: "1px solid #ccc",
                   fontSize: "14px",
                 }}
-              >
-                {[...Array(10)].map((_, i) => (
-                  <option key={i} value={i + 1}>
-                    {i + 1}
-                  </option>
-                ))}
-              </select>
+              />
             </Flex>
 
             <Flex
@@ -133,19 +131,18 @@ export default function StoreDetailPage() {
               <Text fontSize="2xl" fontWeight="bold" color="purple.600">
                 {totalPrice}원
               </Text>
-<Button
-  w={{ base: "100%", sm: "120px" }}
-  fontWeight="bold"
-  bg="#6B46C1"
-  color="white"
-  _hover={{ bg: "#5A38A6" }}
-  onClick={() => {
-    router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
-  }}
->
-  구매
-</Button>
-
+              <Button
+                w={{ base: "100%", sm: "120px" }}
+                fontWeight="bold"
+                bg="#6B46C1"
+                color="white"
+                _hover={{ bg: "#5A38A6" }}
+                onClick={() => {
+                  router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
+                }}
+              >
+                구매
+              </Button>
             </Flex>
           </Box>
         </Flex>
@@ -157,12 +154,10 @@ export default function StoreDetailPage() {
           <Box fontSize="14px" color="gray.700" whiteSpace="pre-line" mb={6}>
             - 상품은 구매일로부터 10일 이내 취소 가능 <br />
             - 구매일로부터 5년까지 유효기간 연장이 가능합니다. <br />
-            - 최초 유효기간 만료 후에는 결제금액의 90%에 대해 환불 요청
-            가능하며, 환불 처리에 7일 이상의 시간이 소요될 수 있습니다. (접수처
-            : 1544-0070) <br />
+            - 최초 유효기간 만료 후에는 결제금액의 90%에 대해 환불 요청 가능하며, 환불 처리에 7일 이상의 시간이 소요될 수 있습니다. (접수처 : 1544-0070) <br />
             - 쿠폰으로 등록 시 유효기간 내 사용 필수 <br />
-            - 일부 극장에서는 사용 제한 가능 <br />- 구매 취소 및 환불 요청은
-            미사용 상품에 한해 가능하며, 사용한 상품에 대해서는 불가합니다.
+            - 일부 극장에서는 사용 제한 가능 <br />
+            - 구매 취소 및 환불 요청은 미사용 상품에 한해 가능하며, 사용한 상품에 대해서는 불가합니다.
           </Box>
 
           <Text fontWeight="bold" fontSize="lg" mb={2} color="black">
