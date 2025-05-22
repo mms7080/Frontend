@@ -6,6 +6,8 @@ import {Header,Footer} from '../../components';
 import {Tabs} from "@chakra-ui/react";
 import {Reviews,Trailer} from '../../components/detail';
 
+import {fetch} from '../../lib/client';
+
 export default function detail(){
         let headerColor='black';
         let headerBg='#F9F9F9';
@@ -32,7 +34,7 @@ export default function detail(){
                 <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage="url('https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2019%2F02%2Fmarvel-avengers-endgame-new-teaser-super-bowl-tw.jpg?w=1080&cbr=1&q=90&fit=max')">
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>
                     <Flex justifyContent='center' alignItems='flex-start' flexDirection='column' gap='10px' color='white' position='relative' zIndex='1'>
-                        <span style={{fontSize:40}}>어벤져스 : 엔드게임</span>
+                        <span style={{fontSize:40}}>어벤져스: 엔드게임</span>
                         <span style={{fontSize:20}}>Avengers: Endgame</span>
                         <Flex gap='10px'>
                             <Button fontSize='16px'>🤍 7.7k</Button>
@@ -77,9 +79,6 @@ export default function detail(){
     인피니티 워에서 타노스의 손에 의해 우주의 절반이 사라지고, 살아남은 히어로들은 시간과 공간을 넘나드는 최후의 반격을 준비합니다.<br/><br/>
 
     팀워크, 희생, 그리고 진정한 영웅의 의미를 그린 이 작품은 팬들에게 깊은 여운을 남기며, 히어로 영화의 새로운 기준을 제시합니다.<br/><br/>
-    <br/><br/><br/><br/><br/><br/><br/>
-                                <Image src='https://i.namu.wiki/i/vFPYI_yGi_9pqUocLkpKYslKfBawVtk1IUdKA069QOcmZSHsTyVuU5P4CQ6CYGXDpDGZ0jTIDZr-ZnVIEU5Z3w.webp'/><br/><br/>
-                                <Image src='https://i.ytimg.com/vi/ijUsSpRVhBU/maxresdefault.jpg'/>
                             </span>
                         </Flex>
                     </Box>
