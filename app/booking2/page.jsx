@@ -40,6 +40,7 @@ export default function Booking2Page() {
     const handlePosterClick = (movie) => {
         setActiveMovie(movie);
       };
+      const closeModal = () => setActiveMovie(null);
 
     return (
     <>
@@ -117,26 +118,59 @@ export default function Booking2Page() {
 
         {activeMovie && (
             <Box position="fixed" top={0} left={0} width="100vw" height="100vh" zIndex={1000} display="flex" alignItems="center" justifyContent="center">
-            {/* 배경 블러처리 태그 */}
+
             <Box
                 position="absolute"
                 top={0}
                 left={0}
                 width="100%"
                 height="100%"
-                bgImage={`url(${activeMovie.poster})`}
+                color="black"
+                // bgImage={`url(${activeMovie.poster})`}
                 bgSize="cover"
                 bgPosition="center"
                 filter="blur(20px)"
                 transform="scale(1.1)"
             />
-            {/* 어두운 팝업창 생성 */}
+
             <Box position="absolute" top={0} left={0} width="100%" height="100%" bg="rgba(0,0,0,0.6)" />
-            {/* 실제 팝업창의 내용 */}
-            <Box position="relative" mx="auto" p={6} bg="#2d2d2d" borderRadius="md" maxW="1000px" w="90%" color="white">
+
+            <Box 
+            // position="relative" 
+            // mx="auto" 
+            // p={6} 
+            // bg="#2d2d2d" 
+            // // filter="blur(20px)"
+            // borderRadius="md" 
+            // maxW="80%" w="80%" 
+            // color="white"
+            position="relative" 
+            mx="auto" 
+            p={6} 
+            borderRadius="md" 
+            maxW="80%" 
+            w="80%" 
+            color="white"
+            bgImage={`url(${activeMovie.backdropUrl || activeMovie.poster})`}
+            bgSize="cover"
+            bgPosition="center"
+            >
+                <Box
+                    position="absolute"
+                    top={0}
+                    left={0}
+                    width="100%"
+                    height="100%"
+                    bg="rgba(0,0,0,0.7)"  // 투명도 조절해서 어둡기 강도 변경
+                    filter="blur(50px)"
+                    borderRadius="md"
+                    zIndex={1}
+                />
+
+                <Box position="relative" zIndex={2}>
                 <Flex justify="space-between" align="center" mb={4}>
                 <Text fontSize="5xl">{activeMovie.title}</Text>
-                <Button color="white" variant="ghost" colorScheme="whiteAlpha" _hover={{ bg: 'purple' }} onClick={() => setActiveMovie(null)}>닫기</Button>
+                <Button fontSize="2xl" color="white" variant="ghost" colorScheme="whiteAlpha" _hover={{ bg: 'purple' }} onClick={() => setActiveMovie(null)}>X</Button>
                 </Flex>
                 <Image
                 src={activeMovie.poster}
@@ -148,6 +182,7 @@ export default function Booking2Page() {
                 objectFit="cover"
                 />
                 <Text fontSize="md">{activeMovie.description}</Text>
+            </Box>
             </Box>
             </Box>
         )}
