@@ -21,7 +21,7 @@ export default async function Mypage(){
      return <>
      <Header headerColor={headerColor} headerBg={headerBg} userInfo={res}></Header>
      
-    <Tabs.Root w='100%' defaultValue="modify" orientation='vertical'>
+    <Tabs.Root w='100%' defaultValue="booking" orientation='vertical'>
       {/* 왼쪽 탭 리스트 */}
       <Box w="15%" minW="250px" ml='250px' pt='50px'>
         <Tabs.List>

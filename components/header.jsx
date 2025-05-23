@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { Flex, Box, IconButton, Stack, Text } from '@chakra-ui/react';
+import { Flex, Box, Icon, Text } from '@chakra-ui/react';
 import { FiUser } from 'react-icons/fi';
+
 import { usePathname } from 'next/navigation';
-import Navigator from './navigator';
+
 
 export default function Header({ userInfo }) {
   const pathname = usePathname();
+  const isRealHome=pathname==='/'||pathname.startsWith('/home');/* 진짜 home인지 확인하기 위한 변수 */
   const isHome = pathname === '/' || pathname.startsWith('/home') 
   || pathname.startsWith('/movie') || pathname.startsWith('/booking2');
   const headerBg = isHome ? '#1a1a1a' : 'white';
@@ -74,7 +76,7 @@ export default function Header({ userInfo }) {
           gap={{ base: 2, md: 4 }}
           fontSize="15px"
         >
-          {userInfo ? (
+          {userInfo && isRealHome ? (/* 로그인 상태이고 홈 화면일 때 */
             <>
               <Text color={headerColor}>{userInfo.name}님 환영합니다</Text>
               <Text transition='all 0.2s ease' color={headerColor} _hover={{color:'#00c3ff'}}>
@@ -82,18 +84,40 @@ export default function Header({ userInfo }) {
               </Text>
             </>
           ) : (
+            userInfo ?/* 로그인 상태이고 홈 화면이 아닐 때 */
+            (
+            <>
+              <Text transition='all 0.2s ease' color={headerColor} _hover={{color:'#00c3ff'}}>
+                <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>로그아웃</Link>
+              </Text>
+            </>
+            )
+            :(/* 로그인 상태가 아닐 때 */
             <>
               <Text transition='all 0.2s ease' color={headerColor} _hover={{color:'#00c3ff'}}><Link href="/signin">로그인</Link></Text>
               <Text transition='all 0.2s ease' color={headerColor} _hover={{color:'#00c3ff'}}><Link href="/join">회원가입</Link></Text>
             </>
-          )}
+          ))}
           <Text transition='all 0.2s ease' color="#ff4d4d" _hover={{color:'#ff6666',textShadow:'0 0 5px rgba(255, 77, 77, 0.5)'}}>빠른예매</Text>
           <Link href="/mypage">
-            <FiUser transition='all 0.2s ease' size={24} color={headerColor} _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}}/>
+          
+              <Icon
+                as={FiUser}
+                boxSize={6} /* size=24px */
+                color={headerColor}
+                transition="all 0.2s ease"
+                position='relative'
+                bottom='2px'
+                _hover={{
+                  transform:'scale(1.2)',
+                  filter: 'brightness(1.2)',
+                  color:'#00c3ff'
+                }}
+              />
+              {/* <FiUser transition='all 0.2s ease' size={24} color={headerColor} _hover={{size:28.8,filter:'brightness(1.2)'}}/> */}
           </Link>
         </Flex>
       </Flex>
-      <Navigator />
     </>
   );
 }

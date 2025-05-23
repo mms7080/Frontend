@@ -1,7 +1,7 @@
 "use client";
 
-import React,{useState,useEffect} from 'react';
-import {Flex,Box,VStack,Input,HStack,Button,Text} from '@chakra-ui/react';
+import React,{useState} from 'react';
+import {Flex,Box,Input,Button,Text} from '@chakra-ui/react';
 
 export default function Modify({userInfo}) {/* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
 
@@ -42,7 +42,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='id'>아이디</label></td>
                                             <td style={{width:605,height:50,paddingLeft:15}}>
-                                                <Input w='575px' id="id" name="id" value={userInfo.username} readOnly/>
+                                                <Text>{userInfo.username}</Text>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -150,7 +150,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름</label></td>
                                             <td style={{width:605,height:50,paddingLeft:15}}>
-                                                <Input id="name" name="name" value={userInfo.name} readOnly/>
+                                                <Text>{userInfo.name}</Text>
                                             </td>
                                         </tr>
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
