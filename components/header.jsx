@@ -58,12 +58,12 @@ export default function Header({ userInfo }) {
           left={{ md: '50%' }}
           transform={{ md: 'translateX(-50%)' }}
         >
-          <Link href="/movie"><Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>영화</Box></Link>
-          <Link href="/booking"><Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>예매</Box></Link>
-          <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>극장</Box>
-          <Link href="/store"><Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>스토어</Box></Link>
-          <Link href="/notice"><Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>공지</Box></Link>
-          <Link href="/event"><Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>이벤트</Box></Link>
+          <Link href="/movie"><Box transition='all 0.2s ease' color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>영화</Box></Link>
+          <Link href="/booking"><Box transition='all 0.2s ease' color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>예매</Box></Link>
+          <Box transition='all 0.2s ease' color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>극장</Box>
+          <Link href="/store"><Box transition='all 0.2s ease' color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>스토어</Box></Link>
+          <Link href="/notice"><Box transition='all 0.2s ease' color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>공지</Box></Link>
+          <Link href="/event"><Box transition='all 0.2s ease' color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>이벤트</Box></Link>
         </Flex>
 
         {/* 유저 영역 */}
@@ -76,19 +76,19 @@ export default function Header({ userInfo }) {
           {userInfo ? (
             <>
               <Text color={headerColor}>{userInfo.name}님 환영합니다</Text>
-              <Text color={headerColor}>
+              <Text transition='all 0.2s ease' color={headerColor} _hover={{color:'#00c3ff'}}>
                 <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>로그아웃</Link>
               </Text>
             </>
           ) : (
             <>
-              <Text color={headerColor}><Link href="/signin">로그인</Link></Text>
-              <Text color={headerColor}><Link href="/join">회원가입</Link></Text>
+              <Text transition='all 0.2s ease' color={headerColor} _hover={{color:'#00c3ff'}}><Link href="/signin">로그인</Link></Text>
+              <Text transition='all 0.2s ease' color={headerColor} _hover={{color:'#00c3ff'}}><Link href="/join">회원가입</Link></Text>
             </>
           )}
-          <Text color="#ff4d4d">빠른예매</Text>
+          <Text transition='all 0.2s ease' color="#ff4d4d" _hover={{color:'#ff6666',textShadow:'0 0 5px rgba(255, 77, 77, 0.5)'}}>빠른예매</Text>
           <Link href="/mypage">
-            <FiUser size={24} color={headerColor} />
+            <FiUser transition='all 0.2s ease' size={24} color={headerColor} _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}}/>
           </Link>
         </Flex>
       </Flex>
