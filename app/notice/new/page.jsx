@@ -100,7 +100,6 @@ export default function NoticeCreatePage() {
         h1 {
           text-align: center;
           font-size: 30px;
-          font-weight: bold;
           margin-bottom: 40px;
           border-bottom: 2px solid #ccc;
           padding-bottom: 10px;
@@ -114,7 +113,6 @@ export default function NoticeCreatePage() {
 
         label {
           font-size: 15px;
-          font-weight: 600;
           margin-bottom: 4px;
         }
 
@@ -125,6 +123,7 @@ export default function NoticeCreatePage() {
           border-radius: 4px;
           outline: none;
           background-color: #fcfcfc;
+          font-weight: normal;
         }
 
         textarea {
@@ -144,9 +143,9 @@ export default function NoticeCreatePage() {
           padding: 10px 20px;
           border: none;
           border-radius: 4px;
-          font-weight: bold;
           cursor: pointer;
           transition: background-color 0.2s;
+          font-weight: normal;
         }
 
         .submit-btn:hover {
@@ -159,8 +158,8 @@ export default function NoticeCreatePage() {
           padding: 10px 20px;
           border: none;
           border-radius: 4px;
-          font-weight: bold;
           cursor: pointer;
+          font-weight: normal;
         }
 
         .cancel-btn:hover {
