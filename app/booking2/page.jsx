@@ -1,13 +1,13 @@
 "use client";
 
 import React, {useState, useEffect} from 'react';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Flex, Box, Text, Button, Image } from '@chakra-ui/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay } from 'swiper/modules';
 import { Header, Footer } from '../../components';
 import MoviePoster,{movies} from '../../components/moviePoster';
-import DateSelector from '../../components/date';
-import TimeSelector from '../../components/time';
+// import DateSelector from '../../components/date';
+// import TimeSelector from '../../components/time';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -15,9 +15,11 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/effect-coverflow';
+import 'swiper/css/autoplay';
 
 export default function Booking2Page() {
     const [user, setUser] = useState(null);
+    const [activeMovie, setActiveMovie] = useState(null);
 
     let headerColor='white';
     let headerBg='#1a1a1a';
@@ -27,7 +29,6 @@ export default function Booking2Page() {
 
     useEffect(() => {
         document.title = '예매 - 빠른 예매';
-
         (async ()=>{
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
@@ -36,8 +37,13 @@ export default function Booking2Page() {
         })();
     }, []);
 
-  return (
+    const handlePosterClick = (movie) => {
+        setActiveMovie(movie);
+      };
+
+    return (
     <>
+        {/* 헤더 */}
         <Box position="relative" zIndex={2} bg="#1a1a1a">
             <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}/>
         </Box>
@@ -100,15 +106,52 @@ export default function Booking2Page() {
                     src={movie.poster}
                     alt={movie.title}
                     style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
+                    onClick={() => handlePosterClick(movie)}
                     />
                 </SwiperSlide>
                 ))}
             </Swiper>
             </Box>
         </Flex>
+        {/* 푸터 */}
         <Box position="relative" zIndex={2} bg="#1a1a1a">
             <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder} />
         </Box>
+
+        {activeMovie && (
+            <Box
+            position="fixed"
+            top={0}
+            left={0}
+            width="100vw"
+            height="100vh"
+            bg="rgba(0,0,0,0.6)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            zIndex={1000}
+            >
+            <Box bg="#2d2d2d" p={6} borderRadius="md" maxW="500px" w="90%" color="white">
+                <Flex justify="space-between" align="center" mb={4}>
+                <Text fontSize="2xl" fontWeight="bold">
+                    {activeMovie.title}
+                </Text>
+                <Button variant="ghost" colorScheme="whiteAlpha" onClick={() => setActiveMovie(null)}>
+                    닫기
+                </Button>
+                </Flex>
+                <Image
+                src={activeMovie.poster}
+                alt={activeMovie.title}
+                borderRadius="8px"
+                mb={4}
+                width="100%"
+                objectFit="cover"
+                />
+                <Text fontSize="md">{activeMovie.description}</Text>
+            </Box>
+            </Box>
+        )}
     </>
   );
 }
