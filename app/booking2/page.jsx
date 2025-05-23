@@ -48,9 +48,6 @@ export default function Booking2Page() {
             <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}/>
         </Box>
 
-        {/* <Text fontSize="5xl" color="black" textAlign="left" marginLeft="10%" marginTop="20px">
-            빠른예매
-        </Text> */}
         <Box textAlign="left" ml="10%" mt="20px">
             <Text fontSize="5xl" color="black">
             빠른예매
@@ -66,7 +63,7 @@ export default function Booking2Page() {
             /* Navigation arrows color */
             .swiper-button-next,
             .swiper-button-prev {
-                color: purple; /* 원하는 화살표 색상 (보라 핑크 계열) */
+                color: purple; /* 화살표색 -> 보라색으로 변경 */
             }
             /* Pagination bullets */
             .swiper-pagination-bullet {
@@ -119,33 +116,35 @@ export default function Booking2Page() {
         </Box>
 
         {activeMovie && (
+            <Box position="fixed" top={0} left={0} width="100vw" height="100vh" zIndex={1000} display="flex" alignItems="center" justifyContent="center">
+            {/* 배경 블러처리 태그 */}
             <Box
-            position="fixed"
-            top={0}
-            left={0}
-            width="100vw"
-            height="100vh"
-            bg="rgba(0,0,0,0.6)"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            zIndex={1000}
-            >
-            <Box bg="#2d2d2d" p={6} borderRadius="md" maxW="500px" w="90%" color="white">
+                position="absolute"
+                top={0}
+                left={0}
+                width="100%"
+                height="100%"
+                bgImage={`url(${activeMovie.poster})`}
+                bgSize="cover"
+                bgPosition="center"
+                filter="blur(20px)"
+                transform="scale(1.1)"
+            />
+            {/* 어두운 팝업창 생성 */}
+            <Box position="absolute" top={0} left={0} width="100%" height="100%" bg="rgba(0,0,0,0.6)" />
+            {/* 실제 팝업창의 내용 */}
+            <Box position="relative" mx="auto" p={6} bg="#2d2d2d" borderRadius="md" maxW="1000px" w="90%" color="white">
                 <Flex justify="space-between" align="center" mb={4}>
-                <Text fontSize="2xl" fontWeight="bold">
-                    {activeMovie.title}
-                </Text>
-                <Button variant="ghost" colorScheme="whiteAlpha" onClick={() => setActiveMovie(null)}>
-                    닫기
-                </Button>
+                <Text fontSize="5xl">{activeMovie.title}</Text>
+                <Button color="white" variant="ghost" colorScheme="whiteAlpha" _hover={{ bg: 'purple' }} onClick={() => setActiveMovie(null)}>닫기</Button>
                 </Flex>
                 <Image
                 src={activeMovie.poster}
                 alt={activeMovie.title}
                 borderRadius="8px"
                 mb={4}
-                width="100%"
+                width="400px"
+                height="650px"
                 objectFit="cover"
                 />
                 <Text fontSize="md">{activeMovie.description}</Text>
