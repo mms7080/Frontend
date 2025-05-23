@@ -41,7 +41,7 @@ export default function detail(){
                             <Button fontSize='16px'>공유하기</Button>
                         </Flex>
 
-                        <Flex gap='10px' color='black' fontSize='14px'>
+                        <Flex gap='10px' color='black' fontSize='14px' py='10px'>
                             <Box px='5px' borderRadius='5px' bg='white'>IMAX</Box>
                             <Box px='5px' borderRadius='5px' bg='white'>4DX</Box>
                         </Flex>
@@ -60,7 +60,7 @@ export default function detail(){
                                 <span style={{fontSize:20}}>👥 594,416명</span>
                             </Flex>
                         </Flex>
-                        <Flex fontSize='18px'>
+                        <Flex fontSize='18px' lineHeight='40px'>
                             인피니티 워 이후 절반만 살아남은 지구의 마지막 희망이 된 어벤져스<br/>
                             사라진 이들을 되살리기위해 어벤져스의 모든 것을 걸었다!<br/>
                             살아남은 자들이 준비하는, 운명을 바꿀 최후의 전쟁이 펼쳐진다!
@@ -68,7 +68,7 @@ export default function detail(){
                     </Flex>
 
                     <VStack pt='80px'>
-                        <Image w='280px' borderRadius='10px' src='https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'/>
+                        <Image w='280px' borderRadius='10px' position='relative' zIndex='1' src='https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'/>
                         <Button w='280px'>예매</Button>
                         <Button w='280px'>🎧 Dolby CINEMA</Button>
                     </VStack>
@@ -83,10 +83,10 @@ export default function detail(){
 
 
 
-일부 섬광 장면이 빛에 민감한 시청자에게 영향을 줄 수 있음.
+일부 섬광 장면이 빛에 민감한 시청자에게 영향을 줄 수 있음.<br/><br/><br/><br/>
                             </span>
                             <Flex w='100%'>
-                                <Flex w='50%' flexDirection='column'>
+                                <Flex w='50%' flexDirection='column' lineHeight='30px'>
                                     <span>러닝 타임:</span>
                                     <span style={{color:'#6D6D96'}}>3시간 5분</span>
                                     <span>공개일:</span>
@@ -96,7 +96,7 @@ export default function detail(){
                                     <span>관람 등급:</span>
                                     <Flex bg='#E4B533' w='25px' h='25px' borderRadius='5px' justifyContent='center' alignItems='center' color='white' fontSize='18px'>12</Flex>
                                 </Flex>
-                                <Flex w='50%' flexDirection='column'>
+                                <Flex w='50%' flexDirection='column' lineHeight='30px'>
                                     <span>감독:</span>
                                     <span style={{color:'#6D6D96'}}>안소니 루소조 루소</span>
                                     <span>출연:</span>
