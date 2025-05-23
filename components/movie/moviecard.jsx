@@ -9,7 +9,7 @@ const HeartIcon = createIcon({
     <>
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path
-        stroke="#00aaff"
+        stroke="red"
         strokeWidth="1.5"
         fill="currentColor"
         d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"
@@ -59,7 +59,7 @@ const MovieCard = ({ movie, onBooking }) => {
           className="like-button"
           onClick={likeChange}
         >
-          <HeartIcon size="lg" color={liked ? "#00aaff" : "transparent"} />
+          <HeartIcon size="lg" color={liked ? "red" : "transparent"} />
           <div className="likes">
             {movie.likeNumber}
           </div>

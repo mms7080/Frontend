@@ -12,7 +12,7 @@
   
   .movie-grid {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     flex-wrap: wrap;
     gap: 30px;
   }
@@ -146,7 +146,7 @@
   }
   
   .reserve-button {
-    background-color: #00aaff;
+    background-color: #a349a4;
     border: none;
     width: 30%;
     padding: 8px 16px;
@@ -157,15 +157,15 @@
   }
   
   .reserve-button:hover {
-    background-color: #0099dd;
-    box-shadow: 0 0 10px rgba(0, 170, 255, 0.6);
+    background-color: #912792;
+    box-shadow: 0 0 10px rgba(145, 39, 255, 0.6);
     transform: translateY(-2px);
   }
 
   .like-button {
     background-color: transparent;
     color: black;
-    border: 1px solid #00aaff;
+    border: 1px solid #a349a4;
     width: 30%;
     padding: 8px 16px;
     border-radius: 4px;
@@ -180,7 +180,7 @@
   
   .like-button:hover {
     /* background-color: #141414; */
-    box-shadow: 0 0 10px rgba(0, 170, 255, 0.6);
+    box-shadow: 0 0 10px rgba(145, 39, 255, 0.6);
     transform: translateY(-2px);
   }
 

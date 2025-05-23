@@ -19,7 +19,7 @@ export default function Moviepage(){
     const [displayNumber, setDisplayNumber] = useState(8);
 
     useEffect(() => {
-        document.title = '전체 영화 - 필모라라';
+        document.title = '전체 영화 - 필모라';
 
         (async () => {
             try {
