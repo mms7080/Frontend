@@ -9,6 +9,11 @@
     margin-bottom: 30px;
     font-size: 24px;
   } */
+
+  :root {
+    --main_color : #6b46c1;
+    --main_color_hover : #553c9a;
+  }
   
   .movie-grid {
     display: flex;
@@ -69,7 +74,7 @@
   }
   
   .poster .overlay .score {
-    color: #4dd0e1;
+    color: #aa8bff;
     font-weight: bold;
     font-size: 18px;
   }
@@ -146,7 +151,7 @@
   }
   
   .reserve-button {
-    background-color: #a349a4;
+    background-color: var(--main_color);
     border: none;
     width: 30%;
     padding: 8px 16px;
@@ -157,15 +162,15 @@
   }
   
   .reserve-button:hover {
-    background-color: #912792;
-    box-shadow: 0 0 10px rgba(145, 39, 255, 0.6);
+    background-color: var(--main_color_hover);
+    box-shadow: 0 0 10px rgba(85, 60, 154, 0.6);
     transform: translateY(-2px);
   }
 
   .like-button {
     background-color: transparent;
     color: black;
-    border: 1px solid #a349a4;
+    border: 1px solid rgba(255, 255, 255, 0.6);
     width: 30%;
     padding: 8px 16px;
     border-radius: 4px;
@@ -180,7 +185,7 @@
   
   .like-button:hover {
     /* background-color: #141414; */
-    box-shadow: 0 0 10px rgba(145, 39, 255, 0.6);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
   }
 
