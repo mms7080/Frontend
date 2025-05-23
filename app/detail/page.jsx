@@ -41,12 +41,12 @@ export default function detail(){
                             <Button fontSize='16px'>공유하기</Button>
                         </Flex>
 
-                        <Flex gap='10px' color='black' fontSize='14px' py='10px'>
+                        <Flex gap='10px' color='black' fontSize='15px' py='30px'>
                             <Box px='5px' borderRadius='5px' bg='white'>IMAX</Box>
                             <Box px='5px' borderRadius='5px' bg='white'>4DX</Box>
                         </Flex>
 
-                        <Flex justifyContent='space-between' gap='10px'>
+                        <Flex justifyContent='space-between' gap='60px' fontSize='25px'>
                             <Flex flexDirection='column'>
                                 <span>실관람 평점</span>
                                 <span style={{fontSize:20}}>🎬 9.6</span>
@@ -59,11 +59,6 @@ export default function detail(){
                                 <span>누적관객수</span>
                                 <span style={{fontSize:20}}>👥 594,416명</span>
                             </Flex>
-                        </Flex>
-                        <Flex fontSize='18px' lineHeight='40px'>
-                            인피니티 워 이후 절반만 살아남은 지구의 마지막 희망이 된 어벤져스<br/>
-                            사라진 이들을 되살리기위해 어벤져스의 모든 것을 걸었다!<br/>
-                            살아남은 자들이 준비하는, 운명을 바꿀 최후의 전쟁이 펼쳐진다!
                         </Flex>
                     </Flex>
 
@@ -116,20 +111,20 @@ export default function detail(){
                 <VStack>
                     <Box w='900px' px='30px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
                         <Flex w='840px' flexDirection='column' gap='30px' pt='40px' pb='80px'>
-                            <Tabs.Root key='outline' defaultValue="review" variant='outline' fitted>
+                            <Tabs.Root key='outline' defaultValue="trailer" variant='outline' fitted>
                                 <Tabs.List>
-                                    <Tabs.Trigger value="review">
-                                        실관람평
-                                    </Tabs.Trigger>
                                     <Tabs.Trigger value="trailer">
                                         예고편/스틸컷
                                     </Tabs.Trigger>
+                                    <Tabs.Trigger value="review">
+                                        실관람평
+                                    </Tabs.Trigger>
                                 </Tabs.List>
-                                <Tabs.Content value="review">
-                                    <Reviews userInfo={user}></Reviews>
-                                </Tabs.Content>
                                 <Tabs.Content value="trailer">
                                     <Trailer></Trailer>
+                                </Tabs.Content>
+                                <Tabs.Content value="review">
+                                    <Reviews userInfo={user}></Reviews>
                                 </Tabs.Content>
                             </Tabs.Root>
                         </Flex>

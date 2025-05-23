@@ -1,13 +1,14 @@
 "use client";
 
 import React,{useState} from 'react';
-import {Flex,Box,Input,Button,Text} from '@chakra-ui/react';
+import {Flex,Box,Input,Button,Text,RadioGroup} from '@chakra-ui/react';
 
 export default function Modify({userInfo}) {/* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
 
     const [phone,setPhone] = useState(userInfo.phone);
     const [email,setEmail] = useState(userInfo.email);
     const [birthdate,setBirthdate] = useState(userInfo.birthdate);
+    const [gender,setGender]=useState('');
     const [zipcode,setZipcode]=useState(userInfo.zipcode);
     const [address,setAddress]=useState(userInfo.address);
     const [address_detail,setAddressDetail]=useState(userInfo.address_detail);
@@ -181,11 +182,22 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="birthdate"><label htmlFor="gender">성별</label></label></td>
                                             <td style={{width:605,height:50,paddingLeft:15}}>
-                                               <select id="gender" name="gender" style={{height:40,border:'1px solid #E4E4E7',borderRadius:5}}>
-                                                    <option value="" disabled>&nbsp;&nbsp;선택하세요</option>
-                                                    <option value="남성" selected={userInfo.gender==='남성'}>&nbsp;&nbsp;남성</option>
-                                                    <option value="여성" selected={userInfo.gender==='여성'}>&nbsp;&nbsp;여성</option>
-                                                </select>
+                                                <RadioGroup.Root defaultValue={userInfo.gender} display='flex' alignItems='center'>
+                                                    <RadioGroup.Item type="radio" value="남성" onClick={(e)=>{setGender(e.target.value)}}>
+                                                        <RadioGroup.ItemHiddenInput />
+                                                        <RadioGroup.ItemIndicator/>
+                                                        <RadioGroup.ItemText>남성</RadioGroup.ItemText>
+                                                    </RadioGroup.Item>
+                                                    &nbsp;
+                                                    &nbsp;
+                                                    &nbsp;
+                                                    <RadioGroup.Item type="radio" value="여성" onClick={(e)=>{setGender(e.target.value)}}>
+                                                        <RadioGroup.ItemHiddenInput />
+                                                        <RadioGroup.ItemIndicator/>
+                                                        <RadioGroup.ItemText>여성</RadioGroup.ItemText>
+                                                    </RadioGroup.Item>
+                                                </RadioGroup.Root>
+                                                <input type="hidden" name="gender" value={gender}/>
                                             </td>
                                         </tr>
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
@@ -202,7 +214,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                 </table>
                                 <a style={{textAlign:'right',color:'#352461',textDecoration:'underline'}} href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`}>회원탈퇴</a>
 
-                                <Button mt='10px' type="submit" bg='#352461'>회원정보 수정</Button>
+                                <Button mt='10px' type="submit" bg='#6B46C1' _hover={{bg:'#553C9A'}}>회원정보 수정</Button>
                             </Flex>
                         </Box>
                     </form>;

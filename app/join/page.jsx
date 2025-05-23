@@ -1,7 +1,7 @@
 "use client";
 
 import React,{useState,useEffect} from 'react';
-import {Flex,Box,VStack,Input,HStack,Button,Text} from '@chakra-ui/react';
+import {Flex,Box,VStack,Input,HStack,Button,Text,RadioGroup} from '@chakra-ui/react';
 
 import {Header,Footer} from '../../components';
 
@@ -10,6 +10,7 @@ import {fetch} from '../../lib/client';
 export default function Join(){
 
     const [user, setUser] = useState(null);
+    const [gender,setGender]=useState('');
 
     useEffect(() => {
         document.title = '회원가입';
@@ -106,7 +107,7 @@ export default function Join(){
                                                     }}
                                                     required
                                                 />
-                                                <Button w='150px' onClick={handleIdCheck} type="button" bg='#352461'>
+                                                <Button w='150px' onClick={handleIdCheck} type="button" bg='#6B46C1' _hover={{bg:'#553C9A'}}>
                                                     아이디 중복 확인
                                                 </Button>
                                             </Flex>
@@ -284,11 +285,22 @@ export default function Join(){
                                     <tr style={{borderBottom:'1px solid #D1D5DD'}}>
                                         <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="birthdate"><label htmlFor="gender">성별</label></label></td>
                                         <td style={{width:605,height:50,paddingLeft:15}}>
-                                            <select id="gender" name="gender" style={{height:40,border:'1px solid #E4E4E7',borderRadius:5,fontSize:14}} defaultValue=''>
-                                                <option value="" disabled>&nbsp;&nbsp;선택하세요</option>
-                                                <option value="남성">&nbsp;&nbsp;남성</option>
-                                                <option value="여성">&nbsp;&nbsp;여성</option>
-                                            </select>
+                                            <RadioGroup.Root display='flex' alignItems='center'>
+                                                <RadioGroup.Item type="radio" value="남성" onClick={(e)=>{setGender(e.target.value)}}>
+                                                    <RadioGroup.ItemHiddenInput />
+                                                    <RadioGroup.ItemIndicator/>
+                                                    <RadioGroup.ItemText>남성</RadioGroup.ItemText>
+                                                </RadioGroup.Item>
+                                                &nbsp;
+                                                &nbsp;
+                                                &nbsp;
+                                                <RadioGroup.Item type="radio" value="여성" onClick={(e)=>{setGender(e.target.value)}}>
+                                                    <RadioGroup.ItemHiddenInput />
+                                                    <RadioGroup.ItemIndicator/>
+                                                    <RadioGroup.ItemText>여성</RadioGroup.ItemText>
+                                                </RadioGroup.Item>
+                                            </RadioGroup.Root>
+                                            <input type="hidden" name="gender" value={gender}/>                                            
                                         </td>
                                     </tr>
                                     <tr style={{borderBottom:'1px solid #D1D5DD'}}>
@@ -308,7 +320,7 @@ export default function Join(){
                             <HStack><input id="agreement2" name="agreement2" type="checkbox" required/><label htmlFor="agreement2">[필수] 개인정보 수집 및 이용에 동의합니다.</label></HStack>
                             <HStack><input id="agreement3" name="agreement3" type="checkbox"/><label htmlFor="agreement3">[선택] 쇼핑정보 수신에 동의합니다.</label></HStack>
 
-                            <Button type="submit" bg='#352461'>회원가입</Button>
+                            <Button type="submit" bg='#6B46C1' _hover={{bg:'#553C9A'}}>회원가입</Button>
                         </Flex>
                     </Box>
                 </form>

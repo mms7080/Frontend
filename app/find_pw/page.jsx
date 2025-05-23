@@ -123,7 +123,7 @@ export default function Find_pw(){
                                 }}>
                                 <RadioGroup.Item id="method_email" name="method" type="radio" value="email">
                                     <RadioGroup.ItemHiddenInput />
-                                    <RadioGroup.ItemIndicator style={{backgroundColor:'#352461'}}/>
+                                    <RadioGroup.ItemIndicator/>
                                     <RadioGroup.ItemText>이메일</RadioGroup.ItemText>
                                 </RadioGroup.Item>
                                 &nbsp;
@@ -131,7 +131,7 @@ export default function Find_pw(){
                                 &nbsp;
                                 <RadioGroup.Item id="method_phone_number" name="method" type="radio" value="phone_number">
                                     <RadioGroup.ItemHiddenInput />
-                                    <RadioGroup.ItemIndicator style={{backgroundColor:'#352461'}}/>
+                                    <RadioGroup.ItemIndicator/>
                                     <RadioGroup.ItemText>휴대폰 번호</RadioGroup.ItemText>
                                 </RadioGroup.Item>
                             </RadioGroup.Root>
@@ -152,7 +152,7 @@ export default function Find_pw(){
                                 </tbody>
                             </table>
                             
-                            <Button bg='#352461' mt='20px' onClick={handleFindPW}>비밀번호 재설정</Button>
+                            <Button bg='#6B46C1' _hover={{bg:'#553C9A'}} mt='20px' onClick={handleFindPW}>비밀번호 재설정</Button>
                         </Flex>
                     </Box>
                 </VStack>
@@ -277,7 +277,7 @@ export default function Find_pw(){
                                     </tbody>
                                 </table>     
         
-                                <Button bg='#352461' mt='20px' type='submit'>비밀번호 재설정</Button>
+                                <Button bg='#6B46C1' _hover={{bg:'#553C9A'}} mt='20px' type='submit'>비밀번호 재설정</Button>
                             </Flex>
                         </form>
                     </Box>

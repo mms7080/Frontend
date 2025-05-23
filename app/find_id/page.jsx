@@ -98,7 +98,7 @@ export default function Find_id(){
                                 }}>
                                 <RadioGroup.Item id="method_email" name="method" type="radio" value="email">
                                     <RadioGroup.ItemHiddenInput />
-                                    <RadioGroup.ItemIndicator style={{backgroundColor:'#352461'}}/>
+                                    <RadioGroup.ItemIndicator/>
                                     <RadioGroup.ItemText>이메일</RadioGroup.ItemText>
                                 </RadioGroup.Item>
                                 &nbsp;
@@ -106,7 +106,7 @@ export default function Find_id(){
                                 &nbsp;
                                 <RadioGroup.Item id="method_phone_number" name="method" type="radio" value="phone_number">
                                     <RadioGroup.ItemHiddenInput />
-                                    <RadioGroup.ItemIndicator style={{backgroundColor:'#352461'}}/>
+                                    <RadioGroup.ItemIndicator/>
                                     <RadioGroup.ItemText>휴대폰 번호</RadioGroup.ItemText>
                                 </RadioGroup.Item>
                             </RadioGroup.Root>
@@ -123,7 +123,7 @@ export default function Find_id(){
                                 </tbody>
                             </table>
 
-                            <Button bg='#352461' mt='20px' onClick={handleFindID}>아이디 찾기</Button>
+                            <Button bg='#6B46C1' _hover={{bg:'#553C9A'}} mt='20px' onClick={handleFindID}>아이디 찾기</Button>
                         </Flex>
                     </Box>
                 </VStack>
@@ -137,17 +137,17 @@ export default function Find_id(){
                 <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
                         <Flex w='840px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
-                            <Button bg='#352461' onClick={()=>setFoundID('')}>
+                            <Button bg='#6B46C1' _hover={{bg:'#553C9A'}} onClick={()=>setFoundID('')}>
                                 <Link href='/find_id'>
                                     아이디 다시 찾기
                                 </Link>
                             </Button>
-                            <Button bg='#352461'>
+                            <Button bg='#6B46C1' _hover={{bg:'#553C9A'}}>
                                 <Link href='/find_pw'>
                                     비밀번호 재설정
                                 </Link>
                             </Button>
-                            <Button bg='#352461'>
+                            <Button bg='#6B46C1' _hover={{bg:'#553C9A'}}>
                                 <Link href='/signin'>
                                     로그인 화면으로 이동
                                 </Link>

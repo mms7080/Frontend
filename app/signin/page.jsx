@@ -34,7 +34,7 @@ export default function Signin(){
                                 <Flex w='100%' justifyContent='flex-start' fontSize='15px' color='#555'>
                                     <span><input id="rl" type="checkbox" name="remember-login"/><label htmlFor='rl'>&nbsp;&nbsp;아이디 저장</label></span>
                                 </Flex>
-                                <Button type='submit' fontSize='17px' w='100%' bg='#352461' mt='10px'>로그인</Button>
+                                <Button type='submit' fontSize='17px' w='100%' bg='#6B46C1' _hover={{bg:'#553C9A'}} mt='10px'>로그인</Button>
                             </Flex>
                         </form>
                         <Flex w='100%' gap='10px' justifyContent='center'>
