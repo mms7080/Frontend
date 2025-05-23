@@ -62,29 +62,63 @@ export default function NoticeDetailPage() {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f9f9f9" userInfo={user} />
+      <Header headerColor="black" headerBg="#ffffff" userInfo={user} />
 
-      <div style={{ maxWidth: '1200px', margin: '60px auto', padding: '30px', backgroundColor: '#fff', borderRadius: '10px', boxShadow: '0 4px 12px rgba(0,0,0,0.05)', fontFamily: 'Pretendard, sans-serif' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: 'black', textAlign: 'center', marginBottom: '30px', borderBottom: '2px solid #6B46C1', paddingBottom: '10px' }}>공지사항</h1>
+      <div
+        style={{
+          maxWidth: '1200px',
+          margin: '60px auto',
+          padding: '30px',
+          backgroundColor: '#ffffff',
+          borderRadius: '10px',
+          fontFamily: 'Pretendard, sans-serif',
+        }}
+      >
+        <h1
+          style={{
+            fontSize: '24px',
+            fontWeight: 400,
+            color: '#222',
+            textAlign: 'center',
+            marginBottom: '30px',
+            borderBottom: '2px solid #ccc',
+            paddingBottom: '12px',
+          }}
+        >
+          📢 공지사항
+        </h1>
 
         <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '24px' }}>
           <tbody>
             <tr>
               <th style={thStyle}>제목</th>
-              <td style={tdStyle}>{notice.title}</td>
+              <td style={{ ...tdStyle, color: '#000' }}>{notice.title}</td>
             </tr>
             <tr>
               <th style={thStyle}>작성자</th>
-              <td style={tdStyle}>{notice.writer}</td>
+              <td style={{ ...tdStyle, color: '#000' }}>{notice.writer}</td>
             </tr>
             <tr>
               <th style={thStyle}>작성일</th>
-              <td style={tdStyle}>{notice.createdAt?.slice(0, 10)}</td>
+              <td style={{ ...tdStyle, color: '#000' }}>{notice.createdAt?.slice(0, 10)}</td>
             </tr>
           </tbody>
         </table>
 
-        <div style={{ whiteSpace: 'pre-line', lineHeight: '1.8', padding: '20px', backgroundColor: '#f9f5ff', border: '1px solid #e2d8f7', borderRadius: '6px', fontSize: '16px', color: '#333', marginBottom: '30px' }}>
+        <div
+          style={{
+            whiteSpace: 'pre-line',
+            lineHeight: '1.8',
+            padding: '20px',
+            backgroundColor: '#ffffff',
+            border: '1px solid #eee',
+            borderRadius: '6px',
+            fontSize: '15px',
+            color: '#333',
+            marginBottom: '30px',
+            fontWeight: 400,
+          }}
+        >
           {notice.content}
         </div>
 
@@ -122,7 +156,7 @@ export default function NoticeDetailPage() {
         <div style={{ textAlign: 'center' }}>
           <button
             onClick={() => router.push('/notice')}
-            style={{ ...editBtn, backgroundColor: '#6B46C1', color: '#fff' }}
+            style={listBtn}
             onMouseOver={e => (e.currentTarget.style.backgroundColor = '#553C9A')}
             onMouseOut={e => (e.currentTarget.style.backgroundColor = '#6B46C1')}
           >
@@ -140,43 +174,59 @@ export default function NoticeDetailPage() {
 const thStyle = {
   textAlign: 'left',
   padding: '12px 16px',
-  backgroundColor: '#f4f1fa',
+  backgroundColor: '#ffffff',
   width: '20%',
-  fontWeight: 'bold',
+  fontWeight: 400,
   borderBottom: '1px solid #ddd',
-  color: '#6B46C1'
+  color: '#555',
+  fontSize: '14px',
 };
 
 const tdStyle = {
   padding: '12px 16px',
   borderBottom: '1px solid #ddd',
-  color: '#444'
+  color: '#444',
+  fontWeight: 400,
+  fontSize: '14px',
 };
 
 const navBtn = {
   padding: '8px 16px',
   border: '1px solid #ccc',
   borderRadius: '4px',
-  backgroundColor: '#fff',
+  backgroundColor: '#ffffff',
   cursor: 'pointer',
   fontSize: '14px',
-  fontWeight: 'bold',
+  fontWeight: 400,
   color: '#6B46C1',
-  transition: '0.3s all ease'
+  transition: 'all 0.3s ease',
 };
 
 const editBtn = {
   padding: '8px 16px',
   borderRadius: '4px',
   border: 'none',
-  backgroundColor: '#eee',
-  fontWeight: 'bold',
+  backgroundColor: '#eeeeee',
+  fontWeight: 400,
   fontSize: '14px',
   cursor: 'pointer',
-  transition: '0.3s all ease'
+  color: '#333',
+  transition: 'all 0.3s ease',
+};
+
+const listBtn = {
+  padding: '8px 16px',
+  borderRadius: '4px',
+  border: 'none',
+  backgroundColor: '#6B46C1',
+  fontWeight: 400,
+  fontSize: '14px',
+  color: '#fff',
+  cursor: 'pointer',
+  transition: 'all 0.3s ease',
 };
 
 const disabledStyle = {
   opacity: 0.4,
-  cursor: 'not-allowed'
+  cursor: 'not-allowed',
 };

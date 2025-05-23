@@ -92,22 +92,24 @@ export default function NoticePage({ notices }) {
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "40px 20px",
-          fontFamily: "'Pretendard', sans-serif",
+          paddingTop: "80px",
+          paddingBottom: "40px",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          textAlign: "center",
         }}
       >
         <h1
           style={{
-            fontSize: "32px",
+            fontSize: "24px",
             fontWeight: "bold",
-            textAlign: "center",
-            color: "black",
-            marginBottom: "40px",
-            borderBottom: "3px solid #6B46C1",
+            color: "#222",
+            borderBottom: "2px solid #ccc",
             paddingBottom: "12px",
+            marginBottom: "40px",
           }}
         >
-          공지사항
+          📢 공지사항
         </h1>
 
         <div style={{ textAlign: "right", marginBottom: "24px" }}>
@@ -123,7 +125,7 @@ export default function NoticePage({ notices }) {
               transition: "all 0.3s",
             }}
             onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = "#553C9A")
+              (e.currentTarget.style.backgroundColor = "#6B46C1")
             }
             onMouseOut={(e) =>
               (e.currentTarget.style.backgroundColor = "black")
@@ -179,8 +181,8 @@ export default function NoticePage({ notices }) {
             boxShadow: "0 4px 10px rgba(0,0,0,0.05)",
           }}
         >
-          <thead style={{ backgroundColor: "#f1e8ff" }}>
-            <tr style={{ color: "#5f0080" }}>
+          <thead style={{ backgroundColor: "white" }}>
+            <tr style={{ color: "black" }}>
               <th
                 style={{
                   padding: "14px",
@@ -279,7 +281,8 @@ export default function NoticePage({ notices }) {
                         color: "#222",
                         textDecoration: "none",
                         display: "block",
-                        transition: "color 0.2s",
+                        transition: "color 0.1s",
+                        fontWeight: 400 
                       }}
                       onMouseOver={(e) =>
                         (e.currentTarget.style.color = "#6B46C1")
@@ -290,14 +293,16 @@ export default function NoticePage({ notices }) {
                       {isNew(notice.createdAt) && (
                         <span
                           style={{
-                            backgroundColor: "#e53e3e",
+                            backgroundColor: "#6B46C1",
                             color: "white",
                             borderRadius: "6px",
                             fontSize: "10px",
-                            padding: "2px 6px",
-                            marginLeft: "8px",
+                            padding: "2px 10px",
+                            marginLeft: "15px",
                             animation: "pulse-badge 1.2s ease-in-out infinite",
                             display: "inline-block",
+                            position: "relative",
+                            top: "-2px",
                           }}
                         >
                           NEW
