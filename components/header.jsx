@@ -8,7 +8,8 @@ import Navigator from './navigator';
 
 export default function Header({ userInfo }) {
   const pathname = usePathname();
-  const isHome = pathname === '/' || pathname.startsWith('/home') || pathname.startsWith('/movie');
+  const isHome = pathname === '/' || pathname.startsWith('/home') 
+  || pathname.startsWith('/movie') || pathname.startsWith('/booking2');
   const headerBg = isHome ? '#1a1a1a' : 'white';
   const headerColor = isHome ? 'white' : 'black';
   const hoverColor = 'gray.500';

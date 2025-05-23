@@ -50,7 +50,7 @@ export default function Booking2Page() {
         </Box>
 
         <Box textAlign="left" ml="10%" mt="20px">
-            <Text fontSize="5xl" color="black">
+            <Text fontSize="5xl" color="white">
             빠른예매
             </Text>
             <Box w="160px" h="4px" bg="purple" mt="2" />
