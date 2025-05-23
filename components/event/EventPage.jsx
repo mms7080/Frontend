@@ -216,21 +216,21 @@ export default function EventPage({ serverEvents }) {
         maxW="1280px"
         mx="auto"
       >
-        <Flex gap={2} borderBottom="1px solid #5f0080" flexWrap="wrap">
+        <Flex gap={2} borderBottom="1px solid #6B46C1" flexWrap="wrap">
           {categories.map((category) => (
             <Button
               key={category}
               variant="ghost"
               borderBottom={
                 activeCategory === category
-                  ? "3px solid #5f0080"
+                  ? "3px solid #6B46C1"
                   : "2px solid transparent"
               }
               borderRadius="0"
               fontWeight={activeCategory === category ? "bold" : "normal"}
-              color={activeCategory === category ? "#5f0080" : "black"}
+              color={activeCategory === category ? "#6B46C1" : "black"}
               onClick={() => setActiveCategory(category)}
-              _hover={{ bg: "transparent", color: "#5f0080" }}
+              _hover={{ bg: "transparent", color: "#6B46C1" }}
               fontSize="lg"
               py={4}
               px={6}
@@ -278,7 +278,7 @@ export default function EventPage({ serverEvents }) {
               fontWeight="bold"
               mt={16}
               mb={4}
-              borderLeft="4px solid #5f0080"
+              borderLeft="4px solid #6B46C1"
               pl={2}
             >
               {category}
