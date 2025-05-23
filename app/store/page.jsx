@@ -62,13 +62,7 @@ export default function MegaboxStorePage() {
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      <Box
-        maxW="1200px"
-        mx="auto"
-        pt={{ base: 10, md: 20 }}
-        px={{ base: 4 }}
-        pb={10}
-      >
+      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
         <Heading
           mb={10}
           fontSize={{ base: "xl", md: "2xl" }}
