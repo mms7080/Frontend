@@ -128,6 +128,7 @@ export default function AdminDashboard() {
     { title: "영화 관리", key: "영화" },
     { title: "예매 관리", key: "예매" },
     { title: "이벤트 관리", key: "이벤트" },
+    { title: "매출 관리", key: "매출" },
   ];
 
   const renderList = () => {
