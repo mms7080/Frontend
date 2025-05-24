@@ -66,7 +66,7 @@ export default function EventPage({ serverEvents }) {
       <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
 
       <Box maxW="1200px" mx="auto" pt="80px" pb="40px" px="16px" textAlign="center">
-        <Text fontSize="24px" fontWeight="bold" color="#222" borderBottom="2px solid #ccc" pb="12px" mb="40px">
+        <Text fontSize="24px" fontWeight="normal" color="#222" borderBottom="2px solid #ccc" pb="12px" mb="40px">
           📅 이벤트
         </Text>
       </Box>

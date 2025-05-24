@@ -66,7 +66,7 @@ export default function MegaboxStorePage() {
         <Heading
           mb={10}
           fontSize={{ base: "xl", md: "2xl" }}
-          fontWeight="bold"
+          fontWeight="normal"
           textAlign="center"
           color="#222"
           borderBottom="2px solid #ccc"
@@ -87,7 +87,7 @@ export default function MegaboxStorePage() {
                   color: category === activeCategory ? "white" : "#333",
                   padding: "8px 16px",
                   borderRadius: "6px",
-                  fontWeight: "bold",
+                  fontWeight: "normal",
                   fontSize: "14px",
                   border: "none",
                   cursor: "pointer",
@@ -111,7 +111,7 @@ export default function MegaboxStorePage() {
             {activeCategory === "전체" && (
               <Text
                 fontSize={{ base: "lg", md: "xl" }}
-                fontWeight="bold"
+                fontWeight="normal"
                 mb={4}
                 borderLeft="4px solid #6B46C1"
                 pl={2}
@@ -152,7 +152,7 @@ export default function MegaboxStorePage() {
                       mb={2}
                       gap={2}
                     >
-                      <Text fontWeight="bold" fontSize="15px" isTruncated>
+                      <Text fontWeight="normal" fontSize="15px" isTruncated>
                         {item.title}
                       </Text>
                       {item.badge && (
@@ -222,7 +222,7 @@ export default function MegaboxStorePage() {
                       bg="#6B46C1"
                       color="white"
                       py={2}
-                      fontWeight="bold"
+                      fontWeight="normal"
                       borderRadius="6px"
                       fontSize="14px"
                       transition="all 0.3s"

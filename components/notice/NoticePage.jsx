@@ -102,7 +102,7 @@ export default function NoticePage({ notices }) {
         <h1
           style={{
             fontSize: "24px",
-            fontWeight: "bold",
+            fontWeight: "normal",
             color: "#222",
             borderBottom: "2px solid #ccc",
             paddingBottom: "12px",
@@ -425,7 +425,7 @@ export default function NoticePage({ notices }) {
                 border: "1px solid #ccc",
                 backgroundColor: currentPage === page ? "#6B46C1" : "white",
                 color: currentPage === page ? "white" : "#333",
-                fontWeight: currentPage === page ? "bold" : "normal",
+                fontWeight: currentPage === page ? "normal" : "normal",
                 cursor: "pointer",
                 transition: "all 0.3s",
               }}
