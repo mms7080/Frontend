@@ -1,25 +1,40 @@
 "use client";
-
 import React from 'react';
-import { Wrap, Button } from '@chakra-ui/react';
+import { HStack, Button, Flex, Text, Box } from '@chakra-ui/react';
 
-// 임시 시간 데이터
-const times = [
-  '10:00', '12:30', '15:00', '17:30', '20:00',
+const timeSlots = [
+  "10:00", "12:00", "14:00", "16:00",
+  "18:00", "20:00", "22:00"
 ];
 
-export default function TimeSelector({ selectedTime, onTimeSelect }) {
+export default function TimeSelector({ selectedTime, setSelectedTime, movieTitle }) {
   return (
-    <Wrap spacing={2}>
-      {times.map(t => (
-        <Button
-          key={t}
-          variant={selectedTime === t ? 'solid' : 'outline'}
-          onClick={() => onTimeSelect(t)}
-        >
-          {t}
-        </Button>
-      ))}
-    </Wrap>
+    <HStack spacing={3} wrap="wrap">
+      {timeSlots.map((time) => {
+        const isSelected = selectedTime === time;
+        return (
+            <Button
+                key={time}
+                onClick={() => setSelectedTime(time)}
+                variant="outline"
+                bg={isSelected ? 'purple' : 'transparent'}
+                color={isSelected ? 'white' : 'gray.200'}
+                borderColor={isSelected ? 'white' : 'transparent'}
+                _hover={{ bg: 'purple', color: 'white' }}
+                w="100%"
+                h="80px"
+                fontSize="lg"
+                justifyContent="space-between"
+            >
+                <Flex w="100%" align="center">
+                    <Text>{time}</Text>
+                    <Box ml={8}>
+                        <Text fontSize="2xl">{movieTitle}</Text>
+                    </Box>
+                </Flex>
+            </Button>
+        );
+        })}
+    </HStack>
   );
 }
