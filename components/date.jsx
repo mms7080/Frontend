@@ -1,34 +1,28 @@
-import React from 'react';
-import { Box, HStack, Text } from '@chakra-ui/react';
+"use client";
 
-const dates = ["05/01(목)", "05/02(금)", "05/03(토)", "05/04(일)"];     // 실험용 데이터 - 추후에 fetch로 백엔드 데이터 가져올 예정
+import React from 'react';
+import { VStack, Button } from '@chakra-ui/react';
+
+// 임시 날짜 데이터
+const dates = [
+  '2025-05-24',
+  '2025-05-25',
+  '2025-05-26',
+  '2025-05-27',
+];
 
 export default function DateSelector({ selectedDate, onDateSelect }) {
-    return (
-        <Box
-            w="100%" 
-            p="20px" 
-            bg="transparent" 
-            borderRadius="15px" 
-            // boxShadow="0 0 15px rgba(0, 0, 0, 0.1)"
+  return (
+    <VStack align="stretch" spacing={2}>
+      {dates.map(d => (
+        <Button
+          key={d}
+          variant={selectedDate === d ? 'solid' : 'outline'}
+          onClick={() => onDateSelect(d)}
         >
-            <HStack spacing="10px" overflowX="auto" p="10px" justify="center">
-                {dates.map(date => (
-                    <Box 
-                        key={date} 
-                        p="10px" 
-                        borderRadius="10px" 
-                        bg={selectedDate === date ? "gray.200" : "purple"} 
-                        color={selectedDate === date ? "black" : "white"}
-                        cursor="pointer"
-                        onClick={() => onDateSelect(date)}
-                        _hover={{ bg: "gray.200", color: "black" }}
-                        transition="all 0.2s"
-                    >
-                        <Text>{date}</Text>
-                    </Box>
-                ))}
-            </HStack>
-        </Box>
-    );
+          {d}
+        </Button>
+      ))}
+    </VStack>
+  );
 }
