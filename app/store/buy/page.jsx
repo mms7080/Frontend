@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -18,18 +17,49 @@ export default function PaymentPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-      credentials: "include",
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .then(setUser);
+    let didCancel = false;
 
-    if (!id) return;
-    fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/detail/${id}`, {
-      credentials: "include",
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .then(setProduct);
+    (async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+          {
+            credentials: "include",
+          }
+        );
+
+        if (!res.ok) throw new Error();
+
+        const data = await res.json();
+        if (!data || !data.username) throw new Error();
+
+        if (!didCancel) {
+          setUser(data);
+
+          if (id) {
+            const productRes = await fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/detail/${id}`,
+              {
+                credentials: "include",
+              }
+            );
+            if (productRes.ok) {
+              const productData = await productRes.json();
+              setProduct(productData);
+            }
+          }
+        }
+      } catch (e) {
+        if (!didCancel) {
+          alert("로그인이 필요합니다.");
+          router.replace("/signin"); // 🔄 replace로 히스토리 제거
+        }
+      }
+    })();
+
+    return () => {
+      didCancel = true;
+    };
   }, [id]);
 
   if (!product) return <div>Loading...</div>;
@@ -40,7 +70,9 @@ export default function PaymentPage() {
   const handlePayment = async () => {
     setLoading(true);
     try {
-      const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
+      const toss = await loadTossPayments(
+        "test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm"
+      );
       const orderId = `order-${Date.now()}`;
 
       toss.requestPayment("카드", {
@@ -48,7 +80,9 @@ export default function PaymentPage() {
         orderId,
         orderName: product.title,
         customerName: user?.name || "비회원",
-        successUrl: `${window.location.origin}/store/payment/success?userId=${user?.id || "guest"}&productId=${product.id}`,
+        successUrl: `${window.location.origin}/store/payment/success?userId=${
+          user?.id || "guest"
+        }&productId=${product.id}`,
         failUrl: `${window.location.origin}/store/payment/fail`,
       });
     } catch (error) {
@@ -97,7 +131,11 @@ export default function PaymentPage() {
             <button onClick={() => router.back()} disabled={loading}>
               이전
             </button>
-            <button className="confirm" onClick={handlePayment} disabled={loading}>
+            <button
+              className="confirm"
+              onClick={handlePayment}
+              disabled={loading}
+            >
               {loading ? "결제 중..." : "결제하기"}
             </button>
           </div>
@@ -156,7 +194,7 @@ export default function PaymentPage() {
           justify-content: space-between;
           margin-top: 20px;
           font-size: 20px;
-          color: #9F7AEA;
+          color: #9f7aea;
         }
         .button-group {
           display: flex;
@@ -172,12 +210,12 @@ export default function PaymentPage() {
           font-weight: bold;
         }
         .button-group button.confirm {
-          background: #6B46C1;
+          background: #6b46c1;
           color: white;
           transition: background 0.3s ease;
         }
         .button-group button.confirm:hover {
-          background: #553C9A;
+          background: #553c9a;
         }
         .button-group button:disabled {
           opacity: 0.6;
