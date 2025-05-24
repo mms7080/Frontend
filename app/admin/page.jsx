@@ -16,7 +16,6 @@ import {
 export default function AdminDashboard() {
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [selectedSection, setSelectedSection] = useState(null);
   const [userCount, setUserCount] = useState(0);
   const [storeCount, setStoreCount] = useState(0);
@@ -33,9 +32,12 @@ export default function AdminDashboard() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+          {
+            credentials: "include",
+          }
+        );
         if (!res.ok) throw new Error();
         const data = await res.json();
         if (data.auth !== "ADMIN") {
@@ -90,226 +92,380 @@ export default function AdminDashboard() {
     { title: "고질라x콩", reservations: 180 },
   ];
 
+  const colors = ["#4e73df", "#1cc88a", "#36b9cc", "#f6c23e", "#e74a3b"];
+
   const managementSections = [
-    { title: "유저 관리", emoji: "👤", key: "유저" },
-    { title: "영화 관리", emoji: "🎬", key: "영화" },
-    { title: "스토어 관리", emoji: "🏦", key: "스토어" },
-    { title: "예매 관리", emoji: "🗕️", key: "예매" },
-    { title: "이벤트 관리", emoji: "🎉", key: "이벤트", link: "/event" },
-    { title: "공지사항 관리", emoji: "📢", key: "공지", link: "/notice" },
+    { title: "유저 관리", key: "유저" },
+    { title: "스토어 관리", key: "스토어" },
+    { title: "영화 관리", key: "영화" },
+    { title: "예매 관리", key: "예매" },
+    { title: "이벤트 관리", key: "이벤트" },
   ];
-
-  const colors = ["#6B46C1", "#805AD5", "#9F7AEA", "#B794F4", "#D6BCFA"];
-
-  const handleCardClick = (section) => {
-    if (section.link) {
-      router.push(section.link);
-    } else {
-      setSelectedSection(section.key);
-      setSelectedMovie(null);
-    }
-  };
 
   const renderList = () => {
     if (selectedSection === "유저") {
       return (
-        <div style={gridContainer}>
-          {users.map((u, idx) => (
-            <div key={idx} style={cardBox}>
-              <p style={cardTitle}>{u.name}</p>
-              <p>ID: {u.username}</p>
-              <p>Email: {u.email}</p>
-              <p>Phone: {u.phone}</p>
+        <div
+          style={{
+            marginTop: 30,
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 24,
+            paddingBottom: 40,
+          }}
+        >
+          {users.map((u, i) => (
+            <div
+              key={i}
+              style={{
+                background: "#fff",
+                padding: 20,
+                borderRadius: 16,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                transition: "transform 0.2s, box-shadow 0.2s",
+                cursor: "default",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "translateY(-3px)";
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)";
+              }}
+            >
+              <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 10 }}>
+                {u.name}
+              </h3>
+              <p style={{ fontSize: 14, color: "#444", marginBottom: 6 }}>
+                <strong>ID:</strong> {u.username}
+              </p>
+              <p style={{ fontSize: 14, color: "#666", marginBottom: 6 }}>
+                <strong>Email:</strong> {u.email}
+              </p>
+              <p style={{ fontSize: 14, color: "#666" }}>
+                <strong>Phone:</strong> {u.phone}
+              </p>
             </div>
           ))}
         </div>
       );
     }
+
     if (selectedSection === "스토어") {
-  return (
-    <div style={gridContainer}>
-      {products.map((p, idx) => (
-        <div
-          key={idx}
-          style={{ ...cardBox, cursor: "pointer" }}
-          onClick={() => router.push(`/store/detail/${p.id}`)}
-        >
-          <img
-            src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${p.imgUrl}`}
-            alt={p.title}
-            style={productImage}
-          />
-          <p style={cardTitle}>{p.title}</p>
-          <p>{p.subtitle}</p>
-          <p>가격: {Number(p.price).toLocaleString()}원</p>
-          <p>카테고리: {p.category}</p>
-          {p.badge && (
-            <span
+      const groupedByCategory = products.reduce((acc, product) => {
+        if (!acc[product.category]) acc[product.category] = [];
+        acc[product.category].push(product);
+        return acc;
+      }, {});
+
+      const handleDelete = async (id) => {
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${id}`,
+            {
+              method: "DELETE",
+              credentials: "include",
+            }
+          );
+          if (res.ok) {
+            setProducts((prev) => prev.filter((p) => p.id !== id));
+          } else {
+            alert("삭제에 실패했습니다.");
+          }
+        } catch {
+          alert("삭제 중 오류 발생");
+        }
+      };
+
+      return (
+        <div style={{ marginTop: 40 }}>
+          {/* 스토어 등록 버튼 */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginBottom: 20,
+            }}
+          >
+            <button
+              onClick={() => router.push("/store/upload")}
               style={{
-                display: "inline-block",
-                padding: "2px 8px",
-                fontSize: "12px",
-                color: "white",
-                backgroundColor: p.badgeColor || "#6B46C1",
-                borderRadius: "6px",
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                padding: "8px 16px",
+                borderRadius: 8,
+                border: "none",
+                fontSize: 14,
+                cursor: "pointer",
               }}
             >
-              {p.badge}
-            </span>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
-    return <p style={{ color: "#777" }}>데이터가 없습니다.</p>;
-  };
+              + 스토어 등록
+            </button>
+          </div>
 
-  return (
-    <>
-      <Header headerColor="white" headerBg="white" userInfo={user} />
-      <main style={main}>
-        <h1 style={title}>👩‍💼 관리자 대시보드</h1>
-        <section style={dashboardHeader}>
-          <div style={infoBox}><h3>🙍‍♂️ 총 회원</h3><p>{userCount}명</p></div>
-          <div style={infoBox}><h3>🎬 등록된 영화</h3><p>{dummyStats.movies}편</p></div>
-          <div style={infoBox}><h3>🛍️ 스토어 상품</h3><p>{storeCount}개</p></div>
-          <div style={infoBox}><h3>📅 예매 수</h3><p>{dummyStats.reservations}건</p></div>
-          <div style={infoBox}><h3>💬 리뷰 수</h3><p>{dummyStats.reviews}개</p></div>
-          <div style={infoBox}><h3>🎉 이벤트 수</h3><p>{dummyStats.events}개</p></div>
-        </section>
-        <section style={dashboardButtons}>
-          {managementSections.map((section, index) => (
-            <div key={index} style={dashboardButton} onClick={() => handleCardClick(section)}>
-              <div style={dashboardButtonDetail}>
-                <h3 style={{ color: "#6B46C1" }}>{section.emoji} {section.title}</h3>
-                <p style={{ fontSize: "13px", color: "#777" }}>관리 및 확인</p>
+          {Object.keys(groupedByCategory).map((category) => (
+            <div key={category} style={{ marginBottom: 40 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  margin: "16px 0",
+                }}
+              >
+                <div
+                  style={{
+                    width: 4,
+                    height: 20,
+                    backgroundColor: "#6B46C1",
+                    borderRadius: 2,
+                    marginRight: 10,
+                  }}
+                />
+                <h2
+                  style={{ fontSize: 18, fontWeight: "bold", color: "#2D3748" }}
+                >
+                  {category}
+                </h2>
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                  gap: 20,
+                }}
+              >
+                {groupedByCategory[category].map((p, i) => (
+                  <div
+                    key={i}
+                    onClick={() => router.push(`/store/detail/${p.id}`)} // ✅ 카드 전체 클릭으로 이동
+                    style={{
+                      background: "#fff",
+                      borderRadius: 12,
+                      boxShadow: "0 3px 8px rgba(0,0,0,0.05)",
+                      overflow: "hidden",
+                      transition: "transform 0.2s, box-shadow 0.2s",
+                      position: "relative",
+                      cursor: "pointer", // ✅ 포인터로 변경
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-3px)";
+                      e.currentTarget.style.boxShadow =
+                        "0 6px 14px rgba(0,0,0,0.12)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.boxShadow =
+                        "0 3px 8px rgba(0,0,0,0.05)";
+                    }}
+                  >
+                    <img
+                      src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${p.imgUrl}`}
+                      alt={p.title}
+                      style={{
+                        width: "100%",
+                        height: 100,
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
+
+                    <div style={{ padding: "12px 16px" }}>
+                      <h3
+                        style={{
+                          fontSize: 15,
+                          fontWeight: "600",
+                          marginBottom: 4,
+                        }}
+                      >
+                        {p.title}
+                      </h3>
+                      <p
+                        style={{ fontSize: 13, color: "#666", marginBottom: 8 }}
+                      >
+                        {p.subtitle}
+                      </p>
+                      <p
+                        style={{
+                          fontSize: 14,
+                          fontWeight: "bold",
+                          color: "#2D3748",
+                          marginBottom: 4,
+                        }}
+                      >
+                        {Number(p.price).toLocaleString()}원
+                      </p>
+                      {p.badge && (
+                        <span
+                          style={{
+                            display: "inline-block",
+                            background: p.badgeColor || "#4e73df",
+                            color: "white",
+                            padding: "2px 8px",
+                            borderRadius: 10,
+                            fontSize: 11,
+                            fontWeight: "500",
+                          }}
+                        >
+                          {p.badge}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        {
+                          handleDelete(p.id);
+                        }
+                      }}
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        right: 8,
+                        background: "#e53e3e",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 6,
+                        padding: "4px 8px",
+                        fontSize: 12,
+                        cursor: "pointer",
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
-        </section>
-        {selectedSection && (
-          <section style={detailSection}>
-            <h2 style={subheading}>🔍 {selectedSection} 목록</h2>
-            {renderList()}
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
+      <Header userInfo={user} />
+      <div style={{ display: "flex" }}>
+        <aside
+          style={{
+            width: 220,
+            background: "#fff",
+            color: "#333",
+            padding: "40px 20px",
+            borderRight: "1px solid #ddd",
+          }}
+        >
+          <h2 style={{ fontSize: 20, marginBottom: 40 }}>🎬 FILMORA 관리자</h2>
+          <ul style={{ listStyle: "none", padding: 0, fontSize: 14 }}>
+            {managementSections.map((section) => (
+              <li
+                key={section.key}
+                style={{
+                  margin: "20px 0",
+                  cursor: "pointer",
+                  color:
+                    selectedSection === section.key ? "#4e73df" : undefined,
+                }}
+                onClick={() => setSelectedSection(section.key)}
+              >
+                {section.title}
+              </li>
+            ))}
+          </ul>
+        </aside>
+        <main style={{ flex: 1, background: "#f8f9fc", padding: 30 }}>
+          <h1 style={{ fontSize: 24, margin: "40px 0 30px" }}>
+            👩‍💼 관리자 대시보드
+          </h1>
+          <section
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))",
+              gap: 24,
+              marginBottom: 50,
+            }}
+          >
+            <SummaryCard title="총 회원" value={`${userCount}명`} icon="🙍‍♂️" />
+            <SummaryCard
+              title="등록 영화"
+              value={`${dummyStats.movies}편`}
+              icon="🎬"
+            />
+            <SummaryCard
+              title="스토어 상품"
+              value={`${storeCount}개`}
+              icon="🛒"
+            />
+            <SummaryCard
+              title="예매 수"
+              value={`${dummyStats.reservations}건`}
+              icon="📅"
+            />
+            <SummaryCard
+              title="리뷰 수"
+              value={`${dummyStats.reviews}개`}
+              icon="💬"
+            />
+            <SummaryCard
+              title="이벤트 수"
+              value={`${dummyStats.events}개`}
+              icon="🎉"
+            />
           </section>
-        )}
-        {!selectedSection && (
-          <>
-            <h2 style={subheading}>📊 영화별 예매 현황</h2>
-            <section style={chartWrapper}>
+          {selectedSection === "영화" && (
+            <section
+              style={{
+                background: "white",
+                borderRadius: 10,
+                padding: 20,
+                boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+              }}
+            >
+              <h3 style={{ fontSize: 18, marginBottom: 16 }}>
+                🎟️ 영화별 예매 현황
+              </h3>
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={movieStats}>
                   <XAxis dataKey="title" />
                   <YAxis allowDecimals={false} />
                   <Tooltip />
-                  <Bar dataKey="reservations" radius={[6, 6, 0, 0]} cursor="pointer">
+                  <Bar dataKey="reservations" radius={[4, 4, 0, 0]}>
                     {movieStats.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={colors[index % colors.length]}
+                      />
                     ))}
                   </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </section>
-          </>
-        )}
-      </main>
-      <Footer footerBg="#f5f5f5" footerColor="#333" />
-    </>
+          )}
+          {renderList()}
+        </main>
+      </div>
+      <Footer />
+    </div>
   );
 }
 
-// ✅ 스타일
-const main = {
-  width: "90%",
-  maxWidth: "1200px",
-  margin: "20px auto 50px auto",
-  display: "flex",
-  flexDirection: "column",
-  gap: "30px",
-};
-const title = {
-  fontSize: "28px",
-  textAlign: "center",
-  color: "#222",
-  padding: "20px",
-  borderBottom: "2px solid #ddd",
-};
-const dashboardHeader = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-  gap: "32px",
-  marginTop: "10px",
-};
-const infoBox = {
-  backgroundColor: "#fff",
-  padding: "18px",
-  borderRadius: "10px",
-  border: "1px solid #ccc",
-  textAlign: "center",
-  boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-};
-const dashboardButtons = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))",
-  gap: "30px",
-  marginTop: "10%",
-};
-const dashboardButton = {
-  borderRadius: "10px",
-  border: "1px solid #ddd",
-  padding: "20px",
-  transition: "all 0.3s ease",
-  cursor: "pointer",
-  background: "linear-gradient(135deg, #f5f5f5, #fff)",
-  boxShadow: "0 1px 5px rgba(0,0,0,0.05)",
-};
-const dashboardButtonDetail = {
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: "8px",
-};
-const subheading = {
-  fontSize: "22px",
-  fontWeight: "600",
-};
-const chartWrapper = {
-  backgroundColor: "#fff",
-  border: "1px solid #ddd",
-  borderRadius: "10px",
-  padding: "20px",
-  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-};
-const detailSection = {
-  marginTop: "20px",
-  padding: "20px",
-  border: "1px solid #eee",
-  borderRadius: "8px",
-  backgroundColor: "#fafafa",
-};
-const gridContainer = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-  gap: "20px",
-};
-const cardBox = {
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  padding: "16px",
-  backgroundColor: "#fff",
-  boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
-};
-const cardTitle = {
-  fontWeight: "bold",
-  fontSize: "16px",
-  marginBottom: "6px",
-};
-const productImage = {
-  width: "100%",
-  height: "180px",
-  objectFit: "cover",
-  borderRadius: "8px",
-  marginBottom: "12px",
-  border: "1px solid #ccc",
-};
+const SummaryCard = ({ title, value, icon }) => (
+  <div
+    style={{
+      background: "white",
+      borderRadius: 8,
+      padding: 20,
+      boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+      textAlign: "center",
+    }}
+  >
+    <div style={{ fontSize: 24 }}>{icon}</div>
+    <h4 style={{ fontSize: 16, margin: "10px 0 4px" }}>{title}</h4>
+    <p style={{ fontSize: 18, fontWeight: "bold" }}>{value}</p>
+  </div>
+);
