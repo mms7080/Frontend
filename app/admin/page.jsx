@@ -21,6 +21,7 @@ export default function AdminDashboard() {
   const [storeCount, setStoreCount] = useState(0);
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
+  const [movies, setMovies] = useState([]);
 
   const dummyStats = {
     movies: 8,
@@ -81,6 +82,13 @@ export default function AdminDashboard() {
       })
         .then((res) => res.json())
         .then(setProducts);
+    }
+    if (selectedSection === "영화") {
+      fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/movies`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then(setMovies);
     }
   }, [selectedSection]);
 
@@ -338,6 +346,53 @@ export default function AdminDashboard() {
                   </div>
                 ))}
               </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    if (selectedSection === "영화") {
+      return (
+        <div
+          style={{
+            marginTop: 30,
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 24,
+            paddingBottom: 40,
+          }}
+        >
+          {movies.map((m, i) => (
+            <div
+              key={i}
+              style={{
+                background: "#fff",
+                padding: 20,
+                borderRadius: 16,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              }}
+            >
+              <img
+                src={m.image}
+                alt={m.title}
+                style={{
+                  width: "100%",
+                  height: 150,
+                  objectFit: "cover",
+                  borderRadius: 12,
+                  marginBottom: 10,
+                }}
+              />
+
+              <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 6 }}>
+                {m.title}
+              </h3>
+              <p style={{ fontSize: 14, color: "#666", marginBottom: 4 }}>
+                평점: {m.score}
+              </p>
+              <p style={{ fontSize: 13, color: "#888" }}>
+                개봉일: {m.releaseDate}
+              </p>
             </div>
           ))}
         </div>
