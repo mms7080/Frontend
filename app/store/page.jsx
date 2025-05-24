@@ -62,7 +62,13 @@ export default function MegaboxStorePage() {
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
+      <Box
+        maxW="1200px"
+        mx="auto"
+        pt={{ base: 10, md: 20 }}
+        px={{ base: 4 }}
+        pb={10}
+      >
         <Heading
           mb={10}
           fontSize={{ base: "xl", md: "2xl" }}
@@ -97,13 +103,14 @@ export default function MegaboxStorePage() {
               </Button>
             ))}
           </Flex>
-          <Button
-            colorScheme="purple"
-            onClick={() => router.push("/store/upload")}
-            mt={{ base: 4, md: 0 }}
-          >
-            + 스토어 등록
-          </Button>
+          {user?.auth === "ADMIN" && (
+            <Button
+              onClick={() => router.push("/store/upload")}
+              mt={{ base: 4, md: 0 }}
+            >
+              + 스토어 등록
+            </Button>
+          )}
         </Flex>
 
         {categoryList.map((category) => (

@@ -47,7 +47,9 @@ export default function EventPage({ serverEvents }) {
 
   const getEventStatus = (dateRange) => {
     const now = new Date();
-    const [_, endStr] = dateRange.split("~").map((s) => s.trim().replace(/\./g, "-"));
+    const [_, endStr] = dateRange
+      .split("~")
+      .map((s) => s.trim().replace(/\./g, "-"));
     const endDate = new Date(endStr);
     return now > endDate ? "종료됨" : "진행중";
   };
@@ -55,28 +57,71 @@ export default function EventPage({ serverEvents }) {
   const filteredEvents =
     activeCategory === "전체"
       ? Object.entries(events)
-      : Object.entries(events).filter(([category]) => category === activeCategory);
+      : Object.entries(events).filter(
+          ([category]) => category === activeCategory
+        );
 
   const keywordFilteredEvents = filteredEvents
-    .map(([category, items]) => [category, items.filter((e) => e.title.toLowerCase().includes(confirmedKeyword.toLowerCase()))])
+    .map(([category, items]) => [
+      category,
+      items.filter((e) =>
+        e.title.toLowerCase().includes(confirmedKeyword.toLowerCase())
+      ),
+    ])
     .filter(([_, items]) => items.length > 0);
 
   return (
     <>
       <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
 
-      <Box maxW="1200px" mx="auto" pt="80px" pb="40px" px="16px" textAlign="center">
-        <Text fontSize="24px" fontWeight="normal" color="#222" borderBottom="2px solid #ccc" pb="12px" mb="40px">
+      <Box
+        maxW="1200px"
+        mx="auto"
+        pt="80px"
+        pb="40px"
+        px="16px"
+        textAlign="center"
+      >
+        <Text
+          fontSize="24px"
+          fontWeight="normal"
+          color="#222"
+          borderBottom="2px solid #ccc"
+          pb="12px"
+          mb="40px"
+        >
           📅 이벤트
         </Text>
       </Box>
 
-      <Box bg="white" pt={20} pb={75} px={{ base: 4, md: 6 }} maxW="1280px" mx="auto">
-        <Flex justify="flex-end" mb={4}>
-          <Button colorScheme="purple" onClick={() => router.push("/event/upload")}>+ 이벤트 등록</Button>
-        </Flex>
+      <Box
+        bg="white"
+        pt={20}
+        pb={75}
+        px={{ base: 4, md: 6 }}
+        maxW="1280px"
+        mx="auto"
+      >
+        {user?.auth === "ADMIN" && (
+          <Flex justify="flex-end" mb={4}>
+            <Button
+              colorScheme="purple"
+              onClick={() => router.push("/event/upload")}
+            >
+              + 이벤트 등록
+            </Button>
+          </Flex>
+        )}
 
-        <Text fontSize="xl" fontWeight="bold" mb={6} borderLeft="4px solid #6B46C1" pl={2}>추천 이벤트</Text>
+        <Text
+          fontSize="xl"
+          fontWeight="bold"
+          mb={6}
+          borderLeft="4px solid #6B46C1"
+          pl={2}
+        >
+          추천 이벤트
+        </Text>
         <Swiper
           modules={[Navigation, Pagination, Autoplay]}
           navigation
@@ -87,8 +132,12 @@ export default function EventPage({ serverEvents }) {
           slidesPerView={1}
           breakpoints={{ 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 } }}
           onSwiper={(swiper) => {
-            swiper.el.addEventListener("mouseenter", () => swiper.autoplay.stop());
-            swiper.el.addEventListener("mouseleave", () => swiper.autoplay.start());
+            swiper.el.addEventListener("mouseenter", () =>
+              swiper.autoplay.stop()
+            );
+            swiper.el.addEventListener("mouseleave", () =>
+              swiper.autoplay.start()
+            );
           }}
         >
           {(events["Pick"] || []).map((event, idx) => (
@@ -109,7 +158,12 @@ export default function EventPage({ serverEvents }) {
                   <img
                     src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
                     alt={event.title}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", pointerEvents: "none" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      pointerEvents: "none",
+                    }}
                   />
                 </Box>
                 <Box p={4} position="relative">
@@ -120,15 +174,23 @@ export default function EventPage({ serverEvents }) {
                     fontSize="xs"
                     fontWeight="bold"
                     color="white"
-                    bg={getEventStatus(event.date) === "종료됨" ? "gray.500" : "green.500"}
+                    bg={
+                      getEventStatus(event.date) === "종료됨"
+                        ? "gray.500"
+                        : "green.500"
+                    }
                     px={2}
                     py={0.5}
                     borderRadius="full"
                   >
                     {getEventStatus(event.date)}
                   </Text>
-                  <Text fontSize="lg" fontWeight="bold" mb={2}>{event.title}</Text>
-                  <Text fontSize="sm" color="gray.500">{event.date}</Text>
+                  <Text fontSize="lg" fontWeight="bold" mb={2}>
+                    {event.title}
+                  </Text>
+                  <Text fontSize="sm" color="gray.500">
+                    {event.date}
+                  </Text>
                 </Box>
               </Box>
             </SwiperSlide>
@@ -137,7 +199,15 @@ export default function EventPage({ serverEvents }) {
       </Box>
 
       <Box bg="white" py={12} px={{ base: 4, md: 6 }} maxW="1280px" mx="auto">
-        <Text fontSize="2xl" fontWeight="bold" mb={8} borderBottom="2px solid #333" pb={2}>진행중인 이벤트</Text>
+        <Text
+          fontSize="2xl"
+          fontWeight="bold"
+          mb={8}
+          borderBottom="2px solid #333"
+          pb={2}
+        >
+          진행중인 이벤트
+        </Text>
 
         <Box mt={4} mb={8} display="flex" gap={2} flexWrap="wrap">
           <input
@@ -145,7 +215,9 @@ export default function EventPage({ serverEvents }) {
             placeholder="이벤트 제목 검색 (Enter 입력 또는 버튼 클릭)"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && setConfirmedKeyword(searchKeyword)}
+            onKeyDown={(e) =>
+              e.key === "Enter" && setConfirmedKeyword(searchKeyword)
+            }
             style={{
               width: "100%",
               maxWidth: "300px",
@@ -155,7 +227,14 @@ export default function EventPage({ serverEvents }) {
               fontSize: "14px",
             }}
           />
-          <Button colorScheme="purple" onClick={() => setConfirmedKeyword(searchKeyword)} px={6} fontWeight="normal">검색</Button>
+          <Button
+            colorScheme="purple"
+            onClick={() => setConfirmedKeyword(searchKeyword)}
+            px={6}
+            fontWeight="normal"
+          >
+            검색
+          </Button>
         </Box>
 
         <Flex gap={2} borderBottom="1px solid #6B46C1" flexWrap="wrap" mb={10}>
@@ -163,7 +242,11 @@ export default function EventPage({ serverEvents }) {
             <Button
               key={category}
               variant="ghost"
-              borderBottom={activeCategory === category ? "3px solid #6B46C1" : "2px solid transparent"}
+              borderBottom={
+                activeCategory === category
+                  ? "3px solid #6B46C1"
+                  : "2px solid transparent"
+              }
               borderRadius="0"
               fontWeight={activeCategory === category ? "bold" : "normal"}
               color={activeCategory === category ? "#6B46C1" : "black"}
@@ -182,8 +265,21 @@ export default function EventPage({ serverEvents }) {
 
         {keywordFilteredEvents.map(([category, items]) => (
           <Box key={category} mb={16}>
-            <Text fontSize="xl" fontWeight="bold" mt={16} mb={4} borderLeft="4px solid #6B46C1" pl={2}>{category}</Text>
-            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6} justifyItems="center">
+            <Text
+              fontSize="xl"
+              fontWeight="bold"
+              mt={16}
+              mb={4}
+              borderLeft="4px solid #6B46C1"
+              pl={2}
+            >
+              {category}
+            </Text>
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+              spacing={6}
+              justifyItems="center"
+            >
               {items.map((event, idx) => (
                 <Box
                   key={idx}
@@ -214,7 +310,11 @@ export default function EventPage({ serverEvents }) {
                       fontSize="xs"
                       fontWeight="bold"
                       color="white"
-                      bg={getEventStatus(event.date) === "종료됨" ? "gray.600" : "green.500"}
+                      bg={
+                        getEventStatus(event.date) === "종료됨"
+                          ? "gray.600"
+                          : "green.500"
+                      }
                       px={2}
                       py={0.5}
                       borderRadius="full"
@@ -224,8 +324,17 @@ export default function EventPage({ serverEvents }) {
                     </Text>
                   </Box>
                   <Box p={3} minH="80px">
-                    <Text fontSize="sm" fontWeight="semibold" mb={1} noOfLines={2}>{event.title}</Text>
-                    <Text fontSize="xs" color="gray.500">{event.date}</Text>
+                    <Text
+                      fontSize="sm"
+                      fontWeight="semibold"
+                      mb={1}
+                      noOfLines={2}
+                    >
+                      {event.title}
+                    </Text>
+                    <Text fontSize="xs" color="gray.500">
+                      {event.date}
+                    </Text>
                   </Box>
                 </Box>
               ))}
@@ -234,7 +343,11 @@ export default function EventPage({ serverEvents }) {
         ))}
       </Box>
 
-      <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
+      <Footer
+        footerColor="white"
+        footerBg="#1a1a1a"
+        footerBorder="transparent"
+      />
     </>
   );
 }

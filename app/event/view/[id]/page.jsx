@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import {
   Box,
   Text,
@@ -11,8 +11,8 @@ import {
   Flex,
   useBreakpointValue,
   Image,
-} from '@chakra-ui/react';
-import { Header, Footer } from '../../../../components';
+} from "@chakra-ui/react";
+import { Header, Footer } from "../../../../components";
 
 export default function EventDetailPage() {
   const { id } = useParams();
@@ -26,9 +26,12 @@ export default function EventDetailPage() {
   useEffect(() => {
     (async () => {
       try {
-        const userRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: 'include',
-        });
+        const userRes = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+          {
+            credentials: "include",
+          }
+        );
         if (!userRes.ok) throw new Error();
         const userInfo = await userRes.json();
         setUser(userInfo);
@@ -42,12 +45,15 @@ export default function EventDetailPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/raw`, {
-          credentials: 'include',
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/raw`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         setAllEvents(data);
-        const found = data.find(e => e.id === Number(id));
+        const found = data.find((e) => e.id === Number(id));
         setEvent(found);
       } catch {
         setEvent(null);
@@ -57,11 +63,12 @@ export default function EventDetailPage() {
     })();
   }, [id]);
 
-  const currentIndex = allEvents.findIndex(e => e.id === Number(id));
+  const currentIndex = allEvents.findIndex((e) => e.id === Number(id));
   const prev = currentIndex > 0 ? allEvents[currentIndex - 1] : null;
-  const next = currentIndex < allEvents.length - 1 ? allEvents[currentIndex + 1] : null;
+  const next =
+    currentIndex < allEvents.length - 1 ? allEvents[currentIndex + 1] : null;
 
-  const buttonDirection = useBreakpointValue({ base: 'column', md: 'row' });
+  const buttonDirection = useBreakpointValue({ base: "column", md: "row" });
 
   return (
     <>
@@ -75,8 +82,12 @@ export default function EventDetailPage() {
           </Flex>
         ) : event ? (
           <>
-            <Heading mb={4} fontSize={['xl', '2xl']}>{event.title}</Heading>
-            <Text fontSize="sm" color="gray.500" mb={4}>{event.date}</Text>
+            <Heading mb={4} fontSize={["xl", "2xl"]}>
+              {event.title}
+            </Heading>
+            <Text fontSize="sm" color="gray.500" mb={4}>
+              {event.date}
+            </Text>
 
             {/* ✅ 여러 이미지 보여주기 */}
             <Flex gap={4} wrap="wrap" mb={8}>
@@ -112,19 +123,19 @@ export default function EventDetailPage() {
                 onClick={() => prev && router.push(`/event/view/${prev.id}`)}
                 isDisabled={!prev}
                 variant="outline"
-                w={['100%', 'auto']}
+                w={["100%", "auto"]}
                 opacity={prev ? 1 : 0.5}
-                cursor={prev ? 'pointer' : 'not-allowed'}
-                _hover={prev ? {} : { bg: 'none' }}
+                cursor={prev ? "pointer" : "not-allowed"}
+                _hover={prev ? {} : { bg: "none" }}
               >
                 ← 이전글
               </Button>
 
               <Button
-                onClick={() => router.push('/event')}
+                onClick={() => router.push("/event")}
                 colorScheme="purple"
                 variant="solid"
-                w={['100%', 'auto']}
+                w={["100%", "auto"]}
               >
                 목록으로
               </Button>
@@ -133,41 +144,47 @@ export default function EventDetailPage() {
                 onClick={() => next && router.push(`/event/view/${next.id}`)}
                 isDisabled={!next}
                 variant="outline"
-                w={['100%', 'auto']}
+                w={["100%", "auto"]}
                 opacity={next ? 1 : 0.5}
-                cursor={next ? 'pointer' : 'not-allowed'}
-                _hover={next ? {} : { bg: 'none' }}
+                cursor={next ? "pointer" : "not-allowed"}
+                _hover={next ? {} : { bg: "none" }}
               >
                 다음글 →
               </Button>
             </Flex>
 
             {/* 삭제 버튼 */}
-            <Flex justify="flex-end" mt={4}>
-              <Button
-                onClick={async () => {
-                  const confirmed = window.confirm('정말로 삭제하시겠습니까?');
-                  if (!confirmed) return;
+            {user?.auth === "ADMIN" && (
+              <Flex justify="flex-end" mt={4}>
+                <Button
+                  onClick={async () => {
+                    const confirmed =
+                      window.confirm("정말로 삭제하시겠습니까?");
+                    if (!confirmed) return;
 
-                  const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${event.id}`, {
-                    method: 'DELETE',
-                    credentials: 'include', // ✅ 삭제 요청에도 쿠키 포함
-                  });
+                    const res = await fetch(
+                      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${event.id}`,
+                      {
+                        method: "DELETE",
+                        credentials: "include",
+                      }
+                    );
 
-                  if (res.ok) {
-                    alert('이벤트가 삭제되었습니다.');
-                    router.push('/event');
-                  } else {
-                    alert('삭제에 실패했습니다.');
-                  }
-                }}
-                variant="outline"
-                colorScheme="red"
-                fontWeight="bold"
-              >
-                삭제
-              </Button>
-            </Flex>
+                    if (res.ok) {
+                      alert("이벤트가 삭제되었습니다.");
+                      router.push("/event");
+                    } else {
+                      alert("삭제에 실패했습니다.");
+                    }
+                  }}
+                  variant="outline"
+                  colorScheme="red"
+                  fontWeight="bold"
+                >
+                  삭제
+                </Button>
+              </Flex>
+            )}
           </>
         ) : (
           <Flex justify="center" align="center" minH="200px">

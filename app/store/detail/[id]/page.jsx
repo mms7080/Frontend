@@ -79,7 +79,8 @@ export default function StoreDetailPage() {
 
           <Box flex="1">
             <Text fontSize="sm" color="purple.600" fontWeight="bold" mb={2}>
-              ⚠️ 일부 특별관(부티크, 돌비 등) 및 쿠폰 사용불가 극장에서는 사용이 제한됩니다.
+              ⚠️ 일부 특별관(부티크, 돌비 등) 및 쿠폰 사용불가 극장에서는 사용이
+              제한됩니다.
             </Text>
             <Text fontSize="sm" mb={5}>
               <b>유효기간:</b> 구매일로부터 1년 / 교환권 등록 후 10일 이내 사용
@@ -154,10 +155,12 @@ export default function StoreDetailPage() {
           <Box fontSize="14px" color="gray.700" whiteSpace="pre-line" mb={6}>
             - 상품은 구매일로부터 10일 이내 취소 가능 <br />
             - 구매일로부터 5년까지 유효기간 연장이 가능합니다. <br />
-            - 최초 유효기간 만료 후에는 결제금액의 90%에 대해 환불 요청 가능하며, 환불 처리에 7일 이상의 시간이 소요될 수 있습니다. (접수처 : 1544-0070) <br />
+            - 최초 유효기간 만료 후에는 결제금액의 90%에 대해 환불 요청
+            가능하며, 환불 처리에 7일 이상의 시간이 소요될 수 있습니다. (접수처
+            : 1544-0070) <br />
             - 쿠폰으로 등록 시 유효기간 내 사용 필수 <br />
-            - 일부 극장에서는 사용 제한 가능 <br />
-            - 구매 취소 및 환불 요청은 미사용 상품에 한해 가능하며, 사용한 상품에 대해서는 불가합니다.
+            - 일부 극장에서는 사용 제한 가능 <br />- 구매 취소 및 환불 요청은
+            미사용 상품에 한해 가능하며, 사용한 상품에 대해서는 불가합니다.
           </Box>
 
           <Text fontWeight="bold" fontSize="lg" mb={2} color="black">
@@ -180,35 +183,37 @@ export default function StoreDetailPage() {
             ← 목록으로 돌아가기
           </Button>
 
-          <Button
-            fontSize="sm"
-            fontWeight="bold"
-            bg="#e53e3e"
-            color="white"
-            _hover={{ bg: "#c53030" }}
-            w="fit-content"
-            onClick={async () => {
-              const confirmDelete = confirm("정말 삭제하시겠습니까?");
-              if (!confirmDelete) return;
+          {user?.auth === "ADMIN" && (
+            <Button
+              fontSize="sm"
+              fontWeight="bold"
+              bg="#e53e3e"
+              color="white"
+              _hover={{ bg: "#c53030" }}
+              w="fit-content"
+              onClick={async () => {
+                const confirmDelete = confirm("정말 삭제하시겠습니까?");
+                if (!confirmDelete) return;
 
-              try {
-                const res = await fetch(
-                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${product.id}`,
-                  {
-                    method: "DELETE",
-                    credentials: "include",
-                  }
-                );
-                if (!res.ok) throw new Error("삭제 실패");
-                alert("삭제가 완료되었습니다!");
-                router.push("/store");
-              } catch (e) {
-                alert("삭제 중 오류 발생: " + e.message);
-              }
-            }}
-          >
-            삭제
-          </Button>
+                try {
+                  const res = await fetch(
+                    `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${product.id}`,
+                    {
+                      method: "DELETE",
+                      credentials: "include",
+                    }
+                  );
+                  if (!res.ok) throw new Error("삭제 실패");
+                  alert("삭제가 완료되었습니다!");
+                  router.push("/store");
+                } catch (e) {
+                  alert("삭제 중 오류 발생: " + e.message);
+                }
+              }}
+            >
+              삭제
+            </Button>
+          )}
         </Flex>
       </Box>
 
