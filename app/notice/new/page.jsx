@@ -20,14 +20,22 @@ export default function NoticeCreatePage() {
         });
         if (!res.ok) throw new Error();
         const data = await res.json();
+
+        // 🔐 관리자 외에는 접근 불가
+        if (data.auth !== 'ADMIN') {
+          alert('관리자만 접근 가능한 페이지입니다.');
+          return router.push('/notice'); // 홈 또는 접근 허용된 경로
+        }
+
         setUser(data);
         setWriter(data.name || '');
       } catch (e) {
-        console.log('로그인 정보 없음');
+        alert('로그인이 필요합니다.');
+        router.push('/signin');
       }
     };
     fetchUser();
-  }, []);
+  }, [router]);
 
   const handleSubmit = async () => {
     if (!title || !writer || !content) {

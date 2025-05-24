@@ -22,18 +22,24 @@ export default function StoreUploadPage() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
-          }
+          { credentials: "include" }
         );
         if (!res.ok) throw new Error();
         const data = await res.json();
+
+        // 🔐 관리자 체크
+        if (data.auth !== "ADMIN") {
+          alert("관리자만 접근 가능한 페이지입니다.");
+          return router.push("/store");
+        }
+
         setUser(data);
       } catch {
-        setUser(null);
+        alert("로그인이 필요합니다.");
+        router.push("/signin");
       }
     })();
-  }, []);
+  }, [router]);
 
   const handleSubmit = async () => {
     if (!category) {

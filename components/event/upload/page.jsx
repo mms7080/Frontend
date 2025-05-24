@@ -28,27 +28,29 @@ export default function EventUploader() {
   const [user, setUser] = useState(null);
   const router = useRouter();
 
-  useEffect(() => {
+   useEffect(() => {
     (async () => {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
-            headers: {
-              'accept': 'application/json;charset=UTF-8',
-              'Content-Type':'application/json'
-            }
-          }
+          { credentials: "include" }
         );
         if (!res.ok) throw new Error();
         const data = await res.json();
+
+        // 🔐 관리자 체크
+        if (data.auth !== "ADMIN") {
+          alert("관리자만 접근 가능한 페이지입니다.");
+          return router.push("/event");
+        }
+
         setUser(data);
       } catch {
-        console.log("로그인 정보 없음");
+        alert("로그인이 필요합니다.");
+        router.push("/signin");
       }
     })();
-  }, []);
+  }, [router]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
