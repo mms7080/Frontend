@@ -19,15 +19,18 @@ export default function AdminDashboard() {
   const [selectedSection, setSelectedSection] = useState(null);
   const [userCount, setUserCount] = useState(0);
   const [storeCount, setStoreCount] = useState(0);
+  const [movieCount, setMovieCount] = useState(0);
+  const [eventCount, setEventCount] = useState(0);
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
   const [movies, setMovies] = useState([]);
+  const [events, setEvents] = useState([]);
 
   const dummyStats = {
     movies: 8,
-    reservations: 120,
-    reviews: 45,
-    events: 6,
+    reservations: 0,
+    reviews: 0,
+    events: 0,
   };
 
   useEffect(() => {
@@ -66,6 +69,16 @@ export default function AdminDashboard() {
     })
       .then((res) => res.json())
       .then(setStoreCount);
+    fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/movie-count`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then(setMovieCount);
+    fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/event-count`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then(setEventCount);
   }, []);
 
   useEffect(() => {
@@ -89,6 +102,13 @@ export default function AdminDashboard() {
       })
         .then((res) => res.json())
         .then(setMovies);
+    }
+    if (selectedSection === "이벤트") {
+      fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/events`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then(setEvents);
     }
   }, [selectedSection]);
 
@@ -398,6 +418,160 @@ export default function AdminDashboard() {
         </div>
       );
     }
+    if (selectedSection === "이벤트") {
+      const groupedByCategory = events.reduce((acc, event) => {
+        if (!acc[event.category]) acc[event.category] = [];
+        acc[event.category].push(event);
+        return acc;
+      }, {});
+
+      const handleDelete = async (id) => {
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${id}`,
+            {
+              method: "DELETE",
+              credentials: "include",
+            }
+          );
+          if (res.ok) {
+            setEvents((prev) => prev.filter((e) => e.id !== id));
+          } else {
+            alert("삭제에 실패했습니다.");
+          }
+        } catch {
+          alert("삭제 중 오류 발생");
+        }
+      };
+
+      return (
+        <div style={{ marginTop: 40 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginBottom: 20,
+            }}
+          >
+            <button
+              onClick={() => router.push("/event/upload")}
+              style={{
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                padding: "8px 16px",
+                borderRadius: 8,
+                border: "none",
+                fontSize: 14,
+                cursor: "pointer",
+              }}
+            >
+              + 이벤트 등록
+            </button>
+          </div>
+
+          {Object.entries(groupedByCategory).map(([category, items]) => (
+            <div key={category} style={{ marginBottom: 40 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  margin: "16px 0",
+                }}
+              >
+                <div
+                  style={{
+                    width: 4,
+                    height: 20,
+                    backgroundColor: "#6B46C1",
+                    borderRadius: 2,
+                    marginRight: 10,
+                  }}
+                />
+                <h2
+                  style={{ fontSize: 18, fontWeight: "bold", color: "#2D3748" }}
+                >
+                  {category}
+                </h2>
+              </div>
+
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                  gap: 20,
+                }}
+              >
+                {items.map((e) => (
+                  <div
+                    key={e.id}
+                    style={{
+                      background: "#fff",
+                      borderRadius: 12,
+                      boxShadow: "0 3px 8px rgba(0,0,0,0.05)",
+                      overflow: "hidden",
+                      position: "relative",
+                    }}
+                  >
+                    <img
+                      src={
+                        e.images?.[0]?.startsWith("http")
+                          ? e.images[0]
+                          : `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${e.images[0]}`
+                      }
+                      alt={e.title}
+                      style={{ width: "100%", height: 150, objectFit: "cover" }}
+                    />
+                    <div style={{ padding: "12px 16px" }}>
+                      <h3
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "600",
+                          marginBottom: 6,
+                        }}
+                      >
+                        {e.title}
+                      </h3>
+                      <p style={{ fontSize: 13, color: "#666" }}>{e.date}</p>
+                      <span
+                        style={{
+                          fontSize: 12,
+                          backgroundColor: "#6B46C1",
+                          color: "#fff",
+                          padding: "2px 8px",
+                          borderRadius: 12,
+                          marginTop: 4,
+                          display: "inline-block",
+                        }}
+                      >
+                        {e.category}
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => handleDelete(e.id)}
+                      style={{
+                        position: "absolute",
+                        top: 8,
+                        right: 8,
+                        background: "#e53e3e",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 6,
+                        padding: "4px 8px",
+                        fontSize: 12,
+                        cursor: "pointer",
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
 
     return null;
   };
@@ -447,8 +621,8 @@ export default function AdminDashboard() {
           >
             <SummaryCard title="총 회원" value={`${userCount}명`} icon="🙍‍♂️" />
             <SummaryCard
-              title="등록 영화"
-              value={`${dummyStats.movies}편`}
+              title="등록된 영화"
+              value={`${movieCount}편`}
               icon="🎬"
             />
             <SummaryCard
@@ -457,18 +631,18 @@ export default function AdminDashboard() {
               icon="🛒"
             />
             <SummaryCard
-              title="예매 수"
+              title="예매"
               value={`${dummyStats.reservations}건`}
               icon="📅"
             />
             <SummaryCard
-              title="리뷰 수"
+              title="리뷰"
               value={`${dummyStats.reviews}개`}
               icon="💬"
             />
             <SummaryCard
-              title="이벤트 수"
-              value={`${dummyStats.events}개`}
+              title="이벤트"
+              value={`${eventCount}개`}
               icon="🎉"
             />
           </section>
