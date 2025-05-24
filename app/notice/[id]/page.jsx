@@ -143,14 +143,47 @@ export default function NoticeDetailPage() {
               다음글
             </button>
           </div>
-          <button
-            style={editBtn}
-            onClick={() => router.push(`/notice/edit/${id}`)}
-            onMouseOver={e => (e.currentTarget.style.backgroundColor = '#ddd')}
-            onMouseOut={e => (e.currentTarget.style.backgroundColor = '#eee')}
-          >
-            수정
-          </button>
+{user?.name === notice.writer && (
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <button
+      style={editBtn}
+      onClick={() => router.push(`/notice/edit/${id}`)}
+      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#ddd')}
+      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#eee')}
+    >
+      수정
+    </button>
+    <button
+      style={{ ...editBtn, marginLeft: '10px' }}
+      onClick={async () => {
+        if (confirm('정말 삭제하시겠습니까?')) {
+          try {
+            const res = await fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`,
+              {
+                method: 'DELETE',
+                credentials: 'include',
+              }
+            );
+            if (res.ok) {
+              alert('삭제 완료');
+              router.push('/notice');
+            } else {
+              alert('삭제 실패');
+            }
+          } catch (err) {
+            console.error(err);
+            alert('삭제 중 오류 발생');
+          }
+        }
+      }}
+      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#ddd')}
+      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#eee')}
+    >
+      삭제
+    </button>
+  </div>
+)}
         </div>
 
         <div style={{ textAlign: 'center' }}>
