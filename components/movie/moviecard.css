@@ -72,6 +72,19 @@
   .poster:hover .overlay {
     opacity: 1;
   }
+
+  .poster .overlay .description {
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4; /* 줄 간격 조정 */
+    text-align: left;
+    
+    /* fallback for browsers that don't support line-clamp */
+    max-height: calc(1.4em * 7); /* line-height * 줄 수 */
+  }
   
   .poster .overlay .score {
     color: #aa8bff;
@@ -180,7 +193,7 @@
     justify-content: center;
     font-size: 14px;
     font-family: inherit;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
   }
   
   .like-button:hover {

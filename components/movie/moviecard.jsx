@@ -29,11 +29,11 @@ const MovieCard = ({ movie, onBooking }) => {
       <span className="rank">{movie.rank}</span>
 <Link href="/detail">
         <div className="poster">
-          <img src={movie.image} alt={movie.title} />
+          <img src={movie.poster} alt={movie.title} />
           <div className="overlay">
             <p>
               {movie.title} <br /> <br />
-              {movie.description}<br /> <br />
+              <span className='description'>{movie.description}</span><br /> <br />
               관람평 <span className="score">{movie.score}</span>
               <br /> <br />개봉일 <span>{movie.releaseDate}</span>
             </p>
