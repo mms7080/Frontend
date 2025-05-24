@@ -2,19 +2,26 @@ import React from 'react';
 import {Flex,Box,VStack,Input,Button,Image} from '@chakra-ui/react';
 import Link from 'next/link';
 import {Header,Footer} from '../../components';
+import {redirect} from 'next/navigation';
+import {fetch} from '../../lib/server';
 
 export const metadata = {
     title: "로그인",
     description: "영화 예매 사이트 로그인 페이지"
 };
 
-export default function Signin(){
+export default async function Signin(){
 
     let headerColor='black';
     let headerBg='#F9F9F9';
     let footerColor='black';
     let footerBg='#F9F9F9';
     let footerBorder='#ccc';
+
+    const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
+
+    if(res)/* 로그인 한 채로 로그인 페이지로 이동하면 홈으로 자동 리다이렉트*/
+        redirect('/home');
 
     return <>
         <Header headerColor={headerColor} headerBg={headerBg}></Header>
