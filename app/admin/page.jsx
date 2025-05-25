@@ -380,53 +380,53 @@ export default function AdminDashboard() {
         </div>
       );
     }
-    if (selectedSection === "영화") {
-      return (
+if (selectedSection === "영화") {
+  return (
+    <div
+      style={{
+        marginTop: 30,
+        display: "grid",
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: 24,
+        paddingBottom: 40,
+      }}
+    >
+      {movies.map((m, i) => (
         <div
+          key={i}
           style={{
-            marginTop: 30,
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 24,
-            paddingBottom: 40,
+            background: "#fff",
+            padding: 20,
+            borderRadius: 16,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
           }}
         >
-          {movies.map((m, i) => (
-            <div
-              key={i}
-              style={{
-                background: "#fff",
-                padding: 20,
-                borderRadius: 16,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-              }}
-            >
-              <img
-                src={m.image}
-                alt={m.title}
-                style={{
-                  width: "100%",
-                  height: 150,
-                  objectFit: "cover",
-                  borderRadius: 12,
-                  marginBottom: 10,
-                }}
-              />
-
-              <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 6 }}>
-                {m.title}
-              </h3>
-              <p style={{ fontSize: 14, color: "#666", marginBottom: 4 }}>
-                평점: {m.score}
-              </p>
-              <p style={{ fontSize: 13, color: "#888" }}>
-                개봉일: {m.releaseDate}
-              </p>
-            </div>
-          ))}
+          <img
+            src={m.poster}
+            alt={m.title}
+            style={{
+              width: "100%",
+              height: 150,
+              objectFit: "cover",
+              borderRadius: 12,
+              marginBottom: 10,
+            }}
+          />
+          <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 6 }}>
+            {m.title}
+          </h3>
+          <p style={{ fontSize: 14, color: "#666", marginBottom: 4 }}>
+            평점: {m.score}
+          </p>
+          <p style={{ fontSize: 13, color: "#888" }}>
+            개봉일: {m.releaseDate}
+          </p>
         </div>
-      );
-    }
+      ))}
+    </div>
+  );
+}
+
     if (selectedSection === "이벤트") {
       const groupedByCategory = events.reduce((acc, event) => {
         if (!acc[event.category]) acc[event.category] = [];
