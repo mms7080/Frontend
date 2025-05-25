@@ -380,52 +380,52 @@ export default function AdminDashboard() {
         </div>
       );
     }
-if (selectedSection === "영화") {
-  return (
-    <div
-      style={{
-        marginTop: 30,
-        display: "grid",
-        gridTemplateColumns: "repeat(4, 1fr)",
-        gap: 24,
-        paddingBottom: 40,
-      }}
-    >
-      {movies.map((m, i) => (
+    if (selectedSection === "영화") {
+      return (
         <div
-          key={i}
           style={{
-            background: "#fff",
-            padding: 20,
-            borderRadius: 16,
-            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            marginTop: 30,
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 24,
+            paddingBottom: 40,
           }}
         >
-          <img
-            src={m.poster}
-            alt={m.title}
-            style={{
-              width: "100%",
-              height: 150,
-              objectFit: "cover",
-              borderRadius: 12,
-              marginBottom: 10,
-            }}
-          />
-          <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 6 }}>
-            {m.title}
-          </h3>
-          <p style={{ fontSize: 14, color: "#666", marginBottom: 4 }}>
-            평점: {m.score}
-          </p>
-          <p style={{ fontSize: 13, color: "#888" }}>
-            개봉일: {m.releaseDate}
-          </p>
+          {movies.map((m, i) => (
+            <div
+              key={i}
+              style={{
+                background: "#fff",
+                padding: 20,
+                borderRadius: 16,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              }}
+            >
+              <img
+                src={m.poster}
+                alt={m.title}
+                style={{
+                  width: "100%",
+                  height: 150,
+                  objectFit: "cover",
+                  borderRadius: 12,
+                  marginBottom: 10,
+                }}
+              />
+              <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 6 }}>
+                {m.title}
+              </h3>
+              <p style={{ fontSize: 14, color: "#666", marginBottom: 4 }}>
+                평점: {m.score}
+              </p>
+              <p style={{ fontSize: 13, color: "#888" }}>
+                개봉일: {m.releaseDate}
+              </p>
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
-  );
-}
+      );
+    }
 
     if (selectedSection === "이벤트") {
       const groupedByCategory = events.reduce((acc, event) => {
@@ -514,12 +514,14 @@ if (selectedSection === "영화") {
                 {items.map((e) => (
                   <div
                     key={e.id}
+                    onClick={() => router.push(`/event/view/${e.id}`)} // ✅ 상세 페이지로 이동
                     style={{
                       background: "#fff",
                       borderRadius: 12,
                       boxShadow: "0 3px 8px rgba(0,0,0,0.05)",
                       overflow: "hidden",
                       position: "relative",
+                      cursor: "pointer", // ✅ 클릭 가능한 커서
                     }}
                   >
                     <img
@@ -556,8 +558,12 @@ if (selectedSection === "영화") {
                         {e.category}
                       </span>
                     </div>
+
                     <button
-                      onClick={() => handleDelete(e.id)}
+                      onClick={(event) => {
+                        event.stopPropagation(); // ✅ 클릭 전파 차단
+                        handleDelete(e.id);
+                      }}
                       style={{
                         position: "absolute",
                         top: 8,
@@ -581,90 +587,92 @@ if (selectedSection === "영화") {
         </div>
       );
     }
-if (selectedSection === "매출") {
-  const salesByProduct = payments.reduce((acc, cur) => {
-    acc[cur.orderName] = (acc[cur.orderName] || 0) + cur.amount;
-    return acc;
-  }, {});
+    if (selectedSection === "매출") {
+      const salesByProduct = payments.reduce((acc, cur) => {
+        acc[cur.orderName] = (acc[cur.orderName] || 0) + cur.amount;
+        return acc;
+      }, {});
 
-  const chartData = Object.entries(salesByProduct).map(([name, amount]) => ({
-    name,
-    amount,
-  }));
+      const chartData = Object.entries(salesByProduct).map(
+        ([name, amount]) => ({
+          name,
+          amount,
+        })
+      );
 
-  return (
-    <div style={{ marginTop: 40 }}>
-      {/* 💰 매출 차트 영역 */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 10,
-          padding: 20,
-          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-          marginBottom: 30,
-        }}
-      >
-        <h3 style={{ fontSize: 18, marginBottom: 16 }}>💰 상품별 매출 차트</h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <XAxis dataKey="name" />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
-              {chartData.map((_, idx) => (
-                <Cell key={idx} fill={colors[idx % colors.length]} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      return (
+        <div style={{ marginTop: 40 }}>
+          {/* 💰 매출 차트 영역 */}
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: 10,
+              padding: 20,
+              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+              marginBottom: 30,
+            }}
+          >
+            <h3 style={{ fontSize: 18, marginBottom: 16 }}>
+              💰 상품별 매출 차트
+            </h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={chartData}>
+                <XAxis dataKey="name" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
+                  {chartData.map((_, idx) => (
+                    <Cell key={idx} fill={colors[idx % colors.length]} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
-      {/* 📋 매출 테이블 영역 */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 10,
-          padding: 20,
-          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h3 style={{ fontSize: 18, marginBottom: 16 }}>📋 전체 매출 목록</h3>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ background: "#f1f1f1" }}>
-              <th style={thStyle}>주문번호</th>
-              <th style={thStyle}>상품명</th>
-              <th style={thStyle}>유저ID</th>
-              <th style={thStyle}>결제금액</th>
-              <th style={thStyle}>결제일</th>
-              <th style={thStyle}>결제수단</th>
-              <th style={thStyle}>카드사</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map((p, idx) => (
-              <tr key={idx}>
-                <td style={tdStyle}>{p.orderId}</td>
-                <td style={tdStyle}>{p.orderName}</td>
-                <td style={tdStyle}>{p.userId}</td>
-                <td style={tdStyle}>{p.amount.toLocaleString()}원</td>
-                <td style={tdStyle}>
-                  {new Date(p.approvedAt).toLocaleString()}
-                </td>
-                <td style={tdStyle}>{p.method}</td>
-                <td style={tdStyle}>{p.cardCompany || "-"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-
-
-
+          {/* 📋 매출 테이블 영역 */}
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: 10,
+              padding: 20,
+              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+            }}
+          >
+            <h3 style={{ fontSize: 18, marginBottom: 16 }}>
+              📋 전체 매출 목록
+            </h3>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ background: "#f1f1f1" }}>
+                  <th style={thStyle}>주문번호</th>
+                  <th style={thStyle}>상품명</th>
+                  <th style={thStyle}>유저ID</th>
+                  <th style={thStyle}>결제금액</th>
+                  <th style={thStyle}>결제일</th>
+                  <th style={thStyle}>결제수단</th>
+                  <th style={thStyle}>카드사</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.map((p, idx) => (
+                  <tr key={idx}>
+                    <td style={tdStyle}>{p.orderId}</td>
+                    <td style={tdStyle}>{p.orderName}</td>
+                    <td style={tdStyle}>{p.userId}</td>
+                    <td style={tdStyle}>{p.amount.toLocaleString()}원</td>
+                    <td style={tdStyle}>
+                      {new Date(p.approvedAt).toLocaleString()}
+                    </td>
+                    <td style={tdStyle}>{p.method}</td>
+                    <td style={tdStyle}>{p.cardCompany || "-"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
 
     return null;
   };
@@ -800,4 +808,3 @@ const tdStyle = {
   borderBottom: "1px solid #eee",
   fontSize: 14,
 };
-
