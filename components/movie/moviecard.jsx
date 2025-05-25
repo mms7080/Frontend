@@ -19,7 +19,7 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-const MovieCard = ({ movie, onBooking }) => {
+const MovieCard = ({ movie }) => {
 
   const [liked, likedController] = useState(false);
   const likeChange = () => {likedController(!liked)};
@@ -64,7 +64,7 @@ const MovieCard = ({ movie, onBooking }) => {
             {movie.likeNumber}
           </div>
         </button>
-        <button className="reserve-button" onClick={() => onBooking(movie.id)}>예매</button>
+        <button className="reserve-button" onClick={() => {}}>예매</button>
       </div>
     </div>
   );
