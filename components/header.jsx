@@ -15,7 +15,7 @@ export default function Header({ userInfo }) {
     pathname === "/" ||
     pathname.startsWith("/home") ||
     pathname.startsWith("/movie") ||
-    pathname.startsWith("/booking2");
+    pathname.startsWith("/booking");
   const headerBg = isHome ? "#1a1a1a" : "white";
   const headerColor = isHome ? "white" : "black";
   const hoverColor = "gray.500";
