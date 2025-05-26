@@ -227,7 +227,11 @@ export default function Booking2Page() {
                                 {selectedRegion && theaterList[selectedRegion].map((theater) => (
                                 <Button
                                     key={theater}
-                                    onClick={() => setSelectedTheater(theater)}
+                                    onClick={() => {
+                                        setSelectedTheater(theater);
+                                        setSelectedDate(null);
+                                        setSelectedTime(null);
+                                    }}
                                     variant="outline"
                                     color={selectedTheater === theater ? 'white' : 'gray.300'}
                                     bg={selectedTheater === theater ? 'purple' : 'transparent'}
@@ -306,7 +310,7 @@ export default function Booking2Page() {
                                 />
                                 ) : (
                                 <Text fontSize="md" color="gray.300" mt={4}>
-                                    먼저 영화관과 날짜를 선택해주세요.
+                                    날짜를 선택하세요.
                                 </Text>
                                 )}
                             <Box flex="1" />
