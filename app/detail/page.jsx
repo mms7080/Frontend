@@ -1,35 +1,27 @@
-'use client';
-
-import React,{useState,useEffect} from 'react';
+import React from 'react';
 import {Box,Flex,VStack,Image,Button} from '@chakra-ui/react';
 import {Header,Footer} from '../../components';
 import {Tabs} from "@chakra-ui/react";
 import {Reviews,Trailer} from '../../components/detail';
 
-import {fetch} from '../../lib/client';
+import {fetch} from '../../lib/server';
 
-export default function detail(){
+export const metadata = {
+    title: '영화 상세 페이지',
+    description: '영화에 대한 상세한 정보를 볼 수 있는 페이지입니다.',
+};
+
+export default async function detail(){
         let headerColor='black';
         let headerBg='#F9F9F9';
         let footerColor='black';
         let footerBg='#F9F9F9';
         let footerBorder='#ccc';
-
-        const [user, setUser] = useState(null);
         
-        useEffect(() => {
-            document.title = '영화 상세 페이지';
-    
-            (async ()=>{
-                try {
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-                    setUser(res);
-                } catch (e) {}
-            })();
-        }, []);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
     
         return <>
-            <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}></Header>
+            <Header headerColor={headerColor} headerBg={headerBg} userInfo={res}></Header>
             <Box>
                 <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage="url('https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2019%2F02%2Fmarvel-avengers-endgame-new-teaser-super-bowl-tw.jpg?w=1080&cbr=1&q=90&fit=max')">
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>
@@ -124,7 +116,7 @@ export default function detail(){
                                     <Trailer></Trailer>
                                 </Tabs.Content>
                                 <Tabs.Content value="review">
-                                    <Reviews userInfo={user}></Reviews>
+                                    <Reviews userInfo={res}></Reviews>
                                 </Tabs.Content>
                             </Tabs.Root>
                         </Flex>
