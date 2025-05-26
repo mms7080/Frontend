@@ -19,12 +19,14 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/autoplay';
 
 export default function Booking2Page() {
+    const [swiperReady, setSwiperReady] = useState(false);
     const [user, setUser] = useState(null);
     const [activeMovie, setActiveMovie] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [selectedTheater, setSelectedTheater] = useState(null);
+    const [activeIndex, setActiveIndex] = useState(0);
     const router = useRouter();
 
     let headerColor='white';
@@ -34,6 +36,7 @@ export default function Booking2Page() {
     let footerBorder='transparent';
 
     useEffect(() => {
+        setSwiperReady(true);
         document.title = "예매 - 빠른 예매";
         (async () => {
           try {
@@ -101,42 +104,74 @@ export default function Booking2Page() {
             }
             `}</style>
             <Box maxW="1550px" w="100%" px={4}>
-            <Swiper
-                modules={[Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay]}
-                effect="coverflow"
-                grabCursor
-                centeredSlides
-                speed={700}
-                slidesPerView={3}
-                spaceBetween={0}
-                loop
-                loopAdditionalSlides={3}
-                coverflowEffect={{ rotate: 0, stretch: 50, depth: 200, modifier: 1, slideShadows: true }}
-                pagination={{ clickable: true }}
-                navigation
-                autoplay={{
-                    delay: 3000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true
-                }}
-                style={{ paddingBottom: '60px' }}
-            >
-                {movies.map(movie => (
-                <SwiperSlide
-                    key={movie.id}
-                    style={{ width: '350px', height: '650px', display: 'flex', justifyContent: 'center' }}
+                {swiperReady && (
+                <Swiper
+                    modules={[Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay]}
+                    effect="coverflow"
+                    grabCursor
+                    centeredSlides
+                    speed={700}
+                    slidesPerView={3}
+                    spaceBetween={0}
+                    loop
+                    loopAdditionalSlides={1}
+                    coverflowEffect={{ rotate: 0, stretch: 50, depth: 200, modifier: 1, slideShadows: true }}
+                    pagination={{ clickable: true }}
+                    navigation
+                    autoplay={{
+                        delay: 3000,
+                        disableOnInteraction: false,
+                        pauseOnMouseEnter: true
+                    }}
+                    style={{ paddingBottom: '60px' }}
+                    onSlideChange={(swiper) => {
+                        setActiveIndex(swiper.realIndex);
+                    }}
                 >
-                    <img
-                    src={movie.poster}
-                    alt={movie.title}
-                    style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
-                    onClick={() => handlePosterClick(movie)}
-                    />
-                </SwiperSlide>
-                ))}
-            </Swiper>
+                    {movies.map(movie => (
+                    <SwiperSlide
+                        key={movie.id}
+                        style={{ width: '350px', height: '650px', display: 'flex', justifyContent: 'center' }}
+                    >
+                        <img
+                        src={movie.poster}
+                        alt={movie.title}
+                        style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
+                        onClick={() => handlePosterClick(movie)}
+                        />
+                    </SwiperSlide>
+                    ))}
+                </Swiper>
+                )}
             </Box>
         </Flex>
+        <Box
+            mt={8}
+            mb={20}
+            px={20}
+            py={20}
+            maxW="80%"
+            w="100%"
+            mx="auto"
+            bg="rgba(0, 0, 0, 0.7)"
+            borderRadius="lg"
+            color="white"
+        >
+            <Flex align="center" gap={6}>
+                {/* 작은 포스터 */}
+                <Image
+                    src={movies[activeIndex]?.poster}
+                    alt={movies[activeIndex]?.title}
+                    w="25%"
+                    borderRadius="md"
+                    objectFit="cover"
+                />
+                {/* 영화 제목 */}
+                <Text fontSize="3xl" fontWeight="bold">
+                    {movies[activeIndex]?.title || ''}
+                </Text>
+            </Flex>
+        </Box>
 
         <Box position="relative" zIndex={2} bg="#1a1a1a">
             <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder} />
