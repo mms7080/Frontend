@@ -55,14 +55,14 @@ export default function EventPage({ serverEvents }) {
     return now > endDate ? "종료됨" : "진행중";
   };
 
- const filteredEvents =
-  activeCategory === "전체"
-    ? categoryOrder
-        .filter((cat) => events[cat]) 
-        .map((cat) => [cat, events[cat]])
-    : Object.entries(events).filter(
-        ([category]) => category === activeCategory
-      );
+  const filteredEvents =
+    activeCategory === "전체"
+      ? categoryOrder
+          .filter((cat) => events[cat])
+          .map((cat) => [cat, events[cat]])
+      : Object.entries(events).filter(
+          ([category]) => category === activeCategory
+        );
 
   const keywordFilteredEvents = filteredEvents
     .map(([category, items]) => [
@@ -265,6 +265,11 @@ export default function EventPage({ serverEvents }) {
             </Button>
           ))}
         </Flex>
+        {keywordFilteredEvents.length === 0 && (
+          <Text fontSize="lg" color="gray.500" textAlign="center" mt={20}>
+            검색 결과가 없습니다.
+          </Text>
+        )}
 
         {keywordFilteredEvents.map(([category, items]) => (
           <Box key={category} mb={16}>
