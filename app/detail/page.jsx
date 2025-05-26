@@ -22,34 +22,34 @@ export default async function detail(){
     
         return <>
             <Header headerColor={headerColor} headerBg={headerBg} userInfo={res}></Header>
-            <Box>
+            <Box mb='100px'>
                 <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage="url('https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2019%2F02%2Fmarvel-avengers-endgame-new-teaser-super-bowl-tw.jpg?w=1080&cbr=1&q=90&fit=max')">
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>
                     <Flex justifyContent='center' alignItems='flex-start' flexDirection='column' gap='10px' color='white' position='relative' zIndex='1'>
-                        <span style={{fontSize:40}}>어벤져스: 엔드게임</span>
-                        <span style={{fontSize:20}}>Avengers: Endgame</span>
+                        <span style={{fontSize:50}}>어벤져스: 엔드게임</span>
+                        <span style={{fontSize:30}}>Avengers: Endgame</span>
                         <Flex gap='10px'>
-                            <Button fontSize='16px'>🤍 7.7k</Button>
-                            <Button fontSize='16px'>공유하기</Button>
+                            <Button fontSize='20px'>🤍 7.7k</Button>
+                            <Button fontSize='20px'>공유하기</Button>
                         </Flex>
 
-                        <Flex gap='10px' color='black' fontSize='15px' py='30px'>
+                        <Flex gap='10px' color='black' fontSize='20px' py='30px'>
                             <Box px='5px' borderRadius='5px' bg='white'>IMAX</Box>
                             <Box px='5px' borderRadius='5px' bg='white'>4DX</Box>
                         </Flex>
 
-                        <Flex justifyContent='space-between' gap='60px' fontSize='25px'>
+                        <Flex justifyContent='space-between' gap='60px' fontSize='40px' pt='100px'>
                             <Flex flexDirection='column'>
                                 <span>실관람 평점</span>
-                                <span style={{fontSize:20}}>🎬 9.6</span>
+                                <span style={{fontSize:30}}>🎬 9.6</span>
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span>예매율</span>
-                                <span style={{fontSize:20}}>1위 (34.2%)</span>
+                                <span style={{fontSize:30}}>1위 (34.2%)</span>
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span>누적관객수</span>
-                                <span style={{fontSize:20}}>👥 594,416명</span>
+                                <span style={{fontSize:30}}>👥 594,416명</span>
                             </Flex>
                         </Flex>
                     </Flex>
@@ -60,9 +60,9 @@ export default async function detail(){
                         <Button w='280px'>🎧 Dolby CINEMA</Button>
                     </VStack>
                 </Flex>
-                <VStack>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
-                        <Flex w='840px' flexDirection='column' gap='30px' pt='40px' pb='80px'>
+                <VStack my='50px'>
+                    <Box w='1200px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
+                        <Flex w='1140px' flexDirection='column' gap='30px' px='50px' pt='40px' pb='80px'>
                             <span style={{textAlign:'center',fontSize:28}}><b>영화 소개</b></span>
                             <span>
                             어벤져스: 엔드게임<br/><br/>
@@ -101,8 +101,8 @@ export default async function detail(){
                     </Box>
                 </VStack>
                 <VStack>
-                    <Box w='900px' px='30px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
-                        <Flex w='840px' flexDirection='column' gap='30px' pt='40px' pb='80px'>
+                    <Box w='1200px' px='30px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
+                        <Flex w='1140px' flexDirection='column' gap='30px' pt='40px' pb='80px'>
                             <Tabs.Root key='outline' defaultValue="trailer" variant='outline' fitted>
                                 <Tabs.List>
                                     <Tabs.Trigger value="trailer">
