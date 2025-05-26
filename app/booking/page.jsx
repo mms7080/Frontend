@@ -312,13 +312,13 @@ export default function Booking2Page() {
                             <Box flex="1" />
                             {/* 좌석 선택 버튼 */}
                             {selectedTheater && selectedDate && selectedTime ? (
-                                // 🎯 조건이 모두 만족되었을 때: 활성 버튼
+                                // 활성 버튼
                                 <Button
                                     mt="auto"
                                     width="100%" 
                                     size="lg"
                                     onClick={handleBooking}
-                                    sx={{
+                                    css={{
                                     bg: 'transparent',
                                     color: 'white',
                                     border: '1px solid white',
@@ -328,7 +328,7 @@ export default function Booking2Page() {
                                     좌석선택하기
                                 </Button>
                                 ) : (
-                                // ❌ 조건이 하나라도 빠졌을 때: 비활성화 버튼
+                                // 비활성화 버튼
                                 <Button
                                     mt="auto"
                                     width="100%" 
@@ -342,33 +342,6 @@ export default function Booking2Page() {
                                     좌석선택하기
                                 </Button>
                                 )}
-
-                            {/* <Button
-                                mt="auto"
-                                width="100%" 
-                                size="lg"
-                                onClick={handleBooking}
-                                isDisabled={!selectedDate || !selectedTime}
-                                css={{
-                                  // 기본 버튼 스타일
-                                  bg: (!selectedDate || !selectedTime) ? 'gray.500' : 'transparent',
-                                  color: (!selectedDate || !selectedTime) ? 'white' : 'white',
-                                  border: '1px solid',
-                                  borderColor: 'white',
-                                  cursor: (!selectedDate || !selectedTime) ? 'not-allowed' : 'pointer',
-                                  _hover: (!selectedDate || !selectedTime)
-                                    ? {} // 비활성화일 땐 hover 없음
-                                    : { bg: 'purple', color: 'white' },
-                                  _disabled: {
-                                    bg: 'gray.500',
-                                    color: 'white',
-                                    cursor: 'not-allowed',
-                                    _hover: {},  // hover 효과 제거
-                                  },
-                                }}
-                            >
-                                좌석선택하기
-                            </Button> */}
                             </Box>
                         </Box>
                     </Flex>
