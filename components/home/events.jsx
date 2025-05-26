@@ -10,7 +10,7 @@ export default function Events({Fetchedevents}){
         <Grid templateColumns='repeat(3,240px)' gap='30px'>
             {(Fetchedevents["Pick"]).map((event,index) =>{
                 if(index<3)
-                    return <Event content={event.title} src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}></Event>;
+                    return <Event content={event.title} src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`} url={`/event/view/${event.id}`}></Event>;
             })}
         </Grid>
     </VStack>;
