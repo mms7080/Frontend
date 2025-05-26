@@ -149,7 +149,7 @@ export default function Header({ userInfo }) {
               <Text
                 transition="all 0.2s ease"
                 color={headerColor}
-                _hover={{ color: "#00c3ff" }}
+                _hover={{ color: hoverColor }}
               >
                 <Link
                   href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}
@@ -174,7 +174,7 @@ export default function Header({ userInfo }) {
               <Text
                 transition="all 0.2s ease"
                 color={headerColor}
-                _hover={{ color: "#00c3ff" }}
+                _hover={{ color: hoverColor }}
               >
                 <Link
                   href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}
@@ -188,14 +188,14 @@ export default function Header({ userInfo }) {
               <Text
                 transition="all 0.2s ease"
                 color={headerColor}
-                _hover={{ color: "#00c3ff" }}
+                _hover={{ color: hoverColor }}
               >
                 <Link href="/signin">로그인</Link>
               </Text>
               <Text
                 transition="all 0.2s ease"
                 color={headerColor}
-                _hover={{ color: "#00c3ff" }}
+                _hover={{ color: hoverColor }}
               >
                 <Link href="/join">회원가입</Link>
               </Text>
@@ -223,7 +223,7 @@ export default function Header({ userInfo }) {
               _hover={{
                 transform: "scale(1.2)",
                 filter: "brightness(1.2)",
-                color: "#00c3ff",
+                color: hoverColor
               }}
             />
           </Link>
