@@ -161,8 +161,8 @@ export default function Booking2Page() {
                 mx="auto" 
                 p={6} 
                 borderRadius="md" 
-                maxW="80%" 
-                w="80%" 
+                maxW="90%" 
+                w="100%" 
                 color="white"
                 bgImage={`url(${activeMovie.backdropUrl || activeMovie.poster})`}
                 bgSize="cover"
