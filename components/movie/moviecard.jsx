@@ -9,7 +9,7 @@ const HeartIcon = createIcon({
     <>
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path
-        stroke="red"
+        stroke="white"
         strokeWidth="1.5"
         fill="currentColor"
         d="M19.5 13.572l-7.5 7.428l-7.5 -7.428m0 0a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"
@@ -22,46 +22,58 @@ const HeartIcon = createIcon({
 const MovieCard = ({ movie }) => {
 
   const [liked, likedController] = useState(false);
-  const likeChange = () => {likedController(!liked)};
+  const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
+  const likeChange = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/update/like?id=${movie.id}&updown=${liked ? "down" : "up"}`);
+      const data = await res.json();
+      if(res.ok) {
+        likedController(!liked);
+        setLikeNumber(data > 999 ? Math.floor(data / 100) / 10 + 'k' : data);
+      }
+    } catch (err) {
+      console.log(err.message);
+    };
+  };
 
   return (
     <div className="movie-card">
-      <span className="rank">{movie.rank}</span>
-<Link href="/detail">
-        <div className="poster">
-          <img src={movie.poster} alt={movie.title} />
-          <div className="overlay">
-            <p>
-              {movie.title} <br /> <br />
-              <span className='description'>{movie.description}</span><br /> <br />
-              관람평 <span className="score">{movie.score}</span>
-              <br /> <br />개봉일 <span>{movie.releaseDate}</span>
-            </p>
+        <div className='rank-box'><span className="rank">예매 : {movie.rank}위</span></div>
+        <Link href={"/detail/" + movie.id}>
+          <div className="poster">
+            <img src={movie.poster} alt={movie.title} />
+            <div className="overlay">
+              <p>
+                {movie.title} <br /> <br />
+                <span className='description'>{movie.description}</span><br /> <br />
+                관람평 <span className="score">{movie.score}</span>
+                <br /> <br />개봉일 <span>{movie.releaseDate}</span>
+              </p>
+            </div>
+            {movie.label && (
+              <span className={`label ${
+                movie.label == "MEGA ONLY" ? "purple" :
+                movie.label == "Dolby" ? "gray" : "none"
+              }`}>{movie.label}</span>
+            )}
+            {movie.rate && (
+              <span className={`rate ${
+                movie.rate == "ALL" ? "green" :
+                movie.rate == "12" ? "yellow" :
+                movie.rate == "15" ? "orange" :
+                movie.rate == "19" ? "red" : "none"
+              }`}>{movie.rate}</span>
+            )}
           </div>
-          {movie.label && (
-            <span className={`label ${
-              movie.label == "MEGA ONLY" ? "purple" :
-              movie.label == "Dolby" ? "gray" : "none"
-            }`}>{movie.label}</span>
-          )}
-          {movie.rate && (
-            <span className={`rate ${
-              movie.rate == "ALL" ? "green" :
-              movie.rate == "12" ? "yellow" :
-              movie.rate == "15" ? "orange" :
-              movie.rate == "19" ? "red" : "none"
-            }`}>{movie.rate}</span>
-          )}
-        </div>
-</Link>
+        </Link>
       <div className="info">
         <button 
           className="like-button"
           onClick={likeChange}
         >
-          <HeartIcon size="lg" color={liked ? "red" : "transparent"} />
+          <HeartIcon size="lg" color={liked ? "white" : "transparent"} />
           <div className="likes">
-            {movie.likeNumber}
+            {likeNumber}
           </div>
         </button>
         <button className="reserve-button" onClick={() => {}}>예매</button>

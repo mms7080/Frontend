@@ -37,15 +37,21 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   }
   
+
+
   .movie-card .rank {
     position: absolute;
     top: 10px;
     left: 10px;
     font-size: 22px;
-    font-weight: bold;
+    font-weight: normal;
     color: white;
     z-index: 1;
-    text-shadow: 0 0 10px black;
+
+    padding: 2px;
+    /* border: 1px solid rgba(255,255,255,0.5); */
+    border : transparent;
+    background-color: rgba(0,0,0,0.7);
   }
   
   .poster {
@@ -159,11 +165,6 @@
     margin-top: 12px;
   }
   
-  .likes {
-    font-size: 14px;
-    color: white;
-  }
-  
   .reserve-button {
     background-color: var(--main_color);
     border: none;
@@ -171,6 +172,7 @@
     padding: 8px 16px;
     border-radius: 4px;
     color: white;
+    font-size: large;
     cursor: pointer;
     transition: all 0.2s ease;
   }
@@ -180,7 +182,7 @@
     box-shadow: 0 0 10px var(--main_color);
     transform: translateY(-2px);
   }
-
+  
   .like-button {
     background-color: transparent;
     color: black;
@@ -204,6 +206,11 @@
     transform: translateY(-2px);
   }
 
+  .likes {
+    font-size: large;
+    color: white;
+  }
+  
   .heart-icon {
     margin-right: 8px;
   }
