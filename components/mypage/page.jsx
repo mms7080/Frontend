@@ -9,17 +9,10 @@ import {Modify} from '.';
 //import {Bookingcheck,Qna} from '.';
 
 export default async function Mypage(){
-    
-    let headerColor='black';
-    let headerBg='#F9F9F9';
-    let footerColor='black';
-    let footerBg='#F9F9F9';
-    let footerBorder='#ccc';
-    
     const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
 
      return <>
-     <Header headerColor={headerColor} headerBg={headerBg} userInfo={res}></Header>
+     <Header userInfo={res}></Header>
      
     <Tabs.Root w='100%' defaultValue="booking" orientation='vertical'>
       {/* 왼쪽 탭 리스트 */}
@@ -52,6 +45,6 @@ export default async function Mypage(){
         </Tabs.Content>
       </Box>
     </Tabs.Root>
-    <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>
+    <Footer></Footer>
   </>;
 }

@@ -11,20 +11,13 @@ export const metadata = {
 };
 
 export default async function Signin(){
-
-    let headerColor='black';
-    let headerBg='#F9F9F9';
-    let footerColor='black';
-    let footerBg='#F9F9F9';
-    let footerBorder='#ccc';
-
     const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
 
     if(res)/* 로그인 한 채로 로그인 페이지로 이동하면 홈으로 자동 리다이렉트*/
         redirect('/home');
 
     return <>
-        <Header headerColor={headerColor} headerBg={headerBg}></Header>
+        <Header></Header>
         <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%'>
@@ -72,6 +65,6 @@ export default async function Signin(){
                 </VStack>
             </Flex>
         </Box>
-        <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>
+        <Footer></Footer>
         </>;
 }

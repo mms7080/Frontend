@@ -8,13 +8,6 @@ import Link from 'next/link';
 import {fetch} from '../../lib/client';
 
 export default function findiddetail({userData}){
-
-    let headerColor='black';
-    let headerBg='#F9F9F9';
-    let footerColor='black';
-    let footerBg='#F9F9F9';
-    let footerBorder='#ccc';
-
     const [foundID,setFoundID]=useState('');
     const [layout,setLayout]=useState('email');
     const [formData,setFormData]=useState({method:'email',name:'',email:'',phone_number:''});
@@ -73,7 +66,7 @@ export default function findiddetail({userData}){
 
     if(foundID===''){/* 아이디 찾기 이전에 보이는 부분 */
         return <>
-            <Header headerColor={headerColor} headerBg={headerBg} userInfo={userData}></Header>
+            <Header userInfo={userData}></Header>
             <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
                 <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
@@ -116,11 +109,11 @@ export default function findiddetail({userData}){
                     </Box>
                 </VStack>
             </Box>
-            <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>            
+            <Footer></Footer>            
         </>;
     }else{/* 찾은 아이디를 보여주는 부분 */
         return <>
-            <Header headerColor={headerColor} headerBg={headerBg} userInfo={userData}></Header>
+            <Header userInfo={userData}></Header>
             <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
                 <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
@@ -144,7 +137,7 @@ export default function findiddetail({userData}){
                     </Box>
                 </VStack>
             </Box>
-            <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>
+            <Footer></Footer>
         </>;
     }
 }

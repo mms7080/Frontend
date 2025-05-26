@@ -13,18 +13,12 @@ export const metadata = {
 
 export default async function Homepage(){
 
-    let headerColor='white';
-    let headerBg='#1a1a1a';
-    let footerColor='white';
-    let footerBg='#1a1a1a';
-    let footerBorder='transparent';
-
     const userres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);/* 로그인 중인 유저 정보 fetch */
     const movieres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);/* 영화 fetch */
     const eventres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event`);/* 이벤트 fetch */
 
     return <>
-        <Header headerColor={headerColor} headerBg={headerBg} userInfo={userres}></Header>
+        <Header userInfo={userres}></Header>
         <Box w='calc(100vw - 17px)' minW='1000px'>
             <Flex w='100%' flexDirection='column'>
                 <Swipers></Swipers>
@@ -34,7 +28,7 @@ export default async function Homepage(){
                 <Reviews></Reviews>
             </Flex>
         </Box>
-        <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>
+        <Footer></Footer>
         </>;
         // 종현 테스트
 }

@@ -17,7 +17,8 @@ export default function Header({ userInfo }) {
     pathname === "/" ||
     pathname.startsWith("/home") ||
     pathname.startsWith("/movie") ||
-    pathname.startsWith("/booking");
+    pathname.startsWith("/booking") ||
+    pathname.startsWith("/search");
   const headerBg = isHome ? "#1a1a1a" : "white";
   const headerColor = isHome ? "white" : "black";
   const hoverColor = "gray.500";
@@ -212,7 +213,9 @@ export default function Header({ userInfo }) {
               textShadow: "0 0 5px rgba(255, 77, 77, 0.5)",
             }}
           >
-            빠른예매
+            <Link href='/booking'>
+              빠른예매
+            </Link>
           </Text>
           <Link href="/mypage">
             <Icon

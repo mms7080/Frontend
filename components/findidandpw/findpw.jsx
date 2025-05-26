@@ -5,13 +5,6 @@ import {RadioGroup,Input,Box,VStack,Flex,Button,Text} from '@chakra-ui/react';
 import {Header,Footer} from '../../components';
 
 export default function findpwdetail({userData}){
-
-    let headerColor='black';
-    let headerBg='#F9F9F9';
-    let footerColor='black';
-    let footerBg='#F9F9F9';
-    let footerBorder='#ccc';
-
     const [found,setFound]=useState(false);
     const [layout,setLayout]=useState('email');
     const [formData,setFormData]=useState({method:'email',id:'',name:'',email:'',phone_number:''});
@@ -96,7 +89,7 @@ export default function findpwdetail({userData}){
 
     if(!found){/* 비밀번호 재설정 이전에 보이는 부분 */
         return <>
-            <Header headerColor={headerColor} headerBg={headerBg} userInfo={userData}></Header>
+            <Header userInfo={userData}></Header>
             <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
                 <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
@@ -143,11 +136,11 @@ export default function findpwdetail({userData}){
                     </Box>
                 </VStack>
             </Box>
-            <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>            
+            <Footer></Footer>            
         </>;
     }else{/* 본격적으로 비밀번호를 재설정하는 과정 */
         return <>
-            <Header headerColor={headerColor} headerBg={headerBg} userInfo={userData}></Header>
+            <Header userInfo={userData}></Header>
             <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
                 <VStack w='100%' bg='#F9F9F9' h='540px'>
                     <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
@@ -269,7 +262,7 @@ export default function findpwdetail({userData}){
                     </Box>
                 </VStack>
             </Box>
-            <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>
+            <Footer></Footer>
         </>;
     }
 }

@@ -11,16 +11,11 @@ export const metadata = {
 };
 
 export default async function detail(){
-        let headerColor='black';
-        let headerBg='#F9F9F9';
-        let footerColor='black';
-        let footerBg='#F9F9F9';
-        let footerBorder='#ccc';
         
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
     
         return <>
-            <Header headerColor={headerColor} headerBg={headerBg} userInfo={res}></Header>
+            <Header userInfo={res}></Header>
             <Box mb='100px'>
                 <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage="url('https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2019%2F02%2Fmarvel-avengers-endgame-new-teaser-super-bowl-tw.jpg?w=1080&cbr=1&q=90&fit=max')">
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>
@@ -122,6 +117,6 @@ export default async function detail(){
                     </Box>
                 </VStack>
             </Box>
-            <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder}></Footer>
+            <Footer></Footer>
         </>;
 }
