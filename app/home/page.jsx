@@ -19,14 +19,14 @@ export default async function Homepage(){
     let footerBg='#1a1a1a';
     let footerBorder='transparent';
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-
+    const userres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);/* 로그인 중인 유저 정보 fetch */
+    const movieres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);/* 영화 fetch */
     return <>
-        <Header headerColor={headerColor} headerBg={headerBg} userInfo={res}></Header>
+        <Header headerColor={headerColor} headerBg={headerBg} userInfo={userres}></Header>
         <Box w='calc(100vw - 17px)' minW='1000px'>
             <Flex w='100%' flexDirection='column'>
                 <Swipers></Swipers>
-                <Movies></Movies>
+                <Movies movieInfo={movieres}></Movies>
                 <Bookmark></Bookmark>
                 <Events></Events>
                 <Reviews></Reviews>
