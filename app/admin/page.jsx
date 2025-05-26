@@ -683,11 +683,11 @@ export default function AdminDashboard() {
 
   return (
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-                  {loadingUser ? (
-              <SkeletonHeader />
-            ) : (
-              <Header headerColor="black" headerBg="white" userInfo={user} />
-            )}
+      {loadingUser ? (
+        <SkeletonHeader />
+      ) : (
+        <Header headerColor="black" headerBg="white" userInfo={user} />
+      )}
       <div style={{ display: "flex" }}>
         <aside
           style={{
