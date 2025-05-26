@@ -198,7 +198,7 @@ export default function Booking2Page() {
                         <Box
                             width="250px"
                             height="650px"
-                            bg="rgba(0, 0, 0, 0.8)"
+                            bg="rgba(0, 0, 0, 0.95)"
                             borderRadius="lg"
                             p={4}
                             display="flex"
@@ -259,7 +259,7 @@ export default function Booking2Page() {
                         <Box
                             width="700px"
                             height="650px"
-                            bg="rgba(0, 0, 0, 0.8)"
+                            bg="rgba(0, 0, 0, 0.95)"
                             borderRadius="lg"
                             p={6}
                             display="flex"
