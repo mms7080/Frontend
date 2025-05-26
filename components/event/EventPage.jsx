@@ -212,7 +212,7 @@ export default function EventPage({ serverEvents }) {
         <Box mt={4} mb={8} display="flex" gap={2} flexWrap="wrap">
           <input
             type="text"
-            placeholder="이벤트 제목 검색 (Enter 입력 또는 버튼 클릭)"
+            placeholder="이벤트 검색"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
             onKeyDown={(e) =>

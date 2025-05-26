@@ -1,44 +1,65 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import Header from '../../../../components/Header';
-import Footer from '../../../../components/Footer';
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Header from "../../../../components/Header";
+import Footer from "../../../../components/Footer";
 
 export default function NoticeEditPage() {
   const { id } = useParams();
   const router = useRouter();
   const [user, setUser] = useState(null);
-  const [notice, setNotice] = useState({ title: '', content: '', writer: '' });
+  const [notice, setNotice] = useState({ title: "", content: "", writer: "" });
 
   useEffect(() => {
     (async () => {
-      const userRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-        credentials: 'include',
-      });
-      const userData = await userRes.json();
-      setUser(userData);
+      try {
+        const userRes = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+          {
+            credentials: "include",
+          }
+        );
+        if (!userRes.ok) throw new Error();
+
+        const userData = await userRes.json();
+        setUser(userData);
+
+        // ✅ 관리자 권한이 아닌 경우 접근 제한
+        if (userData.auth !== "ADMIN") {
+          alert("접근 권한이 없습니다.");
+          router.push("/notice");
+        }
+      } catch (e) {
+        alert("로그인 후 이용해주세요.");
+        router.push("/signin");
+      }
     })();
 
     (async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`);
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`
+      );
       const data = await res.json();
       setNotice(data);
     })();
   }, [id]);
 
   const handleUpdate = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(notice),
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(notice),
+      }
+    );
     if (res.ok) {
-      alert('수정 완료');
+      alert("수정 완료");
       router.push(`/notice/${id}`);
     } else {
-      alert('수정 실패');
+      alert("수정 실패");
     }
   };
 
@@ -62,7 +83,7 @@ export default function NoticeEditPage() {
             placeholder="작성자 이름"
             value={notice.writer}
             readOnly
-            style={{ backgroundColor: '#eee', cursor: 'not-allowed' }}
+            style={{ backgroundColor: "#eee", cursor: "not-allowed" }}
           />
 
           <label>내용</label>
@@ -74,20 +95,31 @@ export default function NoticeEditPage() {
           />
 
           <div className="button-group">
-            <button className="submit-btn" onClick={handleUpdate}>수정 완료</button>
-            <button className="cancel-btn" onClick={() => router.push(`/notice/${id}`)}>취소</button>
+            <button className="submit-btn" onClick={handleUpdate}>
+              수정 완료
+            </button>
+            <button
+              className="cancel-btn"
+              onClick={() => router.push(`/notice/${id}`)}
+            >
+              취소
+            </button>
           </div>
         </div>
       </main>
 
-      <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
+      <Footer
+        footerColor="white"
+        footerBg="#1a1a1a"
+        footerBorder="transparent"
+      />
 
       <style jsx>{`
         .form-container {
           max-width: 800px;
           margin: 40px auto;
           padding: 0 20px;
-          font-family: 'Segoe UI', sans-serif;
+          font-family: "Segoe UI", sans-serif;
         }
 
         h1 {
@@ -111,7 +143,8 @@ export default function NoticeEditPage() {
           font-weight: normal;
         }
 
-        input, textarea {
+        input,
+        textarea {
           padding: 12px;
           font-size: 15px;
           border: 1px solid #ccc;
