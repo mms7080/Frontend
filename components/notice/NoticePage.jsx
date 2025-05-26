@@ -6,6 +6,7 @@ import { Header, Footer } from "..";
 export default function NoticePage({ notices }) {
   const [searchOption, setSearchOption] = useState("title");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const [filtered, setFiltered] = useState([]);
   const [user, setUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,11 +43,11 @@ export default function NoticePage({ notices }) {
           : searchOption === "title_content"
           ? `${n.title} ${n.content}`
           : "";
-      return target?.toLowerCase().includes(searchKeyword.toLowerCase());
+      return target?.toLowerCase().includes(confirmedKeyword.toLowerCase());
     });
     setFiltered(result);
     setCurrentPage(1);
-  }, [searchKeyword, searchOption, notices]);
+  }, [confirmedKeyword, searchOption, notices]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
   const currentItems = filtered.slice(
@@ -64,8 +65,8 @@ export default function NoticePage({ notices }) {
   };
 
   const highlightKeyword = (text) => {
-    if (!searchKeyword.trim()) return [text];
-    const regex = new RegExp(`(${searchKeyword})`, "gi");
+    if (!confirmedKeyword.trim()) return [text];
+    const regex = new RegExp(`(${confirmedKeyword})`, "gi");
     const parts = text.split(regex);
     return parts.map((part, i) =>
       regex.test(part) ? (
@@ -170,6 +171,11 @@ export default function NoticePage({ notices }) {
             placeholder="검색어를 입력하세요"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                setConfirmedKeyword(searchKeyword);
+              }
+            }}
           />
         </div>
 
