@@ -109,10 +109,11 @@ export default function Booking2Page() {
                 speed={700}
                 slidesPerView={3}
                 spaceBetween={0}
+                loop
+                loopAdditionalSlides={3}
                 coverflowEffect={{ rotate: 0, stretch: 50, depth: 200, modifier: 1, slideShadows: true }}
                 pagination={{ clickable: true }}
                 navigation
-                loop
                 autoplay={{
                     delay: 3000,
                     disableOnInteraction: false,
