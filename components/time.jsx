@@ -17,10 +17,10 @@ export default function TimeSelector({ selectedTime, setSelectedTime, movieTitle
                 key={time}
                 onClick={() => setSelectedTime(time)}
                 variant="outline"
-                bg={isSelected ? 'purple' : 'transparent'}
+                bg={isSelected ? '#6B46C1' : 'transparent'}
                 color={isSelected ? 'white' : 'gray.200'}
                 borderColor={isSelected ? 'white' : 'transparent'}
-                _hover={{ bg: 'purple', color: 'white' }}
+                _hover={{ bg: '#6B46C1', color: 'white' }}
                 w="100%"
                 h="80px"
                 fontSize="lg"

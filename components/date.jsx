@@ -31,10 +31,10 @@ export default function DateSelector({ selectedDate, setSelectedDate }) {
             key={value}
             onClick={() => setSelectedDate(value)}
             variant="outline"
-            bg={isSelected ? 'purple' : 'transparent'}
+            bg={isSelected ? '#6B46C1' : 'transparent'}
             color={isSelected ? 'white' : 'gray.200'}
             borderColor={isSelected ? 'white' : 'transparent'}
-            _hover={{ bg: 'purple', color: 'white' }}
+            _hover={{ bg: '#6B46C1', color: 'white' }}
             w="100%"
             h="100px"
             fontSize="lg"

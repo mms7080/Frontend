@@ -34,14 +34,23 @@ export default function Booking2Page() {
     let footerBorder='transparent';
 
     useEffect(() => {
-        document.title = '예매 - 빠른 예매';
-        (async ()=>{
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-                setUser(res);
-            } catch (e) {}
+        document.title = "예매 - 빠른 예매";
+        (async () => {
+          try {
+            const res = await fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+              {
+                credentials: "include",
+              }
+            );
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            setUser(data);
+          } catch (e) {
+            setUser(null);
+          }
         })();
-    }, []);
+      }, []);
 
     const handleBooking = () => {
         if (!selectedDate || !selectedTime) return;
@@ -66,12 +75,11 @@ export default function Booking2Page() {
             <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}/>
         </Box>
 
-        <Box textAlign="left" ml="10%" mt="20px">
-            <Text fontSize="5xl" color="white">
+        {/* <Box textAlign="left" ml="10%" mt="20px">
+            <Text fontSize="4xl" color="white" borderLeft="4px solid #6B46C1" mb={6} pl={2}>
             빠른예매
             </Text>
-            <Box w="160px" h="4px" bg="purple" mt="2" />
-        </Box>
+        </Box> */}
 
         <Flex flex="1" align="center" justify="center" pt="5vh">
             <style jsx global>{`
@@ -89,7 +97,7 @@ export default function Booking2Page() {
                 opacity: 1;
             }
             .swiper-pagination-bullet-active {
-                background: purple; /* 활성 점 색상 (보라 핑크) */
+                background: #6B46C1; /* 활성 점 색상 (보라 핑크) */
             }
             `}</style>
             <Box maxW="1550px" w="100%" px={4}>
@@ -173,7 +181,7 @@ export default function Booking2Page() {
                     <Box position="relative" zIndex={2}>
                     <Flex justify="space-between" align="center" mb={4}>
                     <Text fontSize="5xl">{activeMovie.title}</Text>
-                    <Button fontSize="2xl" color="white" variant="ghost" colorScheme="whiteAlpha" _hover={{ bg: 'purple' }} onClick={() => setActiveMovie(null)}> X </Button>
+                    <Button fontSize="2xl" color="white" variant="ghost" colorScheme="whiteAlpha" _hover={{ bg: '#6B46C1' }} onClick={() => setActiveMovie(null)}> X </Button>
                     </Flex>
                     <Flex direction="row" justify="center" align="start" gap={10}>
                         {/* 포스터 */}
@@ -190,7 +198,7 @@ export default function Booking2Page() {
                         <Box
                             width="250px"
                             height="650px"
-                            bg="rgba(0, 0, 0, 0.6)"
+                            bg="rgba(0, 0, 0, 0.8)"
                             borderRadius="lg"
                             p={4}
                             display="flex"
@@ -210,10 +218,10 @@ export default function Booking2Page() {
                                         setSelectedRegion(region);
                                         setSelectedTheater(null);
                                     }}
-                                    bg={selectedRegion === region ? 'purple' : 'transparent'}
+                                    bg={selectedRegion === region ? '#6B46C1' : 'transparent'}
                                     color={selectedRegion === region ? 'white' : 'gray.300'}
                                     borderColor="transparent"
-                                    _hover={{ bg: 'purple', color: 'white' }}
+                                    _hover={{ bg: '#6B46C1', color: 'white' }}
                                     >
                                     {region}
                                     </Button>
@@ -234,9 +242,9 @@ export default function Booking2Page() {
                                     }}
                                     variant="outline"
                                     color={selectedTheater === theater ? 'white' : 'gray.300'}
-                                    bg={selectedTheater === theater ? 'purple' : 'transparent'}
+                                    bg={selectedTheater === theater ? '#6B46C1' : 'transparent'}
                                     borderColor="transparent"
-                                    _hover={{ bg: 'purple', color: 'white' }}
+                                    _hover={{ bg: '#6B46C1', color: 'white' }}
                                     w="100%"
                                     mb={2}
                                 >
@@ -251,7 +259,7 @@ export default function Booking2Page() {
                         <Box
                             width="700px"
                             height="650px"
-                            bg="rgba(0, 0, 0, 0.6)"
+                            bg="rgba(0, 0, 0, 0.8)"
                             borderRadius="lg"
                             p={6}
                             display="flex"
@@ -326,7 +334,7 @@ export default function Booking2Page() {
                                     bg: 'transparent',
                                     color: 'white',
                                     border: '1px solid white',
-                                    _hover: { bg: 'purple', color: 'white' }
+                                    _hover: { bg: '#6B46C1', color: 'white' }
                                     }}
                                 >
                                     좌석선택하기
