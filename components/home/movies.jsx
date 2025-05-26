@@ -61,7 +61,7 @@ export default function Movies({movieInfo}){
                             setlnColor((lncolor==='white')?'gray.500':'white');
                         }}>좋아요순</Flex>
                     </Flex>
-                    <Link href='/movie'>더 보기</Link>
+                    <Link href='/movie'><Flex color='white'>더 보기</Flex></Link>
                 </Flex>
 
                 <Grid templateColumns='repeat(4,280px)' gap='50px'>
