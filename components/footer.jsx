@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { Flex, Button, HStack, Image, Box } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 

@@ -1,5 +1,7 @@
 "use client";
 
+import React from 'react';
+
 import Link from "next/link";
 import { Flex, Box, Icon, Text } from "@chakra-ui/react";
 import { FiUser } from "react-icons/fi";

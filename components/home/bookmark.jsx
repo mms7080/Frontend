@@ -1,3 +1,4 @@
+import React from 'react';
 import {VStack,Flex,Button,Input,Image,Box} from '@chakra-ui/react';
 
 export default function Bookmark(){

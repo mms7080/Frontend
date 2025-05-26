@@ -1,3 +1,4 @@
+import React from 'react';
 import {VStack,Image} from '@chakra-ui/react';
 
 export default function Event({src,content}){

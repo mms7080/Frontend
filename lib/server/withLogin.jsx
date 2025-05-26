@@ -1,4 +1,4 @@
-import react from 'react';
+import React from 'react';
 
 import {fetch} from '.';
 import {redirect} from 'next/navigation';

@@ -1,3 +1,4 @@
+import React from 'react';
 import {VStack,Grid} from '@chakra-ui/react';
 import Review from '../element/review';
 

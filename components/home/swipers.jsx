@@ -1,4 +1,6 @@
 "use client";
+
+import React from 'react';
 import {VStack,Image,IconButton} from '@chakra-ui/react';
 
 import {Swiper,SwiperSlide} from 'swiper/react';
