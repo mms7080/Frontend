@@ -1,10 +1,9 @@
 import React from 'react';
-import {Box,Flex,VStack,Image,Button} from '@chakra-ui/react';
-import {Header,Footer} from '../../components';
-import {Tabs} from "@chakra-ui/react";
-import {Reviews,Trailer} from '../../components/detail';
+import {Box,Flex,VStack,Image,Button,Tabs} from '@chakra-ui/react';
+import {Header,Footer} from '../../../components';
+import {Reviews,Trailer} from '../../../components/detail';
 
-import {fetch} from '../../lib/server';
+import {fetch} from '../../../lib/server';
 
 export const metadata = {
     title: '영화 상세 페이지',
