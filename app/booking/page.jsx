@@ -1,7 +1,7 @@
 "use client";
 
 import React, {useState, useEffect} from 'react';
-import { Flex, Box, Text, Button, Image } from '@chakra-ui/react';
+import { Flex, Box, Text, Button, Image, Wrap } from '@chakra-ui/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay } from 'swiper/modules';
 import { Header, Footer } from '../../components';
@@ -9,6 +9,7 @@ import MoviePoster,{movies} from '../../components/moviePoster';
 import { useRouter } from 'next/navigation';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
+import { theaterList } from '../../components/theaterList';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -22,6 +23,8 @@ export default function Booking2Page() {
     const [activeMovie, setActiveMovie] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
+    const [selectedRegion, setSelectedRegion] = useState(null);
+    const [selectedTheater, setSelectedTheater] = useState(null);
     const router = useRouter();
 
     let headerColor='white';
@@ -53,6 +56,8 @@ export default function Booking2Page() {
         setActiveMovie(movie);
         setSelectedDate(null);
         setSelectedTime(null);
+        setSelectedRegion(null); 
+        setSelectedTheater(null); 
     };
 
     return (
@@ -181,6 +186,62 @@ export default function Booking2Page() {
                             height="650px"
                             objectFit="cover"
                         />
+                        {/* 극장 선택 박스 */}
+                        <Box
+                            width="250px"
+                            height="650px"
+                            bg="rgba(0, 0, 0, 0.6)"
+                            borderRadius="lg"
+                            p={4}
+                            display="flex"
+                            flexDirection="column"
+                            color="white"
+                            >
+                            {/* ⬆️ 지역 선택 버튼들 */}
+                            <Box mb={4}>
+                                <Text fontSize="lg" mb={2}>REGION</Text>
+                                <Wrap spacing={2}>
+                                {Object.keys(theaterList).map((region) => (
+                                    <Button
+                                    key={region}
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                        setSelectedRegion(region);
+                                        setSelectedTheater(null);
+                                    }}
+                                    bg={selectedRegion === region ? 'purple' : 'transparent'}
+                                    color={selectedRegion === region ? 'white' : 'gray.300'}
+                                    borderColor="transparent"
+                                    _hover={{ bg: 'purple', color: 'white' }}
+                                    >
+                                    {region}
+                                    </Button>
+                                ))}
+                                </Wrap>
+                            </Box>
+
+                            {/* ⬇️ 극장 목록 */}
+                            <Box flex="1" overflowY="auto" minH={0}>
+                                <Text fontSize="lg" mb={2}>THEATERS</Text>
+                                {selectedRegion && theaterList[selectedRegion].map((theater) => (
+                                <Button
+                                    key={theater}
+                                    onClick={() => setSelectedTheater(theater)}
+                                    variant="outline"
+                                    color={selectedTheater === theater ? 'white' : 'gray.300'}
+                                    bg={selectedTheater === theater ? 'purple' : 'transparent'}
+                                    borderColor="transparent"
+                                    _hover={{ bg: 'purple', color: 'white' }}
+                                    w="100%"
+                                    mb={2}
+                                >
+                                    {theater}
+                                </Button>
+                                ))}
+                            </Box>
+                            </Box>
+
 
                         {/* 날짜/시간 선택 박스 */}
                         <Box
