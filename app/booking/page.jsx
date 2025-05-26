@@ -197,7 +197,7 @@ export default function Booking2Page() {
                             flexDirection="column"
                             color="white"
                             >
-                            {/* ⬆️ 지역 선택 버튼들 */}
+                            {/* 지역 선택 버튼들 */}
                             <Box mb={4}>
                                 <Text fontSize="lg" mb={2}>REGION</Text>
                                 <Wrap spacing={2}>
@@ -221,7 +221,7 @@ export default function Booking2Page() {
                                 </Wrap>
                             </Box>
 
-                            {/* ⬇️ 극장 목록 */}
+                            {/* 극장 목록 */}
                             <Box flex="1" overflowY="auto" minH={0}>
                                 <Text fontSize="lg" mb={2}>THEATERS</Text>
                                 {selectedRegion && theaterList[selectedRegion].map((theater) => (
@@ -267,13 +267,20 @@ export default function Booking2Page() {
                                 }}
                             >
                                 <Text fontSize="xl" mb={2}>DATE</Text>
-                                <DateSelector 
-                                    selectedDate={selectedDate} 
-                                    setSelectedDate={(newDate) => {
-                                        setSelectedDate(newDate);
-                                        setSelectedTime(null);        // 시간 초기화
+                                {selectedTheater ? (
+                                <DateSelector
+                                    selectedDate={selectedDate}
+                                    setSelectedDate={(date) => {
+                                    setSelectedDate(date);
+                                    setSelectedTime(null); // 날짜 바꾸면 시간 초기화
                                     }}
+                                    selectedTheater={selectedTheater}
                                 />
+                                ) : (
+                                <Text fontSize="md" color="gray.300" mt={4}>
+                                    영화관을 선택하세요.
+                                </Text>
+                                )}
                             </Box>
 
                             {/* 시간 선택 (60%) */}
@@ -291,13 +298,52 @@ export default function Booking2Page() {
                                 }}
                             >
                             <Text fontSize="xl" mb={2}>TIME</Text>
-                            {selectedDate ? (
-                                <TimeSelector selectedTime={selectedTime} setSelectedTime={setSelectedTime} movieTitle={activeMovie.title} />
-                            ) : (
-                                <Text fontSize="md" color="white" mt={4}>날짜를 선택하세요.</Text>
-                            )}
+                            {selectedTheater && selectedDate ? (
+                                <TimeSelector
+                                    selectedTime={selectedTime}
+                                    setSelectedTime={setSelectedTime}
+                                    movieTitle={activeMovie?.title}
+                                />
+                                ) : (
+                                <Text fontSize="md" color="gray.300" mt={4}>
+                                    먼저 영화관과 날짜를 선택해주세요.
+                                </Text>
+                                )}
                             <Box flex="1" />
-                            <Button
+                            {/* 좌석 선택 버튼 */}
+                            {selectedTheater && selectedDate && selectedTime ? (
+                                // 🎯 조건이 모두 만족되었을 때: 활성 버튼
+                                <Button
+                                    mt="auto"
+                                    width="100%" 
+                                    size="lg"
+                                    onClick={handleBooking}
+                                    sx={{
+                                    bg: 'transparent',
+                                    color: 'white',
+                                    border: '1px solid white',
+                                    _hover: { bg: 'purple', color: 'white' }
+                                    }}
+                                >
+                                    좌석선택하기
+                                </Button>
+                                ) : (
+                                // ❌ 조건이 하나라도 빠졌을 때: 비활성화 버튼
+                                <Button
+                                    mt="auto"
+                                    width="100%" 
+                                    size="lg"
+                                    isDisabled
+                                    bg="gray.500"
+                                    color="white"
+                                    cursor="not-allowed"
+                                    _hover={{}}  // 호버 시 변화 없음
+                                >
+                                    좌석선택하기
+                                </Button>
+                                )}
+
+                            {/* <Button
                                 mt="auto"
                                 width="100%" 
                                 size="lg"
@@ -322,7 +368,7 @@ export default function Booking2Page() {
                                 }}
                             >
                                 좌석선택하기
-                            </Button>
+                            </Button> */}
                             </Box>
                         </Box>
                     </Flex>
