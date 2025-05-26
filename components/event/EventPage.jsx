@@ -6,6 +6,7 @@ import { Box, Flex, Text, Button, Image, SimpleGrid } from "@chakra-ui/react";
 import { Header, Footer } from "..";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import SkeletonHeader from "../../components/SkeletonHeader";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -27,6 +28,7 @@ export default function EventPage({ serverEvents }) {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const router = useRouter();
+  const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     document.title = "진행중인 이벤트 - 필모라";
@@ -42,6 +44,9 @@ export default function EventPage({ serverEvents }) {
         setUser(userInfo);
       } catch (e) {
         console.error("유저 정보 로드 실패:", e);
+        setUser(null);
+      } finally {
+        setLoadingUser(false); // ✅ 로딩 끝
       }
     })();
   }, []);
@@ -75,7 +80,11 @@ export default function EventPage({ serverEvents }) {
 
   return (
     <>
-      <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
+      {loadingUser ? (
+        <SkeletonHeader />
+      ) : (
+        <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
+      )}
 
       <Box
         maxW="1200px"

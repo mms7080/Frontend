@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Header, Footer } from "../../components";
 import { useRouter } from "next/navigation";
+import SkeletonHeader from "../../components/SkeletonHeader";
 
 const defaultCategories = ["전체", "티켓", "팝콘/음료/콤보", "포인트몰"];
 
@@ -20,6 +21,7 @@ export default function MegaboxStorePage() {
   const [activeCategory, setActiveCategory] = useState(defaultCategories[0]);
   const [user, setUser] = useState(null);
   const router = useRouter();
+  const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -33,6 +35,8 @@ export default function MegaboxStorePage() {
         setUser(data);
       } catch {
         setUser(null);
+      } finally {
+        setLoadingUser(false); // ✅ 추가
       }
     })();
 
@@ -61,7 +65,12 @@ export default function MegaboxStorePage() {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
+      {loadingUser ? (
+        <SkeletonHeader />
+      ) : (
+        <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
+      )}
+
       <Box
         maxW="1200px"
         mx="auto"

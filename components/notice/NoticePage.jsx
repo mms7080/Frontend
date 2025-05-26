@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Header, Footer } from "..";
+import SkeletonHeader from "../SkeletonHeader"; 
 
 export default function NoticePage({ notices }) {
   const [searchOption, setSearchOption] = useState("title");
@@ -11,24 +12,26 @@ export default function NoticePage({ notices }) {
   const [user, setUser] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [loadingUser, setLoadingUser] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
-          }
-        );
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setUser(data);
-      } catch (e) {
-        console.log("로그인 정보 없음");
-      }
-    })();
-  }, []);
+
+ useEffect(() => {
+  (async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setUser(data);
+    } catch (e) {
+      console.log("로그인 정보 없음");
+    } finally {
+      setLoadingUser(false); 
+    }
+  })();
+}, []);
+
 
   useEffect(() => {
     const sorted = [...notices].sort((a, b) => b.id - a.id);
@@ -87,8 +90,13 @@ export default function NoticePage({ notices }) {
   };
 
   return (
-    <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
+      <>
+      {/* ✅ 로딩 중이면 스켈레톤, 아니면 진짜 Header */}
+      {loadingUser ? (
+        <SkeletonHeader />
+      ) : (
+        <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
+      )}
       <div
         style={{
           maxWidth: "1200px",

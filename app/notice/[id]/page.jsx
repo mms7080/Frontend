@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../../../components/header";
 import Footer from "../../../components/footer";
+import SkeletonHeader from "../../../components/SkeletonHeader"; 
 
 export default function NoticeDetailPage() {
   const params = useParams();
@@ -14,6 +15,7 @@ export default function NoticeDetailPage() {
   const [allNotices, setAllNotices] = useState([]);
   const [prevId, setPrevId] = useState(null);
   const [nextId, setNextId] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -30,6 +32,8 @@ export default function NoticeDetailPage() {
         }
       } catch {
         setUser(null);
+      } finally {
+      setLoadingUser(false);
       }
     })();
   }, []);
@@ -64,9 +68,13 @@ export default function NoticeDetailPage() {
 
   if (!notice) return <div>로딩 중...</div>;
 
-  return (
-    <>
+ return (
+  <>
+    {loadingUser ? (
+      <SkeletonHeader />
+    ) : (
       <Header headerColor="black" headerBg="#ffffff" userInfo={user} />
+    )}
 
       <div
         style={{

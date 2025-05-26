@@ -13,6 +13,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { Header, Footer } from "../../../../components";
+import SkeletonHeader from "../../../../components/SkeletonHeader";
 
 export default function EventDetailPage() {
   const { id } = useParams();
@@ -21,9 +22,10 @@ export default function EventDetailPage() {
   const [allEvents, setAllEvents] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingUser, setLoadingUser] = useState(true);
 
-  // ✅ 로그인 상태 불러오기
-  useEffect(() => {
+  // 로그인 상태 불러오기
+    useEffect(() => {
     (async () => {
       try {
         const userRes = await fetch(
@@ -37,11 +39,13 @@ export default function EventDetailPage() {
         setUser(userInfo);
       } catch {
         setUser(null);
+      } finally {
+        setLoadingUser(false); 
       }
     })();
   }, []);
 
-  // ✅ 이벤트 데이터 불러오기
+  // 이벤트 데이터 불러오기
   useEffect(() => {
     (async () => {
       try {
@@ -72,8 +76,11 @@ export default function EventDetailPage() {
 
   return (
     <>
-      {/* ✅ 로그인 정보 전달 */}
-      <Header headerColor="black" headerBg="white" userInfo={user} />
+            {loadingUser ? (
+        <SkeletonHeader />
+      ) : (
+        <Header headerColor="black" headerBg="white" userInfo={user} />
+      )}
 
       <Box maxW="800px" mx="auto" mt={20} p={[4, 6]}>
         {loading ? (
