@@ -18,6 +18,7 @@ const categories = [
   "제휴/할인",
   "시사회/무대인사",
 ];
+const categoryOrder = ["Pick", "영화", "극장", "제휴/할인", "시사회/무대인사"];
 
 export default function EventPage({ serverEvents }) {
   const [events] = useState(serverEvents || {});
@@ -54,12 +55,14 @@ export default function EventPage({ serverEvents }) {
     return now > endDate ? "종료됨" : "진행중";
   };
 
-  const filteredEvents =
-    activeCategory === "전체"
-      ? Object.entries(events)
-      : Object.entries(events).filter(
-          ([category]) => category === activeCategory
-        );
+ const filteredEvents =
+  activeCategory === "전체"
+    ? categoryOrder
+        .filter((cat) => events[cat]) 
+        .map((cat) => [cat, events[cat]])
+    : Object.entries(events).filter(
+        ([category]) => category === activeCategory
+      );
 
   const keywordFilteredEvents = filteredEvents
     .map(([category, items]) => [
