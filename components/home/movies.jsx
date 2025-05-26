@@ -7,6 +7,8 @@ import MovieCard from '../movie/moviecard';
 
 export default function Movies({movieInfo}){
     const [sortkey, setSortkey] = useState('releaseDate');
+    const [rdcolor, setrdColor] = useState('white'); 
+    const [lncolor, setlnColor] = useState('gray.500'); 
     // 20230516
     // 20210205
     // 20141106
@@ -45,11 +47,19 @@ export default function Movies({movieInfo}){
     return <VStack w='100%' bg='#141414' pt='80px' pb='50px'>
                 <h1 style={{color:'white',fontSize:25,paddingBottom:50}}>박스 오피스</h1>
 
-                <Flex w='1250px' justifyContent='space-between' color='white'>
+                <Flex w='1250px' justifyContent='space-between'>
                     <Flex gap='10px'>
-                        <Flex _hover={{cursor:'pointer'}} onClick={()=>{setSortkey('releaseDate')}}>최신순</Flex>
-                        <Flex>|</Flex>
-                        <Flex _hover={{cursor:'pointer'}} onClick={()=>{setSortkey('likeNumber')}}>좋아요순</Flex>
+                        <Flex color={rdcolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
+                            setSortkey('releaseDate');
+                            setrdColor((rdcolor==='white')?'gray.500':'white');
+                            setlnColor((lncolor==='white')?'gray.500':'white');
+                        }}>최신순</Flex>
+                        <Flex color='white'>|</Flex>
+                        <Flex color={lncolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
+                            setSortkey('likeNumber');
+                            setrdColor((rdcolor==='white')?'gray.500':'white');
+                            setlnColor((lncolor==='white')?'gray.500':'white');
+                        }}>좋아요순</Flex>
                     </Flex>
                     <Link href='/movie'>더 보기</Link>
                 </Flex>
