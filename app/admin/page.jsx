@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Header, Footer } from "../../components";
+import SkeletonHeader from "../../components/SkeletonHeader";
 import {
   BarChart,
   Bar,
@@ -26,6 +27,7 @@ export default function AdminDashboard() {
   const [movies, setMovies] = useState([]);
   const [events, setEvents] = useState([]);
   const [payments, setPayments] = useState([]);
+  const [loadingUser, setLoadingUser] = useState(true);
 
   const dummyStats = {
     movies: 8,
@@ -54,6 +56,8 @@ export default function AdminDashboard() {
       } catch {
         alert("로그인 후 이용해주세요.");
         router.push("/signin");
+      } finally {
+        setLoadingUser(false);
       }
     })();
   }, []);
@@ -679,7 +683,11 @@ export default function AdminDashboard() {
 
   return (
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-      <Header userInfo={user} />
+                  {loadingUser ? (
+              <SkeletonHeader />
+            ) : (
+              <Header headerColor="black" headerBg="white" userInfo={user} />
+            )}
       <div style={{ display: "flex" }}>
         <aside
           style={{
