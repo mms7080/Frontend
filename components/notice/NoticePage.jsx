@@ -298,7 +298,7 @@ export default function NoticePage({ notices,userData }) {
                             animation: "pulse-badge 1.2s ease-in-out infinite",
                             display: "inline-block",
                             position: "relative",
-                            top: "-2px",
+                            top: "4px",
                           }}
                         >
                           NEW
