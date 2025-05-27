@@ -22,8 +22,8 @@ export default function Events({Fetchedevents}){
         <Grid templateColumns='repeat(3,240px)' gap='30px' overflow='visible'>
             {(Fetchedevents["Pick"]).filter(event=>getEventStatus(event.date)!=='종료됨').map((event,index) =>{
                 if(index<3)
-                    return <Box overflow='visible'>
-                            <Event key={event.id} content={event.title} src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`} url={`/event/view/${event.id}`}></Event>
+                    return <Box overflow='visible' key={event.id}>
+                            <Event content={event.title} src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`} url={`/event/view/${event.id}`}></Event>
                         </Box>;
             })}
         </Grid>

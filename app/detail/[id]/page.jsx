@@ -11,82 +11,83 @@ export const metadata = {
     description: '영화에 대한 상세한 정보를 볼 수 있는 페이지입니다.',
 };
 
-export default async function detail(){
+export default async function detail({params}){
         
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
+        const movieinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${params.id}`);
     
         return <>
             <Header userInfo={res}></Header>
             <Box mb='100px'>
-                <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage="url('https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2019%2F02%2Fmarvel-avengers-endgame-new-teaser-super-bowl-tw.jpg?w=1080&cbr=1&q=90&fit=max')">
+                <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage={`url(${movieinfo.wideImage})`}>
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>
                     <Flex justifyContent='center' alignItems='flex-start' flexDirection='column' gap='10px' color='white' position='relative' zIndex='1'>
-                        <span style={{fontSize:50,textShadow:'4px 4px 6px black'}}>어벤져스: 엔드게임</span>
-                        <span style={{fontSize:30,position:'relative',bottom:15}}>Avengers: Endgame</span>
+                        <span style={{fontSize:50,textShadow:'4px 4px 6px black'}}>{movieinfo.title}</span>
+                        <span style={{fontSize:30,position:'relative',bottom:15}}>{movieinfo.titleEnglish}</span>
                         <Flex gap='10px' pt='10px'>
-                            <Button fontSize='15px' boxShadow='4px 4px 6px black'><FaHeart color='red'/> 7.7k</Button>
+                            <Button fontSize='15px' boxShadow='4px 4px 6px black'><FaHeart color='red'/>{
+                                movieinfo.likeNumber > 999 ? Math.floor(movieinfo.likeNumber / 100) / 10 + 'k' : movieinfo.likeNumber                                
+                            }</Button>
                             <Button fontSize='15px' boxShadow='4px 4px 6px black'>공유하기</Button>
                         </Flex>
 
                         <Flex gap='10px' color='black' fontSize='15px' py='5px'>
-                            <Box px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>IMAX</Box>
-                            <Box px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>4DX</Box>
+                            <Box px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>{movieinfo.label}</Box>
                         </Flex>
 
                         <Flex justifyContent='space-between' gap='60px' fontSize='25px' pt='170px'>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>실관람 평점</span>
-                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>🎬 9.6</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>🎬 {movieinfo.score}</span>
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>예매율</span>
-                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>1위 (34.2%)</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>{movieinfo.rank}위 ({movieinfo.reserveRate+'%'})</span>
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>누적관객수</span>
-                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>👥 594,416명</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>👥 {movieinfo.totalView}명</span>
                             </Flex>
                         </Flex>
                     </Flex>
 
                     <VStack pt='80px'>
-                        <Image w='280px' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src='https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'/>
+                        <Image w='280px' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src={movieinfo.poster}/>
                         <Button w='280px' boxShadow='4px 4px 6px black'>예매</Button>
-                        <Button w='280px' boxShadow='4px 4px 6px black'>🎧 Dolby CINEMA</Button>
                     </VStack>
                 </Flex>
                 <VStack my='50px'>
                     <Box w='1200px' px='30px' m='40px' borderRadius='10px' bg='white'>
                         <Flex w='1140px' flexDirection='column' gap='30px' px='50px' pt='40px' pb='80px'>
                             <span>
-                            어벤져스: 엔드게임<br/><br/>
-전 세계적인 찬사를 받은 '인피니티 사가'의 최종편. 이 극적인 마지막 결전에서 어벤져스는 우주 최강 악당 '타노스'와 대결한다. 끔찍한 사건으로 세계 인구의 절반이 사라지고 계급 간에 붕괴까지 일어난 상황, 남은 히어로들은 앞으로 나아가기 위해 고군분투하는데... 이들은 우주의 질서와 화합, 사랑하는 이들을 되찾기 위해 힘을 합쳐야 한다. 로버트 다우니 주니어, 크리스 에반스, 마크 러팔로, 크리스 헴스워스, 스칼렛 요한슨, 제레미 레너, 돈 치들, 폴 러드, 베네딕트 컴버배치, 채드윅 보즈먼, 브리 라슨, 톰 홀랜드, 카렌 길런, 조 샐다나, 에반젤린 릴리가 출연하는 마블 스튜디오의 '어벤져스: 엔드게임'은 케빈 파이기가 제작, 앤소니 루소와 조 루소가 감독을 맡았다. 루이스 데스포지토, 빅토리아 알론소, 마이클 그릴로, 트린 트란, 존 파브로, 제임스 건, 스탠 리가 제작 총괄을 맡았고 크리스토퍼 마커스와 스티븐 맥필리가 각본을 썼다. 일부 빛이 깜빡이는 장면이나 패턴은 광과민성 시청자들에게 영향을 미칠 수 있다.
-
-
-
-일부 섬광 장면이 빛에 민감한 시청자에게 영향을 줄 수 있음.<br/><br/><br/><br/>
+                                {movieinfo.title}<br/><br/>
+                                {movieinfo.description}<br/><br/><br/><br/>
                             </span>
                             <Flex w='100%'>
-                                <Flex w='50%' flexDirection='column' lineHeight='30px'>
+                                <Flex w='50%' flexDirection='column' lineHeight='40px'>
                                     <span>러닝 타임:</span>
-                                    <span style={{color:'#6D6D96'}}>3시간 5분</span>
+                                    <span style={{color:'#6D6D96'}}>{Math.floor(movieinfo.runningTime/60)}시간 {movieinfo.runningTime%60}분</span>
                                     <span>공개일:</span>
-                                    <span style={{color:'#6D6D96'}}>2019년 4월 24일</span>
+                                    <span style={{color:'#6D6D96'}}>{(()=>{
+                                            const [year, month, day] = movieinfo.releaseDate.split('.').map(part => parseInt(part, 10));
+                                            return `${year}년 ${month}월 ${day}일`;
+                                        })()
+                                    }</span>
                                     <span>장르:</span>
-                                    <span style={{color:'#6D6D96'}}>슈퍼 히어로어드벤처, 액션SF판타지</span>
+                                    <span style={{color:'#6D6D96'}}>{movieinfo.genre}</span>
                                     <span>관람 등급:</span>
-                                    <Flex bg='#E4B533' w='25px' h='25px' borderRadius='5px' justifyContent='center' alignItems='center' color='white' fontSize='18px'>12</Flex>
+                                    <Flex bg={
+                                        movieinfo.rate == "ALL" ? "green" :
+                                        movieinfo.rate == "12" ? "yellow" :
+                                        movieinfo.rate == "15" ? "orange" :
+                                        movieinfo.rate == "19" ? "red" : "none"
+                                    } w={movieinfo.rate=='ALL'?'40px':'25px'} h='25px' borderRadius='5px' justifyContent='center' alignItems='center' color='black' fontSize='18px'>{movieinfo.rate}</Flex>
                                 </Flex>
-                                <Flex w='50%' flexDirection='column' lineHeight='30px'>
+                                <Flex w='50%' flexDirection='column' lineHeight='40px'>
                                     <span>감독:</span>
-                                    <span style={{color:'#6D6D96'}}>안소니 루소조 루소</span>
+                                    {movieinfo.director.split(',').map(name=><span style={{color:'#6D6D96'}}>{name.trim()}</span>)}
                                     <span>출연:</span>
-                                    <span style={{color:'#6D6D96'}}>로버트 다우니 주니어</span>
-                                    <span style={{color:'#6D6D96'}}>크리스 에반스</span>
-                                    <span style={{color:'#6D6D96'}}>마크 러팔로</span>
-                                    <span style={{color:'#6D6D96'}}>크리스 헴스워스</span>
-                                    <span style={{color:'#6D6D96'}}>스칼렛 요한슨</span>
-                                    <span style={{color:'#6D6D96'}}>제레미 레너</span>
+                                    {movieinfo.cast.split(',').map(name=><span style={{color:'#6D6D96'}}>{name.trim()}</span>)}
                                 </Flex>
                                 
                             </Flex>

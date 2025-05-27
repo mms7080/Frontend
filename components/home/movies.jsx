@@ -69,17 +69,15 @@ export default function Movies({movieInfo}){
                     ?
                     movieInfo.sort((a,b)=>b.releaseDate.localeCompare(a.releaseDate)).map((movie,index) => {
                         if(index < 8)
-                            return (<Box overflow='visible'>
+                            return (<Box overflow='visible' key={movie.id}>
                                     <MovieCard 
-                                        key={movie.id}
                                         movie={movie}
                                     /></Box>);
                     }):
                     movieInfo.sort((a,b)=>b.likeNumber-a.likeNumber).map((movie,index) => {
                         if(index < 8)
-                            return (<Box overflow='visible'>
+                            return (<Box overflow='visible' key={movie.id}>
                                         <MovieCard 
-                                        key={movie.id}
                                         movie={movie}
                                     /></Box>);
                     })}
