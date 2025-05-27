@@ -32,7 +32,7 @@ export default function Footer() {
     >
       <Flex flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxAwidth(20);}} onMouseLeave={()=>{setBoxAwidth(10);}}>
         <h5 style={{ fontSize: 14, color: footerColor }}>고객센터</h5>
-        <Box w={BoxAwidth} h="2px" bg="#00c3ff" mb="5px" transition='all 0.3s ease-in-out'></Box>
+        <Box w={BoxAwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
         <span style={{fontSize:12}}>1544-1234</span>
         <span style={{fontSize:12}}>운영시간 | 오전 10:00 ~ 오후 6:00</span>
         <span style={{fontSize:12}}>점심시간 | 오후 12:00 ~ 오후 1:30</span>
@@ -40,19 +40,19 @@ export default function Footer() {
       </Flex>
       <Flex flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxBwidth(20);}} onMouseLeave={()=>{setBoxBwidth(10);}}>
         <h5 style={{ fontSize: 14, color: footerColor }}>주소 안내</h5>
-        <Box w={BoxBwidth} h="2px" bg="#00c3ff" mb="5px" transition='all 0.3s ease-in-out'></Box>
+        <Box w={BoxBwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
         <span style={{fontSize:12}}>서울특별시 강남구 테헤란로 87길 22 도심공항터미널 건물 408호</span>
       </Flex>
       <Flex flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxCwidth(20);}} onMouseLeave={()=>{setBoxCwidth(10);}}>
         <h5 style={{ fontSize: 14, color: footerColor }}>빠른 메뉴</h5>
-        <Box w={BoxCwidth} h="2px" bg="#00c3ff" mb="5px" transition='all 0.3s ease-in-out'></Box>
+        <Box w={BoxCwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
         <HStack spacing={2}>
           <Button w="60px" h="30px" color="white" bg="#6B46C1" _hover={{bg:'#553C9A'}} border="1px solid #444" fontSize="12px" borderRadius="5px">
             <Link href='/booking'>
-              빠른 예매
+              예매
             </Link>
           </Button>
-          <Button w="60px" h="30px" color="white" bg="#6B46C1" _hover={{bg:'#553C9A'}} border="1px solid #444" fontSize="12px" borderRadius="5px">
+          <Button w="90px" h="30px" color="white" bg="#6B46C1" _hover={{bg:'#553C9A'}} border="1px solid #444" fontSize="12px" borderRadius="5px">
             <Link href='/mypage'>
               마이페이지
             </Link>
@@ -61,7 +61,7 @@ export default function Footer() {
       </Flex>
       <Flex w='100px' flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxDwidth(20);}} onMouseLeave={()=>{setBoxDwidth(10);}}>
         <h5 style={{ fontSize: 14, color: footerColor }}>회사 정보</h5>
-        <Box w={BoxDwidth} h="2px" bg="#00c3ff" mb="5px" transition='all 0.3s ease-in-out'></Box>
+        <Box w={BoxDwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
         <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>이용약관</Text></Link>
         <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>개인정보처리방침</Text></Link>
         <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>사이트 이용가이드</Text></Link>
@@ -80,13 +80,13 @@ export default function Footer() {
           </a>
           <a href="https://kakao.com" target="_blank">
             <Image
-              w="20px"
-              h="20px"
+              w="25px"
+              h="25px"
               loading="lazy"
               borderRadius="5px"
-              src="http://localhost:9999/images/kakao.jpg"
+              src="http://localhost:9999/images/kakao.png"
               alt="Kakao Logo"
-              z='all 0.3s ease-in-out'
+              transition='all 0.3s ease-in-out'
               _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}
             />
           </a>
