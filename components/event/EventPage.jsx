@@ -21,34 +21,17 @@ const categories = [
 ];
 const categoryOrder = ["Pick", "영화", "극장", "제휴/할인", "시사회/무대인사"];
 
-export default function EventPage({ serverEvents }) {
+export default function EventPage({ serverEvents,data }) {
   const [events] = useState(serverEvents || {});
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(data);
   const [activeCategory, setActiveCategory] = useState("전체");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const router = useRouter();
-  const [loadingUser, setLoadingUser] = useState(true);
+  const [loadingUser, setLoadingUser] = useState(false);
 
   useEffect(() => {
     document.title = "진행중인 이벤트 - 필모라";
-
-    (async () => {
-      try {
-        const userInfoRes = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          { credentials: "include" }
-        );
-        if (!userInfoRes.ok) throw new Error();
-        const userInfo = await userInfoRes.json();
-        setUser(userInfo);
-      } catch (e) {
-        console.error("유저 정보 로드 실패:", e);
-        setUser(null);
-      } finally {
-        setLoadingUser(false); // ✅ 로딩 끝
-      }
-    })();
   }, []);
 
   const getEventStatus = (dateRange) => {
