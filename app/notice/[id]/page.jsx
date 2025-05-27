@@ -4,7 +4,5 @@ import NoticeID from "../../../components/notice/noticeid";
 
 export default async function NoticeDetailPage() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-  return <>
-    <NoticeID data={res}/>
-  </>;
+  return <NoticeID userData={res}/>;
 }

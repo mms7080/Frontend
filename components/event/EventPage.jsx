@@ -21,9 +21,9 @@ const categories = [
 ];
 const categoryOrder = ["Pick", "영화", "극장", "제휴/할인", "시사회/무대인사"];
 
-export default function EventPage({ serverEvents,data }) {
+export default function EventPage({ serverEvents,userData }) {
   const [events] = useState(serverEvents || {});
-  const [user, setUser] = useState(data);
+  const [user, setUser] = useState(userData);
   const [activeCategory, setActiveCategory] = useState("전체");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");

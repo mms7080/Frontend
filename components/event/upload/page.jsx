@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function EventUploader({data}) {
+export default function EventUploader({userData}) {
   const [form, setForm] = useState({
     title: "",
     category: "",
@@ -25,7 +25,7 @@ export default function EventUploader({data}) {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [user, setUser] = useState(data);
+  const [user, setUser] = useState(userData);
   const router = useRouter();
 
   try {

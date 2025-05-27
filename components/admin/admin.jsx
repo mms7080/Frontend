@@ -14,9 +14,9 @@ import {
   Cell,
 } from "recharts";
 
-export default function AdminDashboard({data}) {
+export default function AdminDashboard({userData}) {
     const router = useRouter();
-    const [user, setUser] = useState(data);
+    const [user, setUser] = useState(userData);
     const [selectedSection, setSelectedSection] = useState(null);
     const [userCount, setUserCount] = useState(0);
     const [storeCount, setStoreCount] = useState(0);

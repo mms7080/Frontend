@@ -15,12 +15,12 @@ import {
 import { Header, Footer } from "../..";
 import SkeletonHeader from "../../SkeletonHeader";
 
-export default function EventDetailPage({data}) {
+export default function EventDetailPage({userData}) {
   const { id } = useParams();
   const router = useRouter();
   const [event, setEvent] = useState(null);
   const [allEvents, setAllEvents] = useState([]);
-  const [user, setUser] = useState(data);
+  const [user, setUser] = useState(userData);
   const [loading, setLoading] = useState(true);
   const [loadingUser, setLoadingUser] = useState(false);
 

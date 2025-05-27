@@ -4,6 +4,6 @@ import {fetch} from "../../../lib/server";
 export default async function EventuploadPage() {
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-  return <EventUploader data={res} />;
+  return <EventUploader userData={res} />;
   
 }

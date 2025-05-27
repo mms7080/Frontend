@@ -6,12 +6,12 @@ import Header from "../header";
 import Footer from "../footer";
 import SkeletonHeader from "../SkeletonHeader"; 
 
-export default function NoticeIdPage({data}) {
+export default function NoticeIdPage({userData}) {
   const params = useParams();
   const id = params?.id;
   const router = useRouter();
   const [notice, setNotice] = useState(null);
-  const [user, setUser] = useState(data);
+  const [user, setUser] = useState(userData);
   const [allNotices, setAllNotices] = useState([]);
   const [prevId, setPrevId] = useState(null);
   const [nextId, setNextId] = useState(null);

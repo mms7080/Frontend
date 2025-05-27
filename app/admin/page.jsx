@@ -7,7 +7,5 @@ export default async function adminpage(){
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
 
-  return <>
-    <Admin data={res}></Admin>
-  </>;
+  return <Admin userData={res}></Admin>;
 }

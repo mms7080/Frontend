@@ -9,5 +9,5 @@ export default async function Eventmainpage() {
   });
   const eventData = await res.json();
 
-  return <EventPage serverEvents={eventData} data={userres}/>;
+  return <EventPage serverEvents={eventData} userData={userres}/>;
 }
