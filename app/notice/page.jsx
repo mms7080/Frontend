@@ -7,6 +7,5 @@ export default async function noticemainPage() {
   const userres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
   const noticeres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice`);
 
-  console.log(userres);
   return <NoticePage notices={noticeres} userData={userres}/>;
 }
