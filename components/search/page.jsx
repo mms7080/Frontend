@@ -2,6 +2,7 @@
 
 import React,{useEffect,useState} from 'react';
 import {Button,Flex,Box,Input} from '@chakra-ui/react';
+import Link from "next/link";
 
 import {Header,Footer} from '..';
 import MovieCard from '../movie/moviecard';
@@ -85,6 +86,16 @@ export default function Searchdetail({userData,movieData,keywordData}){
                                 transform="translate(0, 1px)"
                             >
                             검색
+                            </Button>
+                            <Button
+                                marginLeft={4} px={6} bg="#1e1e1e"
+                                border="1px solid gray" 
+                                _hover={{borderColor : "white"}}
+                                transform="translate(0, 1px)"
+                            >
+                                <Link href='/home'>
+                                    홈으로
+                                </Link>
                             </Button>
                         </Box>
                     </Flex>
