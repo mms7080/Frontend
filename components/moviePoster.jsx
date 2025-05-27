@@ -1,5 +1,11 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { Flex, Image, Box } from '@chakra-ui/react';
+
+// useEffect(()=>{
+//     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/regions`, {
+//         credentials: "include",
+//       })
+// })
 
 export const movies = [
     { id: 1, title: "인터스텔라", poster: "https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false",
