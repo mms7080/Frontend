@@ -19,21 +19,24 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-const MovieCard = ({ movie }) => {
+const MovieCard = ({ movie, user, openModal }) => {
 
   const [liked, likedController] = useState(false);
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
   const likeChange = async () => {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/update/like?id=${movie.id}&updown=${liked ? "down" : "up"}`);
-      const data = await res.json();
-      if(res.ok) {
-        likedController(!liked);
-        setLikeNumber(data > 999 ? Math.floor(data / 100) / 10 + 'k' : data);
-      }
-    } catch (err) {
-      console.log(err.message);
-    };
+    if(!user)
+      openModal();
+    else
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/update/like?id=${movie.id}&updown=${liked ? "down" : "up"}`);
+        const data = await res.json();
+        if(res.ok) {
+          likedController(!liked);
+          setLikeNumber(data > 999 ? Math.floor(data / 100) / 10 + 'k' : data);
+        }
+      } catch (err) {
+        console.log(err.message);
+      };
   };
 
   return (

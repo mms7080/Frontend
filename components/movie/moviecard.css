@@ -179,7 +179,7 @@
   
   .reserve-button:hover {
     background-color: var(--main_color_hover);
-    box-shadow: 0 0 10px var(--main_color);
+    /* box-shadow: 0 0 10px var(--main_color); */
     transform: translateY(-2px);
   }
   
