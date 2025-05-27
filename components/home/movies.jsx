@@ -6,7 +6,7 @@ import {VStack,Grid,Flex} from '@chakra-ui/react';
 import MovieCard from '../movie/moviecard';
 
 export default function Movies({movieInfo}){
-    const [sortkey, setSortkey] = useState('releaseDate');
+    const [sortkey, setSortkey] = useState('likeNumber');
     const [rdcolor, setrdColor] = useState('white'); 
     const [lncolor, setlnColor] = useState('gray.500'); 
     // 20230516
@@ -50,16 +50,16 @@ export default function Movies({movieInfo}){
                 <Flex w='1250px' justifyContent='space-between'>
                     <Flex gap='10px'>
                         <Flex color={rdcolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
-                            setSortkey('releaseDate');
-                            setrdColor((rdcolor==='white')?'gray.500':'white');
-                            setlnColor((lncolor==='white')?'gray.500':'white');
-                        }}>최신순</Flex>
-                        <Flex color='white'>|</Flex>
-                        <Flex color={lncolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
                             setSortkey('likeNumber');
                             setrdColor((rdcolor==='white')?'gray.500':'white');
                             setlnColor((lncolor==='white')?'gray.500':'white');
                         }}>좋아요순</Flex>
+                        <Flex color='white'>|</Flex>
+                        <Flex color={lncolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
+                            setSortkey('releaseDate');
+                            setrdColor((rdcolor==='white')?'gray.500':'white');
+                            setlnColor((lncolor==='white')?'gray.500':'white');
+                        }}>최신순</Flex>
                     </Flex>
                     <Link href='/movie'><Flex color='white'>더 보기</Flex></Link>
                 </Flex>
