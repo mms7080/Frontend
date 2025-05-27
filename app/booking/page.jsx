@@ -157,21 +157,38 @@ export default function Booking2Page() {
             borderRadius="lg"
             color="white"
         >
-            <Flex align="center" gap={6}>
-                {/* 작은 포스터 */}
+            <Flex justify="space-between" align="start" gap={8}>
+                {/* 왼쪽: 포스터 */}
+                <Box flex="1" display="flex" justifyContent="center">
                 <Image
                     src={movies[activeIndex]?.poster}
                     alt={movies[activeIndex]?.title}
-                    w="25%"
+                    w="70%"
                     borderRadius="md"
                     objectFit="cover"
                 />
-                {/* 영화 제목 */}
-                <Text fontSize="3xl" fontWeight="bold">
+                </Box>
+
+                {/* 가운데: 정보 */}
+                <Box flex="1" textAlign="center" flexDirection="column">
+                <Text fontSize="5xl" fontWeight="bold" mt={0} mb={3} textAlign="left">
                     {movies[activeIndex]?.title || ''}
                 </Text>
+                <Text fontSize="2xl" mb={20} textAlign="left">{movies[activeIndex]?.subtitle || ''}</Text>
+                <Box mt="auto">
+                    <Text fontSize="2xl" mb={1} textAlign="left">👍 좋아요: {movies[activeIndex]?.likeNumber || '0'}</Text>
+                    <Text fontSize="2xl" mb={1} textAlign="left">⭐ 평점: {movies[activeIndex]?.score || '-'}</Text>
+                    <Text fontSize="2xl" mb={1} textAlign="left">📊 예매율: {movies[activeIndex]?.rate || '-'}</Text>
+                    <Text fontSize="2xl" textAlign="left">👥 누적 관객수: {movies[activeIndex]?.audience || '-'}</Text>
+                </Box>
+                </Box>
+
+                {/* 오른쪽: 비어 있음 (공간 확보) */}
+                <Box flex="1" />
             </Flex>
         </Box>
+
+
 
         <Box position="relative" zIndex={2} bg="#1a1a1a">
             <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder} />

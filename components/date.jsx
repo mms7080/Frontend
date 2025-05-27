@@ -7,7 +7,7 @@ const getNext14Days = () => {
   const today = new Date();
   const weekday = ['일', '월', '화', '수', '목', '금', '토'];
 
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < 5; i++) {
     const day = new Date(today);
     day.setDate(today.getDate() + i);
 
