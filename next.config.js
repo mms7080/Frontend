@@ -4,4 +4,13 @@ export default {
   basePath: '',            // 웹페이지의 기본 경로
   output:'standalone',     // 필요한 파일만 추출할지 여부
   trailingSlash:true,      // 접미사 슬래시 여부
+  async redirects() {
+    return [
+      {
+        source: '/',/* /로 접속해도 /home으로 가도록 조치 */
+        destination: '/home',
+        permanent: true
+      }
+    ];
+  }
 }
