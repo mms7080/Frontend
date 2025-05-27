@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Header, Footer } from "..";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 
-export default function PaymentPage() {
+export default function PaymentPage({userData}) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -94,7 +94,7 @@ export default function PaymentPage() {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
+      <Header headerColor="black" headerBg="white" userInfo={userData} />
       <div className="payment-container">
         <h2>결제하기</h2>
 
