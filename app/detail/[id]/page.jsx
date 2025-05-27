@@ -2,6 +2,7 @@ import React from 'react';
 import {Box,Flex,VStack,Image,Button,Tabs} from '@chakra-ui/react';
 import {Header,Footer} from '../../../components';
 import {Reviews,Trailer} from '../../../components/detail';
+import {FaHeart} from 'react-icons/fa';
 
 import {fetch} from '../../../lib/server';
 
@@ -20,44 +21,43 @@ export default async function detail(){
                 <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage="url('https://image-cdn.hypb.st/https%3A%2F%2Fkr.hypebeast.com%2Ffiles%2F2019%2F02%2Fmarvel-avengers-endgame-new-teaser-super-bowl-tw.jpg?w=1080&cbr=1&q=90&fit=max')">
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>
                     <Flex justifyContent='center' alignItems='flex-start' flexDirection='column' gap='10px' color='white' position='relative' zIndex='1'>
-                        <span style={{fontSize:50}}>어벤져스: 엔드게임</span>
-                        <span style={{fontSize:30}}>Avengers: Endgame</span>
-                        <Flex gap='10px'>
-                            <Button fontSize='20px'>🤍 7.7k</Button>
-                            <Button fontSize='20px'>공유하기</Button>
+                        <span style={{fontSize:50,textShadow:'4px 4px 6px black'}}>어벤져스: 엔드게임</span>
+                        <span style={{fontSize:30,position:'relative',bottom:15}}>Avengers: Endgame</span>
+                        <Flex gap='10px' pt='10px'>
+                            <Button fontSize='15px' boxShadow='4px 4px 6px black'><FaHeart color='red'/> 7.7k</Button>
+                            <Button fontSize='15px' boxShadow='4px 4px 6px black'>공유하기</Button>
                         </Flex>
 
-                        <Flex gap='10px' color='black' fontSize='20px' py='30px'>
-                            <Box px='5px' borderRadius='5px' bg='white'>IMAX</Box>
-                            <Box px='5px' borderRadius='5px' bg='white'>4DX</Box>
+                        <Flex gap='10px' color='black' fontSize='15px' py='5px'>
+                            <Box px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>IMAX</Box>
+                            <Box px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>4DX</Box>
                         </Flex>
 
-                        <Flex justifyContent='space-between' gap='60px' fontSize='40px' pt='100px'>
+                        <Flex justifyContent='space-between' gap='60px' fontSize='25px' pt='170px'>
                             <Flex flexDirection='column'>
-                                <span>실관람 평점</span>
-                                <span style={{fontSize:30}}>🎬 9.6</span>
+                                <span style={{textShadow:'4px 4px 6px black'}}>실관람 평점</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>🎬 9.6</span>
                             </Flex>
                             <Flex flexDirection='column'>
-                                <span>예매율</span>
-                                <span style={{fontSize:30}}>1위 (34.2%)</span>
+                                <span style={{textShadow:'4px 4px 6px black'}}>예매율</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>1위 (34.2%)</span>
                             </Flex>
                             <Flex flexDirection='column'>
-                                <span>누적관객수</span>
-                                <span style={{fontSize:30}}>👥 594,416명</span>
+                                <span style={{textShadow:'4px 4px 6px black'}}>누적관객수</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>👥 594,416명</span>
                             </Flex>
                         </Flex>
                     </Flex>
 
                     <VStack pt='80px'>
-                        <Image w='280px' borderRadius='10px' position='relative' zIndex='1' src='https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'/>
-                        <Button w='280px'>예매</Button>
-                        <Button w='280px'>🎧 Dolby CINEMA</Button>
+                        <Image w='280px' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src='https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'/>
+                        <Button w='280px' boxShadow='4px 4px 6px black'>예매</Button>
+                        <Button w='280px' boxShadow='4px 4px 6px black'>🎧 Dolby CINEMA</Button>
                     </VStack>
                 </Flex>
                 <VStack my='50px'>
-                    <Box w='1200px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
+                    <Box w='1200px' px='30px' m='40px' borderRadius='10px' bg='white'>
                         <Flex w='1140px' flexDirection='column' gap='30px' px='50px' pt='40px' pb='80px'>
-                            <span style={{textAlign:'center',fontSize:28}}><b>영화 소개</b></span>
                             <span>
                             어벤져스: 엔드게임<br/><br/>
 전 세계적인 찬사를 받은 '인피니티 사가'의 최종편. 이 극적인 마지막 결전에서 어벤져스는 우주 최강 악당 '타노스'와 대결한다. 끔찍한 사건으로 세계 인구의 절반이 사라지고 계급 간에 붕괴까지 일어난 상황, 남은 히어로들은 앞으로 나아가기 위해 고군분투하는데... 이들은 우주의 질서와 화합, 사랑하는 이들을 되찾기 위해 힘을 합쳐야 한다. 로버트 다우니 주니어, 크리스 에반스, 마크 러팔로, 크리스 헴스워스, 스칼렛 요한슨, 제레미 레너, 돈 치들, 폴 러드, 베네딕트 컴버배치, 채드윅 보즈먼, 브리 라슨, 톰 홀랜드, 카렌 길런, 조 샐다나, 에반젤린 릴리가 출연하는 마블 스튜디오의 '어벤져스: 엔드게임'은 케빈 파이기가 제작, 앤소니 루소와 조 루소가 감독을 맡았다. 루이스 데스포지토, 빅토리아 알론소, 마이클 그릴로, 트린 트란, 존 파브로, 제임스 건, 스탠 리가 제작 총괄을 맡았고 크리스토퍼 마커스와 스티븐 맥필리가 각본을 썼다. 일부 빛이 깜빡이는 장면이나 패턴은 광과민성 시청자들에게 영향을 미칠 수 있다.
@@ -95,7 +95,7 @@ export default async function detail(){
                     </Box>
                 </VStack>
                 <VStack>
-                    <Box w='1200px' px='30px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
+                    <Box w='1200px' px='30px' borderRadius='10px' bg='white'>
                         <Flex w='1140px' flexDirection='column' gap='30px' pt='40px' pb='80px'>
                             <Tabs.Root key='outline' defaultValue="trailer" variant='outline' fitted>
                                 <Tabs.List>

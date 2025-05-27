@@ -4,34 +4,15 @@ import { useState, useEffect } from "react";
 import { Header, Footer } from "..";
 import SkeletonHeader from "../SkeletonHeader"; 
 
-export default function NoticePage({ notices }) {
+export default function NoticePage({ notices,userData }) {
   const [searchOption, setSearchOption] = useState("title");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const [filtered, setFiltered] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(userData);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const [loadingUser, setLoadingUser] = useState(true);
-
-
- useEffect(() => {
-  (async () => {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setUser(data);
-    } catch (e) {
-      console.log("로그인 정보 없음");
-    } finally {
-      setLoadingUser(false); 
-    }
-  })();
-}, []);
-
+  const [loadingUser, setLoadingUser] = useState(false);
 
   useEffect(() => {
     const sorted = [...notices].sort((a, b) => b.id - a.id);
