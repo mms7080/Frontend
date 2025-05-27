@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function EventUploader() {
+export default function EventUploader({data}) {
   const [form, setForm] = useState({
     title: "",
     category: "",
@@ -25,32 +25,20 @@ export default function EventUploader() {
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(data);
   const router = useRouter();
 
-   useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          { credentials: "include" }
-        );
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-
-        // 🔐 관리자 체크
-        if (data.auth !== "ADMIN") {
-          alert("관리자만 접근 가능한 페이지입니다.");
-          return router.push("/event");
-        }
-
-        setUser(data);
-      } catch {
-        alert("로그인이 필요합니다.");
-        router.push("/signin");
-      }
-    })();
-  }, [router]);
+  try {
+    if (!user) throw new Error();
+    // 🔐 관리자 체크
+    if (user.auth !== "ADMIN") {
+      alert("관리자만 접근 가능한 페이지입니다.");
+      return router.push("/event");
+    }
+  } catch {
+    alert("로그인이 필요합니다.");
+    router.push("/signin");
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;

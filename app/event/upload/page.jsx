@@ -1,7 +1,6 @@
-'use client';
-
 import EventUploader from '../../../components/event/upload/page';
-
-export default function Page() {
-  return <EventUploader />;
+import {fetch} from "../../../lib/server";
+export default async function Page() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
+  return <EventUploader data={res} />;
 }
