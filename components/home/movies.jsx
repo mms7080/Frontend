@@ -2,13 +2,13 @@
 
 import React,{useEffect,useState} from 'react';
 import Link from "next/link";
-import {VStack,Grid,Flex} from '@chakra-ui/react';
+import {VStack,Grid,Flex,Box} from '@chakra-ui/react';
 import MovieCard from '../movie/moviecard';
 
 export default function Movies({movieInfo}){
     const [sortkey, setSortkey] = useState('likeNumber');
     const [rdcolor, setrdColor] = useState('white'); 
-    const [lncolor, setlnColor] = useState('gray.500'); 
+    const [lncolor, setlnColor] = useState('gray.500');
     // 20230516
     // 20210205
     // 20141106
@@ -61,25 +61,27 @@ export default function Movies({movieInfo}){
                             setlnColor((lncolor==='white')?'gray.500':'white');
                         }}>최신순</Flex>
                     </Flex>
-                    <Link href='/movie'><Flex color='white'>더 보기</Flex></Link>
+                    <Link href='/movie'><Flex color='white' _hover={{color:'gray.500'}}>더 보기</Flex></Link>
                 </Flex>
 
-                <Grid templateColumns='repeat(4,280px)' gap='50px'>
+                <Grid templateColumns='repeat(4,280px)' gap='50px' overflow='visible'>
                     {(sortkey==='releaseDate')
                     ?
                     movieInfo.sort((a,b)=>b.releaseDate.localeCompare(a.releaseDate)).map((movie,index) => {
                         if(index < 8)
-                            return (<MovieCard 
+                            return (<Box overflow='visible'>
+                                    <MovieCard 
                                         key={movie.id}
                                         movie={movie}
-                                    />);
+                                    /></Box>);
                     }):
                     movieInfo.sort((a,b)=>b.likeNumber-a.likeNumber).map((movie,index) => {
                         if(index < 8)
-                            return (<MovieCard 
+                            return (<Box overflow='visible'>
+                                        <MovieCard 
                                         key={movie.id}
                                         movie={movie}
-                                    />);
+                                    /></Box>);
                     })}
                 </Grid>
             </VStack>;
