@@ -44,7 +44,7 @@ const MovieCard = ({ movie, user, openModal }) => {
         <div className='rank-box'><span className="rank">예매 : {movie.rank}위</span></div>
         <Link href={"/detail/" + movie.id}>
           <div className="poster">
-            <img src={movie.poster} alt={movie.title} />
+            <img src={movie.poster} alt={movie.title} loading='lazy' />
             <div className="overlay">
               <p>
                 {movie.title} <br /> <br />
