@@ -724,16 +724,23 @@ export default function AdminDashboard({ userData }) {
               marginBottom: 50,
             }}
           >
-            <SummaryCard title="총 회원" value={`${userCount}명`} icon="🙍‍♂️" />
+            <SummaryCard
+              title="총 회원"
+              value={`${userCount}명`}
+              icon="🙍‍♂️"
+              onClick={() => setSelectedSection("유저")}
+            />
             <SummaryCard
               title="등록된 영화"
               value={`${movieCount}편`}
               icon="🎬"
+              onClick={() => setSelectedSection("영화")}
             />
             <SummaryCard
               title="스토어 상품"
               value={`${storeCount}개`}
               icon="🛒"
+              onClick={() => setSelectedSection("스토어")}
             />
             <SummaryCard
               title="예매"
@@ -745,7 +752,12 @@ export default function AdminDashboard({ userData }) {
               value={`${dummyStats.reviews}개`}
               icon="💬"
             />
-            <SummaryCard title="이벤트" value={`${eventCount}개`} icon="🎉" />
+            <SummaryCard
+              title="이벤트"
+              value={`${eventCount}개`}
+              icon="🎉"
+              onClick={() => setSelectedSection("이벤트")}
+            />
           </section>
           {selectedSection === "영화" && (
             <section
@@ -783,14 +795,29 @@ export default function AdminDashboard({ userData }) {
   );
 }
 
-const SummaryCard = ({ title, value, icon }) => (
+const SummaryCard = ({ title, value, icon, onClick }) => (
   <div
+    onClick={onClick}
     style={{
       background: "white",
       borderRadius: 8,
       padding: 20,
       boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
       textAlign: "center",
+      cursor: onClick ? "pointer" : "default",
+      transition: "transform 0.2s, box-shadow 0.2s",
+    }}
+    onMouseEnter={(e) => {
+      if (onClick) {
+        e.currentTarget.style.transform = "translateY(-3px)";
+        e.currentTarget.style.boxShadow = "0 6px 14px rgba(0,0,0,0.12)";
+      }
+    }}
+    onMouseLeave={(e) => {
+      if (onClick) {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "0 1px 4px rgba(0,0,0,0.1)";
+      }
     }}
   >
     <div style={{ fontSize: 24 }}>{icon}</div>
