@@ -2,7 +2,7 @@ import React from 'react';
 import {Flex,Box} from '@chakra-ui/react';
 
 import {Swipers,Movies,Bookmark,Events,Reviews} from '../../components/home';
-import {Header,Footer} from '../../components';
+import {Header} from '../../components';
 
 import {fetch} from '../../lib/server';
 
@@ -28,6 +28,5 @@ export default async function Homepage(){
                 <Reviews></Reviews>
             </Flex>
         </Box>
-        <Footer></Footer>
         </>;
 }

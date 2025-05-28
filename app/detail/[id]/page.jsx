@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box,Flex,VStack,Image,Button,Tabs} from '@chakra-ui/react';
-import {Header,Footer} from '../../../components';
+import {Header} from '../../../components';
 import {Reviews,Trailer} from '../../../components/detail';
 import {FaHeart} from 'react-icons/fa';
 
@@ -24,15 +24,17 @@ export default async function detail({params}){
                     <Flex justifyContent='center' alignItems='flex-start' flexDirection='column' gap='10px' color='white' position='relative' zIndex='1'>
                         <span style={{fontSize:50,textShadow:'4px 4px 6px black'}}>{movieinfo.title}</span>
                         <span style={{fontSize:30,position:'relative',bottom:15}}>{movieinfo.titleEnglish}</span>
-                        <Flex gap='10px' pt='10px'>
+                        <Flex gap='10px' pt='10px' overflow='visible'>
                             <Button fontSize='15px' boxShadow='4px 4px 6px black'><FaHeart color='red'/>{
                                 movieinfo.likeNumber > 999 ? Math.floor(movieinfo.likeNumber / 100) / 10 + 'k' : movieinfo.likeNumber                                
                             }</Button>
                             <Button fontSize='15px' boxShadow='4px 4px 6px black'>공유하기</Button>
                         </Flex>
 
-                        <Flex gap='10px' color='black' fontSize='15px' py='5px'>
-                            <Box px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>{movieinfo.label}</Box>
+                        <Flex gap='10px' color='black' fontSize='15px' py='5px' overflow='visible'>
+                            {
+                                movieinfo.label?movieinfo.label.split(',').map(name=><Box px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>{name.trim()}</Box>):<></>
+                            }
                         </Flex>
 
                         <Flex justifyContent='space-between' gap='60px' fontSize='25px' pt='170px'>
@@ -51,7 +53,7 @@ export default async function detail({params}){
                         </Flex>
                     </Flex>
 
-                    <VStack pt='80px'>
+                    <VStack pt='80px' overflow='visible'>
                         <Image w='280px' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src={movieinfo.poster}/>
                         <Button w='280px' boxShadow='4px 4px 6px black'>예매</Button>
                     </VStack>
@@ -118,6 +120,5 @@ export default async function detail({params}){
                     </Box>
                 </VStack>
             </Box>
-            <Footer></Footer>
         </>;
 }

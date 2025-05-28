@@ -3,7 +3,7 @@
 import React,{useState} from 'react';
 
 import {RadioGroup,Input,Box,VStack,Flex,Button} from '@chakra-ui/react';
-import {Header,Footer} from '../../components';
+import {Header} from '../../components';
 import Link from 'next/link';
 import {fetch} from '../../lib/client';
 
@@ -108,8 +108,7 @@ export default function findiddetail({userData}){
                         </Flex>
                     </Box>
                 </VStack>
-            </Box>
-            <Footer></Footer>            
+            </Box>       
         </>;
     }else{/* 찾은 아이디를 보여주는 부분 */
         return <>
@@ -137,7 +136,6 @@ export default function findiddetail({userData}){
                     </Box>
                 </VStack>
             </Box>
-            <Footer></Footer>
         </>;
     }
 }

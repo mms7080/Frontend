@@ -4,7 +4,7 @@ import React,{useEffect,useState} from 'react';
 import {Button,Flex,Box,Input} from '@chakra-ui/react';
 import Link from "next/link";
 
-import {Header,Footer} from '..';
+import {Header} from '..';
 import MovieCard from '../movie/moviecard';
 
 export default function Searchdetail({userData,movieData,keywordData}){
@@ -105,6 +105,5 @@ export default function Searchdetail({userData,movieData,keywordData}){
                 <MoreButton/>
             </Box>
         </div>
-        <Footer></Footer>
         </>;
 }

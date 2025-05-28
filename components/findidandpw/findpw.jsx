@@ -2,7 +2,7 @@
 
 import React,{useState} from 'react';
 import {RadioGroup,Input,Box,VStack,Flex,Button,Text} from '@chakra-ui/react';
-import {Header,Footer} from '../../components';
+import {Header} from '../../components';
 
 export default function findpwdetail({userData}){
     const [found,setFound]=useState(false);
@@ -136,7 +136,6 @@ export default function findpwdetail({userData}){
                     </Box>
                 </VStack>
             </Box>
-            <Footer></Footer>            
         </>;
     }else{/* 본격적으로 비밀번호를 재설정하는 과정 */
         return <>
@@ -262,7 +261,6 @@ export default function findpwdetail({userData}){
                     </Box>
                 </VStack>
             </Box>
-            <Footer></Footer>
         </>;
     }
 }

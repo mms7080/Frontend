@@ -1,7 +1,7 @@
 import React from 'react';
 import {Flex,Box,VStack,Input,Button,Image} from '@chakra-ui/react';
 import Link from 'next/link';
-import {Header,Footer} from '../../components';
+import {Header} from '../../components';
 import {redirect} from 'next/navigation';
 import {fetch} from '../../lib/server';
 
@@ -65,6 +65,5 @@ export default async function Signin(){
                 </VStack>
             </Flex>
         </Box>
-        <Footer></Footer>
         </>;
 }

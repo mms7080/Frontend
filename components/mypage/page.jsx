@@ -2,7 +2,7 @@ import React from 'react';
 import {Tabs,Box} from "@chakra-ui/react"
 import {FaFilm,FaQuestion} from 'react-icons/fa';
 import {FiUser} from 'react-icons/fi';
-import {Header,Footer} from '../../components';
+import {Header} from '../../components';
 import {fetch} from '../../lib/server';
 import {Modify} from '.';
 
@@ -45,6 +45,5 @@ export default async function Mypage(){
         </Tabs.Content>
       </Box>
     </Tabs.Root>
-    <Footer></Footer>
   </>;
 }
