@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Link from 'next/link';
 import { createIcon } from '@chakra-ui/react';
+import Modal, { useModal } from '../../components/movie/modal'
 import './moviecard.css';
 
 const HeartIcon = createIcon({
@@ -19,10 +20,14 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-const MovieCard = ({ movie, user, openModal }) => {
+
+
+const MovieCard = ({ movie, user, rank, crit }) => {
 
   const [liked, likedController] = useState(false);
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
+  const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
+
   const likeChange = async () => {
     if(!user)
       openModal();
@@ -39,9 +44,11 @@ const MovieCard = ({ movie, user, openModal }) => {
       };
   };
 
-  return (
+  return (<>
     <div className="movie-card">
-        <div className='rank-box'><span className="rank">예매 : {movie.rank}위</span></div>
+        <div className='rank-box'><span className="rank">
+          {rank ? (crit ? `${crit} : ${rank}위` : `${rank}위`) : ""}
+          </span></div>
         <Link href={"/detail/" + movie.id}>
           <div className="poster">
             <img src={movie.poster} alt={movie.title} loading='lazy' />
@@ -80,6 +87,11 @@ const MovieCard = ({ movie, user, openModal }) => {
         <button className="reserve-button" onClick={() => {}}>예매</button>
       </div>
     </div>
+    {isModalOpen && (<Modal
+    isModalOpen={isModalOpen}
+    isModalVisible={isModalVisible}
+    closeModal={closeModal}/>)}
+    </>
   );
 };
 
