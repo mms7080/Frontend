@@ -133,7 +133,7 @@ export default function Header({ userInfo }) {
           direction={{ base: "column", md: "row" }}
           align={{ base: "flex-start", md: "center" }}
           gap={{ base: 2, md: 4 }}
-          fontSize="15px"
+          fontSize="15px" overflow='visible'
         >
           {userInfo && isRealHome ? (
             <>
@@ -217,7 +217,7 @@ export default function Header({ userInfo }) {
               빠른예매
             </Link>
           </Text>
-          <Link href="/mypage">
+          <Link href="/mypage" style={{overflow:'visible'}}>
             <Icon
               as={FiUser}
               boxSize={6}
