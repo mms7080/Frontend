@@ -1,10 +1,7 @@
 import React from 'react';
 import {Flex,Box} from '@chakra-ui/react';
-import dynamic from "next/dynamic";
 
-import SwipersLoader from "../../components/home/SwipersLoader";
-
-import {Movies,Bookmark,Events,Reviews} from '../../components/home';
+import {Swipers,Movies,Bookmark,Events,Reviews} from '../../components/home';
 import {Header,Footer} from '../../components';
 
 import {fetch} from '../../lib/server';
@@ -24,7 +21,7 @@ export default async function Homepage(){
         <Header userInfo={userres}></Header>
         <Box w='calc(100vw - 17px)' minW='1000px'>
             <Flex w='100%' flexDirection='column'>
-                <SwipersLoader></SwipersLoader>
+                <Swipers></Swipers>
                 <Movies movieInfo={movieres}></Movies>
                 <Bookmark></Bookmark>
                 <Events Fetchedevents={eventres}></Events>

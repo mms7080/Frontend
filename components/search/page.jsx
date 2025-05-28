@@ -73,6 +73,7 @@ export default function Searchdetail({userData,movieData,keywordData}){
                                 fontSize="15px" color="white"
                                 _hover={{borderColor : "white"}}
                                 value={inputValue}
+                                ml='25px'
                                 onChange={(e) => setInputValue(e.target.value)}
                                 onKeyDown={(e) => {
                                     if(e.key === 'Enter') handleSearch();

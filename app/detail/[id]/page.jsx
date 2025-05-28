@@ -59,7 +59,7 @@ export default async function detail({params}){
                 <VStack my='50px'>
                     <Box w='1200px' px='30px' m='40px' borderRadius='10px' bg='white'>
                         <Flex w='1140px' flexDirection='column' gap='30px' px='50px' pt='40px' pb='80px'>
-                            <span>
+                            <span style={{lineHeight:'40px'}}>
                                 {movieinfo.title}<br/><br/>
                                 {movieinfo.description}<br/><br/><br/><br/>
                             </span>
