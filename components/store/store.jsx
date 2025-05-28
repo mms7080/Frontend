@@ -61,17 +61,26 @@ export default function MegaboxStorePage({userData}) {
         px={{ base: 4 }}
         pb={10}
       >
-        <Heading
-          mb={10}
-          fontSize={{ base: "xl", md: "2xl" }}
-          fontWeight="normal"
-          textAlign="center"
-          color="#222"
-          borderBottom="2px solid #ccc"
-          pb={3}
-        >
-          🛍️ 스토어
-        </Heading>
+<h1
+  style={{
+    fontSize: "24px",
+    fontWeight: "normal",
+    color: "#222",
+    borderBottom: "2px solid #ccc",
+    paddingBottom: "12px",
+    marginBottom: "40px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+  }}
+>
+  <img
+    src="http://localhost:9999/images/logo.png" 
+    alt="logo"
+    style={{ width: "141px", height: "68px", objectFit: "contain" }}
+  />
+</h1>
 
         <Flex justify="space-between" align="center" wrap="wrap" mb={8} px={2}>
           <Flex gap={2} flexWrap="wrap">

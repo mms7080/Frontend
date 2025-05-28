@@ -80,16 +80,26 @@ export default function EventPage({ serverEvents, userData }) {
         px="16px"
         textAlign="center"
       >
-        <Text
-          fontSize="24px"
-          fontWeight="normal"
-          color="#222"
-          borderBottom="2px solid #ccc"
-          pb="12px"
-          mb="40px"
-        >
-          📅 이벤트
-        </Text>
+<h1
+  style={{
+    fontSize: "24px",
+    fontWeight: "normal",
+    color: "#222",
+    borderBottom: "2px solid #ccc",
+    paddingBottom: "12px",
+    marginBottom: "40px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+  }}
+>
+  <img
+    src="http://localhost:9999/images/logo.png" 
+    alt="logo"
+    style={{ width: "141px", height: "68px", objectFit: "contain" }}
+  />
+</h1>
       </Box>
 
       <Box

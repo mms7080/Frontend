@@ -86,18 +86,26 @@ export default function NoticePage({ notices,userData }) {
           textAlign: "center",
         }}
       >
-        <h1
-          style={{
-            fontSize: "24px",
-            fontWeight: "normal",
-            color: "#222",
-            borderBottom: "2px solid #ccc",
-            paddingBottom: "12px",
-            marginBottom: "40px",
-          }}
-        >
-          📢 공지사항
-        </h1>
+<h1
+  style={{
+    fontSize: "24px",
+    fontWeight: "normal",
+    color: "#222",
+    borderBottom: "2px solid #ccc",
+    paddingBottom: "12px",
+    marginBottom: "40px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+  }}
+>
+  <img
+    src="http://localhost:9999/images/logo.png" 
+    alt="logo"
+    style={{ width: "141px", height: "68px", objectFit: "contain" }}
+  />
+</h1>
 
         {user?.auth === "ADMIN" && (
           <div style={{ textAlign: "right", marginBottom: "24px" }}>
