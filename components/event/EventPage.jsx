@@ -10,6 +10,9 @@ import SkeletonHeader from "../../components/SkeletonHeader";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const categories = [
   "전체",
@@ -21,7 +24,7 @@ const categories = [
 ];
 const categoryOrder = ["Pick", "영화", "극장", "제휴/할인", "시사회/무대인사"];
 
-export default function EventPage({ serverEvents,userData }) {
+export default function EventPage({ serverEvents, userData }) {
   const [events] = useState(serverEvents || {});
   const [user, setUser] = useState(userData);
   const [activeCategory, setActiveCategory] = useState("전체");
@@ -117,80 +120,85 @@ export default function EventPage({ serverEvents,userData }) {
         >
           추천 이벤트
         </Text>
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          navigation
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 2000, disableOnInteraction: false }}
-          loop
-          spaceBetween={20}
-          slidesPerView={1}
-          breakpoints={{ 640: { slidesPerView: 1 }, 768: { slidesPerView: 2 } }}
-          onSwiper={(swiper) => {
-            swiper.el.addEventListener("mouseenter", () =>
-              swiper.autoplay.stop()
-            );
-            swiper.el.addEventListener("mouseleave", () =>
-              swiper.autoplay.start()
-            );
-          }}
-        >
-          {(events["Pick"] || []).map((event, idx) => (
-            <SwiperSlide key={idx}>
+        <Box w="100%" maxW="1280px" mx="auto" px={{ base: 4, md: 6 }}>
+          <Slider
+            dots={true}
+            infinite={true}
+            speed={500}
+            slidesToShow={3}
+            slidesToScroll={1}
+            autoplay={true}
+            autoplaySpeed={2000}
+            pauseOnHover={true}
+            arrows={true}
+            responsive={[
+              {
+                breakpoint: 768,
+                settings: {
+                  slidesToShow: 1,
+                },
+              },
+            ]}
+          >
+            {(events["Pick"] || []).map((event, idx) => (
               <Box
-                bg="white"
-                borderRadius="md"
-                overflow="hidden"
-                boxShadow="md"
-                border="1px solid #eee"
+                key={idx}
+                p={2}
+                w="100%"
                 maxW="400px"
                 mx="auto"
-                marginBottom="10%"
                 onClick={() => router.push(`/event/view/${event.id}`)}
                 _hover={{ cursor: "pointer" }}
               >
-                <Box w="100%" h="400px" overflow="hidden">
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
-                    alt={event.title}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      pointerEvents: "none",
-                    }}
-                  />
-                </Box>
-                <Box p={4} position="relative">
-                  <Text
-                    position="absolute"
-                    top="8px"
-                    right="8px"
-                    fontSize="xs"
-                    fontWeight="bold"
-                    color="white"
-                    bg={
-                      getEventStatus(event.date) === "종료됨"
-                        ? "gray.500"
-                        : "green.500"
-                    }
-                    px={2}
-                    py={0.5}
-                    borderRadius="full"
-                  >
-                    {getEventStatus(event.date)}
-                  </Text>
-                  <Text fontSize="lg" fontWeight="bold" mb={2}>
-                    {event.title}
-                  </Text>
-                  <Text fontSize="sm" color="gray.500">
-                    {event.date}
-                  </Text>
+                <Box
+                  border="1px solid #eee"
+                  borderRadius="md"
+                  overflow="hidden"
+                  boxShadow="md"
+                >
+                  <Box w="100%" h="400px" overflow="hidden">
+                    <img
+                      src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`}
+                      alt={event.title}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        pointerEvents: "none",
+                      }}
+                    />
+                  </Box>
+                  <Box p={4} position="relative">
+                    <Text
+                      position="absolute"
+                      top="8px"
+                      right="8px"
+                      fontSize="xs"
+                      fontWeight="bold"
+                      color="white"
+                      bg={
+                        getEventStatus(event.date) === "종료됨"
+                          ? "gray.500"
+                          : "green.500"
+                      }
+                      px={2}
+                      py={0.5}
+                      borderRadius="full"
+                    >
+                      {getEventStatus(event.date)}
+                    </Text>
+                    <Text fontSize="lg" fontWeight="bold" mb={2}>
+                      {event.title}
+                    </Text>
+                    <Text fontSize="sm" color="gray.500">
+                      {event.date}
+                    </Text>
+                  </Box>
                 </Box>
               </Box>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+            ))}
+          </Slider>
+        </Box>
       </Box>
 
       <Box bg="white" py={12} px={{ base: 4, md: 6 }} maxW="1280px" mx="auto">
