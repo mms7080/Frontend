@@ -1,17 +1,18 @@
 'use client';
 
 import React,{useEffect,useState} from 'react';
-import {Button,Flex,Box,Input} from '@chakra-ui/react';
+import {Button,Flex,Box,Input,Text} from '@chakra-ui/react';
 import Link from "next/link";
 
 import {Header} from '..';
 import MovieCard from '../movie/moviecard';
 
-export default function Searchdetail({userData,movieData,keywordData}){
+export default function Searchdetail({userData,movieData,serverEvents,keywordData}){
     const [movies, setMovies] = useState(movieData);
     const [inputValue, setInputValue] = useState(keywordData);
     const [searchWord, setSearchWord] = useState(keywordData);
     const [displayNumber, setDisplayNumber] = useState(8);
+    const [events] = useState(serverEvents || {});
 
     const handleSearch = () => {
         if(inputValue != searchWord) 
@@ -58,11 +59,29 @@ export default function Searchdetail({userData,movieData,keywordData}){
                     </Box>)
     }
 
+    // const EventCards = () => {
+    //     if(searchWord != "" && searchedMovies.length < 1)
+    //         return <Box w='100%' h='50vh' bg='#1e1e1e' fontSize='4xl' color='white'
+    //                 display='flex' alignItems='center' justifyContent='center'>
+    //                 검색 결과가 없습니다
+    //                 </Box>
+    //     else return (<Box className="movie-grid">
+    //                     {searchedMovies.map((movie,index) => {
+    //                         if(index < displayNumber)
+    //                             return (<MovieCard 
+    //                                         key={movie.id}
+    //                                         movie={movie}
+    //                                     />)
+    //                     })}
+    //                 </Box>)
+    // }
+
+    
+
     return <>
         <Header userInfo={userData}></Header>
         <div className="bg-[#141414]">
             <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
-                {/* 카테고리 분류 */}
                 <Box pb={6}>
                     <Flex gap={2} justify={'space-between'} >
                         <Box transform="translate(-23px, 0)">
@@ -100,9 +119,30 @@ export default function Searchdetail({userData,movieData,keywordData}){
                             </Button>
                         </Box>
                     </Flex>
+
+                    <Text
+                    fontSize="xl"
+                    pl='10px'
+                    py='10px'
+                    mt='30px'
+                    borderLeft="4px solid #6B46C1"
+                    color='white'
+                    >
+                        영화 검색결과
+                    </Text>
                 </Box>
                 <MovieCards/>
                 <MoreButton/>
+                <Text
+                fontSize="xl"
+                pl='10px'
+                py='10px'
+                mt='30px'
+                borderLeft="4px solid #6B46C1"
+                color='white'
+                >
+                    이벤트 검색결과
+                </Text>
             </Box>
         </div>
         </>;

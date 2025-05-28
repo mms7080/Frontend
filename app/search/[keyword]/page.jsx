@@ -11,5 +11,6 @@ export const metadata = {
 export default async function Searchpage({params}){
     const userres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
     const movieres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);
-    return <Search userData={userres} movieData={movieres} keywordData={decodeURIComponent(params.keyword)}/>;
+    const eventres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event`);
+    return <Search userData={userres} movieData={movieres} serverEvents={eventres} keywordData={decodeURIComponent(params.keyword)}/>;
 }

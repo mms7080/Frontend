@@ -18,15 +18,24 @@ export default function Bookmark(){
                  value={inputValue}
                  onChange={(e)=>setInputValue(e.target.value)}
                  onKeyDown={(e)=>{
-                    if(e.key==='Enter')
-                         router.push(`/search/${e.target.value}`);
+                    if(e.key==='Enter'){
+                        if(e.target.value===''){
+                            alert('검색어를 입력하세요.');
+                            return;
+                        }
+                        router.push(`/search/${e.target.value}`);
+                    }
                  }}
                  />
                 
-                <Button h='24px' bg='none'>
-                    <Link href={`/search/${inputValue}`}>
-                        <Image w='16px' h='16px' src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="search" loading='lazy'/>
-                    </Link>
+                <Button h='24px' bg='none' onClick={()=>{
+                    if(inputValue===''){
+                        alert('검색어를 입력하세요.');
+                        return;
+                    }
+                    router.push(`/search/${inputValue}`);
+                }}>
+                    <Image w='16px' h='16px' src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="search" loading='lazy'/>
                 </Button>
 
             </Flex>
