@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Header, Footer } from "..";
+import { Header } from "..";
 import SkeletonHeader from "../SkeletonHeader"; 
 
 export default function NoticePage({ notices,userData }) {
@@ -451,7 +451,6 @@ export default function NoticePage({ notices,userData }) {
         </div>
       </div>
       <div style={{ height: "260px" }} />
-      <Footer footerBg="white" footerColor="black" />
     </>
   );
 }

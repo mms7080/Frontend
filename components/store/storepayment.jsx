@@ -3,7 +3,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Header, Footer } from "..";
+import { Header } from "..";
 
 export default function PaymentSuccessPage({userData}) {
   const searchParams = useSearchParams();
@@ -122,8 +122,6 @@ export default function PaymentSuccessPage({userData}) {
           </button>
         </div>
       </div>
-
-      <Footer footerBg="white" footerColor="black" />
     </>
   );
 }

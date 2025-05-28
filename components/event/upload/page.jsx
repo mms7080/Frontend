@@ -11,7 +11,7 @@ import {
   Image,
   Flex,
 } from "@chakra-ui/react";
-import { Header, Footer } from "../../";
+import { Header } from "../../";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -237,7 +237,6 @@ export default function EventUploader({userData}) {
       </Box>
 
       <Box h="100px" />
-      <Footer footerColor="black" footerBg="white" footerBorder="#ddd" />
     </>
   );
 }

@@ -10,7 +10,7 @@ import {
   Flex,
   Button,
 } from "@chakra-ui/react";
-import { Header, Footer } from "..";
+import { Header } from "..";
 import { useRouter } from "next/navigation";
 import SkeletonHeader from "../SkeletonHeader";
 
@@ -238,7 +238,6 @@ export default function MegaboxStorePage({userData}) {
         ))}
       </Box>
       <Box height={{ base: "100px", md: "230px" }} />
-      <Footer footerBg="white" footerColor="black" />
     </>
   );
 }

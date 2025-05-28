@@ -3,7 +3,6 @@
 import React,{ useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../header";
-import Footer from "../footer";
 import SkeletonHeader from "../SkeletonHeader"; 
 
 export default function NoticeIdPage({userData}) {
@@ -224,7 +223,6 @@ export default function NoticeIdPage({userData}) {
       </div>
 
       <div style={{ height: "200px" }} />
-      <Footer footerBg="white" footerColor="black" />
     </>
   );
 }

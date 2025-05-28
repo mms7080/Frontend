@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Box, Flex, Text, Button, Image, SimpleGrid } from "@chakra-ui/react";
-import { Header, Footer } from "..";
+import { Header } from "..";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import SkeletonHeader from "../../components/SkeletonHeader";
@@ -350,12 +350,6 @@ export default function EventPage({ serverEvents, userData }) {
           </Box>
         ))}
       </Box>
-
-      <Footer
-        footerColor="white"
-        footerBg="#1a1a1a"
-        footerBorder="transparent"
-      />
     </>
   );
 }

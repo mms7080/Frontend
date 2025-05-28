@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '../Header';
-import Footer from '../Footer';
 
 export default function NoticeCreatePage({userData}) {
   const router = useRouter();
@@ -82,9 +81,7 @@ export default function NoticeCreatePage({userData}) {
           </div>
         </div>
       </main>
-
-      <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
-
+      
       <style jsx>{`
         .form-container {
           max-width: 800px;

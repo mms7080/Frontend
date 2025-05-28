@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../Header";
-import Footer from "../Footer";
 
 export default function NoticeEditIdPage({userData}) {
   const { id } = useParams();
@@ -95,13 +94,7 @@ export default function NoticeEditIdPage({userData}) {
           </div>
         </div>
       </main>
-
-      <Footer
-        footerColor="white"
-        footerBg="#1a1a1a"
-        footerBorder="transparent"
-      />
-
+      
       <style jsx>{`
         .form-container {
           max-width: 800px;

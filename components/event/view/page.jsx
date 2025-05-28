@@ -12,7 +12,7 @@ import {
   useBreakpointValue,
   Image,
 } from "@chakra-ui/react";
-import { Header, Footer } from "../..";
+import { Header } from "../..";
 import SkeletonHeader from "../../SkeletonHeader";
 
 export default function EventDetailPage({userData}) {
@@ -180,8 +180,6 @@ export default function EventDetailPage({userData}) {
           </Flex>
         )}
       </Box>
-
-      <Footer footerColor="black" footerBg="white" footerBorder="#ccc" />
     </>
   );
 }

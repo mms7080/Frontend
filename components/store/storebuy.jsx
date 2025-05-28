@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Header, Footer } from "..";
+import { Header } from "..";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 
 export default function PaymentPage({userData}) {
@@ -141,8 +141,6 @@ export default function PaymentPage({userData}) {
           </div>
         </div>
       </div>
-
-      <Footer footerBg="white" footerColor="black" />
 
       <style jsx>{`
         .payment-container {

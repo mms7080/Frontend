@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Header, Footer } from "../../components";
+import { Header } from "../../components";
 import SkeletonHeader from "../../components/SkeletonHeader";
 import {
   BarChart,
@@ -779,7 +779,6 @@ export default function AdminDashboard({ userData }) {
           {renderList()}
         </main>
       </div>
-      <Footer />
     </div>
   );
 }

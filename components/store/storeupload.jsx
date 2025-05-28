@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Header, Footer } from "..";
+import { Header } from "..";
 
 export default function StoreUploadPage({userData}) {
   const [category, setCategory] = useState("");
@@ -224,7 +224,6 @@ export default function StoreUploadPage({userData}) {
           </div>
         </div>
       </div>
-      <Footer footerBg="white" footerColor="black" />
     </>
   );
 }

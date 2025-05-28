@@ -10,7 +10,7 @@ import {
   Button,
   Spacer,
 } from "@chakra-ui/react";
-import { Header, Footer } from "..";
+import { Header } from "..";
 import { useParams, useRouter } from "next/navigation";
 
 export default function StoreDetailPage({userData}) {
@@ -210,8 +210,6 @@ export default function StoreDetailPage({userData}) {
           )}
         </Flex>
       </Box>
-
-      <Footer footerBg="white" footerColor="black" />
     </>
   );
 }
