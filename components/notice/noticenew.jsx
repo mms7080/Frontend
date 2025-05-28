@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from '../Header';
+import Header from '../header';
 
 export default function NoticeCreatePage({userData}) {
   const router = useRouter();
