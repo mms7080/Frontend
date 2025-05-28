@@ -12,6 +12,7 @@ export default function Layout({children}) {
         <Provider>
             {children}
         </Provider>
+        <script type="text/javascript" src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAOMAP_KEY}&libraries=services,clusterer`}></script>
       </body>
       </html>;
 }
