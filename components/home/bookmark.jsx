@@ -32,24 +32,24 @@ export default function Bookmark(){
             </Flex>
             <Box w='1px' h='32px' bg='#333'></Box>
             <Link href='/booking'>
-                <VStack>
+                <Flex gap='5px' flexDirection='column' h='60px' justifyContent='center' alignItems='center' overflow='visible'>
                     <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png" alt="calendar" loading='lazy'/>
                     <span style={{color:'white'}}>상영시간표</span>
-                </VStack>
+                </Flex>
             </Link>
             <Box w='1px' h='32px' bg='#333'></Box>
             <Link href='/booking'>
-                <VStack>
+                <Flex gap='5px' flexDirection='column' h='60px' justifyContent='center' alignItems='center' overflow='visible'>
                     <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/512/4305/4305567.png" alt="boxoffice" loading='lazy'/>
                     <span style={{color:'white'}}>박스오피스</span>
-                </VStack>
+                </Flex>
             </Link>
             <Box w='1px' h='32px' bg='#333'></Box>
             <Link href='/booking'>
-                <VStack>
+                <Flex gap='5px' flexDirection='column' h='60px' justifyContent='center' alignItems='center' overflow='visible'>
                     <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/512/2331/2331970.png" alt="ticket" loading='lazy'/>
                     <span style={{color:'#ff4d4d'}}>빠른예매</span>
-                </VStack>
+                </Flex>
             </Link>
         </Flex>
     </VStack>;
