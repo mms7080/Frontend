@@ -61,8 +61,12 @@ const MovieCard = ({ movie, user, rank, crit }) => {
               </p>
             </div>
               <div className='label-container'>
-              {movie.imax && (<span className={`label gray`}>IMAX</span>)}
-              {movie._4dx && (<span className={`label gray`}>4DX</span>)}
+              {movie.label && (
+              <>
+                {movie.label.includes("IMAX") && (<span className={`label gray`}>IMAX</span>)}
+                {movie.label.includes("4DX") && (<span className={`label gray`}>4DX</span>)}
+              </>
+              )}
               </div>
             {movie.rate && (
               <span className={`rate ${
