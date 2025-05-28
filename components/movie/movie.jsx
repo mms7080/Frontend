@@ -25,16 +25,16 @@ const modalStyles = `
     }
 `;
 
-const Movie = ({userRes, movieRes}) => {
+const Movie = () => {
 
-      const [activeCategory, setActiveCategory] = useState('전체영화');
-      const [movies, setMovies] = useState([]);
-      const [user, setUser] = useState(null);
-      const [inputValue, setInputValue] = useState("");
-      const [searchWord, setSearchWord] = useState("");
-      const [displayNumber, setDisplayNumber] = useState(8);
-      const [isModalOpen, setIsModalOpen] = useState(false);
-      const [isModalVisible, setIsModalVisible] = useState(false);
+    const [activeCategory, setActiveCategory] = useState('전체영화');
+    const [movies, setMovies] = useState([]);
+    const [user, setUser] = useState(null);
+    const [inputValue, setInputValue] = useState("");
+    const [searchWord, setSearchWord] = useState("");
+    const [displayNumber, setDisplayNumber] = useState(8);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     useEffect(() => {
         document.title = '전체 영화 - 필모라';
@@ -84,10 +84,9 @@ const Movie = ({userRes, movieRes}) => {
         })();
     }, []);
 
-
-  const handleSearch = () => {
-    if(inputValue != searchWord) 
-        setSearchWord(inputValue);
+    const handleSearch = () => {
+        if(inputValue != searchWord) 
+            setSearchWord(inputValue);
 }
 
 // 현재 시간과 개봉일 비교해서 카테고리 분류
@@ -151,7 +150,7 @@ useEffect(()=>{
 const MovieCards = () => {
     if(searchWord != "" && searchedMovies.length < 1)
         return <Box w='100%' h='50vh' bg='#1e1e1e' fontSize='4xl' color='white'
-                display='flex' alignItems='center' justifyContent='center'>
+                    display='flex' alignItems='center' justifyContent='center'>
                 검색 결과가 없습니다
                 </Box>
     else return (<Box className="movie-grid">
@@ -167,8 +166,8 @@ const MovieCards = () => {
                 </Box>)
 }
 
-  return <>(
-    <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
+return <>(
+<Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
     {/* 카테고리 분류 */}
     <Box pb={6}>
         <Flex gap={2} justify={'space-between'} >
@@ -218,42 +217,42 @@ const MovieCards = () => {
     <MoreButton/>
 </Box>
 
-        {/* 모달 창 */}
-        {isModalOpen && (
-            <>
-                <style>{modalStyles}</style>
-                <Box      
-                    className={`modal-overlay ${isModalVisible ? 'show' : ''}`}
-                    position="fixed" inset="0" transform="translate(0, -5%)" zIndex="50" 
-                    display="flex" alignItems="center" justifyContent="center"
-                    bg="blackAlpha.500"
-                    onClick={closeModal}
-                >
-                    <Box 
-                        className={`modal-content ${isModalVisible ? 'show' : ''}`}
-                        position="relative" bg="white" borderRadius="xl" shadow="2xl" 
-                        p="8" maxW="md" w="full" mx="4"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <Box textAlign="center">
-                            <Box mb="6" fontSize="xl">
-                                로그인 후 이용가능한 서비스 입니다.
-                            </Box>
-                            <Button
-                                width="20%" py="3" padding="8px" fontSize="large"
-                                bg="#6b46c1" color="white" borderRadius="4px" 
-                                _hover={{bg : "#553c9a"}}
-                                onClick={closeModal}
-                            >
-                                확인
-                            </Button>
-                        </Box>
+{/* 모달 창 */}
+{isModalOpen && (
+    <>
+        <style>{modalStyles}</style>
+        <Box      
+            className={`modal-overlay ${isModalVisible ? 'show' : ''}`}
+            position="fixed" inset="0" transform="translate(0, -5%)" zIndex="50" 
+            display="flex" alignItems="center" justifyContent="center"
+            bg="blackAlpha.500"
+            onClick={closeModal}
+        >
+            <Box 
+                className={`modal-content ${isModalVisible ? 'show' : ''}`}
+                position="relative" bg="white" borderRadius="xl" shadow="2xl" 
+                p="8" maxW="md" w="full" mx="4"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <Box textAlign="center">
+                    <Box mb="6" fontSize="xl">
+                        로그인 후 이용가능한 서비스 입니다.
                     </Box>
+                    <Button
+                        width="20%" py="3" padding="8px" fontSize="large"
+                        bg="#6b46c1" color="white" borderRadius="4px" 
+                        _hover={{bg : "#553c9a"}}
+                        onClick={closeModal}
+                    >
+                        확인
+                    </Button>
                 </Box>
-            </>
-        )}
+            </Box>
+        </Box>
+    </>
+)}
 
-  );</>
+);</>
 }
 
 export default Movie;

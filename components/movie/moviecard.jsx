@@ -53,12 +53,10 @@ const MovieCard = ({ movie, user, openModal }) => {
                 <br /> <br />개봉일 <span>{movie.releaseDate}</span>
               </p>
             </div>
-            {movie.label && (
-              <span className={`label ${
-                movie.label == "MEGA ONLY" ? "purple" :
-                movie.label == "Dolby" ? "gray" : "none"
-              }`}>{movie.label}</span>
-            )}
+              <div className='label-container'>
+              {movie.imax && (<span className={`label gray`}>IMAX</span>)}
+              {movie._4dx && (<span className={`label gray`}>4DX</span>)}
+              </div>
             {movie.rate && (
               <span className={`rate ${
                 movie.rate == "ALL" ? "green" :
