@@ -16,6 +16,5 @@ export default async function Moviepage(){
     return <>
         <Header headerColor="white" headerBg="#1a1a1a" userInfo={userRes}/>
         <Movie/>
-        <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
     </>;
 }

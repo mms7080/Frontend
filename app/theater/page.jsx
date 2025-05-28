@@ -16,6 +16,5 @@ export default async function TheaterPage() {
     return <>
         <Header headerColor="white" headerBg="#1a1a1a" userInfo={userRes}/>
         <Theater/>
-        <Footer footerColor="white" footerBg="#1a1a1a" footerBorder="transparent" />
     </>
 }
