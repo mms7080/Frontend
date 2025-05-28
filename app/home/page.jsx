@@ -30,5 +30,4 @@ export default async function Homepage(){
         </Box>
         <Footer></Footer>
         </>;
-        // 종현 테스트
 }

@@ -1,69 +1,85 @@
 "use client";
 
-import React from 'react';
-import {VStack,Image,IconButton} from '@chakra-ui/react';
+import React from "react";
+import Slider from "react-slick";
+import {IconButton} from "@chakra-ui/react";
+import {FaChevronLeft,FaChevronRight} from "react-icons/fa";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-import {Swiper,SwiperSlide} from 'swiper/react';
-import {Navigation,Pagination,Autoplay} from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import {FaCaretLeft,FaCaretRight} from 'react-icons/fa';
+// 커스텀 화살표 컴포넌트
+function NextArrow(props) {
+  const { onClick } = props;
+  return (
+    <IconButton
+      aria-label="Next"
+      position="absolute"
+      right="10px"
+      top="45%"
+      transform="translateY(-50%)"
+      zIndex="2"
+      backgroundColor="transparent"
+      onClick={onClick}
+      outline='none'
+      border='none'
+      
+    ><FaChevronRight color='white' _hover={{color:'gray.300'}}/></IconButton>
+  );
+}
 
-export default function Swipers(){
-    return <VStack w='100%' h='700px' position='relative'>
-            {/* 왼쪽 화살표 */}
-            <IconButton
-                className="swiper-button-prev"
-                position="absolute"
-                top="50%"
-                left="10px"
-                transform="translateY(-50%)"
-                zIndex="2"
-                icon={<FaCaretLeft size={30} />}
-                aria-label="Previous Slide"
-                backgroundColor="transparent"
-                color='white'
-                _hover={{ backgroundColor: 'transparent', color: 'gray.300' }}
-            />
+function PrevArrow(props) {
+  const { onClick } = props;
+  return (
+    <IconButton
+      aria-label="Previous"
+      position="absolute"
+      left="10px"
+      top="45%"
+      transform="translateY(-50%)"
+      zIndex="2"
+      backgroundColor="transparent"
+      onClick={onClick}
+      outline='none'
+      border='none'
+    ><FaChevronLeft color='white' _hover={{color:'gray.300'}}/></IconButton>
+  );
+}
 
-            {/* 오른쪽 화살표 */}
-            <IconButton
-                className="swiper-button-next"
-                position="absolute"
-                top="50%"
-                right="10px"
-                transform="translateY(-50%)"
-                zIndex="2"
-                icon={<FaCaretRight size={30} />}
-                aria-label="Next Slide"
-                backgroundColor="transparent"
-                color='white'
-                _hover={{ backgroundColor: 'transparent', color: 'gray.300' }}
-            />
+export default function SimpleSlider() {
+  const settings = {
+    dots: false,   
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+  };
 
-            <Swiper
-                modules={[Navigation, Pagination, Autoplay]}
-                navigation={{
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-                }}
-                pagination={{ clickable: true }}
-                autoplay={{ delay: 3000 }}
-                loop={true}
-                spaceBetween={1}
-                slidesPerView={1}
-                style={{width:'100%',height:'100%'}}
-            >
-                <SwiperSlide>
-                    <Image loading='lazy' objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Flip/Flip_1920774.png" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image loading='lazy' objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Cat/Cat_1920774.jpg" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <Image loading='lazy' objectFit='cover' style={{width:'100%',height:'100%'}} src="https://cf2.lottecinema.co.kr/lotte_image/2025/Secret/Secret_19207745.png" />
-                </SwiperSlide>
-            </Swiper>
-        </VStack>;
+  return (
+    <div style={{ width: "100%", height: "700px", position: "relative",overflow:'visible' }}>
+      <Slider {...settings}>
+        <div>
+          <img
+            src="https://cf2.lottecinema.co.kr/lotte_image/2025/Flip/Flip_1920774.png"
+            style={{ width: "100%", height: "700px", objectFit: "cover" }}
+          />
+        </div>
+        <div>
+          <img
+            src="https://cf2.lottecinema.co.kr/lotte_image/2025/Cat/Cat_1920774.jpg"
+            style={{ width: "100%", height: "700px", objectFit: "cover" }}
+          />
+        </div>
+        <div>
+          <img
+            src="https://cf2.lottecinema.co.kr/lotte_image/2025/Secret/Secret_19207745.png"
+            style={{ width: "100%", height: "700px", objectFit: "cover" }}
+          />
+        </div>
+      </Slider>
+    </div>
+  );
 }
