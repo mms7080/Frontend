@@ -22,10 +22,10 @@ export default function Layout({ children }) {
           </div>
         </Provider>
 
-        <script
+        {/* <script
           type="text/javascript"
           src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAOMAP_KEY}&libraries=services,clusterer`}
-        ></script>
+        ></script> */}
       </body>
     </html>
   );

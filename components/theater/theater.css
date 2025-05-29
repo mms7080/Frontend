@@ -1,0 +1,53 @@
+/* 기존 스타일을 더 강하게 적용 */
+.map-container {
+    position: relative !important;
+    width: 100% !important;
+    height: 350px !important;
+    z-index: 1 !important;
+    overflow: visible !important;
+}
+
+/* Kakao Map 관련 스타일 강화 */
+.map-container > div,
+.map-container canvas,
+.map-container img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+}
+
+/* Chakra UI와의 충돌 방지 */
+.map-container * {
+    box-sizing: content-box !important;
+}
+
+/* 이미지 지연 로딩 방지 */
+.map-container img {
+    loading: eager !important;
+}
+
+/* 지도 컨테이너와 모든 하위 요소들의 위치 강제 조정 */
+.map-container,
+.map-container > div {
+    position: relative !important;
+    overflow: visible !important;
+    transform: none !important;
+}
+
+/* 지도 이미지들이 올바른 위치에 표시되도록 강제 */
+.map-container img {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Kakao Map의 타일 컨테이너 위치 조정 */
+.map-container [style*="position: absolute"] {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+}
