@@ -20,7 +20,7 @@ export default function Reviews({userInfo}){
             
             <Flex flexDirection='column' gap='15px'>
                 <Flex w='100%' gap='15px'>
-                    <Flex w='80px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{userInfo?userInfo.username:'로그인 필요'}</Flex>
+                    <Flex w='120px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{userInfo?userInfo.username:'로그인 필요'}</Flex>
                     <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/logic`} method='post' style={{flex:1}}>
                         <Flex h='70px' border='1px solid #666666' borderRadius='5px' alignItems='center'>
                             <Textarea border='none' outline='none' 

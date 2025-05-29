@@ -5,7 +5,7 @@ import {Flex,Text,Box,Button,Input} from '@chakra-ui/react';
 export default function Detailreview({author,score,content}){
     return <>
         <Flex w='100%' gap='15px'>
-            <Flex w='80px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{author.substring(0,2)+'**'+author.substring(4)}</Flex>
+            <Flex w='120px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{author.substring(0,2)+'**'+author.substring(4)}</Flex>
             <Flex w='100%' h='70px' flex='1' bg='#F8F8FA' borderRadius='5px' alignItems='center'>
                 <Flex w='100%' gap='15px' alignItems='center'>
                     <span style={{color:'#352461',paddingLeft:20,width:100}}>관람평</span>
