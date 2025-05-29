@@ -161,13 +161,13 @@ export default function Booking2Page() {
             <Flex justify="space-between" align="start" gap={8}>
                 {/* 왼쪽: 포스터 */}
                 <Box flex="1" display="flex" justifyContent="center">
-                <Image
-                    src={movies[activeIndex]?.poster}
-                    alt={movies[activeIndex]?.title}
-                    w="70%"
-                    borderRadius="md"
-                    objectFit="cover"
-                />
+                    <Image
+                        src={movies[activeIndex]?.poster}
+                        alt={movies[activeIndex]?.title}
+                        w="80%"
+                        borderRadius="md"
+                        objectFit="cover"
+                    />
                 </Box>
 
                 {/* 가운데: 정보 */}
@@ -182,7 +182,7 @@ export default function Booking2Page() {
                             {movies[activeIndex]?.likeNumber || '0'}
                         </Button>
                     </Flex>
-                    <Box mt={0}>
+                    <Box mt={8}>
                         <Grid templateColumns="repeat(3, 1fr)" gap={8}>
                             {/* 각 항목 */}
                             <GridItem>
