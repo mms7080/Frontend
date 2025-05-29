@@ -4,8 +4,8 @@ import Search from '../../../components/search/page'
 import {fetch} from '../../../lib/server';
 
 export const metadata = {
-    title: '영화 검색',
-    description: '영화를 검색할 수 있는 사이트입니다.',
+    title: '검색',
+    description: '영화, 이벤트, 리뷰를 검색할 수 있는 사이트입니다.',
 };
 
 export default async function Searchpage({params}){
