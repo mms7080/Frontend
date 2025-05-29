@@ -117,6 +117,7 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
                                 fontSize="15px" color="white"
                                 _hover={{borderColor : "white"}}
                                 ml='25px'
+                                defaultValue={keywordData}
                                 onKeyDown={(e) => {
                                     if(e.key === 'Enter') handleSearch();
                                 }}
