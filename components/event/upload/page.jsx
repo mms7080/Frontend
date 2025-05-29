@@ -188,7 +188,7 @@ export default function EventUploader({userData}) {
             >
               <option value="">카테고리 선택</option>
               <option value="추천">추천</option>
-              <option value="메가Pick">메가Pick</option>
+              <option value="Pick">Pick</option>
               <option value="영화">영화</option>
               <option value="극장">극장</option>
               <option value="제휴/할인">제휴/할인</option>
