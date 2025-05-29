@@ -56,7 +56,7 @@ movies.filter((movie) => {
 
 // 검색어 포함 유무로 분류
 const searchedMovies = searchWord === "" ? filteredMovies :
-filteredMovies.filter((movie) => movie.title.includes(searchWord));
+filteredMovies.filter((movie) => movie.title.includes(searchWord) || movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()));
 
 // 예매율 기준 정렬렬
 const sortedMovies = searchedMovies.sort((a,b)=>b.reserveRate - a.reserveRate);
