@@ -1,6 +1,6 @@
 'use client';
 
-import React,{useEffect,useState,useMemo} from 'react';
+import React,{useEffect,useState} from 'react';
 import {Button,Flex,Box,Input,Text} from '@chakra-ui/react';
 import {useRouter} from 'next/navigation';
 import Link from "next/link";
@@ -24,7 +24,7 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
     // 검색어 포함 유무로 분류
     const searchedMovies = searchWord === "" ? movies:
     movies.filter((movie) => {
-        return movie.title.toLowerCase().includes(searchWord.toLowerCase());
+        return movie.title.toLowerCase().includes(searchWord.toLowerCase()) || movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase());
     });
     
     // 영화 더보기 버튼
@@ -63,12 +63,9 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
     }
 
     const categoryOrder = ["Pick", "영화", "극장", "제휴/할인", "시사회/무대인사"];
-    const arrangedEvents=useMemo(()=>{
-        return categoryOrder.filter((cat) => events[cat]).map((cat) => [cat, events[cat]]);/* 전체 이벤트를 포함하는 변수 생성 */
-    },[events]);
+    const arrangedEvents=categoryOrder.filter((cat) => events[cat]).map((cat) => [cat, events[cat]]);/* 전체 이벤트를 포함하는 변수 생성 */
 
-    const searchedEvents = useMemo(()=>{
-        return searchWord === "" ? arrangedEvents:arrangedEvents/* 검색 키워드를 포함하는 이벤트 추려내기 */
+    const searchedEvents = searchWord === "" ? arrangedEvents:arrangedEvents/* 검색 키워드를 포함하는 이벤트 추려내기 */
         .map(([category, items]) => [
           category,
           items.filter((e) =>
@@ -76,7 +73,6 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
           ),
         ])
         .filter(([_, items]) => items.length > 0);
-    },[searchWord, arrangedEvents]); 
 
     // 이벤트 더보기 버튼
     const MoreButton2 = () => {
@@ -173,6 +169,18 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
                 </Text>
                 <EventCards/>
                 <MoreButton2/>
+
+                <Text
+                fontSize="xl"
+                pl='10px'
+                py='10px'
+                mt='30px'
+                mb='30px'
+                borderLeft="4px solid #6B46C1"
+                color='white'
+                >
+                    리뷰 검색결과
+                </Text>
             </Box>
         </div>
         </>;

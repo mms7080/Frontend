@@ -7,7 +7,7 @@ export default function Event({src,content,url}){
     return <Link href={url}>
             <VStack w='240px' borderRadius='8px' bg='white' textAlign='center' boxShadow='0 2px 10px rgba(0,0,0,0.1)' transition='all 0.2s ease'
                 _hover={{transform:'translateY(-5px)',boxShadow:'0 4px 20px rgba(0, 0, 0, 0.6)'}}>
-                <Image w='100%' src={src} alt="이벤트" loading='lazy'/>
+                <Image w='240px' h='240px' objectFit='cover' src={src} alt="이벤트" loading='lazy'/>
                 <Text w='100%' fontSize='14px' color='#333' px='20px' pt='5px' pb='10px' overflow='hidden' whiteSpace='nowrap' textOverflow='ellipsis'>{content}</Text>
             </VStack>
         </Link>;
