@@ -104,8 +104,6 @@ export default function EventPage({ serverEvents, userData }) {
 
       <Box
         bg="white"
-        pt={20}
-        pb={75}
         px={{ base: 4, md: 6 }}
         maxW="1280px"
         mx="auto"
@@ -115,6 +113,7 @@ export default function EventPage({ serverEvents, userData }) {
             <Button
               colorScheme="purple"
               onClick={() => router.push("/event/upload")}
+              style={{ transform: "translateX(-30px)" }}
             >
               + 이벤트 등록
             </Button>
