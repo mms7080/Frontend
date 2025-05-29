@@ -1,5 +1,6 @@
 import KakaoMap from "./kakaomap";
 import { Box, Heading } from "@chakra-ui/react";
+import './theater.css';
 
 const Theater = () => {
     return (
@@ -15,23 +16,11 @@ const Theater = () => {
             >
                 🛍️ 영화관
             </Heading>
-            <Box 
+            <div 
                 className="map-container"
-                sx={{
-                    '& > div': {
-                        position: 'relative !important',
-                        overflow: 'visible !important'
-                    },
-                    '& img': {
-                        position: 'relative !important',
-                        left: 'auto !important',
-                        top: 'auto !important',
-                        transform: 'none !important'
-                    }
-                }}
             >
                 <KakaoMap address="부산광역시 부산진구 중앙대로" />
-            </Box>
+            </div>
         </Box>
     );
 }
