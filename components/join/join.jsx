@@ -16,6 +16,7 @@ export default function Joindetail(){
     const [pwrMessage,setPwrMessage]=useState('');/* 비밀번호 확인 입력창 밑의 메세지 */
     const [isPwrAvailable,setIsPwrAvailable]=useState(null);/* 비밀번호 확인이 비밀번호와 같은지 여부 */
     const [gender,setGender]=useState('');
+    const [inputsvalue, setInputsValue] = useState('');
 
     const handleIdCheck=async ()=>{
         try{
@@ -54,6 +55,13 @@ export default function Joindetail(){
         }
     };
 
+    const handleChange = (inputedvalue) => {
+        // 영어 대소문자와 숫자만 허용
+        const inputValue = inputedvalue;
+        const filteredValue = inputValue.replace(/[^a-zA-Z0-9]/g, '');
+        setInputsValue(filteredValue);
+    };
+
     return <Box w='calc(100vw - 17px)' minW='1000px'>
             <VStack w='100%' bg='#F9F9F9'>
                 <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>
@@ -73,8 +81,10 @@ export default function Joindetail(){
                                                     name="id"
                                                     minLength="4"
                                                     maxLength="16"
-                                                    placeholder="영문 소문자와 숫자 조합 (4~16자)"
+                                                    placeholder="영문 대소문자와 숫자 조합 (4~16자)"
+                                                    value={inputsvalue}
                                                     onChange={(e)=>{
+                                                        handleChange(e.target.value);
                                                         setId(e.target.value);
                                                         setIsIdAvailable(null);/* 아이디 값 바꾸면 유효성 여부를 다시 체크해야 함 */
                                                         setIdMessage('');
