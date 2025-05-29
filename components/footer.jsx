@@ -66,19 +66,21 @@ export default function Footer() {
         <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>개인정보처리방침</Text></Link>
         <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>사이트 이용가이드</Text></Link>
         <HStack spacing={2} mt="8px">
-          <a href="https://instagram.com" target="_blank">
-            <Image
-              w="20px"
-              h="20px"
-              loading="lazy"
-              borderRadius="5px"
-              src="https://mblogthumb-phinf.pstatic.net/MjAyMTA5MTlfMjUg/MDAxNjMyMDE3OTA4NTA0.dhHpehPf66HwINvBr6OijefwiqeXdPcbcdCU1m1nZ1Ig.3R8X4ori4uDAxmc535BOc6_M8zQHWSfotX-gO8YX4Mwg.PNG.brotherm1n/SE-5c4e2eac-5093-4df9-9626-2bf8df6eb194.png?type=w800"
-              alt="Instagram Logo"
-              transition='all 0.3s ease-in-out'
-              _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}
-            />
-          </a>
-          <a href="https://kakao.com" target="_blank">
+          <Link href="https://instagram.com" target="_blank">
+            <Flex w='25px' h='25px' justifyContent='center' alignItems='center'>
+              <Image
+                w="20px"
+                h="20px"
+                loading="lazy"
+                borderRadius="5px"
+                src="https://mblogthumb-phinf.pstatic.net/MjAyMTA5MTlfMjUg/MDAxNjMyMDE3OTA4NTA0.dhHpehPf66HwINvBr6OijefwiqeXdPcbcdCU1m1nZ1Ig.3R8X4ori4uDAxmc535BOc6_M8zQHWSfotX-gO8YX4Mwg.PNG.brotherm1n/SE-5c4e2eac-5093-4df9-9626-2bf8df6eb194.png?type=w800"
+                alt="Instagram Logo"
+                transition='all 0.3s ease-in-out'
+                _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}
+              />
+            </Flex>
+          </Link>
+          <Link href="https://kakao.com" target="_blank">
             <Image
               w="25px"
               h="25px"
@@ -89,7 +91,7 @@ export default function Footer() {
               transition='all 0.3s ease-in-out'
               _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}
             />
-          </a>
+          </Link>
         </HStack>
       </Flex>
     </Flex>
