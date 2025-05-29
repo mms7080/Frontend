@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Flex,Text,Box,Button,Input} from '@chakra-ui/react';
 
-export default function Detailreview({author,score,content}){
+export default function Detailreview({author,score,content,likenum}){
     return <>
         <Flex w='100%' gap='15px'>
             <Flex w='120px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{author.substring(0,2)+'**'+author.substring(4)}</Flex>
@@ -15,7 +15,7 @@ export default function Detailreview({author,score,content}){
                     <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/reviewlike/logic`} method='post'>
                         <Flex flexDirection='column' alignItems='center'>
                             <Button type='submit' bg='#F8F8FA' h='30px' fontSize='16px'>👍</Button>
-                            <Input ml='7px' w='5px'h='13px' fontSize='13px' border='none' outline='none' value={0} readOnly color='#666691'/>
+                            <Input ml='7px' w='5px'h='13px' fontSize='13px' border='none' outline='none' value={likenum} readOnly color='#666691'/>
                         </Flex>
                     </form>
                 </Flex>

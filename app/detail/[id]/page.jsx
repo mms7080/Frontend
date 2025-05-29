@@ -15,7 +15,14 @@ export default async function detail({params}){
         
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
         const movieinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${params.id}`);
-    
+        const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${params.id}`);
+        let sum=0;
+
+        for(let i=0;i<reviewinfo.length;i++)sum+=reviewinfo[i].score;
+        sum/=reviewinfo.length;
+        if(Number.isInteger(sum))sum+='.0';
+        else sum=Math.round(sum*10)/10;
+
         return <>
             <Header userInfo={res}></Header>
             <Box mb='100px'>
@@ -40,7 +47,7 @@ export default async function detail({params}){
                         <Flex justifyContent='space-between' gap='60px' fontSize='25px' pt='170px'>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>실관람 평점</span>
-                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>🎬 {movieinfo.score}</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>🎬 {sum}</span>
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>예매율</span>
@@ -113,7 +120,7 @@ export default async function detail({params}){
                                     <Trailer></Trailer>
                                 </Tabs.Content>
                                 <Tabs.Content value="review">
-                                    <Reviews userInfo={res}></Reviews>
+                                    <Reviews userInfo={res} movieInfo={movieinfo} reviewInfo={reviewinfo}></Reviews>
                                 </Tabs.Content>
                             </Tabs.Root>
                         </Flex>

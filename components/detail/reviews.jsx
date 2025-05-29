@@ -2,12 +2,23 @@ import React from 'react';
 import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
 import Detailreview from '../element/detailreview'
 
-export default function Reviews({userInfo}){
+export default function Reviews({userInfo,movieInfo,reviewInfo}){
+
+    const reviewExist=()=>{
+        for(let i=0;i<reviewInfo.length;i++)
+            if(reviewInfo[i].author===userInfo.username)
+                return true;
+        return false;
+    }
+
+    const reviewOK=()=>userInfo && !reviewExist();
+    console.log(reviewOK());
+
     return <>
         <Flex flexDirection='column'>
-            <span style={{color:'#352461',fontSize:25}}>어벤져스: 엔드게임에 대한 <span style={{color:'#01738B'}}>2</span>개의 이야기가 있어요!</span>
+            <span style={{color:'#352461',fontSize:25}}>{movieInfo.title}에 대한 <span style={{color:'#01738B'}}>{reviewInfo.length}</span>개의 이야기가 있어요!</span>
             <Flex justifyContent='space-between' pt='50px' pb='15px'>
-                <span>전체 <span style={{color:'#01738B'}}>2</span>건</span>
+                <span>전체 <span style={{color:'#01738B'}}>{reviewInfo.length}</span>건</span>
                 <Flex w='150px' justifyContent='space-between'>
                     <span>최신순</span>
                     <span>|</span>
@@ -46,9 +57,17 @@ export default function Reviews({userInfo}){
                                 /* IE 10+ */
                                 msOverflowStyle: "none",
                                 }}
-                            id='review' name='review' h='70px' fontSize='16px' placeholder='어벤져스: 엔드게임 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.'/>
-                            <NativeSelect.Root width="100px">
-                                <NativeSelect.Field name='score' defaultValue='10'>
+                            id='review' name='review' h='70px' fontSize='16px'
+                            placeholder={!userInfo?'로그인이 필요합니다.':(reviewExist()?'리뷰는 한 영화당 한 개만 작성할 수 있습니다.':`${movieInfo.title} 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.`)}
+                            readOnly={!reviewOK()}
+                            _hover={{cursor:'default'}}
+                            />
+                            <span style={{overflow:'visible'}}>⭐</span>
+                            <span style={{padding:5}}>:</span>
+                            <NativeSelect.Root w="90px" pr='10px' flexShrink={0}>
+                                <NativeSelect.Field w='90px' name='score' defaultValue='10' disabled={!reviewOK()} // 여기서 제어
+                                    style={{ cursor: !reviewOK() ? 'default' : 'pointer' }} // 금지 커서 막기
+                                    >
                                     <option value={10}>10</option>
                                     <option value={9}>9</option>
                                     <option value={8}>8</option>
@@ -62,12 +81,13 @@ export default function Reviews({userInfo}){
                                 </NativeSelect.Field>
                                 <NativeSelect.Indicator/>
                             </NativeSelect.Root>
-                            <Button type='submit' bg='white' color='#666666' h='60px' fontSize='16px'>✏️ 관람평쓰기</Button>
+                            {reviewOK() && (<Button type='submit' bg='white' color='#666666' h='60px' fontSize='16px'>✏️ 관람평쓰기</Button>)}
                         </Flex>
                     </form>
                 </Flex>
-                <Detailreview author='sicksicksicksick' score='10' content='이 영화 정말 최고였어요! 감동받았습니다.'></Detailreview>
-                <Detailreview author='kjmm033' score='8' content='어벤져스 엔드게임 다시 봐도 소름...'></Detailreview>
+                {reviewInfo.map((review,index)=>
+                    <Detailreview key={index} author={review.author} score={review.score} content={review.content} likenum={review.likenumber}></Detailreview>    
+                )}
             </Flex>
             
         </Flex>
