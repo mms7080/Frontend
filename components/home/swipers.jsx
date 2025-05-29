@@ -2,7 +2,7 @@
 
 import React from "react";
 import Slider from "react-slick";
-import {IconButton} from "@chakra-ui/react";
+import {IconButton,Image} from "@chakra-ui/react";
 import {FaChevronLeft,FaChevronRight} from "react-icons/fa";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -62,21 +62,30 @@ export default function SimpleSlider() {
     <div style={{ width: "100%", height: "700px", position: "relative",overflow:'visible' }}>
       <Slider {...settings}>
         <div>
-          <img
+          <Image
             src="https://cf2.lottecinema.co.kr/lotte_image/2025/Flip/Flip_1920774.png"
-            style={{ width: "100%", height: "700px", objectFit: "cover" }}
+            w='100%'
+            h='700px'
+            objectFit='cover'
+            loading="lazy"
           />
         </div>
         <div>
-          <img
+          <Image
             src="https://cf2.lottecinema.co.kr/lotte_image/2025/Cat/Cat_1920774.jpg"
-            style={{ width: "100%", height: "700px", objectFit: "cover" }}
+            w='100%'
+            h='700px'
+            objectFit='cover'
+            loading="lazy"
           />
         </div>
         <div>
-          <img
+          <Image
             src="https://cf2.lottecinema.co.kr/lotte_image/2025/Secret/Secret_19207745.png"
-            style={{ width: "100%", height: "700px", objectFit: "cover" }}
+            w='100%'
+            h='700px'
+            objectFit='cover'
+            loading="lazy"
           />
         </div>
       </Slider>
