@@ -18,7 +18,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/autoplay';
 
-export default function Booking2Page() {
+export default function BookingTestPage() {
     const [swiperReady, setSwiperReady] = useState(false);
     const [user, setUser] = useState(null);
     const [activeMovie, setActiveMovie] = useState(null); // 선택된 영화

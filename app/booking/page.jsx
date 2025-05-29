@@ -1,15 +1,16 @@
 "use client";
 
 import React, {useState, useEffect} from 'react';
-import { Flex, Box, Text, Button, Image, Wrap } from '@chakra-ui/react';
+import { Flex, Box, Text, Button, Image, Wrap, Grid, GridItem } from '@chakra-ui/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay } from 'swiper/modules';
 import { Header, Footer } from '../../components';
-import MoviePoster,{movies} from '../../components/moviePoster';
+import {movies} from '../../components/moviePoster';
 import { useRouter } from 'next/navigation';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
 import { theaterList } from '../../components/theaterList';
+import {FaHeart} from 'react-icons/fa';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -170,21 +171,65 @@ export default function Booking2Page() {
                 </Box>
 
                 {/* 가운데: 정보 */}
-                <Box flex="1" textAlign="center" flexDirection="column">
-                <Text fontSize="5xl" fontWeight="bold" mt={0} mb={3} textAlign="left">
-                    {movies[activeIndex]?.title || ''}
-                </Text>
-                <Text fontSize="2xl" mb={20} textAlign="left">{movies[activeIndex]?.subtitle || ''}</Text>
-                <Box mt="auto">
-                    <Text fontSize="2xl" mb={1} textAlign="left">👍 좋아요: {movies[activeIndex]?.likeNumber || '0'}</Text>
-                    <Text fontSize="2xl" mb={1} textAlign="left">⭐ 평점: {movies[activeIndex]?.score || '-'}</Text>
-                    <Text fontSize="2xl" mb={1} textAlign="left">📊 예매율: {movies[activeIndex]?.rate || '-'}</Text>
-                    <Text fontSize="2xl" textAlign="left">👥 누적 관객수: {movies[activeIndex]?.audience || '-'}</Text>
-                </Box>
+                <Box flex="1" textAlign="center" flexDirection="column" justifyContent="space-between" minH="320px">
+                    <Text fontSize="5xl" fontWeight="bold" mt={0} mb={3} textAlign="left">
+                        {movies[activeIndex]?.title || ''}
+                    </Text>
+                    <Text fontSize="2xl" mb={10} textAlign="left">{movies[activeIndex]?.subtitle || ''}</Text>
+                    <Flex align="center" gap={2} mb={1}>
+                        <Button fontSize="2xl" mb={20}>
+                            <FaHeart color="red" />
+                            {movies[activeIndex]?.likeNumber || '0'}
+                        </Button>
+                    </Flex>
+                    <Box mt={0}>
+                        <Grid templateColumns="repeat(3, 1fr)" gap={8}>
+                            {/* 각 항목 */}
+                            <GridItem>
+                                <Text fontSize="2xl" fontWeight="bold" textAlign="left">실관람 평점</Text>
+                                <Text fontSize="xl" mt={1} textAlign="left">🎬 {movies[activeIndex]?.score || '-'}</Text>
+                            </GridItem>
+                            <GridItem>
+                                <Text fontSize="2xl" fontWeight="bold" textAlign="left">예매율</Text>
+                                <Text fontSize="xl" mt={1} textAlign="left">{movies[activeIndex]?.rate || '-'}</Text>
+                            </GridItem>
+                            <GridItem>
+                                <Text fontSize="2xl" fontWeight="bold" textAlign="left">누적관객수</Text>
+                                <Text fontSize="xl" mt={1} textAlign="left">👥 {movies[activeIndex]?.audience || '-'}</Text>
+                            </GridItem>
+                        </Grid>
+                    </Box>
                 </Box>
 
+                <Box w="1px" bg="#6B46C1" height="430px" mx={4} />
+
                 {/* 오른쪽: 비어 있음 (공간 확보) */}
-                <Box flex="1" />
+                <Box flex="1">
+                    <Box mb={5}>
+                        <Text fontWeight="bold" fontSize="md" mb={1}>🎬 상영시간</Text>
+                        <Text fontSize="lg">{movies[activeIndex]?.runningTime || '-'}</Text>
+                    </Box>
+                    <Box mb={5}>
+                        <Text fontWeight="bold" fontSize="md" mb={1}>📅 개봉일</Text>
+                        <Text fontSize="lg">{movies[activeIndex]?.releaseDate || '-'}</Text>
+                    </Box>
+                    <Box mb={5}>
+                        <Text fontWeight="bold" fontSize="md" mb={1}>🎭 장르</Text>
+                        <Text fontSize="lg">{movies[activeIndex]?.Genre || '-'}</Text>
+                    </Box>
+                    <Box mb={5}>
+                        <Text fontWeight="bold" fontSize="md" mb={1}>🎬 감독</Text>
+                        <Text fontSize="lg">{movies[activeIndex]?.Director || '-'}</Text>
+                    </Box>
+                    <Box mb={5}>
+                        <Text fontWeight="bold" fontSize="md" mb={1}>👥 출연</Text>
+                        <Text fontSize="lg">{movies[activeIndex]?.cast || '-'}</Text>
+                    </Box>
+                    <Box>
+                        <Text fontWeight="bold" fontSize="md" mb={1}>🔞 관람등급</Text>
+                        <Text fontSize="lg">{movies[activeIndex]?.ageRating || '-'}</Text>
+                    </Box>
+                </Box>
             </Flex>
         </Box>
 
