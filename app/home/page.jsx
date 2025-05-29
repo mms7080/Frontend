@@ -19,7 +19,7 @@ export default async function Homepage(){
 
     return <>
         <Header userInfo={userres}></Header>
-        <Box w='calc(100vw - 17px)' minW='1000px'>
+        <Box w='100vw' minW='1000px'>
             <Flex w='100%' flexDirection='column'>
                 <Swipers></Swipers>
                 <Movies movieInfo={movieres}></Movies>
