@@ -46,9 +46,9 @@ const MovieCard = ({ movie, user, rank, crit }) => {
 
   return (<>
     <div className="movie-card">
-        <div className='rank-box'><span className="rank">
-          {rank ? (crit ? `${crit} : ${rank}위` : `${rank}위`) : ""}
-          </span></div>
+      { rank && (<div className='rank-box'><span className="rank">
+                  {(crit ? `${crit} : ${rank}위` : `${rank}위`)}
+                </span></div>)}
         <Link href={"/detail/" + movie.id}>
           <div className="poster">
             <img src={movie.poster} alt={movie.title} loading='lazy' />
@@ -57,7 +57,8 @@ const MovieCard = ({ movie, user, rank, crit }) => {
                 {movie.title} <br /> <br />
                 <span className='description'>{movie.description}</span><br /> <br />
                 관람평 <span className="score">{movie.score}</span>
-                <br /> <br />개봉일 <span>{movie.releaseDate}</span>
+                <br /> <br />예매율 <span>{movie.reserveRate}%</span>
+                <br/>개봉일 <span>{movie.releaseDate}</span>
               </p>
             </div>
               <div className='label-container'>
