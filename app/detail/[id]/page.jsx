@@ -19,7 +19,7 @@ export default async function detail({params}){
         let sum=0;
 
         for(let i=0;i<reviewinfo.length;i++)sum+=reviewinfo[i].score;
-        sum/=reviewinfo.length;
+        if(reviewinfo.length>0)sum/=reviewinfo.length;
         if(Number.isInteger(sum))sum+='.0';
         else sum=Math.round(sum*10)/10;
 
