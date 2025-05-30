@@ -16,8 +16,8 @@ export default function Layout({ children }) {
               minHeight: '100vh',
             }}
           >
-            {children}
-            <main style={{ flex: 1 }}></main>
+            
+            <main style={{ flex: 1 }}>{children}</main>
             <Footer />
           </div>
         </Provider>
