@@ -235,9 +235,9 @@ export default function Booking2Page() {
 
 
 
-        <Box position="relative" zIndex={2} bg="#1a1a1a">
+        {/* <Box position="relative" zIndex={2} bg="#1a1a1a">
             <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder} />
-        </Box>
+        </Box> */}
 
         {activeMovie && (
             <Box position="fixed" top={0} left={0} width="100vw" height="100vh" zIndex={1000} display="flex" alignItems="center" justifyContent="center">
