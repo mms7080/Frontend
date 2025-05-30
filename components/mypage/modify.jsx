@@ -2,16 +2,17 @@
 
 import React,{useState} from 'react';
 import {Flex,Box,Input,Button,Text,RadioGroup} from '@chakra-ui/react';
+import Link from "next/link";
 
 export default function Modify({userInfo}) {/* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
 
     const [phone,setPhone] = useState(userInfo.phone);
     const [email,setEmail] = useState(userInfo.email);
-    const [birthdate,setBirthdate] = useState(userInfo.birthdate);
+    const [birthdate,setBirthdate] = useState(userInfo.birthdate ?? '');
     const [gender,setGender]=useState('');
-    const [zipcode,setZipcode]=useState(userInfo.zipcode);
-    const [address,setAddress]=useState(userInfo.address);
-    const [address_detail,setAddressDetail]=useState(userInfo.address_detail);
+    const [zipcode,setZipcode]=useState(userInfo.zipcode ?? '');
+    const [address,setAddress]=useState(userInfo.address ?? '');
+    const [address_detail,setAddressDetail]=useState(userInfo.address_detail ?? '');
 
     const [pw,setPw]=useState('');
     const [pwMessage,setPwMessage]=useState('');/* 비밀번호 입력창 밑의 메세지 */
@@ -31,6 +32,8 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
             alert('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
             return;
         }
+
+        alert('개인정보가 수정되었습니다!');
     };
 
     return <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/modify/logic`} method='post' onSubmit={handleSubmit}>
@@ -212,7 +215,16 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a style={{textAlign:'right',color:'#352461',textDecoration:'underline'}} href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`}>회원탈퇴</a>
+                                <Link style={{textAlign:'right',color:'#352461',textDecoration:'underline'}}
+                                href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`}
+                                onClick={(e) => {
+                                      e.preventDefault(); // 기본 이동 막기
+                                      const confirmDelete = window.confirm("정말로 회원탈퇴하시겠습니까?");
+                                      if (confirmDelete) {
+                                        window.location.href = `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`;
+                                      }
+                                    }}
+                                 >회원탈퇴</Link>
 
                                 <Button mt='10px' type="submit" bg='#6B46C1' _hover={{bg:'#553C9A'}}>회원정보 수정</Button>
                             </Flex>

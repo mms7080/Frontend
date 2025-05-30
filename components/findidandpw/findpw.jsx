@@ -73,6 +73,8 @@ export default function findpwdetail({userData}){
             alert('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
             return;
         }
+
+        alert('비밀번호가 성공적으로 변경되었습니다!');
     }
 
     const EmailLayout=()=>{

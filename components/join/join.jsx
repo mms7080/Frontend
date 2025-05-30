@@ -53,6 +53,8 @@ export default function Joindetail(){
             alert('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
             return;
         }
+
+        alert('회원가입이 완료되었습니다!');
     };
 
     const handleChange = (inputedvalue) => {
