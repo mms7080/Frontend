@@ -59,7 +59,7 @@ export default function Booking2Page() {
     const handleBooking = () => {
         if (!selectedDate || !selectedTime) return;
         router.push(
-            `/booking/seats?movieTitle=${encodeURIComponent(activeMovie.title)}` +
+            `/booking/seats?movieId=${activeMovie.id}` +
             `&date=${encodeURIComponent(selectedDate)}` +
             `&time=${encodeURIComponent(selectedTime)}`
         );
