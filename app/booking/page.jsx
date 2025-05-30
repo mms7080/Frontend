@@ -59,9 +59,9 @@ export default function Booking2Page() {
     const handleBooking = () => {
         if (!selectedDate || !selectedTime) return;
         router.push(
-        `/reserve?movieId=${activeMovie.id}` +
-        `&date=${encodeURIComponent(selectedDate)}` +
-        `&time=${encodeURIComponent(selectedTime)}`
+            `/booking/seats?movieTitle=${encodeURIComponent(activeMovie.title)}` +
+            `&date=${encodeURIComponent(selectedDate)}` +
+            `&time=${encodeURIComponent(selectedTime)}`
         );
     };
 
@@ -87,22 +87,22 @@ export default function Booking2Page() {
 
         <Flex flex="1" align="center" justify="center" pt="5vh">
             <style jsx global>{`
-            .swiper-slide:not(.swiper-slide-active) img {
-                filter: brightness(50%);
-            }
-            /* Navigation arrows color */
-            .swiper-button-next,
-            .swiper-button-prev {
-                color: white; /* 화살표색 -> 보라색으로 변경 */
-            }
-            /* Pagination bullets */
-            .swiper-pagination-bullet {
-                background: #ccc; /* 비활성 점 색상 */
-                opacity: 1;
-            }
-            .swiper-pagination-bullet-active {
-                background: #6B46C1; /* 활성 점 색상 (보라 핑크) */
-            }
+                .swiper-slide:not(.swiper-slide-active) img {
+                    filter: brightness(50%);
+                }
+                /* Navigation arrows color */
+                .swiper-button-next,
+                .swiper-button-prev {
+                    color: white; /* 화살표색 -> 보라색으로 변경 */
+                }
+                /* Pagination bullets */
+                .swiper-pagination-bullet {
+                    background: #ccc; /* 비활성 점 색상 */
+                    opacity: 1;
+                }
+                .swiper-pagination-bullet-active {
+                    background: #6B46C1; /* 활성 점 색상 (보라 핑크) */
+                }
             `}</style>
             <Box maxW="1550px" w="100%" px={4}>
                 {swiperReady && (
