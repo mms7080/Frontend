@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Header } from "..";
-import SkeletonHeader from "../SkeletonHeader"; 
+import SkeletonHeader from "../SkeletonHeader";
 
-export default function NoticePage({ notices,userData }) {
+export default function NoticePage({ notices, userData }) {
   const [searchOption, setSearchOption] = useState("title");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
@@ -33,7 +33,15 @@ export default function NoticePage({ notices,userData }) {
     setCurrentPage(1);
   }, [confirmedKeyword, searchOption, notices]);
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+  const totalPages = useMemo(() => {
+    return Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+  }, [filtered]);
+
+  const pageGroupSize = 10;
+  const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
+  const startPage = currentGroup * pageGroupSize + 1;
+  const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
+
   const currentItems = filtered.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
@@ -71,8 +79,7 @@ export default function NoticePage({ notices,userData }) {
   };
 
   return (
-      <>
-      {/* ✅ 로딩 중이면 스켈레톤, 아니면 진짜 Header */}
+    <>
       {loadingUser ? (
         <SkeletonHeader />
       ) : (
@@ -86,26 +93,26 @@ export default function NoticePage({ notices,userData }) {
           textAlign: "center",
         }}
       >
-<h1
-  style={{
-    fontSize: "24px",
-    fontWeight: "normal",
-    color: "#222",
-    borderBottom: "2px solid #ccc",
-    paddingBottom: "12px",
-    marginBottom: "40px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "12px",
-  }}
->
-  <img
-    src="http://localhost:9999/images/logo.png" 
-    alt="logo"
-    style={{ width: "141px", height: "68px", objectFit: "contain" }}
-  />
-</h1>
+        <h1
+          style={{
+            fontSize: "24px",
+            fontWeight: "normal",
+            color: "#222",
+            borderBottom: "2px solid #ccc",
+            paddingBottom: "12px",
+            marginBottom: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+          }}
+        >
+          <img
+            src="http://localhost:9999/images/logo.png"
+            alt="logo"
+            style={{ width: "141px", height: "68px", objectFit: "contain" }}
+          />
+        </h1>
 
         {user?.auth === "ADMIN" && (
           <div style={{ textAlign: "right", marginBottom: "24px" }}>
@@ -419,7 +426,11 @@ export default function NoticePage({ notices,userData }) {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+
+          {Array.from(
+            { length: endPage - startPage + 1 },
+            (_, i) => startPage + i
+          ).map((page) => (
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
@@ -437,6 +448,7 @@ export default function NoticePage({ notices,userData }) {
               {page}
             </button>
           ))}
+
           <button
             onClick={() =>
               setCurrentPage((prev) => Math.min(totalPages, prev + 1))
@@ -458,7 +470,7 @@ export default function NoticePage({ notices,userData }) {
           </button>
         </div>
       </div>
-      <div style={{ height: "260px" }} />
+
     </>
   );
 }
