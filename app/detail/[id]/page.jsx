@@ -12,10 +12,12 @@ export const metadata = {
 };
 
 export default async function detail({params}){
+
+        const {id} = await params;
         
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-        const movieinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${params.id}`);
-        const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${params.id}`);
+        const movieinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${id}`);
+        const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${id}`);
         let sum=0;
 
         for(let i=0;i<reviewinfo.length;i++)sum+=reviewinfo[i].score;

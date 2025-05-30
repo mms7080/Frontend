@@ -1,10 +1,14 @@
 'use client';
 
-import React from 'react';
+import React,{useState} from 'react';
 import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
 import Detailreview from '../element/detailreview'
 
 export default function Reviews({userInfo,movieInfo,reviewInfo}){
+
+    const [acolor, setacolor] = useState('black'); 
+    const [bcolor, setbcolor] = useState('gray.500');
+    const [ccolor, setccolor] = useState('gray.500');
 
     const reviewExist=()=>{
         for(let i=0;i<reviewInfo.length;i++)
