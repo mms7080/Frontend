@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {Header} from '../../components';
 import {redirect} from 'next/navigation';
 import {fetch} from '../../lib/server';
+import SigninClientAlert from '../../components/signin/SigninClientAlert';
 
 export const metadata = {
     title: "로그인",
@@ -18,6 +19,7 @@ export default async function Signin(){
 
     return <>
         <Header></Header>
+        <SigninClientAlert/>
         <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%'>
