@@ -4,6 +4,7 @@ import './theater.css';
 
 const Theater = () => {
     return (
+
         <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
             <Heading
                 mb={10}
@@ -19,7 +20,7 @@ const Theater = () => {
             <div 
                 className="map-container"
             >
-                <KakaoMap address="부산광역시 부산진구 중앙대로" />
+                <KakaoMap/>
             </div>
         </Box>
     );

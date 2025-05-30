@@ -5,7 +5,7 @@ import { Footer } from '../components';
 
 export default function Layout({ children }) {
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang="ko">
       <head />
       <body>
         <Provider>
@@ -16,16 +16,11 @@ export default function Layout({ children }) {
               minHeight: '100vh',
             }}
           >
-            
-            <main style={{ flex: 1 }}>{children}</main>
+            {children}
+            <main style={{ flex: 1 }}></main>
             <Footer />
           </div>
         </Provider>
-
-        {/* <script
-          type="text/javascript"
-          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAOMAP_KEY}&libraries=services,clusterer`}
-        ></script> */}
       </body>
     </html>
   );
