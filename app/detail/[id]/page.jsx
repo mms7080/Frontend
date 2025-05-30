@@ -40,7 +40,7 @@ export default async function detail({params}){
 
                         <Flex gap='10px' color='black' fontSize='15px' py='5px' overflow='visible'>
                             {
-                                movieinfo.label?movieinfo.label.split(',').map(name=><Box px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>{name.trim()}</Box>):<></>
+                                movieinfo.label?movieinfo.label.split(',').map((name,index)=><Box key={index} px='5px' borderRadius='5px' bg='white' boxShadow='4px 4px 6px black'>{name.trim()}</Box>):<></>
                             }
                         </Flex>
 
@@ -94,9 +94,9 @@ export default async function detail({params}){
                                 </Flex>
                                 <Flex w='50%' flexDirection='column' lineHeight='40px'>
                                     <span>감독:</span>
-                                    {movieinfo.director.split(',').map(name=><span style={{color:'#6D6D96'}}>{name.trim()}</span>)}
+                                    {movieinfo.director.split(',').map((name,index)=><span key={index} style={{color:'#6D6D96'}}>{name.trim()}</span>)}
                                     <span>출연:</span>
-                                    {movieinfo.cast.split(',').map(name=><span style={{color:'#6D6D96'}}>{name.trim()}</span>)}
+                                    {movieinfo.cast.split(',').map((name,index)=><span key={index} style={{color:'#6D6D96'}}>{name.trim()}</span>)}
                                 </Flex>
                                 
                             </Flex>

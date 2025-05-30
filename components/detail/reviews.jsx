@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
 import Detailreview from '../element/detailreview'
@@ -12,7 +14,13 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
     }
 
     const reviewOK=()=>userInfo && !reviewExist();
-    console.log(reviewOK());
+    
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault(); // 줄바꿈 방지
+          document.getElementById('myForm').requestSubmit(); // 폼 제출
+        }
+    };
 
     return <>
         <Flex flexDirection='column'>
@@ -32,7 +40,7 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
             <Flex flexDirection='column' gap='15px'>
                 <Flex w='100%' gap='15px'>
                     <Flex w='120px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{userInfo?userInfo.username:'로그인 필요'}</Flex>
-                    <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/logic`} method='post' style={{flex:1}}>
+                    <form id='myForm' action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/logic/${movieInfo.id}`} method='post' style={{flex:1}}>
                         <Flex h='70px' border='1px solid #666666' borderRadius='5px' alignItems='center'>
                             <Textarea border='none' outline='none' 
                                 maxLength='150'
@@ -57,7 +65,7 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                                 /* IE 10+ */
                                 msOverflowStyle: "none",
                                 }}
-                            id='review' name='review' h='70px' fontSize='16px'
+                            id='content' name='content' h='70px' fontSize='16px' onKeyDown={handleKeyDown}
                             placeholder={!userInfo?'로그인이 필요합니다.':(reviewExist()?'리뷰는 한 영화당 한 개만 작성할 수 있습니다.':`${movieInfo.title} 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.`)}
                             readOnly={!reviewOK()}
                             _hover={{cursor:'default'}}
