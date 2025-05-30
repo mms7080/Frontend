@@ -16,7 +16,7 @@ import SkeletonHeader from "../SkeletonHeader";
 
 const defaultCategories = ["전체", "티켓", "팝콘/음료/콤보", "포인트몰"];
 
-export default function MegaboxStorePage({userData}) {
+export default function MegaboxStorePage({ userData }) {
   const [storeData, setStoreData] = useState({});
   const [activeCategory, setActiveCategory] = useState(defaultCategories[0]);
   const [user, setUser] = useState(userData);
@@ -61,26 +61,26 @@ export default function MegaboxStorePage({userData}) {
         px={{ base: 4 }}
         pb={10}
       >
-<h1
-  style={{
-    fontSize: "24px",
-    fontWeight: "normal",
-    color: "#222",
-    borderBottom: "2px solid #ccc",
-    paddingBottom: "12px",
-    marginBottom: "40px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "12px",
-  }}
->
-  <img
-    src="http://localhost:9999/images/logo.png" 
-    alt="logo"
-    style={{ width: "141px", height: "68px", objectFit: "contain" }}
-  />
-</h1>
+        <h1
+          style={{
+            fontSize: "24px",
+            fontWeight: "normal",
+            color: "#222",
+            borderBottom: "2px solid #ccc",
+            paddingBottom: "12px",
+            marginBottom: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+          }}
+        >
+          <img
+            src="http://localhost:9999/images/logo.png"
+            alt="logo"
+            style={{ width: "141px", height: "68px", objectFit: "contain" }}
+          />
+        </h1>
 
         <Flex justify="space-between" align="center" wrap="wrap" mb={8} px={2}>
           <Flex gap={2} flexWrap="wrap">
@@ -128,121 +128,122 @@ export default function MegaboxStorePage({userData}) {
               </Text>
             )}
 
-            <SimpleGrid
-              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-              spacing={{ base: 6, md: 10 }}
-              justifyItems="center"
+<SimpleGrid
+  columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+  spacing={{ base: 6, md: 10 }}
+  justifyItems="center"
+>
+  {(storeData[category] || []).map((item) => (
+    <Box
+      key={item.id}
+      w="100%"
+      maxW="280px"
+      borderWidth="1px"
+      borderRadius="lg"
+      bg="white"
+      p={5}
+      minH="360px"
+      cursor="pointer"
+      onClick={() => router.push(`/store/detail/${item.id}`)}
+    >
+      <Image
+        src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${item.imgUrl}`}
+        alt={item.title}
+        objectFit="cover"
+        w="100%"
+        h="200px"
+        mb={3}
+        borderRadius="md"
+      />
+      <Box>
+        <Flex justifyContent="space-between" alignItems="center" mb={2} gap={2}>
+          <Text fontWeight="normal" fontSize="15px" isTruncated>
+            {item.title}
+          </Text>
+          {item.badge && (
+            <span
+              style={{
+                backgroundColor: item.badgeColor || "#6B46C1",
+                color: "white",
+                borderRadius: "4px",
+                padding: "2px 6px",
+                fontSize: "12px",
+                whiteSpace: "nowrap",
+              }}
             >
-              {(storeData[category] || []).map((item) => (
-                <Box
-                  key={item.id}
-                  w="100%"
-                  maxW="280px"
-                  borderWidth="1px"
-                  borderRadius="lg"
-                  bg="white"
-                  p={5}
-                  minH="360px"
-                >
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${item.imgUrl}`}
-                    alt={item.title}
-                    objectFit="cover"
-                    w="100%"
-                    h="200px"
-                    mb={3}
-                    borderRadius="md"
-                  />
-                  <Box>
-                    <Flex
-                      justifyContent="space-between"
-                      alignItems="center"
-                      mb={2}
-                      gap={2}
-                    >
-                      <Text fontWeight="normal" fontSize="15px" isTruncated>
-                        {item.title}
-                      </Text>
-                      {item.badge && (
-                        <span
-                          style={{
-                            backgroundColor: item.badgeColor || "#6B46C1",
-                            color: "white",
-                            borderRadius: "4px",
-                            padding: "2px 6px",
-                            fontSize: "12px",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                    </Flex>
-                    <Text fontSize="13px" color="#666" mb={1} noOfLines={2}>
-                      {item.subtitle}
-                    </Text>
+              {item.badge}
+            </span>
+          )}
+        </Flex>
+        <Text fontSize="13px" color="#666" mb={1} noOfLines={2}>
+          {item.subtitle}
+        </Text>
 
-                    <Flex
-                      alignItems="center"
-                      gap={2}
-                      mb={2}
-                      flexWrap="wrap"
-                      bg="#FAF5FF"
-                      px={2}
-                      py={1}
-                      borderRadius="6px"
-                    >
-                      {item.originalPrice && (
-                        <>
-                          <Text
-                            fontSize="13px"
-                            color="#aaa"
-                            textDecoration="line-through"
-                            fontWeight="normal"
-                          >
-                            {formatPrice(item.originalPrice)}
-                          </Text>
-                          <Text
-                            fontSize="12px"
-                            color="red"
-                            fontWeight="semibold"
-                            bg="#FED7D7"
-                            px={2}
-                            py={0.5}
-                            borderRadius="4px"
-                          >
-                            SALE
-                          </Text>
-                        </>
-                      )}
-                      <Text
-                        fontSize="18px"
-                        fontWeight="bold"
-                        color="#6B46C1"
-                        letterSpacing="-0.5px"
-                      >
-                        {formatPrice(item.price)}
-                      </Text>
-                    </Flex>
+        <Flex
+          alignItems="center"
+          gap={2}
+          mb={2}
+          flexWrap="wrap"
+          bg="#FAF5FF"
+          px={2}
+          py={1}
+          borderRadius="6px"
+        >
+          {item.originalPrice && (
+            <>
+              <Text
+                fontSize="13px"
+                color="#aaa"
+                textDecoration="line-through"
+                fontWeight="normal"
+              >
+                {formatPrice(item.originalPrice)}
+              </Text>
+              <Text
+                fontSize="12px"
+                color="red"
+                fontWeight="semibold"
+                bg="#FED7D7"
+                px={2}
+                py={0.5}
+                borderRadius="4px"
+              >
+                SALE
+              </Text>
+            </>
+          )}
+          <Text
+            fontSize="18px"
+            fontWeight="bold"
+            color="#6B46C1"
+            letterSpacing="-0.5px"
+          >
+            {formatPrice(item.price)}
+          </Text>
+        </Flex>
 
-                    <Button
-                      w="100%"
-                      bg="#6B46C1"
-                      color="white"
-                      py={2}
-                      fontWeight="normal"
-                      borderRadius="6px"
-                      fontSize="14px"
-                      transition="all 0.3s"
-                      _hover={{ bg: "#553C9A", transform: "scale(1.02)" }}
-                      onClick={() => router.push(`/store/detail/${item.id}`)}
-                    >
-                      구매하기
-                    </Button>
-                  </Box>
-                </Box>
-              ))}
-            </SimpleGrid>
+        <Button
+          w="100%"
+          bg="#6B46C1"
+          color="white"
+          py={2}
+          fontWeight="normal"
+          borderRadius="6px"
+          fontSize="14px"
+          transition="all 0.3s"
+          _hover={{ bg: "#553C9A", transform: "scale(1.02)" }}
+          onClick={(e) => {
+            e.stopPropagation(); // 카드 클릭 이벤트 방지
+            router.push(`/store/detail/${item.id}`);
+          }}
+        >
+          구매하기
+        </Button>
+      </Box>
+    </Box>
+  ))}
+</SimpleGrid>
+
           </Box>
         ))}
       </Box>
