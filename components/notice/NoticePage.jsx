@@ -4,18 +4,29 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Header } from "..";
 import SkeletonHeader from "../SkeletonHeader";
 
+
+  // 공지사항 페이지 컴포넌트
 export default function NoticePage({ notices, userData }) {
+  // 검색 옵션 (제목, 내용, 제목+내용, 작성자)
   const [searchOption, setSearchOption] = useState("title");
+  // 검색창에 입력 중인 키워드
   const [searchKeyword, setSearchKeyword] = useState("");
+  // 검색 확정 시 사용할 키워드
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
+  // 필터링된 공지사항 목록
   const [filtered, setFiltered] = useState([]);
+  // 로그인된 사용자 정보
   const [user, setUser] = useState(userData);
+  // 현재 페이지 번호
   const [currentPage, setCurrentPage] = useState(1);
+  // 페이지당 표시할 공지 수
   const itemsPerPage = 5;
+  // 로딩 여부 (스켈레톤 표시용)
   const [loadingUser, setLoadingUser] = useState(false);
 
+  // 공지 목록 필터링
   useEffect(() => {
-    const sorted = [...notices].sort((a, b) => b.id - a.id);
+    const sorted = [...notices].sort((a, b) => b.id - a.id); // 최신 순 정렬
     const result = sorted.filter((n) => {
       const target =
         searchOption === "title"
@@ -33,20 +44,24 @@ export default function NoticePage({ notices, userData }) {
     setCurrentPage(1);
   }, [confirmedKeyword, searchOption, notices]);
 
+   // 전체 페이지 수 계산 (최소 1)
   const totalPages = useMemo(() => {
     return Math.max(1, Math.ceil(filtered.length / itemsPerPage));
   }, [filtered]);
 
+  // 페이지네이션 그룹 단위 계산 (10개 단위 그룹)
   const pageGroupSize = 10;
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
 
+  // 현재 페이지에 해당하는 공지 데이터
   const currentItems = filtered.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
+  // 날짜 포맷: YYYY.MM.DD
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("ko-KR", {
@@ -56,6 +71,7 @@ export default function NoticePage({ notices, userData }) {
     });
   };
 
+  // 검색 키워드 하이라이트 표시
   const highlightKeyword = (text) => {
     if (!confirmedKeyword.trim()) return [text];
     const regex = new RegExp(`(${confirmedKeyword})`, "gi");
@@ -71,15 +87,18 @@ export default function NoticePage({ notices, userData }) {
     );
   };
 
+  // 작성일 기준으로 NEW 뱃지 표시 여부 확인 (작성일로부터 2일)
   const isNew = (createdAt) => {
     const created = new Date(createdAt);
     const now = new Date();
     const diff = (now - created) / (1000 * 60 * 60 * 24);
-    return diff <= 3;
+    return diff <= 2;
   };
 
   return (
     <>
+     {/* 로딩 중일 땐 SkeletonHeader, 아니면 실제 Header 표시 */}
+     {/* 근데 이제 안써서 필요없음 */}
       {loadingUser ? (
         <SkeletonHeader />
       ) : (
@@ -93,6 +112,7 @@ export default function NoticePage({ notices, userData }) {
           textAlign: "center",
         }}
       >
+         {/* 로고 헤더 */}
         <h1
           style={{
             fontSize: "24px",
@@ -113,7 +133,7 @@ export default function NoticePage({ notices, userData }) {
             style={{ width: "141px", height: "68px", objectFit: "contain" }}
           />
         </h1>
-
+        {/* 관리자만 공지작성 버튼보이도록록 */}
         {user?.auth === "ADMIN" && (
           <div style={{ textAlign: "right", marginBottom: "24px" }}>
             <button
@@ -139,7 +159,7 @@ export default function NoticePage({ notices, userData }) {
             </button>
           </div>
         )}
-
+        {/* 검색 폼 */}
         <div
           style={{
             display: "flex",
@@ -182,7 +202,7 @@ export default function NoticePage({ notices, userData }) {
             }}
           />
         </div>
-
+        {/* 공지사항 테이블 */}
         <table
           style={{
             width: "100%",
@@ -390,7 +410,7 @@ export default function NoticePage({ notices, userData }) {
             )}
           </tbody>
         </table>
-
+        {/* NEW 뱃지 애니메이션 */}
         <style jsx global>{`
           @keyframes pulse-badge {
             0% {
@@ -407,7 +427,7 @@ export default function NoticePage({ notices, userData }) {
             }
           }
         `}</style>
-
+        {/* 페이지네이션 */}
         <div style={{ textAlign: "center", marginTop: "40px" }}>
           <button
             onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
