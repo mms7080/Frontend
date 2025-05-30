@@ -1,9 +1,12 @@
 'use client';
 
 import React,{useState} from 'react';
-import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
+import {Button,Flex,Textarea,NativeSelect,VStack} from '@chakra-ui/react';
 import Detailreview from '../element/detailreview';
 import {fetch} from '../../lib/client';
+
+import { ButtonGroup, IconButton, Pagination } from "@chakra-ui/react"
+import { LuChevronLeft, LuChevronRight } from "react-icons/lu"
 
 export default function Reviews({userInfo,movieInfo,reviewInfo}){
 
@@ -156,5 +159,35 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
             </Flex>
             
         </Flex>
+
+        <VStack pt='15px'>
+        <Pagination.Root count={10} pageSize={2} defaultPage={1}>
+  <ButtonGroup variant="ghost" size="sm">
+    <Pagination.PrevTrigger asChild>
+      <IconButton>
+        <LuChevronLeft />
+      </IconButton>
+    </Pagination.PrevTrigger>
+
+    {/* 직접 페이지 버튼들을 모두 렌더링 */}
+    {[...Array(20)].map((_, idx) => {
+      const pageNum = idx + 1;
+      return (
+        <Pagination.Item key={pageNum} value={pageNum} asChild>
+          <IconButton variant={{ base: "ghost", _selected: "outline" }}>
+            {pageNum}
+          </IconButton>
+        </Pagination.Item>
+      );
+    })}
+
+    <Pagination.NextTrigger asChild>
+      <IconButton>
+        <LuChevronRight />
+      </IconButton>
+    </Pagination.NextTrigger>
+  </ButtonGroup>
+</Pagination.Root>
+    </VStack>
     </>;
 }
