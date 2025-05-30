@@ -17,7 +17,14 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
     const [bcolor, setbcolor] = useState('gray.500');
     const [ccolor, setccolor] = useState('gray.500');
     const [sortkey, setSortkey] = useState('writetime');// writetime - 최신순 , likenumber - 공감순 , score - 평점순
-    const [reviewList, setReviewList] = useState([...reviewInfo]);
+    const [reviewList, setReviewList] = useState([...reviewInfo].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)!=0)?(new Date(b.writetime)-new Date(a.writetime)):(b.likenumber-a.likenumber)));
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const reviewsPerPage = 10;
+
+    const indexOfLastReview = currentPage * reviewsPerPage;
+    const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+    const currentReviews = reviewList.slice(indexOfFirstReview, indexOfLastReview);
 
     const reviewExist=()=>{
         for(let i=0;i<reviewList.length;i++)
@@ -153,15 +160,16 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                         {reviewOK() && (<Button bg='white' color='#666666' h='60px' fontSize='16px' onClick={handleSubmit}>✏️ 관람평쓰기</Button>)}
                     </Flex>
                 </Flex>
-                {reviewList.map((review,index)=>
-                    <Detailreview key={index} author={review.author} score={review.score} content={review.content} likenum={review.likenumber}></Detailreview>    
+                {currentReviews.map((review,index)=>
+                    <Detailreview key={indexOfFirstReview+index} author={review.author} score={review.score} content={review.content} likenum={review.likenumber}></Detailreview>    
                 )}
             </Flex>
             
         </Flex>
 
         <VStack pt='15px'>
-        <Pagination.Root count={10} pageSize={2} defaultPage={1}>
+        <Pagination.Root count={reviewList.length} 
+         pageSize={reviewsPerPage} page={currentPage} onPageChange={({page}) =>setCurrentPage(page)}>
   <ButtonGroup variant="ghost" size="sm">
     <Pagination.PrevTrigger asChild>
       <IconButton>
@@ -169,17 +177,27 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
       </IconButton>
     </Pagination.PrevTrigger>
 
-    {/* 직접 페이지 버튼들을 모두 렌더링 */}
-    {[...Array(20)].map((_, idx) => {
-      const pageNum = idx + 1;
-      return (
-        <Pagination.Item key={pageNum} value={pageNum} asChild>
-          <IconButton variant={{ base: "ghost", _selected: "outline" }}>
-            {pageNum}
-          </IconButton>
-        </Pagination.Item>
-      );
-    })}
+{/* 10개씩 페이지 그룹 렌더링 */}
+      {(() => {
+        const totalPages = Math.ceil(reviewList.length / reviewsPerPage);
+        const pageGroupSize = 10;
+        const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
+        const startPage = currentGroup * pageGroupSize + 1;
+        const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
+
+        return Array.from({ length: endPage - startPage + 1 }, (_, idx) => {
+          const pageNum = startPage + idx;
+          return (
+            <Pagination.Item key={pageNum} value={pageNum} asChild>
+              <IconButton
+                variant={{ base: "ghost", _selected: "outline" }}
+              >
+                {pageNum}
+              </IconButton>
+            </Pagination.Item>
+          );
+        });
+      })()}
 
     <Pagination.NextTrigger asChild>
       <IconButton>
