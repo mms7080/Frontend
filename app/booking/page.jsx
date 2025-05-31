@@ -60,6 +60,8 @@ export default function Booking2Page() {
         if (!selectedDate || !selectedTime) return;
         router.push(
             `/booking/seats?movieId=${activeMovie.id}` +
+            `&region=${encodeURIComponent(selectedRegion)}` +
+            `&theater=${encodeURIComponent(selectedTheater)}` +
             `&date=${encodeURIComponent(selectedDate)}` +
             `&time=${encodeURIComponent(selectedTime)}`
         );

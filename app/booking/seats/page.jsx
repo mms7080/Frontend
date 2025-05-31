@@ -10,6 +10,10 @@ export default function SeatsPage() {
     const [user, setUser] = useState(null);
     const searchParams = useSearchParams();
     const movieId = parseInt(searchParams.get('movieId'));
+    const region = searchParams.get('region');
+    const theater = searchParams.get('theater');
+    const date = searchParams.get('date');
+    const time = searchParams.get('time');
     const movie = movies.find((m) => m.id === movieId);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const rows = 9;
@@ -45,9 +49,15 @@ export default function SeatsPage() {
                     minH="calc(100vh - 100px)"
                 >
                     {/* 왼쪽: 영화 정보 */}
-                    <Box flex="1" maxW="50%" textAlign="center">
+                    <Box flex="1" maxW="50%" textAlign="center" alignSelf="flex-start" mt="5%" ml="5%">
                         <Box minW="220px" textAlign="left" ml="10%">
-                            <Text fontSize="4xl" fontWeight="" mb={4}>
+                            <Text 
+                                fontSize="3xl" 
+                                whiteSpace="nowrap"
+                                overflow="visible"
+                                textOverflow="unset"
+                                mb={4}
+                            >
                                 🎬 {movie?.title || '선택된 영화 없음'}
                             </Text>
                             {movie?.poster && (
@@ -56,43 +66,63 @@ export default function SeatsPage() {
                                     alt={movie.title}
                                     borderRadius="md"
                                     objectFit="cover"
-                                    w="50%"
-                                    maxH="300px"
+                                    w="100%"
+                                    // maxH="300px"
                                 />
                             )}
                         </Box>
                     </Box>
 
-                    {/* 선택된 좌석 박스 */}
+                    {/* 🎯 예매 정보 + 🪑 선택 좌석을 하나로 묶은 박스 */}
                     <Box
-                        mt={6}
                         p={4}
-                        borderRadius="md"
-                        bg="blackAlpha.600"
-                        minH="80px"
+                        // bg="blackAlpha.600"
+                        borderRadius="lg"
                         color="gray.200"
+                        minW="280px"
+                        maxW="50%"
+                        alignSelf="flex-start"
+                        mt="8%"
                     >
-                        <Text fontWeight="bold" mb={2}>
-                             SEATS
-                        </Text>
-                        {selectedSeats.length === 0 ? (
-                            <Text fontSize="sm" color="gray.400">
-                                선택된 좌석이 없습니다.
+                        {/* 예매 정보 */}
+                        <Box mb={6}>
+                            <Text fontWeight="bold" fontSize="2xl" mb={2}>
+                                Booking Info
                             </Text>
-                        ) : (
-                            <Text color="#6B46C1">{
-                                // 좌석 표시 오름차순으로 표기
-                                [...selectedSeats].sort((a, b) => {
+                            <Text fontSize="xl">
+                                🎯 지역: {region || "-"}
+                                <br />
+                                🏢 영화관: {theater || "-"}
+                                <br />
+                                📅 날짜: {date || "-"}
+                                <br />
+                                🕒 시간: {time || "-"}
+                            </Text>
+                        </Box>
+
+                        {/* 선택 좌석 */}
+                        <Box>
+                            <Text fontSize="2xl" fontWeight="bold" mb={2}>
+                                SEATS
+                            </Text>
+                            {selectedSeats.length === 0 ? (
+                                <Text fontSize="lg" color="gray.400">
+                                선택된 좌석이 없습니다.
+                                </Text>
+                            ) : (
+                                <Text fontSize="xl" color="#6B46C1">
+                                {[...selectedSeats]
+                                    .sort((a, b) => {
                                     const rowA = a[0];
                                     const rowB = b[0];
                                     const numA = parseInt(a.slice(1));
                                     const numB = parseInt(b.slice(1));
-                          
-                                    if (rowA === rowB) return numA - numB;
-                                    return rowA.localeCompare(rowB);
-                                }).join(", ")                          
-                            }</Text>
-                        )}
+                                    return rowA === rowB ? numA - numB : rowA.localeCompare(rowB);
+                                    })
+                                    .join(", ")}
+                                </Text>
+                            )}
+                        </Box>
                     </Box>
 
                     {/* 오른쪽: 좌석 그리드 */}
