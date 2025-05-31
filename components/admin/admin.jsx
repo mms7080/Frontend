@@ -651,6 +651,7 @@ export default function AdminDashboard({ userData }) {
                   <th style={thStyle}>결제일</th>
                   <th style={thStyle}>결제수단</th>
                   <th style={thStyle}>카드사</th>
+                  <th style={thStyle}>환불</th>
                 </tr>
               </thead>
               <tbody>
@@ -665,6 +666,44 @@ export default function AdminDashboard({ userData }) {
                     </td>
                     <td style={tdStyle}>{p.method}</td>
                     <td style={tdStyle}>{p.cardCompany || "-"}</td>
+                    <td style={tdStyle}>
+                      <button
+                        onClick={async () => {
+                          if (confirm("환불 및 취소 처리하시겠습니까?")) {
+                            try {
+                              const res = await fetch(
+                                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/${p.id}`,
+                                {
+                                  method: "DELETE",
+                                  credentials: "include",
+                                }
+                              );
+                              if (res.ok) {
+                                alert("환불 완료");
+                                setPayments((prev) =>
+                                  prev.filter((item) => item.id !== p.id)
+                                );
+                              } else {
+                                alert("환불 실패");
+                              }
+                            } catch (e) {
+                              alert("에러 발생: " + e.message);
+                            }
+                          }
+                        }}
+                        style={{
+                          background: "#e53e3e",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: 4,
+                          padding: "4px 8px",
+                          fontSize: 12,
+                          cursor: "pointer",
+                        }}
+                      >
+                        환불
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
