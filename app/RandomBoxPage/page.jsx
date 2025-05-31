@@ -1,14 +1,23 @@
 import RandomBoxPage from "../../components/RandomBox/page";
-import { fetch as serverfetch } from "../../lib/server";
+import { cookies } from "next/headers";
 
-export default async function RandomBoxMainPage() {
-  let userInfo = null;
-  try {
-    const res = await serverfetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-    if (res) userInfo = res;
-  } catch (e) {
-    console.log("유저 정보 가져오기 실패", e);
+export default async function Page() {
+  const cookieStore = cookies();
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    credentials: "include",
+    cache: "no-store",
+  });
+
+  const text = await res.text();
+  if (!res.ok || !text) {
+    return (
+      <meta httpEquiv="refresh" content="0;url=/signin" />
+    );
   }
 
-  return <RandomBoxPage userData={userInfo} />;
+  const userData = JSON.parse(text);
+  return <RandomBoxPage userData={userData} />;
 }
