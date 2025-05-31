@@ -1,7 +1,7 @@
 "use client";
 
 import React,{useState} from "react";
-import { Box, Text, Grid, Flex, Image } from '@chakra-ui/react';
+import { Box, Text, Grid, Flex, Image, Button } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Header, Footer } from '../../../components';
 import { movies } from '../../../components/moviePoster'
@@ -19,17 +19,42 @@ export default function SeatsPage() {
     const rows = 9;
     const cols = 12;
     const rowLabels = "ABCDEFGHI".split("");
+    const [personCounts, setPersonCounts] = useState({
+        adult: 0,
+        teen: 0,
+        senior: 0,
+        special: 0,
+    });
+    const totalPeople =
+        personCounts.adult +
+        personCounts.teen +
+        personCounts.senior +
+        personCounts.special;
+
 
     let headerColor='white';
     let headerBg='#1a1a1a';
 
+    // const toggleSeat = (seatId) => {
+    //     setSelectedSeats((prev) =>
+    //       prev.includes(seatId)
+    //         ? prev.filter((s) => s !== seatId)
+    //         : [...prev, seatId]
+    //     );
+    // };
+
     const toggleSeat = (seatId) => {
-        setSelectedSeats((prev) =>
-          prev.includes(seatId)
-            ? prev.filter((s) => s !== seatId)
-            : [...prev, seatId]
-        );
-    };
+        if (selectedSeats.includes(seatId)) {
+          // 이미 선택된 좌석이면 해제
+          setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
+        } else {
+          // 새로 선택할 경우, 인원 수보다 많으면 막기
+          if (selectedSeats.length < totalPeople) {
+            setSelectedSeats((prev) => [...prev, seatId]);
+          }
+        }
+      };
+      
 
     const isSelected = (seatId) => selectedSeats.includes(seatId);
 
@@ -82,7 +107,7 @@ export default function SeatsPage() {
                         minW="280px"
                         maxW="50%"
                         alignSelf="flex-start"
-                        mt="8%"
+                        mt="7%"
                     >
                         {/* 예매 정보 */}
                         <Box mb={6}>
@@ -100,6 +125,50 @@ export default function SeatsPage() {
                             </Text>
                         </Box>
 
+                        <Box mb={6}>
+                            {["adult", "teen", "senior", "special"].map((type) => {
+                                const labelMap = {
+                                adult: "성인",
+                                teen: "청소년",
+                                senior: "경로",
+                                special: "우대",
+                            };
+                            return (
+                                <Flex key={type} align="center" justify="space-between" mb={2}>
+                                    <Text>{labelMap[type]}</Text>
+                                    <Flex align="center">
+                                        <Button
+                                            size="sm"
+                                            _hover={{bg: "#6B46C1"}}
+                                            onClick={() =>
+                                            setPersonCounts((prev) => ({
+                                                ...prev,
+                                                [type]: Math.max(0, prev[type] - 1),
+                                            }))
+                                            }
+                                        >
+                                            -
+                                        </Button>
+                                        <Text mx={2}>{personCounts[type]}</Text>
+                                        <Button
+                                            size="sm"
+                                            _hover={{bg: "#6B46C1"}}
+                                            onClick={() =>
+                                            setPersonCounts((prev) => ({
+                                                ...prev,
+                                                [type]: prev[type] + 1,
+                                            }))
+                                            }
+                                        >
+                                            +
+                                        </Button>
+                                    </Flex>
+                                </Flex>
+                                );
+                            })}
+                        </Box>
+
+
                         {/* 선택 좌석 */}
                         <Box>
                             <Text fontSize="2xl" fontWeight="bold" mb={2}>
@@ -110,7 +179,7 @@ export default function SeatsPage() {
                                 선택된 좌석이 없습니다.
                                 </Text>
                             ) : (
-                                <Text fontSize="xl" color="#6B46C1">
+                                <Text fontSize="2xl" fontWeight="bold" color="#6B46C1">
                                 {[...selectedSeats]
                                     .sort((a, b) => {
                                     const rowA = a[0];
