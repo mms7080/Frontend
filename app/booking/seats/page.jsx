@@ -46,7 +46,7 @@ export default function SeatsPage() {
                 >
                     {/* 왼쪽: 영화 정보 */}
                     <Box flex="1" maxW="50%" textAlign="center">
-                        <Box minW="220px" textAlign="left">
+                        <Box minW="220px" textAlign="left" ml="10%">
                             <Text fontSize="4xl" fontWeight="" mb={4}>
                                 🎬 {movie?.title || '선택된 영화 없음'}
                             </Text>
@@ -73,14 +73,25 @@ export default function SeatsPage() {
                         color="gray.200"
                     >
                         <Text fontWeight="bold" mb={2}>
-                            선택한 좌석:
+                             SEATS
                         </Text>
                         {selectedSeats.length === 0 ? (
                             <Text fontSize="sm" color="gray.400">
                                 선택된 좌석이 없습니다.
                             </Text>
                         ) : (
-                            <Text>{selectedSeats.join(", ")}</Text>
+                            <Text color="#6B46C1">{
+                                // 좌석 표시 오름차순으로 표기
+                                [...selectedSeats].sort((a, b) => {
+                                    const rowA = a[0];
+                                    const rowB = b[0];
+                                    const numA = parseInt(a.slice(1));
+                                    const numB = parseInt(b.slice(1));
+                          
+                                    if (rowA === rowB) return numA - numB;
+                                    return rowA.localeCompare(rowB);
+                                }).join(", ")                          
+                            }</Text>
                         )}
                     </Box>
 
