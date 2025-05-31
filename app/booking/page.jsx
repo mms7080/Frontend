@@ -137,10 +137,10 @@ export default function Booking2Page() {
                         style={{ width: '350px', height: '650px', display: 'flex', justifyContent: 'center' }}
                     >
                         <img
-                        src={movie.poster}
-                        alt={movie.title}
-                        style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
-                        onClick={() => handlePosterClick(movie)}
+                            src={movie.poster}
+                            alt={movie.title}
+                            style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
+                            onClick={() => handlePosterClick(movie)}
                         />
                     </SwiperSlide>
                     ))}
@@ -254,18 +254,18 @@ export default function Booking2Page() {
                     bgPosition="center"
                     transform="scale(1.1)"
                 />
-                <Box position="absolute" top={0} left={0} width="100%" height="100%" bg="rgba(0,0,0,0.6)" />
+                <Box position="absolute" top={0} left={0} width="100%" height="100%" bg="rgba(0,0,0,0.8)" />
                 <Box 
-                position="relative" 
-                mx="auto" 
-                p={6} 
-                borderRadius="md" 
-                maxW="90%" 
-                w="100%" 
-                color="white"
-                bgImage={`url(${activeMovie.backdropUrl || activeMovie.poster})`}
-                bgSize="cover"
-                bgPosition="center"
+                    position="relative" 
+                    mx="auto" 
+                    p={6} 
+                    borderRadius="md" 
+                    maxW="90%" 
+                    w="100%" 
+                    color="white"
+                    bgImage={`url(${activeMovie.backdropUrl || activeMovie.poster})`}
+                    bgSize="cover"
+                    bgPosition="center"
                 >
                     <Box
                         position="absolute"
@@ -274,14 +274,14 @@ export default function Booking2Page() {
                         width="100%"
                         height="100%"
                         bg="rgba(0,0,0,0.7)"  // 투명도 조절해서 어둡기 강도 변경
-                        filter="blur(50px)"
+                        // filter="blur(50px)"
                         borderRadius="md"
                         zIndex={1}
                     />
                     <Box position="relative" zIndex={2}>
-                    <Flex justify="space-between" align="center" mb={4}>
-                    <Text fontSize="5xl">{activeMovie.title}</Text>
-                    <Button fontSize="2xl" color="white" variant="ghost" colorScheme="whiteAlpha" _hover={{ bg: '#6B46C1' }} onClick={() => setActiveMovie(null)}> X </Button>
+                    <Flex justify="space-between" align="center" mb={4} ml="7.5%">
+                        <Text fontSize="5xl">{activeMovie.title}</Text>
+                        <Button fontSize="2xl" color="white" variant="ghost" colorScheme="whiteAlpha" _hover={{ bg: '#6B46C1' }} onClick={() => setActiveMovie(null)}> X </Button>
                     </Flex>
                     <Flex direction="row" justify="center" align="start" gap={10}>
                         {/* 포스터 */}
@@ -307,7 +307,7 @@ export default function Booking2Page() {
                             >
                             {/* 지역 선택 버튼들 */}
                             <Box mb={4}>
-                                <Text fontSize="lg" mb={2}>REGION</Text>
+                                <Text fontSize="2xl" fontWeight="bold" mb={2} >REGION</Text>
                                 <Wrap spacing={2}>
                                 {Object.keys(theaterList).map((region) => (
                                     <Button
@@ -321,6 +321,7 @@ export default function Booking2Page() {
                                     bg={selectedRegion === region ? '#6B46C1' : 'transparent'}
                                     color={selectedRegion === region ? 'white' : 'gray.300'}
                                     borderColor="transparent"
+                                    border={selectedRegion === region ? '1px solid white' : 'transparent'}
                                     _hover={{ bg: '#6B46C1', color: 'white' }}
                                     >
                                     {region}
@@ -331,7 +332,7 @@ export default function Booking2Page() {
 
                             {/* 극장 목록 */}
                             <Box flex="1" overflowY="auto" minH={0}>
-                                <Text fontSize="lg" mb={2}>THEATERS</Text>
+                                <Text fontSize="2xl" fontWeight="bold" mb={2}>THEATERS</Text>
                                 {selectedRegion && theaterList[selectedRegion].map((theater) => (
                                 <Button
                                     key={theater}
@@ -344,6 +345,7 @@ export default function Booking2Page() {
                                     color={selectedTheater === theater ? 'white' : 'gray.300'}
                                     bg={selectedTheater === theater ? '#6B46C1' : 'transparent'}
                                     borderColor="transparent"
+                                    border={selectedTheater === theater ? '1px solid white' : 'transparent'}
                                     _hover={{ bg: '#6B46C1', color: 'white' }}
                                     w="100%"
                                     mb={2}
@@ -378,7 +380,7 @@ export default function Booking2Page() {
                                     },
                                 }}
                             >
-                                <Text fontSize="xl" mb={2}>DATE</Text>
+                                <Text fontSize="2xl" fontWeight="bold" mb={2}>DATE</Text>
                                 {selectedTheater ? (
                                 <DateSelector
                                     selectedDate={selectedDate}
@@ -409,7 +411,7 @@ export default function Booking2Page() {
                                     },
                                 }}
                             >
-                            <Text fontSize="xl" mb={2}>TIME</Text>
+                            <Text fontSize="2xl" fontWeight="bold" mb={2}>TIME</Text>
                             {selectedTheater && selectedDate ? (
                                 <TimeSelector
                                     selectedTime={selectedTime}
