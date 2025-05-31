@@ -119,6 +119,78 @@ export default function EventPage({ serverEvents, userData }) {
             </Button>
           </Flex>
         )}
+<Box
+  bg="white"
+  border="1px solid #ddd"
+  borderRadius="16px"
+  boxShadow="0 8px 16px rgba(107, 70, 193, 0.2)"
+  p={6}
+  textAlign="center"
+  mb={10}
+  maxW="1280px"
+  mx="auto"
+  position="relative"
+  overflow="hidden"
+>
+  {/* 상단 라벨 */}
+  <Box
+    position="absolute"
+    top="0"
+    left="0"
+    bg="#6B46C1"
+    color="white"
+    px={4}
+    py={2}
+    fontSize="sm"
+    fontWeight="bold"
+    borderBottomRightRadius="12px"
+  >
+    스페셜 이벤트
+  </Box>
+
+  {/* 타이틀 */}
+  <Text fontSize="2xl" fontWeight="bold" mb={3} color="#6B46C1">
+    🎁 1,000원 상품권 랜덤 뽑기
+  </Text>
+
+  {/* 이미지 */}
+  <Box mb={5}>
+    <Image
+      src="http://localhost:9999/images/coupon.png" // 이미지 경로는 원하는 것으로 교체
+      alt="₩1,000 쿠폰 이미지"
+      mx="auto"
+      borderRadius="12px"
+      boxShadow="md"
+      maxW="150px"
+    />
+  </Box>
+
+  {/* 설명 */}
+  <Text fontSize="sm" color="#555" mb={5}>
+    오늘의 행운을 테스트해보세요! 단 하루, 단 한 번의 찬스!
+  </Text>
+
+  {/* 버튼 */}
+  <Button
+    backgroundColor="#6B46C1"
+    color="white"
+    fontWeight="semibold"
+    borderRadius="8px"
+    px={6}
+    py={3}
+    fontSize="md"
+    transition="all 0.3s"
+    _hover={{ bg: "#553C9A", transform: "scale(1.05)" }}
+    onClick={() => router.push("/RandomBoxPage")}
+  >
+    지금 뽑기
+  </Button>
+</Box>
+
+
+
+
+
 
         <Text
           fontSize="xl"
