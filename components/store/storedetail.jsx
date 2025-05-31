@@ -115,13 +115,13 @@ export default function StoreDetailPage({userData}) {
               gap={4}
               wrap="wrap"
             >
-              <Button
+              {/* <Button
                 variant="outline"
                 w={{ base: "100%", sm: "100px" }}
                 borderColor="gray.300"
               >
                 🎁 선물
-              </Button>
+              </Button> */}
               <Spacer display={{ base: "none", sm: "block" }} />
               <Text fontSize="2xl" fontWeight="bold" color="purple.600">
                 {totalPrice}원
