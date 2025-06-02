@@ -322,7 +322,7 @@ export default function Joindetail(){
                                             <Flex flexDirection='column' gap='5px'>
                                                 <Flex gap='5px'>
                                                     <Input id="zipcode" name="zipcode" placeholder="우편번호" value={form.zipcode} readOnly onClick={() => handlePostcodeSearch()}/>
-                                                    <Button type='button' w='150px' onClick={()=>handlePostcodeSearch()} type="button" bg='#6B46C1' _hover={{bg:'#553C9A'}}>
+                                                    <Button type='button' w='150px' onClick={()=>handlePostcodeSearch()} bg='#6B46C1' _hover={{bg:'#553C9A'}}>
                                                         주소 검색
                                                     </Button>
                                                 </Flex>

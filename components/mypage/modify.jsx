@@ -1,10 +1,37 @@
 "use client";
 
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {Flex,Box,Input,Button,Text,RadioGroup} from '@chakra-ui/react';
 import Link from "next/link";
 
 export default function Modify({userInfo}) {/* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
+
+    const [form, setForm] = useState({
+        zipcode:userInfo.zipcode ?? '',
+        address:userInfo.address ?? '',
+        address_detail:userInfo.address_detail ?? ''
+    });
+
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+        document.body.appendChild(script);
+    }, []);
+
+    // 2. 주소 검색 버튼 클릭 시 실행할 함수
+    const handlePostcodeSearch = () => {
+        new window.daum.Postcode({
+          oncomplete: function (data) {
+            setForm({
+              ...form,
+              zipcode: data.zonecode,
+              address: data.address
+            });
+            setZipcode(data.zonecode);
+            setAddress(data.address);
+          }
+        }).open();
+      };
 
     const [phone,setPhone] = useState(userInfo.phone);
     const [email,setEmail] = useState(userInfo.email);
@@ -207,8 +234,13 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                             <td style={{width:235,height:140,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="address_detail">주소</label></td>
                                             <td style={{width:605,height:140,paddingLeft:15}}>
                                                <Flex flexDirection='column' gap='5px'>
-                                                    <Input id="zipcode" name="zipcode" value={zipcode} onChange={(e)=>setZipcode(e.target.value)}/>
-                                                    <Input id="address" name="address" value={address} onChange={(e)=>setAddress(e.target.value)}/>
+                                                    <Flex gap='5px'>
+                                                        <Input id="zipcode" name="zipcode" value={form.zipcode} readOnly onClick={() => handlePostcodeSearch()}/>
+                                                        <Button type='button' w='150px' onClick={()=>handlePostcodeSearch()} bg='#6B46C1' _hover={{bg:'#553C9A'}}>
+                                                            주소 검색
+                                                        </Button>
+                                                    </Flex>
+                                                    <Input id="address" name="address" value={form.address} readOnly onClick={() => handlePostcodeSearch()}/>
                                                     <Input id="address_detail" name="address_detail" value={address_detail} onChange={(e)=>setAddressDetail(e.target.value)}/>
                                                 </Flex>
                                             </td>

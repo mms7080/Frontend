@@ -37,11 +37,12 @@ export default function Header({ userInfo }) {
     // return null;
 
     // (b) 헤더를 어두운 색(#1a1a1a) 고정으로 렌더하고, 나머지 정보는 비워두기
+    const tempbg=isHome ? "#1a1a1a" : "white";
     return (
       <Flex
         w="100%"
         h={{ base: 'auto', md: '100px' }}
-        bg="#1a1a1a"
+        bg={tempbg}
         p={{ base: '20px', md: '40px' }}
       />
     );
