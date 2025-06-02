@@ -6,6 +6,62 @@ import {fetch} from '../../lib/client';
 
 export default function Joindetail(){
 
+
+    const [capsLock, setCapsLock] = useState(false); 
+
+        // 두벌식 한글 자판 기준: KeyQ → ㅂ, KeyW → ㅈ, ...
+    const dubeolsikMap = {
+      KeyQ: 'q', KeyW: 'w', KeyE: 'e', KeyR: 'r', KeyT: 't',
+      KeyY: 'y', KeyU: 'u', KeyI: 'i', KeyO: 'o', KeyP: 'p',
+      KeyA: 'a', KeyS: 's', KeyD: 'd', KeyF: 'f', KeyG: 'g',
+      KeyH: 'h', KeyJ: 'j', KeyK: 'k', KeyL: 'l',
+      KeyZ: 'z', KeyX: 'x', KeyC: 'c', KeyV: 'v',
+      KeyB: 'b', KeyN: 'n', KeyM: 'm',
+    };
+
+    const handleKeyDown = (e) => {
+        
+        e.preventDefault();
+        const key = e.code;
+        const keyChar = e.key;
+
+        if (key === 'CapsLock') {
+          setCapsLock((prev) => !prev); // CapsLock 상태 토글
+          return;
+        }
+    
+        // 백스페이스
+        if (key === 'Backspace') {
+          setInputsValue((prev) => prev.slice(0, -1));
+          return;
+        }
+    
+        // 스페이스
+        if (key === 'Space') {
+          setInputsValue((prev) => prev + ' ');
+          return;
+        }
+        
+        // 한글 키 매핑 → 영문 입력
+        if (dubeolsikMap[key]) {
+        
+          const isShift = e.getModifierState('Shift');
+          const baseChar = dubeolsikMap[key];
+        
+          const isUpper = (isShift && !capsLock) || (!isShift && capsLock); // 둘 중 하나만 눌렸을 때 대문자
+          const finalChar = isUpper ? baseChar.toUpperCase() : baseChar.toLowerCase();
+          setInputsValue((prev) => prev + finalChar);
+          return;
+        }
+
+        // 숫자 및 특수문자 입력 허용
+        // 숫자만 허용 (0~9)
+        if (/^[0-9]$/.test(keyChar)) {
+            setInputsValue((prev) => prev + keyChar);
+            return;
+        }
+    };
+
     const [form, setForm] = useState({
         zipcode:"",
         address:"",
@@ -83,13 +139,6 @@ export default function Joindetail(){
         alert('회원가입이 완료되었습니다!');
     };
 
-    const handleChange = (inputedvalue) => {
-        // 영어 대소문자와 숫자만 허용
-        const inputValue = inputedvalue;
-        const filteredValue = inputValue.replace(/[^a-zA-Z0-9]/g, '');
-        setInputsValue(filteredValue);
-    };
-
     return <Box w='100vw' minW='1000px'>
             <VStack w='100%'>
                 <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>
@@ -111,8 +160,8 @@ export default function Joindetail(){
                                                     maxLength="16"
                                                     placeholder="영문 대소문자와 숫자 조합 (4~16자)"
                                                     value={inputsvalue}
+                                                    onKeyDown={handleKeyDown}
                                                     onChange={(e)=>{
-                                                        handleChange(e.target.value);
                                                         setId(e.target.value);
                                                         setIsIdAvailable(null);/* 아이디 값 바꾸면 유효성 여부를 다시 체크해야 함 */
                                                         setIdMessage('');
