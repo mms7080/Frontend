@@ -169,15 +169,16 @@ export default function Booking2Page() {
                         w="80%"
                         borderRadius="md"
                         objectFit="cover"
+                        boxShadow="xl"
                     />
                 </Box>
 
                 {/* 가운데: 정보 */}
                 <Box flex="1" textAlign="center" flexDirection="column" justifyContent="space-between" minH="320px">
-                    <Text fontSize="5xl" fontWeight="normal" mt={0} mb={3} textAlign="left">
+                    <Text fontSize="5xl" fontWeight="normal" mt={0} mb={3} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">
                         {movies[activeIndex]?.title || ''}
                     </Text>
-                    <Text fontSize="2xl" mb={10} textAlign="left">{movies[activeIndex]?.subtitle || ''}</Text>
+                    <Text fontSize="2xl" mb={10} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.subtitle || ''}</Text>
                     <Flex align="center" gap={2} mb={1}>
                         <Button fontSize="2xl" mb={20} _hover={{cursor:"default"}}>
                             <FaHeart color="red" />
@@ -188,16 +189,16 @@ export default function Booking2Page() {
                         <Grid templateColumns="repeat(3, 1fr)" gap={8}>
                             {/* 각 항목 */}
                             <GridItem>
-                                <Text fontSize="2xl" fontWeight="normal" textAlign="left">실관람 평점</Text>
-                                <Text fontSize="xl" mt={1} textAlign="left">🎬 {movies[activeIndex]?.score || '-'}</Text>
+                                <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">실관람 평점</Text>
+                                <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">🎬 {movies[activeIndex]?.score || '-'}</Text>
                             </GridItem>
                             <GridItem>
-                                <Text fontSize="2xl" fontWeight="normal" textAlign="left">예매율</Text>
-                                <Text fontSize="xl" mt={1} textAlign="left">{movies[activeIndex]?.rate || '-'}</Text>
+                                <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">예매율</Text>
+                                <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.rate || '-'}</Text>
                             </GridItem>
                             <GridItem>
-                                <Text fontSize="2xl" fontWeight="normal" textAlign="left">누적관객수</Text>
-                                <Text fontSize="xl" mt={1} textAlign="left">👥 {movies[activeIndex]?.audience || '-'}</Text>
+                                <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">누적관객수</Text>
+                                <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">👥 {movies[activeIndex]?.audience || '-'}</Text>
                             </GridItem>
                         </Grid>
                     </Box>
@@ -208,38 +209,32 @@ export default function Booking2Page() {
                 {/* 오른쪽: 비어 있음 (공간 확보) */}
                 <Box flex="1">
                     <Box mb={5}>
-                        <Text fontWeight="normal" fontSize="lg" mb={1}>상영시간</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">상영시간</Text>
                         <Text fontSize="md" color="gray.400">{movies[activeIndex]?.runningTime || '-'}</Text>
                     </Box>
                     <Box mb={5}>
-                        <Text fontWeight="normal" fontSize="lg" mb={1}>개봉일</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">개봉일</Text>
                         <Text fontSize="md" color="gray.400">{movies[activeIndex]?.releaseDate || '-'}</Text>
                     </Box>
                     <Box mb={5}>
-                        <Text fontWeight="normal" fontSize="lg" mb={1}>장르</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">장르</Text>
                         <Text fontSize="md" color="gray.400">{movies[activeIndex]?.Genre || '-'}</Text>
                     </Box>
                     <Box mb={5}>
-                        <Text fontWeight="normal" fontSize="lg" mb={1}>감독</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">감독</Text>
                         <Text fontSize="md" color="gray.400">{movies[activeIndex]?.Director || '-'}</Text>
                     </Box>
                     <Box mb={5}>
-                        <Text fontWeight="normal" fontSize="lg" mb={1}>출연</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">출연</Text>
                         <Text fontSize="md" color="gray.400">{movies[activeIndex]?.cast || '-'}</Text>
                     </Box>
                     <Box>
-                        <Text fontWeight="normal" fontSize="lg" mb={1}>관람등급</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">관람등급</Text>
                         <Text fontSize="md" color="gray.400">{movies[activeIndex]?.ageRating || '-'}</Text>
                     </Box>
                 </Box>
             </Flex>
         </Box>
-
-
-
-        {/* <Box position="relative" zIndex={2} bg="#1a1a1a">
-            <Footer footerColor={footerColor} footerBg={footerBg} footerBorder={footerBorder} />
-        </Box> */}
 
         {activeMovie && (
             <Box position="fixed" top={0} left={0} width="100vw" height="100vh" zIndex={1000} display="flex" alignItems="center" justifyContent="center">
