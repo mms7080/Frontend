@@ -63,7 +63,9 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                     initialContent='' initialScore={10}></Reviewwrite>
                 </Flex>
                 {currentReviews.map((review,index)=>
-                    <Detailreview key={indexOfFirstReview+index} author={review.author} score={review.score} content={review.content} likenum={review.likenumber}></Detailreview>    
+                    <Detailreview username={userInfo?userInfo.username:''} key={indexOfFirstReview+index}
+                     id={review.id} author={review.author} score={review.score} content={review.content}
+                      likenum={review.likenumber} likeusers={review.likeusers} setReviewList={setReviewList}></Detailreview>    
                 )}
             </Flex>
             
