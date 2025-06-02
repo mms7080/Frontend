@@ -8,6 +8,9 @@ import { movies } from '../../../components/moviePoster'
 import { useRouter } from 'next/navigation';
 
 export default function SeatsPage() {
+    let headerColor='white';
+    let headerBg='#1a1a1a';
+
     const router = useRouter();
     const [user, setUser] = useState(null);
     const searchParams = useSearchParams();
@@ -35,21 +38,47 @@ export default function SeatsPage() {
 
     const isButtonDisabled = (selectedSeats.length === 0 || selectedSeats.length < totalPeople);
 
+    const disabledSeats = ["A3", "A4", "A9", "A10"];
+    const bookedSeats =["B2"];
 
-    let headerColor='white';
-    let headerBg='#1a1a1a';
+
+    // const toggleSeat = (seatId) => {
+    //     if (selectedSeats.includes(seatId)) {
+    //         // 이미 선택된 좌석이면 해제
+    //         setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
+    //     } else {
+    //         // 새로 선택할 경우, 인원 수보다 많으면 막기
+    //         if (selectedSeats.length < totalPeople) {
+    //             setSelectedSeats((prev) => [...prev, seatId]);
+    //         }
+    //     }
+    // };
 
     const toggleSeat = (seatId) => {
+        if (bookedSeats.includes(seatId)) return; // 예약 완료 좌석 클릭 막기
+    
+        const isDisabledSeat = disabledSeats.includes(seatId);
+    
         if (selectedSeats.includes(seatId)) {
-            // 이미 선택된 좌석이면 해제
             setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
         } else {
-            // 새로 선택할 경우, 인원 수보다 많으면 막기
-            if (selectedSeats.length < totalPeople) {
-                setSelectedSeats((prev) => [...prev, seatId]);
+            const normalSeats = selectedSeats.filter(s => !disabledSeats.includes(s));
+            const selectedDisabledSeats = selectedSeats.filter(s => disabledSeats.includes(s));
+    
+            if (isDisabledSeat) {
+                if (selectedDisabledSeats.length >= personCounts.special) {
+                    alert("선택한 장애인석이 우대 인원 수를 초과했습니다.");
+                    return;
+                }
+            } else {
+                if (normalSeats.length >= (totalPeople - personCounts.special)) {
+                    alert("선택한 일반 좌석이 인원 수를 초과했습니다.");
+                    return;
+                }
             }
+            setSelectedSeats((prev) => [...prev, seatId]);
         }
-    };
+    };    
 
     const handlePayment = () => {
         router.push(
@@ -66,6 +95,13 @@ export default function SeatsPage() {
     };
       
     const isSelected = (seatId) => selectedSeats.includes(seatId);
+
+    const getSeatColor = (seatId) => {
+        if (selectedSeats.includes(seatId)) return "#6B46C1"; // 선택한 좌석
+        if (disabledSeats.includes(seatId)) return "blue.500"; // 장애인석
+        if (bookedSeats.includes(seatId)) return "gray.300";    // 예약완료된 좌석
+        return "gray.600"; // 일반 좌석
+    };      
 
     useEffect(() => {
         document.title = "예매 - 좌석선택";
@@ -312,8 +348,16 @@ export default function SeatsPage() {
                                     key={seatId}
                                     w="40px"
                                     h="40px"
-                                    bg={isSelected(seatId) ? "#6B46C1" : "gray.600"}
-                                    _hover={{ bg: "#6B46C1", cursor: "pointer" }}
+                                    bg={getSeatColor(seatId)}
+                                    // _hover={{ bg: "#6B46C1", cursor: "pointer" }}
+                                    _hover={{
+                                        bg: !bookedSeats.includes(seatId) &&
+                                            !disabledSeats.includes(seatId) &&
+                                            !isSelected(seatId)
+                                            ? "#6B46C1"
+                                            : undefined,
+                                        cursor: bookedSeats.includes(seatId) ? "not-allowed" : "pointer"
+                                    }}                                    
                                     borderRadius="md"
                                     display="flex"
                                     alignItems="center"
@@ -329,6 +373,25 @@ export default function SeatsPage() {
                         </React.Fragment>
                     ))}
                     </Grid>
+                    {/* 좌석 상태 정보 */}
+                    <Flex justify="center" mt={8} gap={6} wrap="wrap">
+                        <Flex align="center">
+                            <Box w="20px" h="20px" bg="gray.500" borderRadius="md" mr={2} />
+                            <Text fontSize="md" color="gray.300">예약 가능</Text>
+                        </Flex>
+                        <Flex align="center">
+                            <Box w="20px" h="20px" bg="gray.300" borderRadius="md" mr={2} />
+                            <Text fontSize="md" color="gray.400">예약 완료</Text>
+                        </Flex>
+                        <Flex align="center">
+                            <Box w="20px" h="20px" bg="blue.500" borderRadius="md" mr={2} />
+                            <Text fontSize="md" color="gray.300">장애인석</Text>
+                        </Flex>
+                        <Flex align="center">
+                            <Box w="20px" h="20px" bg="#6B46C1" borderRadius="md" mr={2} border="2px solid white" />
+                            <Text fontSize="md" color="gray.300">선택한 좌석</Text>
+                        </Flex>
+                    </Flex>
                 </Box>
                 </Box>
 
