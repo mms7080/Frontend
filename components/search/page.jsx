@@ -105,7 +105,7 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
     return <>
         <Header userInfo={userData}></Header>
         <div className="bg-[#141414]">
-            <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
+            <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto" style={{ overflow: 'hidden' }}>
                 <Box pb={6}>
                     <Flex gap={2} justify={'space-between'} >
                         <Box transform="translate(-23px, 0)">
