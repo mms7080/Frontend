@@ -1,10 +1,20 @@
-import KakaoMap from "./kakaomap";
+"use client"
+import {useState, useEffect} from 'react';
+import NaverMap from "./navermap";
 import { Box, Heading } from "@chakra-ui/react";
-import './theater.css';
 
-const Theater = () => {
+
+
+const Theater = ({userInfo}) => {
+    const [address, setAddress] = useState("");
+
+    useEffect(() => {
+        if(userInfo && userInfo.address) {
+            setAddress(userInfo.address);
+        }
+    },[]);
+
     return (
-
         <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
             <Heading
                 mb={10}
@@ -17,11 +27,9 @@ const Theater = () => {
             >
                 🛍️ 영화관
             </Heading>
-            <div 
-                className="map-container"
-            >
-                <KakaoMap/>
-            </div>
+            <Box>
+                <NaverMap address={address}/>
+            </Box>
         </Box>
     );
 }

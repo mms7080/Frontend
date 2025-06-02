@@ -13,8 +13,8 @@ export default async function Moviepage(){
     
     const userRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
 
-    return <>
-        <Header headerColor="white" headerBg="#1a1a1a" userInfo={userRes}/>
+    return <div className="bg-[#141414]">
+        <Header userInfo={userRes}/>
         <Movie/>
-    </>;
+    </div>;
 }

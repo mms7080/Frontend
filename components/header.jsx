@@ -19,7 +19,7 @@ export default function Header({ userInfo }) {
   const isHome =
     pathname === "/" ||
     pathname.startsWith("/home") ||
-    pathname.startsWith("/movie") ||
+    pathname === "/movie/" ||
     pathname.startsWith("/booking") ||
     pathname.startsWith("/search");
   const headerBg = isHome ? "#1a1a1a" : "white";
@@ -113,14 +113,16 @@ export default function Header({ userInfo }) {
               예매
             </Box>
           </Link>
-          <Box
-            transition="all 0.2s ease"
-            color={headerColor}
-            cursor="pointer"
-            _hover={{ color: hoverColor }}
-          >
-            극장
-          </Box>
+          <Link href="/theater">
+            <Box
+              transition="all 0.2s ease"
+              color={headerColor}
+              cursor="pointer"
+              _hover={{ color: hoverColor }}
+            >
+              영화관
+            </Box>
+          </Link>
           <Link href="/store">
             <Box
               transition="all 0.2s ease"
