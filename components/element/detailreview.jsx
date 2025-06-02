@@ -63,9 +63,11 @@ export default function Detailreview({id,username,author,score,content,likenum,l
                     <Box bg='#DFDFE1' w='1px' h='50px'></Box>
                     <Text pl='20px' flex='1' color='#666691'>{content}</Text>
                     <Flex flexDirection='column' justifyContent='center' alignItems='center' w='60px' h='60px' borderRadius='50%'
-                     {...(username && {_hover:{bg:'gray.300'}})} zIndex='10' position='relative' mr='30px'>
-                        {username?(didilikeit()?
-                            <Button type='button' bg='transparent' h='30px' fontSize='16px' border='none' outline='none' onClick={handleSubmit}>
+                     {...(username && {_hover:{bg:'gray.300'}})} position='relative' mr='30px'>
+                        {username?(<Button type='button' bg='transparent' h='30px' fontSize='16px' border='none' outline='none' onClick={()=>{
+                                if(!didilikeit())triggerAnimation();
+                                handleSubmit();
+                                }}>
                                 <Box
                                     key={animate ? 'bounce' : 'static'}
                                     animation={animate ? `${bounce} 0.8s ease` : 'none'}
@@ -73,15 +75,8 @@ export default function Detailreview({id,username,author,score,content,likenum,l
                                     transition="transform 0.2s ease" // 클릭할 때 부드럽게
                                     _active={{ transform: "scale(0.8)" }}
                                 >
-                                    <Image src='https://cdn-icons-png.flaticon.com/128/5953/5953425.png' w='20px' h='20px'/>
-                                </Box>
-                            </Button>:
-                            <Button type='button' bg='transparent' h='30px' fontSize='16px' border='none' outline='none' onClick={()=>{
-                                triggerAnimation();
-                                handleSubmit();
-                                }}>
-                                <Box>
-                                    <Image src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px'></Image>
+                                    <Image src={ didilikeit()?'https://cdn-icons-png.flaticon.com/128/5953/5953425.png'
+                                    :'https://cdn-icons-png.flaticon.com/128/9807/9807775.png'} w='20px' h='20px'/>
                                 </Box>
                             </Button>
                         ):<Image src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px' opacity='0.5'></Image>
