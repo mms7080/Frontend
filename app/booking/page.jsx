@@ -156,7 +156,7 @@ export default function Booking2Page() {
             maxW="80%"
             w="100%"
             mx="auto"
-            bg="rgba(0, 0, 0, 0.7)"
+            bg="rgba(0, 0, 0, 0.2)"
             borderRadius="lg"
             color="white"
         >
@@ -174,12 +174,12 @@ export default function Booking2Page() {
 
                 {/* 가운데: 정보 */}
                 <Box flex="1" textAlign="center" flexDirection="column" justifyContent="space-between" minH="320px">
-                    <Text fontSize="5xl" fontWeight="bold" mt={0} mb={3} textAlign="left">
+                    <Text fontSize="5xl" fontWeight="normal" mt={0} mb={3} textAlign="left">
                         {movies[activeIndex]?.title || ''}
                     </Text>
                     <Text fontSize="2xl" mb={10} textAlign="left">{movies[activeIndex]?.subtitle || ''}</Text>
                     <Flex align="center" gap={2} mb={1}>
-                        <Button fontSize="2xl" mb={20}>
+                        <Button fontSize="2xl" mb={20} _hover={{cursor:"default"}}>
                             <FaHeart color="red" />
                             {movies[activeIndex]?.likeNumber || '0'}
                         </Button>
@@ -188,15 +188,15 @@ export default function Booking2Page() {
                         <Grid templateColumns="repeat(3, 1fr)" gap={8}>
                             {/* 각 항목 */}
                             <GridItem>
-                                <Text fontSize="2xl" fontWeight="bold" textAlign="left">실관람 평점</Text>
+                                <Text fontSize="2xl" fontWeight="normal" textAlign="left">실관람 평점</Text>
                                 <Text fontSize="xl" mt={1} textAlign="left">🎬 {movies[activeIndex]?.score || '-'}</Text>
                             </GridItem>
                             <GridItem>
-                                <Text fontSize="2xl" fontWeight="bold" textAlign="left">예매율</Text>
+                                <Text fontSize="2xl" fontWeight="normal" textAlign="left">예매율</Text>
                                 <Text fontSize="xl" mt={1} textAlign="left">{movies[activeIndex]?.rate || '-'}</Text>
                             </GridItem>
                             <GridItem>
-                                <Text fontSize="2xl" fontWeight="bold" textAlign="left">누적관객수</Text>
+                                <Text fontSize="2xl" fontWeight="normal" textAlign="left">누적관객수</Text>
                                 <Text fontSize="xl" mt={1} textAlign="left">👥 {movies[activeIndex]?.audience || '-'}</Text>
                             </GridItem>
                         </Grid>
@@ -208,28 +208,28 @@ export default function Booking2Page() {
                 {/* 오른쪽: 비어 있음 (공간 확보) */}
                 <Box flex="1">
                     <Box mb={5}>
-                        <Text fontWeight="bold" fontSize="md" mb={1}>🎬 상영시간</Text>
-                        <Text fontSize="lg">{movies[activeIndex]?.runningTime || '-'}</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1}>상영시간</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.runningTime || '-'}</Text>
                     </Box>
                     <Box mb={5}>
-                        <Text fontWeight="bold" fontSize="md" mb={1}>📅 개봉일</Text>
-                        <Text fontSize="lg">{movies[activeIndex]?.releaseDate || '-'}</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1}>개봉일</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.releaseDate || '-'}</Text>
                     </Box>
                     <Box mb={5}>
-                        <Text fontWeight="bold" fontSize="md" mb={1}>🎭 장르</Text>
-                        <Text fontSize="lg">{movies[activeIndex]?.Genre || '-'}</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1}>장르</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.Genre || '-'}</Text>
                     </Box>
                     <Box mb={5}>
-                        <Text fontWeight="bold" fontSize="md" mb={1}>🎬 감독</Text>
-                        <Text fontSize="lg">{movies[activeIndex]?.Director || '-'}</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1}>감독</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.Director || '-'}</Text>
                     </Box>
                     <Box mb={5}>
-                        <Text fontWeight="bold" fontSize="md" mb={1}>👥 출연</Text>
-                        <Text fontSize="lg">{movies[activeIndex]?.cast || '-'}</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1}>출연</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.cast || '-'}</Text>
                     </Box>
                     <Box>
-                        <Text fontWeight="bold" fontSize="md" mb={1}>🔞 관람등급</Text>
-                        <Text fontSize="lg">{movies[activeIndex]?.ageRating || '-'}</Text>
+                        <Text fontWeight="normal" fontSize="lg" mb={1}>관람등급</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.ageRating || '-'}</Text>
                     </Box>
                 </Box>
             </Flex>
@@ -307,7 +307,7 @@ export default function Booking2Page() {
                             >
                             {/* 지역 선택 버튼들 */}
                             <Box mb={4}>
-                                <Text fontSize="2xl" fontWeight="bold" mb={2} >REGION</Text>
+                                <Text fontSize="2xl" fontWeight="normal" mb={2} >REGION</Text>
                                 <Wrap spacing={2}>
                                 {Object.keys(theaterList).map((region) => (
                                     <Button
@@ -332,7 +332,7 @@ export default function Booking2Page() {
 
                             {/* 극장 목록 */}
                             <Box flex="1" overflowY="auto" minH={0}>
-                                <Text fontSize="2xl" fontWeight="bold" mb={2}>THEATERS</Text>
+                                <Text fontSize="2xl" fontWeight="normal" mb={2}>THEATERS</Text>
                                 {selectedRegion && theaterList[selectedRegion].map((theater) => (
                                 <Button
                                     key={theater}
@@ -380,7 +380,7 @@ export default function Booking2Page() {
                                     },
                                 }}
                             >
-                                <Text fontSize="2xl" fontWeight="bold" mb={2}>DATE</Text>
+                                <Text fontSize="2xl" fontWeight="normal" mb={2}>DATE</Text>
                                 {selectedTheater ? (
                                 <DateSelector
                                     selectedDate={selectedDate}
@@ -411,7 +411,7 @@ export default function Booking2Page() {
                                     },
                                 }}
                             >
-                            <Text fontSize="2xl" fontWeight="bold" mb={2}>TIME</Text>
+                            <Text fontSize="2xl" fontWeight="normal" mb={2}>TIME</Text>
                             {selectedTheater && selectedDate ? (
                                 <TimeSelector
                                     selectedTime={selectedTime}
