@@ -2,6 +2,7 @@
 
 import React,{useState} from 'react';
 import {VStack,Flex,Button,Input,Image,Box} from '@chakra-ui/react';
+import { FiSearch } from 'react-icons/fi'
 import {useRouter} from 'next/navigation';
 import Link from "next/link";
 
@@ -12,9 +13,8 @@ export default function Bookmark(){
 
     return <VStack w='100%' bg='#0f0f0f' p='30px'>
         <Flex gap='30px' alignItems='center'>
-            <Flex h='40px' justifyContent='space-between' alignContent='center' py='8px' px='12px' bg='#1e1e1e' borderRadius='4px'>
-                <Input h='24px' color='white' border='none' outline='none' fontSize='14px'
-                 _focus={{borderBottom:'1px solid #00c3ff'}}
+            <Flex h='40px' justifyContent='space-between' alignContent='center' py='8px' bg='#1e1e1e' borderRadius='4px' border='1px solid gray' _focusWithin={{borderColor:'white'}}>
+                <Input w='300px' h='24px' color='white' border='none' outline='none' fontSize='14px'
                  value={inputValue}
                  onChange={(e)=>setInputValue(e.target.value)}
                  onKeyDown={(e)=>{
@@ -26,6 +26,7 @@ export default function Bookmark(){
                         router.push(`/search/${e.target.value}`);
                     }
                  }}
+                 placeholder='검색 키워드 입력(영화, 이벤트, 리뷰검색)'
                  />
                 
                 <Button h='24px' bg='none' onClick={()=>{
@@ -35,7 +36,7 @@ export default function Bookmark(){
                     }
                     router.push(`/search/${inputValue}`);
                 }}>
-                    <Image w='16px' h='16px' src="https://cdn-icons-png.flaticon.com/512/54/54481.png" alt="search" loading='lazy'/>
+                    <FiSearch style={{position:'relative',left:'5px'}}/>
                 </Button>
 
             </Flex>
