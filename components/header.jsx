@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React,{ useState, useEffect } from 'react';
 
 import Link from "next/link";
 import { Flex, Box, Icon, Text } from "@chakra-ui/react";
@@ -9,6 +9,9 @@ import { FiUser } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 
 export default function Header({ userInfo }) {
+
+  const [mounted, setMounted] = useState(false);
+
   const pathname = usePathname();
   const isRealHome =
     pathname === "/" ||
@@ -22,6 +25,27 @@ export default function Header({ userInfo }) {
   const headerBg = isHome ? "#1a1a1a" : "white";
   const headerColor = isHome ? "white" : "black";
   const hoverColor = "gray.500";
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // 만약 아직 클라이언트 마운트가 안 된 상태라면,
+  // (a) 헤더를 아예 그리지 않거나, (b) 어두운 bg로 강제 렌더
+  if (!mounted) {
+    // (a) 아무것도 안 그린다 → 로딩 중 빈 공간만 보일 수 있음
+    // return null;
+
+    // (b) 헤더를 어두운 색(#1a1a1a) 고정으로 렌더하고, 나머지 정보는 비워두기
+    return (
+      <Flex
+        w="100%"
+        h={{ base: 'auto', md: '100px' }}
+        bg="#1a1a1a"
+        p={{ base: '20px', md: '40px' }}
+      />
+    );
+  }
 
   return (
     <>

@@ -47,7 +47,7 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
     {/* 영화카드들 */}
     const MovieCards = () => {
         if(searchWord != "" && searchedMovies.length < 1)
-            return <Box w='100%' h='50vh' bg='#1e1e1e' fontSize='4xl' color='white'
+            return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
                     display='flex' alignItems='center' justifyContent='center'>
                     검색 결과가 없습니다
                     </Box>
@@ -88,7 +88,7 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
 
     const EventCards = () => {/* 이벤트 카드들 */
         if(searchWord != "" && searchedEvents.length < 1)
-            return <Box w='100%' h='50vh' bg='#1e1e1e' fontSize='4xl' color='white'
+            return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
                     display='flex' alignItems='center' justifyContent='center'>
                     검색 결과가 없습니다
                     </Box>
@@ -105,7 +105,7 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
     return <>
         <Header userInfo={userData}></Header>
         <div className="bg-[#141414]">
-            <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto" style={{ overflow: 'hidden' }}>
+            <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
                 <Box pb={6}>
                     <Flex gap={2} justify={'space-between'} >
                         <Box transform="translate(-23px, 0)">
