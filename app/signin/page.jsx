@@ -20,7 +20,7 @@ export default async function Signin(){
     return <>
         <Header></Header>
         <SigninClientAlert/>
-        <Box w='calc(100vw - 17px)' minW='1000px' h='540px'>
+        <Box w='100vw' minW='1000px' h='540px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%'>
                     <Flex w='400px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
