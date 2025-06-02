@@ -167,14 +167,16 @@ export default function Booking2Page() {
                         src={movies[activeIndex]?.poster}
                         alt={movies[activeIndex]?.title}
                         w="80%"
+                        margin="50px"
                         borderRadius="md"
+                        // border="2px solid black"
                         objectFit="cover"
-                        boxShadow="xl"
+                        boxShadow="0px 0px 30px rgba(255,255,255,0.6)"
                     />
                 </Box>
 
                 {/* 가운데: 정보 */}
-                <Box flex="1" textAlign="center" flexDirection="column" justifyContent="space-between" minH="320px">
+                <Box flex="1" textAlign="center" flexDirection="column" justifyContent="space-between" minH="320px" mt={10}>
                     <Text fontSize="5xl" fontWeight="normal" mt={0} mb={3} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">
                         {movies[activeIndex]?.title || ''}
                     </Text>
@@ -204,10 +206,10 @@ export default function Booking2Page() {
                     </Box>
                 </Box>
 
-                <Box w="1px" bg="#6B46C1" height="430px" mx={4} />
+                <Box w="1px" bg="#6B46C1" height="460px" mx={4} mt={10} />
 
                 {/* 오른쪽: 비어 있음 (공간 확보) */}
-                <Box flex="1">
+                <Box flex="1" mt={10}>
                     <Box mb={5}>
                         <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">상영시간</Text>
                         <Text fontSize="md" color="gray.400">{movies[activeIndex]?.runningTime || '-'}</Text>
