@@ -67,7 +67,7 @@ export default function Joindetail(){
     return <Box w='100vw' minW='1000px'>
             <VStack w='100%'>
                 <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
+                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white'>
                         <Flex w='840px' flexDirection='column' gap='30px' py='50px'>
                             <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>회원가입</span>
                             <span style={{fontSize:20}}>기본 정보</span>

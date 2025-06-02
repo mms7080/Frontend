@@ -68,8 +68,8 @@ export default function findiddetail({userData}){
         return <>
             <Header userInfo={userData}></Header>
             <Box w='100vw' minW='1000px' h='540px'>
-                <VStack w='100%' bg='#F9F9F9' h='540px'>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
+                <VStack w='100%' h='540px'>
+                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white'>
                         <Flex w='840px' flexDirection='column' gap='15px' py='50px'>
                             <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>아이디 찾기</span>
                             <label htmlFor="method_email">찾기 방법</label>{/* ID 찾기 방법을 선택하는 단계 */}
@@ -114,8 +114,8 @@ export default function findiddetail({userData}){
         return <>
             <Header userInfo={userData}></Header>
             <Box w='100vw' minW='1000px' h='540px'>
-                <VStack w='100%' bg='#F9F9F9' h='540px'>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white' boxShadow='-5px 5px 5px rgba(0, 0, 0, 0.05), 5px 5px 5px rgba(0, 0, 0, 0.05)'>
+                <VStack w='100%' h='540px'>
+                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white'>
                         <Flex w='840px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
                             <Button bg='#6B46C1' _hover={{bg:'#553C9A'}} onClick={()=>setFoundID('')}>
                                 <Link href='/find_id'>
