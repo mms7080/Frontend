@@ -6,61 +6,18 @@ import {fetch} from '../../lib/client';
 
 export default function Joindetail(){
 
+    const handleBeforeInput = (e) => {
+    const inputChar = e.data;
+    if (!inputChar) return;
 
-    const [capsLock, setCapsLock] = useState(false); 
+    // 한글 자음/모음/완성형 + 특수문자 정규식
+    const forbiddenRegex = /[ㄱ-ㅎㅏ-ㅣ가-힣!@#$%^&*(),.?":{}|<>~`\\[\];'_+\-=/]/;
 
-        // 두벌식 한글 자판 기준: KeyQ → ㅂ, KeyW → ㅈ, ...
-    const dubeolsikMap = {
-      KeyQ: 'q', KeyW: 'w', KeyE: 'e', KeyR: 'r', KeyT: 't',
-      KeyY: 'y', KeyU: 'u', KeyI: 'i', KeyO: 'o', KeyP: 'p',
-      KeyA: 'a', KeyS: 's', KeyD: 'd', KeyF: 'f', KeyG: 'g',
-      KeyH: 'h', KeyJ: 'j', KeyK: 'k', KeyL: 'l',
-      KeyZ: 'z', KeyX: 'x', KeyC: 'c', KeyV: 'v',
-      KeyB: 'b', KeyN: 'n', KeyM: 'm',
-    };
-
-    const handleKeyDown = (e) => {
-        
-        e.preventDefault();
-        const key = e.code;
-        const keyChar = e.key;
-
-        if (key === 'CapsLock') {
-          setCapsLock((prev) => !prev); // CapsLock 상태 토글
-          return;
-        }
-    
-        // 백스페이스
-        if (key === 'Backspace') {
-          setInputsValue((prev) => prev.slice(0, -1));
-          return;
-        }
-    
-        // 스페이스
-        if (key === 'Space') {
-          setInputsValue((prev) => prev + ' ');
-          return;
-        }
-        
-        // 한글 키 매핑 → 영문 입력
-        if (dubeolsikMap[key]) {
-        
-          const isShift = e.getModifierState('Shift');
-          const baseChar = dubeolsikMap[key];
-        
-          const isUpper = (isShift && !capsLock) || (!isShift && capsLock); // 둘 중 하나만 눌렸을 때 대문자
-          const finalChar = isUpper ? baseChar.toUpperCase() : baseChar.toLowerCase();
-          setInputsValue((prev) => prev + finalChar);
-          return;
-        }
-
-        // 숫자 및 특수문자 입력 허용
-        // 숫자만 허용 (0~9)
-        if (/^[0-9]$/.test(keyChar)) {
-            setInputsValue((prev) => prev + keyChar);
-            return;
-        }
-    };
+    if (forbiddenRegex.test(inputChar)) {
+      e.preventDefault();
+      alert('한글 및 특수문자는 입력할 수 없습니다!');
+    }
+  };
 
     const [form, setForm] = useState({
         zipcode:"",
@@ -99,7 +56,34 @@ export default function Joindetail(){
     const [isPwrAvailable,setIsPwrAvailable]=useState(null);/* 비밀번호 확인이 비밀번호와 같은지 여부 */
     const [gender,setGender]=useState('');
     const [inputsvalue, setInputsValue] = useState('');
+    const [isComposing, setIsComposing] = useState(false);
 
+    const handleCompositionStart = () => {
+      setIsComposing(true);
+    };
+
+    const handleCompositionEnd = (e) => {
+      setIsComposing(false);
+      const value = e.target.value;
+      // 조합이 끝난 후 필터링하여 저장
+      const filteredValue = value.replace(/[^a-zA-Z0-9]/g, '');
+      setInputsValue(filteredValue);
+      setId(filteredValue);
+    };
+
+    const handleChange = (e) => {
+      const value = e.target.value;
+      if (isComposing) {
+        // 조합 중일 땐 필터링 없이 그대로 저장
+        setInputsValue(value);
+        setId(value);
+      } else {
+        // 조합 중이 아닐 땐 필터링 진행
+        const filteredValue = value.replace(/[^a-zA-Z0-9]/g, '');
+        setInputsValue(filteredValue);
+        setId(filteredValue);
+      }
+    };
     const handleIdCheck=async ()=>{
         try{
             if(id.length==0){
@@ -160,13 +144,15 @@ export default function Joindetail(){
                                                     maxLength="16"
                                                     placeholder="영문 대소문자와 숫자 조합 (4~16자)"
                                                     value={inputsvalue}
-                                                    onKeyDown={handleKeyDown}
                                                     onChange={(e)=>{
-                                                        setId(e.target.value);
-                                                        setIsIdAvailable(null);/* 아이디 값 바꾸면 유효성 여부를 다시 체크해야 함 */
+                                                        handleChange(e);
+                                                        setIsIdAvailable(null);
                                                         setIdMessage('');
-                                                        setIdCheck(false);/* 아이디 값이 바뀌면 아이디 중복 확인 여부를 false로 함 */
+                                                        setIdCheck(false);
                                                     }}
+                                                    onBeforeInput={handleBeforeInput}
+                                                    onCompositionStart={handleCompositionStart}
+                                                    onCompositionEnd={handleCompositionEnd}
                                                     required
                                                 />
                                                 <Button w='150px' onClick={handleIdCheck} type="button" bg='#6B46C1' _hover={{bg:'#553C9A'}}>
