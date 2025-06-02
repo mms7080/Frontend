@@ -39,20 +39,7 @@ export default function SeatsPage() {
     const isButtonDisabled = (selectedSeats.length === 0 || selectedSeats.length < totalPeople);
 
     const disabledSeats = ["A3", "A4", "A9", "A10"];
-    const bookedSeats =["B2"];
-
-
-    // const toggleSeat = (seatId) => {
-    //     if (selectedSeats.includes(seatId)) {
-    //         // 이미 선택된 좌석이면 해제
-    //         setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
-    //     } else {
-    //         // 새로 선택할 경우, 인원 수보다 많으면 막기
-    //         if (selectedSeats.length < totalPeople) {
-    //             setSelectedSeats((prev) => [...prev, seatId]);
-    //         }
-    //     }
-    // };
+    const bookedSeats =["B3", "B4"];
 
     const toggleSeat = (seatId) => {
         if (bookedSeats.includes(seatId)) return; // 예약 완료 좌석 클릭 막기
@@ -67,7 +54,7 @@ export default function SeatsPage() {
     
             if (isDisabledSeat) {
                 if (selectedDisabledSeats.length >= personCounts.special) {
-                    alert("선택한 장애인석이 우대 인원 수를 초과했습니다.");
+                    alert("선택한 우대 좌석이 우대 인원 수를 초과했습니다.");
                     return;
                 }
             } else {
@@ -92,6 +79,16 @@ export default function SeatsPage() {
           `&senior=${personCounts.senior}` +
           `&special=${personCounts.special}`
         );
+    };
+
+    const handleReset = () => {
+        setSelectedSeats([]);
+        // setPersonCounts({
+        //     adult: 0,
+        //     teen: 0,
+        //     senior: 0,
+        //     special: 0,
+        // });
     };
       
     const isSelected = (seatId) => selectedSeats.includes(seatId);
@@ -279,7 +276,7 @@ export default function SeatsPage() {
                     {/* 오른쪽: 좌석 그리드 */}
                 <Box flex="3" textAlign="center" overflow="visible">
                 <Box 
-                    mt="-15%"
+                    mt="-10%"
                     mb={6} 
                     textAlign="center" 
                     position="relative" 
@@ -381,7 +378,7 @@ export default function SeatsPage() {
                         </Flex>
                         <Flex align="center">
                             <Box w="20px" h="20px" bg="gray.300" borderRadius="md" mr={2} />
-                            <Text fontSize="md" color="gray.400">예약 완료</Text>
+                            <Text fontSize="md" color="gray.300">예약 완료</Text>
                         </Flex>
                         <Flex align="center">
                             <Box w="20px" h="20px" bg="blue.500" borderRadius="md" mr={2} />
@@ -391,6 +388,17 @@ export default function SeatsPage() {
                             <Box w="20px" h="20px" bg="#6B46C1" borderRadius="md" mr={2} border="2px solid white" />
                             <Text fontSize="md" color="gray.300">선택한 좌석</Text>
                         </Flex>
+                        <Button
+                            size="sm"
+                            fontSize="sm"
+                            color="white"
+                            _hover={{bg:"#6B46C1"}}
+                            variant="outline"
+                            onClick={handleReset}
+                            mt={{ base: 4, md: 0 }}
+                        >
+                            초기화
+                        </Button>
                     </Flex>
                 </Box>
                 </Box>
