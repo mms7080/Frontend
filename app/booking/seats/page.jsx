@@ -30,6 +30,7 @@ export default function SeatsPage() {
         personCounts.teen +
         personCounts.senior +
         personCounts.special;
+    const isButtonDisabled = selectedSeats.length === 0;
 
 
     let headerColor='white';
@@ -72,6 +73,7 @@ export default function SeatsPage() {
                     align="center"              // 수직 정렬
                     justify="center"            // 수평 정렬
                     minH="calc(100vh - 100px)"
+                    overflow="visible"
                 >
                     {/* 왼쪽: 영화 정보 */}
                     <Box flex="1" maxW="50%" textAlign="center" alignSelf="flex-start" mt="5%" ml="5%">
@@ -167,15 +169,13 @@ export default function SeatsPage() {
                                 );
                             })}
                         </Box>
-
-
                         {/* 선택 좌석 */}
                         <Box>
                             <Text fontSize="2xl" fontWeight="bold" mb={2}>
                                 SEATS
                             </Text>
                             {selectedSeats.length === 0 ? (
-                                <Text fontSize="lg" color="gray.400">
+                                <Text fontSize="2xl" color="gray.400">
                                 선택된 좌석이 없습니다.
                                 </Text>
                             ) : (
@@ -192,12 +192,31 @@ export default function SeatsPage() {
                                 </Text>
                             )}
                         </Box>
+                        <Button
+                            mt={6}
+                            width="100%"
+                            size="2xl"
+                            fontSize="2xl"
+                            bg={isButtonDisabled ? "gray.600" : "#6B46C1"}
+                            color="white"
+                            cursor={isButtonDisabled ? "not-allowed" : "pointer"}
+                            _hover={isButtonDisabled ? {} : { bg: "#553C9A" }}
+                            isDisabled={isButtonDisabled}
+                            onClick={() => {
+                              if (!isButtonDisabled) {
+                                alert(`결제 진행: 좌석 ${selectedSeats.join(", ")}`);
+                              }
+                            }}                          
+                        >
+                            결제하기
+                        </Button>
                     </Box>
 
                     {/* 오른쪽: 좌석 그리드 */}
-                <Box flex="3" textAlign="center">
+                <Box flex="3" textAlign="center" overflow="visible">
                 <Box 
-                    mb={12} 
+                    mt="-15%"
+                    mb={6} 
                     textAlign="center" 
                     position="relative" 
                     mx="auto"
