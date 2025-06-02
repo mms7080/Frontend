@@ -136,8 +136,8 @@ export default function SeatsPage() {
                     overflow="visible"
                 >
                     {/* 왼쪽: 영화 정보 */}
-                    <Box flex="1" maxW="50%" textAlign="center" alignSelf="flex-start" mt="5%" ml="5%">
-                        <Box minW="220px" textAlign="left" ml="10%">
+                    <Box flex="1" maxW="50%" textAlign="center" alignSelf="flex-start" mt="5%" ml="8%">
+                        <Box minW="270px" maxW="400px" mx="auto">
                             <Text 
                                 fontSize="3xl" 
                                 whiteSpace="nowrap"
@@ -145,7 +145,7 @@ export default function SeatsPage() {
                                 textOverflow="unset"
                                 mb={4}
                             >
-                                🎬 {movie?.title || '선택된 영화 없음'}
+                                {movie?.title || '선택된 영화 없음'}
                             </Text>
                             {movie?.poster && (
                                 <Image
@@ -154,7 +154,7 @@ export default function SeatsPage() {
                                     borderRadius="md"
                                     objectFit="cover"
                                     w="100%"
-                                    // maxH="300px"
+                                    maxW="400px"
                                 />
                             )}
                         </Box>
@@ -173,17 +173,17 @@ export default function SeatsPage() {
                     >
                         {/* 예매 정보 */}
                         <Box mb={6}>
-                            <Text fontWeight="bold" fontSize="2xl" mb={2}>
-                                Booking Info
+                            <Text fontWeight="normal" fontSize="3xl" mb={2} textShadow="6px 6px 6px rgba(0,0,0,0.6)">
+                                예매 정보
                             </Text>
-                            <Text fontSize="xl">
-                                🎯 지역: {region || "-"}
+                            <Text fontSize="lg" className='text-[rgb(211, 211, 211)]'>
+                                지역: {region || "-"}
                                 <br />
-                                🏢 영화관: {theater || "-"}
+                                영화관: {theater || "-"}
                                 <br />
-                                📅 날짜: {date || "-"}
+                                날짜: {date || "-"}
                                 <br />
-                                🕒 시간: {time || "-"}
+                                시간: {time || "-"}
                             </Text>
                         </Box>
 
@@ -231,7 +231,7 @@ export default function SeatsPage() {
                         </Box>
                         {/* 선택 좌석 */}
                         <Box>
-                            <Text fontSize="2xl" fontWeight="bold" mb={2}>
+                            <Text fontSize="2xl" fontWeight="normal" mb={2}>
                                 SEATS
                             </Text>
                             {selectedSeats.length === 0 ? (
@@ -239,7 +239,7 @@ export default function SeatsPage() {
                                 선택된 좌석이 없습니다.
                                 </Text>
                             ) : (
-                                <Text fontSize="2xl" fontWeight="bold" color="#6B46C1">
+                                <Text fontSize="2xl" fontWeight="normal" color="#6B46C1">
                                 {[...selectedSeats]
                                     .sort((a, b) => {
                                     const rowA = a[0];
@@ -298,7 +298,7 @@ export default function SeatsPage() {
                     <Text
                         mt={-6}
                         fontSize="xl"
-                        fontWeight="bold"
+                        fontWeight="normal"
                         letterSpacing="widest"
                         color="gray.300"
                         mb={10}
@@ -324,7 +324,7 @@ export default function SeatsPage() {
                             display="flex"
                             alignItems="center"
                             justifyContent="center"
-                            fontWeight="bold"
+                            fontWeight="normal"
                         >
                             {rowLabel}
                         </Box>
