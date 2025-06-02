@@ -43,22 +43,22 @@ export default function Bookmark(){
             <Box w='1px' h='32px' bg='#333'></Box>
             <Link href='/booking'>
                 <Flex gap='5px' flexDirection='column' h='60px' justifyContent='center' alignItems='center' overflow='visible'>
-                    <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/512/2922/2922510.png" alt="calendar" loading='lazy'/>
-                    <span style={{color:'white'}}>상영시간표</span>
-                </Flex>
-            </Link>
-            <Box w='1px' h='32px' bg='#333'></Box>
-            <Link href='/booking'>
-                <Flex gap='5px' flexDirection='column' h='60px' justifyContent='center' alignItems='center' overflow='visible'>
-                    <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/512/4305/4305567.png" alt="boxoffice" loading='lazy'/>
-                    <span style={{color:'white'}}>박스오피스</span>
-                </Flex>
-            </Link>
-            <Box w='1px' h='32px' bg='#333'></Box>
-            <Link href='/booking'>
-                <Flex gap='5px' flexDirection='column' h='60px' justifyContent='center' alignItems='center' overflow='visible'>
-                    <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/512/2331/2331970.png" alt="ticket" loading='lazy'/>
+                    <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/128/2067/2067153.png" alt="ticket" loading='lazy'/>
                     <span style={{color:'#ff4d4d'}}>빠른예매</span>
+                </Flex>
+            </Link>
+            <Box w='1px' h='32px' bg='#333'></Box>
+            <Link href='/movie'>
+                <Flex gap='5px' flexDirection='column' h='60px' justifyContent='center' alignItems='center' overflow='visible'>
+                    <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/128/777/777242.png" alt="boxoffice" loading='lazy'/>
+                    <span style={{color:'white'}}>영화 몰아보기</span>
+                </Flex>
+            </Link>
+            <Box w='1px' h='32px' bg='#333'></Box>
+            <Link href='/store'>
+                <Flex gap='5px' flexDirection='column' h='60px' justifyContent='center' alignItems='center' overflow='visible'>
+                    <Image w='24px' h='24px' _hover={{transform:'scale(1.2)',filter:'brightness(1.2)'}} transition='all 0.2s ease' src="https://cdn-icons-png.flaticon.com/512/2331/2331970.png" alt="calendar" loading='lazy'/>
+                    <span style={{color:'white'}}>스토어</span>
                 </Flex>
             </Link>
         </Flex>
