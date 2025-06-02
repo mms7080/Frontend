@@ -1,6 +1,6 @@
 "use client";
 
-import React,{useState} from "react";
+import React,{useState, useEffect} from "react";
 import { Box, Text, Grid, Flex, Image, Button } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Header, Footer } from '../../../components';
@@ -32,7 +32,8 @@ export default function SeatsPage() {
         personCounts.teen +
         personCounts.senior +
         personCounts.special;
-    const isButtonDisabled = selectedSeats.length === 0;
+
+    const isButtonDisabled = (selectedSeats.length === 0 || selectedSeats.length < totalPeople);
 
 
     let headerColor='white';
@@ -65,6 +66,25 @@ export default function SeatsPage() {
     };
       
     const isSelected = (seatId) => selectedSeats.includes(seatId);
+
+    useEffect(() => {
+        document.title = "예매 - 좌석선택";
+        (async () => {
+          try {
+            const res = await fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+              {
+                credentials: "include",
+              }
+            );
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            setUser(data);
+          } catch (e) {
+            setUser(null);
+          }
+        })();
+    }, []);
 
     return (
         <>
