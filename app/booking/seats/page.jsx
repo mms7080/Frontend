@@ -5,8 +5,10 @@ import { Box, Text, Grid, Flex, Image, Button } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Header, Footer } from '../../../components';
 import { movies } from '../../../components/moviePoster'
+import { useRouter } from 'next/navigation';
 
 export default function SeatsPage() {
+    const router = useRouter();
     const [user, setUser] = useState(null);
     const searchParams = useSearchParams();
     const movieId = parseInt(searchParams.get('movieId'));
@@ -36,27 +38,32 @@ export default function SeatsPage() {
     let headerColor='white';
     let headerBg='#1a1a1a';
 
-    // const toggleSeat = (seatId) => {
-    //     setSelectedSeats((prev) =>
-    //       prev.includes(seatId)
-    //         ? prev.filter((s) => s !== seatId)
-    //         : [...prev, seatId]
-    //     );
-    // };
-
     const toggleSeat = (seatId) => {
         if (selectedSeats.includes(seatId)) {
-          // 이미 선택된 좌석이면 해제
-          setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
+            // 이미 선택된 좌석이면 해제
+            setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
         } else {
-          // 새로 선택할 경우, 인원 수보다 많으면 막기
-          if (selectedSeats.length < totalPeople) {
-            setSelectedSeats((prev) => [...prev, seatId]);
-          }
+            // 새로 선택할 경우, 인원 수보다 많으면 막기
+            if (selectedSeats.length < totalPeople) {
+                setSelectedSeats((prev) => [...prev, seatId]);
+            }
         }
-      };
-      
+    };
 
+    const handlePayment = () => {
+        router.push(
+          `/checkout?movieId=${movieId}` +
+          `&region=${encodeURIComponent(region)}` +
+          `&theater=${encodeURIComponent(theater)}` +
+          `&date=${encodeURIComponent(date)}` +
+          `&time=${encodeURIComponent(time)}` +
+          `&adult=${personCounts.adult}` +
+          `&teen=${personCounts.teen}` +
+          `&senior=${personCounts.senior}` +
+          `&special=${personCounts.special}`
+        );
+    };
+      
     const isSelected = (seatId) => selectedSeats.includes(seatId);
 
     return (
@@ -204,7 +211,8 @@ export default function SeatsPage() {
                             isDisabled={isButtonDisabled}
                             onClick={() => {
                               if (!isButtonDisabled) {
-                                alert(`결제 진행: 좌석 ${selectedSeats.join(", ")}`);
+                                handlePayment();
+                                // alert(`결제 진행: 좌석 ${selectedSeats.join(", ")}`);
                               }
                             }}                          
                         >
