@@ -182,7 +182,7 @@ export default function Booking2Page() {
                     </Text>
                     <Text fontSize="2xl" mb={10} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.subtitle || ''}</Text>
                     <Flex align="center" gap={2} mb={1}>
-                        <Button fontSize="2xl" mb={20} _hover={{cursor:"default"}}>
+                        <Button fontSize="2xl" mb={20} _hover={{cursor:"default"}} boxShadow="6px 6px 6px rgba(0,0,0,0.6)">
                             <FaHeart color="red" />
                             {movies[activeIndex]?.likeNumber || '0'}
                         </Button>
