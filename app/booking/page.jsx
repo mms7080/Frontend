@@ -5,7 +5,7 @@ import { Flex, Box, Text, Button, Image, Wrap, Grid, GridItem } from '@chakra-ui
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay } from 'swiper/modules';
 import { Header, Footer } from '../../components';
-import {movies} from '../../components/moviePoster';
+// import {movies} from '../../components/moviePoster';
 import { useRouter } from 'next/navigation';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
@@ -20,6 +20,7 @@ import 'swiper/css/effect-coverflow';
 import 'swiper/css/autoplay';
 
 export default function Booking2Page() {
+    const [movies, setMovies] = useState([]);
     const [swiperReady, setSwiperReady] = useState(false);
     const [user, setUser] = useState(null);
     const [activeMovie, setActiveMovie] = useState(null);
@@ -32,9 +33,6 @@ export default function Booking2Page() {
 
     let headerColor='white';
     let headerBg='#1a1a1a';
-    let footerColor='white';
-    let footerBg='#1a1a1a';
-    let footerBorder='transparent';
 
     useEffect(() => {
         setSwiperReady(true);
@@ -54,6 +52,24 @@ export default function Booking2Page() {
             setUser(null);
           }
         })();
+
+        (async () => {
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);
+                if (!res.ok) throw new Error("영화 데이터를 불러오는 데 실패했습니다");
+                const movieList = await res.json();
+                const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
+                const updatedMovieList = movieList.map(movie => ({
+                    ...movie,
+                    poster: baseURL + movie.poster,
+                    wideImage: movie.wideImage ? baseURL + movie.wideImage : null,
+                }));
+            
+                setMovies(updatedMovieList);
+            } catch (err) {
+              console.error(err);
+            }
+          })();        
       }, []);
 
     const handleBooking = () => {
@@ -81,12 +97,6 @@ export default function Booking2Page() {
             <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}/>
         </Box>
 
-        {/* <Box textAlign="left" ml="10%" mt="20px">
-            <Text fontSize="4xl" color="white" borderLeft="4px solid #6B46C1" mb={6} pl={2}>
-            빠른예매
-            </Text>
-        </Box> */}
-
         <Flex flex="1" align="center" justify="center" pt="5vh">
             <style jsx global>{`
                 .swiper-slide:not(.swiper-slide-active) img {
@@ -107,7 +117,7 @@ export default function Booking2Page() {
                 }
             `}</style>
             <Box maxW="1550px" w="100%" px={4}>
-                {swiperReady && (
+                {swiperReady && movies.length > 0 && (
                 <Swiper
                     modules={[Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay]}
                     effect="coverflow"
@@ -118,7 +128,7 @@ export default function Booking2Page() {
                     spaceBetween={0}
                     loop
                     loopAdditionalSlides={1}
-                    coverflowEffect={{ rotate: 0, stretch: 50, depth: 200, modifier: 1, slideShadows: true }}
+                    coverflowEffect={{ rotate: 0, stretch: 50, depth: 0, scale: 0.8, modifier: 1, slideShadows: true }}
                     pagination={{ clickable: true }}
                     navigation
                     autoplay={{
@@ -180,7 +190,7 @@ export default function Booking2Page() {
                     <Text fontSize="5xl" fontWeight="normal" mt={0} mb={3} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">
                         {movies[activeIndex]?.title || ''}
                     </Text>
-                    <Text fontSize="2xl" mb={10} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.subtitle || ''}</Text>
+                    <Text fontSize="2xl" mb={10} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.titleEnglish || ''}</Text>
                     <Flex align="center" gap={2} mb={1}>
                         <Button fontSize="2xl" mb={20} _hover={{cursor:"default"}} boxShadow="6px 6px 6px rgba(0,0,0,0.6)">
                             <FaHeart color="red" />
@@ -196,11 +206,11 @@ export default function Booking2Page() {
                             </GridItem>
                             <GridItem>
                                 <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">예매율</Text>
-                                <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.rate || '-'}</Text>
+                                <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.reserveRate || '-'}%</Text>
                             </GridItem>
                             <GridItem>
                                 <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">누적관객수</Text>
-                                <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">👥 {movies[activeIndex]?.audience || '-'}</Text>
+                                <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">👥 {movies[activeIndex]?.totalView || '-'}만명</Text>
                             </GridItem>
                         </Grid>
                     </Box>
@@ -212,7 +222,7 @@ export default function Booking2Page() {
                 <Box flex="1" mt={10}>
                     <Box mb={5}>
                         <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">상영시간</Text>
-                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.runningTime || '-'}</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.runningTime || '-'}분</Text>
                     </Box>
                     <Box mb={5}>
                         <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">개봉일</Text>
@@ -220,11 +230,11 @@ export default function Booking2Page() {
                     </Box>
                     <Box mb={5}>
                         <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">장르</Text>
-                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.Genre || '-'}</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.genre || '-'}</Text>
                     </Box>
                     <Box mb={5}>
                         <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">감독</Text>
-                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.Director || '-'}</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.director || '-'}</Text>
                     </Box>
                     <Box mb={5}>
                         <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">출연</Text>
@@ -232,7 +242,7 @@ export default function Booking2Page() {
                     </Box>
                     <Box>
                         <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">관람등급</Text>
-                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.ageRating || '-'}</Text>
+                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.rate || '-'}</Text>
                     </Box>
                 </Box>
             </Flex>

@@ -19,7 +19,9 @@ body::-webkit-scrollbar {/* 크롬, 사파리 스크롤바 숨기기 */
 }
 
 .swiper-wrapper {
-  width:200% !important;
-  perspective:2000px;
+  perspective: 1200px;
+  /* transform: translate3d(0, 0, 0); */
+  width:400% !important;
+  /* perspective:1200px; */
 }
 /* test */
