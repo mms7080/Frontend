@@ -5,7 +5,6 @@ import { Flex, Box, Text, Button, Image, Wrap, Grid, GridItem } from '@chakra-ui
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay } from 'swiper/modules';
 import { Header, Footer } from '../../components';
-// import {movies} from '../../components/moviePoster';
 import { useRouter } from 'next/navigation';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
@@ -21,6 +20,9 @@ import 'swiper/css/autoplay';
 
 export default function Booking2Page() {
     const [movies, setMovies] = useState([]);
+    const [regionList, setRegionList] = useState([]);
+    const [theaterList, setTheaterList] = useState([]);
+
     const [swiperReady, setSwiperReady] = useState(false);
     const [user, setUser] = useState(null);
     const [activeMovie, setActiveMovie] = useState(null);
@@ -52,7 +54,7 @@ export default function Booking2Page() {
             setUser(null);
           }
         })();
-
+        // 영화 데이터
         (async () => {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);
@@ -69,8 +71,47 @@ export default function Booking2Page() {
             } catch (err) {
               console.error(err);
             }
-          })();        
+        })();      
+        // 지역데이터
+        (async () => {
+            try {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/regions`);
+              const result = await res.json();
+              if (result.success && Array.isArray(result.data)) {
+                setRegionList(result.data);
+              }
+            } catch (e) {
+              console.error("지역 데이터 불러오기 실패:", e);
+            }
+        })();
+        // 극장데이터
+        (async () => {
+            try {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/theaters`);
+              const result = await res.json();
+              if (result.success && Array.isArray(result.data)) {
+                setRegionList(result.data);
+              }
+            } catch (e) {
+              console.error("극장 데이터 불러오기 실패:", e);
+            }
+        })();
       }, []);
+
+      const fetchTheatersByRegion = async (region) => {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/theaters?region=${encodeURIComponent(region)}`);
+          const result = await res.json();
+          if (result.success && Array.isArray(result.data)) {
+            setTheaterList(result.data); // ✅ 극장 목록 상태 저장
+          } else {
+            setTheaterList([]);
+          }
+        } catch (e) {
+          console.error("극장 목록 불러오기 실패:", e);
+          setTheaterList([]);
+        }
+      };
 
     const handleBooking = () => {
         if (!selectedDate || !selectedTime) return;
@@ -270,7 +311,7 @@ export default function Booking2Page() {
                     maxW="90%" 
                     w="100%" 
                     color="white"
-                    bgImage={`url(${activeMovie.backdropUrl || activeMovie.poster})`}
+                    bgImage={`url(${activeMovie.backdropUrl || activeMovie.wideImage})`}
                     bgSize="cover"
                     bgPosition="center"
                 >
@@ -316,51 +357,52 @@ export default function Booking2Page() {
                             <Box mb={4}>
                                 <Text fontSize="2xl" fontWeight="normal" mb={2} >REGION</Text>
                                 <Wrap spacing={2}>
-                                {Object.keys(theaterList).map((region) => (
-                                    <Button
-                                    key={region}
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => {
-                                        setSelectedRegion(region);
-                                        setSelectedTheater(null);
-                                    }}
-                                    bg={selectedRegion === region ? '#6B46C1' : 'transparent'}
-                                    color={selectedRegion === region ? 'white' : 'gray.300'}
-                                    borderColor="transparent"
-                                    border={selectedRegion === region ? '1px solid white' : 'transparent'}
-                                    _hover={{ bg: '#6B46C1', color: 'white' }}
-                                    >
-                                    {region}
-                                    </Button>
-                                ))}
+                                    {regionList.map((region) => (
+                                        <Button
+                                            key={region}
+                                            size="sm"
+                                            variant="outline"
+                                            onClick={() => {
+                                                setSelectedRegion(region);
+                                                setSelectedTheater(null);
+                                                fetchTheatersByRegion(region);
+                                            }}
+                                            bg={selectedRegion === region ? '#6B46C1' : 'transparent'}
+                                            color={selectedRegion === region ? 'white' : 'gray.300'}
+                                            borderColor="transparent"
+                                            border={selectedRegion === region ? '1px solid white' : 'transparent'}
+                                            _hover={{ bg: '#6B46C1', color: 'white' }}
+                                        >
+                                            {region}
+                                        </Button>
+                                    ))}
                                 </Wrap>
                             </Box>
 
                             {/* 극장 목록 */}
                             <Box flex="1" overflowY="auto" minH={0}>
                                 <Text fontSize="2xl" fontWeight="normal" mb={2}>THEATERS</Text>
-                                {selectedRegion && theaterList[selectedRegion].map((theater) => (
-                                <Button
-                                    key={theater}
+                                {theaterList.map((theater) => (
+                                    <Button
+                                    key={theater.theaterId}
                                     onClick={() => {
-                                        setSelectedTheater(theater);
+                                        setSelectedTheater(theater.name);
                                         setSelectedDate(null);
                                         setSelectedTime(null);
                                     }}
                                     variant="outline"
-                                    color={selectedTheater === theater ? 'white' : 'gray.300'}
-                                    bg={selectedTheater === theater ? '#6B46C1' : 'transparent'}
+                                    color={selectedTheater === theater.name ? 'white' : 'gray.300'}
+                                    bg={selectedTheater === theater.name ? '#6B46C1' : 'transparent'}
                                     borderColor="transparent"
-                                    border={selectedTheater === theater ? '1px solid white' : 'transparent'}
+                                    border={selectedTheater === theater.name ? '1px solid white' : 'transparent'}
                                     _hover={{ bg: '#6B46C1', color: 'white' }}
                                     w="100%"
                                     mb={2}
-                                >
-                                    {theater}
-                                </Button>
+                                    >
+                                    {theater.name}
+                                    </Button>
                                 ))}
-                            </Box>
+                                </Box>
                             </Box>
 
 
