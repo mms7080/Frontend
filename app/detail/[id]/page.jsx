@@ -1,7 +1,7 @@
 import React from 'react';
 import {Box,Flex,VStack,Image,Button,Tabs} from '@chakra-ui/react';
 import {Header} from '../../../components';
-import {Reviews,Trailer} from '../../../components/detail';
+import {Reviews,Filmstill} from '../../../components/detail';
 import {FaHeart} from 'react-icons/fa';
 
 import {fetch} from '../../../lib/server';
@@ -70,6 +70,7 @@ export default async function detail({params}){
                 <VStack my='50px'>
                     <Box w='1200px' px='30px' m='40px' borderRadius='10px' bg='white'>
                         <Flex w='1140px' flexDirection='column' gap='30px' px='50px' pt='40px' pb='80px'>
+                            <iframe width="100%" height="500px" src={`${movieinfo.trailer}?autoplay=1&mute=1`} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                             <span style={{lineHeight:'40px'}}>
                                 {movieinfo.title}<br/><br/>
                                 {movieinfo.description}<br/><br/><br/><br/>
@@ -112,14 +113,14 @@ export default async function detail({params}){
                             <Tabs.Root key='outline' defaultValue="trailer" variant='outline' fitted>
                                 <Tabs.List>
                                     <Tabs.Trigger value="trailer">
-                                        예고편/스틸컷
+                                        스틸컷
                                     </Tabs.Trigger>
                                     <Tabs.Trigger value="review">
                                         실관람평
                                     </Tabs.Trigger>
                                 </Tabs.List>
                                 <Tabs.Content value="trailer">
-                                    <Trailer></Trailer>
+                                    <Filmstill></Filmstill>
                                 </Tabs.Content>
                                 <Tabs.Content value="review">
                                     <Reviews userInfo={res} movieInfo={movieinfo} reviewInfo={reviewinfo}></Reviews>

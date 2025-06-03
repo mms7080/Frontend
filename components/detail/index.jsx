@@ -1,4 +1,4 @@
 import Reviews from './reviews';
-import Trailer from './trailer';
+import Filmstill from './filmstill';
 
-export {Reviews,Trailer};
+export {Reviews,Filmstill};
