@@ -28,7 +28,7 @@ export default async function detail({params}){
         return <>
             <Header userInfo={res}></Header>
             <Box mb='100px'>
-                <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage={`url(${movieinfo.wideImage})`}>
+                <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage={`url(${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movieinfo.wideImage})`}>
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>
                     <Flex justifyContent='center' alignItems='flex-start' flexDirection='column' gap='10px' color='white' position='relative' zIndex='1'>
                         <span style={{fontSize:50,textShadow:'4px 4px 6px black'}}>{movieinfo.title}</span>
@@ -63,7 +63,7 @@ export default async function detail({params}){
                     </Flex>
 
                     <VStack pt='80px' overflow='visible'>
-                        <Image w='280px' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src={movieinfo.poster}/>
+                        <Image w='280px' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movieinfo.poster}`}/>
                         <Button w='280px' boxShadow='4px 4px 6px black'>예매</Button>
                     </VStack>
                 </Flex>
