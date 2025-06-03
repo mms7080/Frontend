@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
-  Heading,
   Text,
   Image,
   SimpleGrid,
@@ -13,22 +12,24 @@ import {
 import { Header } from "..";
 import { useRouter } from "next/navigation";
 import SkeletonHeader from "../SkeletonHeader";
+import { useCart } from "./CartContext";
+import CartSidebar from "./CartSidebar";
 
-// 카테고리 값
+
+
+
+
+
 const defaultCategories = ["전체", "티켓", "팝콘/음료/콤보", "포인트몰"];
 
 export default function MegaboxStorePage({ userData }) {
-  // 서버에서 받아온 스토어 아이템
   const [storeData, setStoreData] = useState({});
-  // 현재 선택된 카테고리
   const [activeCategory, setActiveCategory] = useState(defaultCategories[0]);
-  // 사용자 정보
   const [user, setUser] = useState(userData);
   const router = useRouter();
-  // 로딩 여부
-  const [loadingUser, setLoadingUser] = useState(false); 
+  const [loadingUser, setLoadingUser] = useState(false);
+  const { addToCart } = useCart();
 
-  // 스토어 데이터 fetch
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store`, {
       credentials: "include",
@@ -39,7 +40,6 @@ export default function MegaboxStorePage({ userData }) {
       });
   }, []);
 
-  // 카테고리 키 정렬 (기본 3개 + 나머지)
   const sortedKeys = [
     "티켓",
     "팝콘/음료/콤보",
@@ -49,11 +49,9 @@ export default function MegaboxStorePage({ userData }) {
     ),
   ];
 
-  // 선택된 카테고리에 따라 필터링
   const categoryList =
     activeCategory === "전체" ? sortedKeys : [activeCategory];
 
-  // 가격 포맷 (1,000원)
   const formatPrice = (price) =>
     new Intl.NumberFormat("ko-KR").format(price) + "원";
 
@@ -65,15 +63,7 @@ export default function MegaboxStorePage({ userData }) {
         <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
       )}
 
-      {/* 메인 컨텐츠 영역 */}
-      <Box
-        maxW="1200px"
-        mx="auto"
-        pt={{ base: 10, md: 20 }}
-        px={{ base: 4 }}
-        pb={10}
-      >
-        {/* 로고 헤더 */}
+      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
         <h1
           style={{
             fontSize: "24px",
@@ -95,7 +85,6 @@ export default function MegaboxStorePage({ userData }) {
           />
         </h1>
 
-        {/* 카테고리 선택 버튼 및 관리자용 등록 버튼 */}
         <Flex justify="space-between" align="center" wrap="wrap" mb={8} px={2}>
           <Flex gap={2} flexWrap="wrap">
             {defaultCategories.map((category) => (
@@ -118,18 +107,13 @@ export default function MegaboxStorePage({ userData }) {
               </Button>
             ))}
           </Flex>
-          {/* 관리자일 경우 스토어 등록 버튼 표시 */}
           {user?.auth === "ADMIN" && (
-            <Button
-              onClick={() => router.push("/store/upload")}
-              mt={{ base: 4, md: 0 }}
-            >
+            <Button onClick={() => router.push("/store/upload")} mt={{ base: 4, md: 0 }}>
               + 스토어 등록
             </Button>
           )}
         </Flex>
 
-        {/* 카테고리별 스토어 아이템 출력 */}
         {categoryList.map((category) => (
           <Box key={category} mb={12}>
             {activeCategory === "전체" && (
@@ -143,12 +127,7 @@ export default function MegaboxStorePage({ userData }) {
                 {category}
               </Text>
             )}
-            {/* 상품 리스트 */}
-            <SimpleGrid
-              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-              spacing={{ base: 6, md: 10 }}
-              justifyItems="center"
-            >
+            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={{ base: 6, md: 10 }} justifyItems="center">
               {(storeData[category] || []).map((item) => (
                 <Box
                   key={item.id}
@@ -162,7 +141,6 @@ export default function MegaboxStorePage({ userData }) {
                   cursor="pointer"
                   onClick={() => router.push(`/store/detail/${item.id}`)}
                 >
-                  {/* 상품 이미지 */}
                   <Image
                     src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${item.imgUrl}`}
                     alt={item.title}
@@ -172,14 +150,8 @@ export default function MegaboxStorePage({ userData }) {
                     mb={3}
                     borderRadius="md"
                   />
-                  {/* 상품 정보 영역 */}
                   <Box>
-                    <Flex
-                      justifyContent="space-between"
-                      alignItems="center"
-                      mb={2}
-                      gap={2}
-                    >
+                    <Flex justifyContent="space-between" alignItems="center" mb={2} gap={2}>
                       <Text fontWeight="normal" fontSize="15px" isTruncated>
                         {item.title}
                       </Text>
@@ -198,54 +170,24 @@ export default function MegaboxStorePage({ userData }) {
                         </span>
                       )}
                     </Flex>
-                    {/* 부제목 */}
                     <Text fontSize="13px" color="#666" mb={1} noOfLines={2}>
                       {item.subtitle}
                     </Text>
-                    {/* 가격 정보 (SALE 배지) */}
-                    <Flex
-                      alignItems="center"
-                      gap={2}
-                      mb={2}
-                      flexWrap="wrap"
-                      bg="#FAF5FF"
-                      px={2}
-                      py={1}
-                      borderRadius="6px"
-                    >
+                    <Flex alignItems="center" gap={2} mb={2} flexWrap="wrap" bg="#FAF5FF" px={2} py={1} borderRadius="6px">
                       {item.originalPrice && (
                         <>
-                          <Text
-                            fontSize="13px"
-                            color="#aaa"
-                            textDecoration="line-through"
-                            fontWeight="normal"
-                          >
+                          <Text fontSize="13px" color="#aaa" textDecoration="line-through" fontWeight="normal">
                             {formatPrice(item.originalPrice)}
                           </Text>
-                          <Text
-                            fontSize="12px"
-                            color="red"
-                            fontWeight="semibold"
-                            bg="#FED7D7"
-                            px={2}
-                            py={0.5}
-                            borderRadius="4px"
-                          >
+                          <Text fontSize="12px" color="red" fontWeight="semibold" bg="#FED7D7" px={2} py={0.5} borderRadius="4px">
                             SALE
                           </Text>
                         </>
                       )}
-                      <Text
-                        fontSize="18px"
-                        fontWeight="bold"
-                        color="#6B46C1"
-                        letterSpacing="-0.5px"
-                      >
+                      <Text fontSize="18px" fontWeight="bold" color="#6B46C1" letterSpacing="-0.5px">
                         {formatPrice(item.price)}
                       </Text>
                     </Flex>
-                    {/* 구매하기 버튼 */}
                     <Button
                       w="100%"
                       bg="#6B46C1"
@@ -257,11 +199,27 @@ export default function MegaboxStorePage({ userData }) {
                       transition="all 0.3s"
                       _hover={{ bg: "#553C9A", transform: "scale(1.02)" }}
                       onClick={(e) => {
-                        e.stopPropagation(); // 카드 클릭 이벤트 방지
+                        e.stopPropagation();
                         router.push(`/store/detail/${item.id}`);
                       }}
                     >
                       구매하기
+                    </Button>
+                    <Button
+                      w="100%"
+                      bg="gray.100"
+                      color="black"
+                      mt={2}
+                      fontWeight="normal"
+                      borderRadius="6px"
+                      fontSize="14px"
+                      _hover={{ bg: "gray.200" }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(item);
+                      }}
+                    >
+                      장바구니 담기
                     </Button>
                   </Box>
                 </Box>
@@ -271,6 +229,7 @@ export default function MegaboxStorePage({ userData }) {
         ))}
       </Box>
       <Box height={{ base: "100px", md: "230px" }} />
+      <CartSidebar />
     </>
   );
 }
