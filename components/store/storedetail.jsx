@@ -12,6 +12,9 @@ import {
 } from "@chakra-ui/react";
 import { Header } from "..";
 import { useParams, useRouter } from "next/navigation";
+import { useCart } from "../../components/store/CartContext";
+import CartSidebar from "../../components/store/CartSidebar";
+
 
 export default function StoreDetailPage({userData}) {
   const [user, setUser] = useState(userData);
@@ -19,6 +22,7 @@ export default function StoreDetailPage({userData}) {
   const router = useRouter();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/detail/${id}`, {
@@ -109,36 +113,45 @@ export default function StoreDetailPage({userData}) {
               />
             </Flex>
 
-            <Flex
-              direction={{ base: "column", sm: "row" }}
-              align={{ base: "stretch", sm: "center" }}
-              gap={4}
-              wrap="wrap"
-            >
-              {/* <Button
-                variant="outline"
-                w={{ base: "100%", sm: "100px" }}
-                borderColor="gray.300"
-              >
-                🎁 선물
-              </Button> */}
-              <Spacer display={{ base: "none", sm: "block" }} />
-              <Text fontSize="2xl" fontWeight="bold" color="purple.600">
-                {totalPrice}원
-              </Text>
-              <Button
-                w={{ base: "100%", sm: "120px" }}
-                fontWeight="bold"
-                bg="#6B46C1"
-                color="white"
-                _hover={{ bg: "#5A38A6" }}
-                onClick={() => {
-                  router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
-                }}
-              >
-                구매
-              </Button>
-            </Flex>
+      <Flex
+        direction={{ base: "column", sm: "row" }}
+        align={{ base: "stretch", sm: "center" }}
+        gap={4}
+        wrap="wrap"
+      >
+        <Spacer display={{ base: "none", sm: "block" }} />
+        <Text fontSize="2xl" fontWeight="bold" color="purple.600">
+          {totalPrice}원
+        </Text>
+        <Button
+          w={{ base: "100%", sm: "120px" }}
+          fontWeight="bold"
+          bg="#6B46C1"
+          color="white"
+          _hover={{ bg: "#5A38A6" }}
+          onClick={() => {
+            router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
+          }}
+        >
+          구매
+        </Button>
+        <Button
+          w={{ base: "100%", sm: "120px" }}
+          fontWeight="bold"
+          bg="gray.200"
+          color="black"
+          _hover={{ bg: "gray.300" }}
+          onClick={() => {
+            addToCart({
+              ...product,
+              price: product.price.replace(/[^0-9]/g, ""),
+              quantity,
+            });
+          }}
+        >
+          장바구니
+        </Button>
+      </Flex>
           </Box>
         </Flex>
 
@@ -210,6 +223,7 @@ export default function StoreDetailPage({userData}) {
           )}
         </Flex>
       </Box>
+      <CartSidebar />
     </>
   );
 }
