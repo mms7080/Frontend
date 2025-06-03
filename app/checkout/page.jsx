@@ -18,6 +18,7 @@ export default function CheckoutPage() {
   const date = params.get("date");
   const time = params.get("time");
   const seats = params.get("seats")?.split(",") || [];
+  const [selectedCoupon, setSelectedCoupon] = useState("none");
 
   const adult = parseInt(params.get("adult") || "0");
   const teen = parseInt(params.get("teen") || "0");
@@ -98,6 +99,25 @@ export default function CheckoutPage() {
                 </div>
             </div>
             <strong>{seats.length > 0 ? seats.join(", ") : "좌석 정보 없음"}</strong>
+            </div>
+
+            <div style={{ margin: "40px 0" }}>
+                <label htmlFor="coupon" style={{ display: "block", marginBottom: "8px", fontWeight: "bold", color: "white" }}>
+                    쿠폰 선택
+                </label>
+                <select
+                    id="coupon"
+                    defaultValue="none"
+                    style={{
+                    padding: "12px",
+                    borderRadius: "6px",
+                    border: "1px solid #ccc",
+                    width: "100%",
+                    fontSize: "16px"
+                    }}
+                >
+                    <option value="none">선택 안함</option>
+                </select>
             </div>
 
             <div className="payment-summary">
