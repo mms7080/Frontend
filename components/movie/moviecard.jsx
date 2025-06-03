@@ -51,7 +51,7 @@ const MovieCard = ({ movie, user, rank, crit }) => {
                 </span></div>)}
         <Link href={"/detail/" + movie.id}>
           <div className="poster">
-            <img src={movie.poster} alt={movie.title} loading='lazy' />
+            <img src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movie.poster}`} alt={movie.title} loading='lazy' />
             <div className="overlay">
               <p>
                 {movie.title} <br /> <br />
