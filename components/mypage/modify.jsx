@@ -94,9 +94,9 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                       const value=e.target.value;
                                                       setPw(value);
                                                       setIsPwAvailable(null);/* 비밀번호 값이 바뀌면 다시 유효성 여부를 검사 */
-                                                      if(value.length>0 && value.length<10){
+                                                      if(!value||value.length<10){
                                                           setIsPwAvailable(false);
-                                                          if(value.length>=5)
+                                                          if(value.length>=1)
                                                               setPwMessage('⚠️ 비밀번호가 약합니다. (최소 10자 필요)');
                                                           else
                                                               setPwMessage('');
@@ -105,7 +105,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                           setIsPwAvailable(true);
                                                           setPwMessage('✅ 강한 비밀번호입니다!');
                                                       }
-                                                      if(value.length>0){
+                                                      if(value.length>0 && pwr.length>0){
                                                           if(pwr===value){/* 비밀번호를 바꾸다가 비밀번호 확인과 일치할 경우를 대비한 코드 */
                                                               setPwrMessage('✅ 비밀번호가 일치합니다.');
                                                               setIsPwrAvailable(true);
@@ -145,7 +145,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                onChange={(e)=>{
                                                    const value=e.target.value;
                                                    setPwr(value);
-                                                   if(value.length>0){
+                                                   if(value.length>0 && pw.length>0){
                                                        if(pw===value){/* 비밀번호와 비밀번호 확인이 일치할 경우 */
                                                            setPwrMessage('✅ 비밀번호가 일치합니다.');
                                                            setIsPwrAvailable(true);
