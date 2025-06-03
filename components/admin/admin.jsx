@@ -391,7 +391,11 @@ export default function AdminDashboard({ userData }) {
               }}
             >
               <img
-                src={m.poster}
+                src={
+                  m.poster.startsWith("http")
+                    ? m.poster
+                    : `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${m.poster}`
+                }
                 alt={m.title}
                 style={{
                   width: "100%",
@@ -401,6 +405,7 @@ export default function AdminDashboard({ userData }) {
                   marginBottom: 10,
                 }}
               />
+
               <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 6 }}>
                 {m.title}
               </h3>
