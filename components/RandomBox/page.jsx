@@ -9,49 +9,63 @@ export default function RandomBoxPage({ userData }) {
   const [user] = useState(userData);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [showBox, setShowBox] = useState(false);
 
- const openBox = async () => {
-  if (!user) {
-    alert("로그인이 필요합니다.");
-    return;
-  }
-
-  const today = new Date().toISOString().split("T")[0];
-  const lastOpened = localStorage.getItem("lastOpenedDate");
-
-  // ✅ 실제 사용 시 주석 해제
-  // if (lastOpened === today) {
-  //   alert("오늘은 이미 열었습니다.");
-  //   return;
-  // }
-
-  setLoading(true);
-  setResult(null);
-
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/random-box?userId=${user.username}`,
-      {
-        method: "POST",
-        credentials: "include",
-      }
-    );
-    const data = await res.json();
-    setResult(data);
-    if (data.result === "당첨!") {
-      confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+  const openBox = async () => {
+    if (!user) {
+      alert("로그인이 필요합니다.");
+      return;
     }
 
+    const today = new Date().toISOString().split("T")[0];
+    const lastOpened = localStorage.getItem("lastOpenedDate");
+
     // ✅ 실제 사용 시 주석 해제
-    // localStorage.setItem("lastOpenedDate", today);
+    // if (lastOpened === today) {
+    //   alert("오늘은 이미 열었습니다.");
+    //   return;
+    // }
 
-  } catch (err) {
-    alert("에러 발생: " + err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    setResult(null);
+    setShowBox(true); 
 
+    const boxSound = new Audio("http://localhost:9999/sounds/box.mp3");
+boxSound.play().catch(() => {});
+setTimeout(() => {
+  boxSound.pause();
+  boxSound.currentTime = 0;
+}, 2500);
+
+
+    setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/random-box?userId=${user.username}`,
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+        const data = await res.json();
+        setResult(data);
+
+        if (data.result === "당첨!") {
+          confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+        new Audio("http://localhost:9999/sounds/win.mp3").play().catch(() => {});
+      } else {
+        new Audio("http://localhost:9999/sounds/lose.mp3").play().catch(() => {});
+      }
+        // ✅ 실제 사용 시 주석 해제
+        // localStorage.setItem("lastOpenedDate", today);
+      } catch (err) {
+        alert("에러 발생: " + err.message);
+      } finally {
+        setLoading(false);
+        setShowBox(false);
+      }
+    }, 3000);
+  };
 
   return (
     <>
@@ -67,9 +81,22 @@ export default function RandomBoxPage({ userData }) {
           <p>하루에 한 번, 클릭 한 번으로 쿠폰을 획득해보세요!</p>
         </div>
 
-        <button className="open-button" onClick={openBox} disabled={loading}>
-          {loading ? "열리는 중..." : "랜덤박스 열기"}
-        </button>
+        {!loading && !showBox && !result && (
+          <button className="open-button" onClick={openBox}>
+            랜덤박스 열기
+          </button>
+        )}
+
+        {showBox && (
+          <div className="box-animation-wrapper">
+            <img
+              src="http://localhost:9999/images/box.gif"
+              alt="상자 열기"
+              className="shaking-box"
+            />
+            <p className="box-text">열리는 중...</p>
+          </div>
+        )}
 
         {result && result.result === "당첨!" && (
           <div className="result-box win">
@@ -133,6 +160,52 @@ export default function RandomBoxPage({ userData }) {
           cursor: not-allowed;
         }
 
+.box-animation-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  margin-top: 40px;
+}
+
+.box-wrapper {
+  padding: 12px;
+  border: 4px dashed #6b46c1;
+  background: linear-gradient(135deg, #fefefe, #f0f0ff);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+.box-gif {
+  width: 190px;
+}
+
+        .box-text {
+          margin-top: 16px;
+          font-size: 18px;
+          color: #666;
+        }
+
+        @keyframes shake {
+          0% {
+            transform: rotate(0deg);
+          }
+          25% {
+            transform: rotate(4deg);
+          }
+          50% {
+            transform: rotate(-4deg);
+          }
+          75% {
+            transform: rotate(4deg);
+          }
+          100% {
+            transform: rotate(0deg);
+          }
+        }
+
         .result-box {
           margin-top: 40px;
           padding: 24px;
@@ -174,18 +247,6 @@ export default function RandomBoxPage({ userData }) {
           to {
             opacity: 1;
             transform: translateY(0);
-          }
-        }
-
-        @keyframes pop {
-          0% {
-            transform: scale(0.9);
-          }
-          50% {
-            transform: scale(1.15);
-          }
-          100% {
-            transform: scale(1);
           }
         }
       `}</style>
