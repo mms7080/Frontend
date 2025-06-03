@@ -38,7 +38,7 @@ export default function Booking2Page() {
 
     useEffect(() => {
         setSwiperReady(true);
-        document.title = "예매 - 빠른 예매";
+        document.title = "예매 - 영화선택";
         (async () => {
           try {
             const res = await fetch(

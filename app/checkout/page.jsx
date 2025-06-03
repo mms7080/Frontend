@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
-import { Box, Text, Flex, Button } from "@chakra-ui/react";
 import { movies } from '../../components/moviePoster';
 import { Header, Footer } from '../../components';
 
@@ -18,7 +17,6 @@ export default function CheckoutPage() {
   const date = params.get("date");
   const time = params.get("time");
   const seats = params.get("seats")?.split(",") || [];
-  const [selectedCoupon, setSelectedCoupon] = useState("none");
 
   const adult = parseInt(params.get("adult") || "0");
   const teen = parseInt(params.get("teen") || "0");
@@ -33,9 +31,6 @@ export default function CheckoutPage() {
     { label: "경로", count: senior, price: 10000 },
     { label: "우대", count: special, price: 8000 },
   ].filter(item => item.count > 0);
-
-  let headerColor = 'white';
-  let headerBg = '#1a1a1a';
 
   useEffect(() => {
     document.title = "예매 - 결제";
