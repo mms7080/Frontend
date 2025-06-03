@@ -136,7 +136,21 @@ const NaverMap = ({address}) => {
                     map: mapInstance
                 });
             } else {
-                initMap();
+                let attempts = 0;
+                const maxAttempts = 50; // 최대 50번 시도 (5초)
+
+                const checkInterval = setInterval(() => {
+                    attempts++;
+
+                    if (window.naver && window.naver.maps) {
+                        clearInterval(checkInterval);
+                        initMap();
+                    } else if (attempts >= maxAttempts) {
+                        clearInterval(checkInterval);
+                        console.warn('Naver Maps API 로드 타임아웃');
+                        setError('지도 로드에 시간이 너무 오래 걸립니다.');
+                    }
+                }, 100);
             }
         }
     }, [latitude, longitude, isScriptLoaded]);
