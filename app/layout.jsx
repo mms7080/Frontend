@@ -21,6 +21,10 @@ export default function Layout({ children }) {
             <Footer />
           </div>
         </Provider>
+        <script
+          type="text/javascript"
+          src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVERMAP_KEY}&submodules=geocoder`}
+        />
       </body>
     </html>
   );
