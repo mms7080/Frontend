@@ -6,7 +6,7 @@ import {Flex,Text,Box,Button,Image} from '@chakra-ui/react';
 import {keyframes} from '@emotion/react';
 import {fetch} from '../../lib/client';
 
-export default function Detailreview({id,username,author,score,content,likenum,likeusers,setReviewList}){
+export default function Detailreview({id,username,author,score,content,likenum,likeusers,setReviewList,movieInfo,isHome=false}){
 
     const [likenumber,setLikenumber]=useState(likenum);
     const [likeuserlist,setLikeuserlist]=useState(likeusers);
@@ -54,7 +54,7 @@ export default function Detailreview({id,username,author,score,content,likenum,l
     };
 
     return <>
-        <Flex w='100%' gap='15px'>
+        <Flex w='100%' gap='15px' transition='all 0.2s ease' {...(isHome && {_hover:{transform:'translateY(-5px)'}})}>
             <Flex w='120px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{author.substring(0,2)+'**'+author.substring(4)}</Flex>
             <Flex w='100%' h='70px' flex='1' bg='#F8F8FA' borderRadius='5px' alignItems='center'>
                 <Flex w='100%' gap='15px' alignItems='center'>
@@ -62,28 +62,39 @@ export default function Detailreview({id,username,author,score,content,likenum,l
                     <span style={{color:'#352461',fontSize:40,width:50}}>{score}</span>
                     <Box bg='#DFDFE1' w='1px' h='50px'></Box>
                     <Text pl='20px' flex='1' color='#666691'>{content}</Text>
+                    {!isHome?
                     <Flex flexDirection='column' justifyContent='center' alignItems='center' w='60px' h='60px' borderRadius='50%'
-                     {...(username && {_hover:{bg:'gray.300'}})} position='relative' mr='30px'>
-                        {username?(<Button type='button' bg='transparent' h='30px' fontSize='16px' border='none' outline='none' onClick={()=>{
-                                if(!didilikeit())triggerAnimation();
-                                handleSubmit();
-                                }}>
-                                <Box
-                                    key={animate ? 'bounce' : 'static'}
-                                    animation={animate ? `${bounce} 0.8s ease` : 'none'}
-                                    as="span"
-                                    transition="transform 0.2s ease" // 클릭할 때 부드럽게
-                                    _active={{ transform: "scale(0.8)" }}
-                                >
-                                    <Image src={ didilikeit()?'https://cdn-icons-png.flaticon.com/128/5953/5953425.png'
-                                    :'https://cdn-icons-png.flaticon.com/128/9807/9807775.png'} w='20px' h='20px'/>
-                                </Box>
-                            </Button>
-                        ):<Image src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px' opacity='0.5'></Image>
-                        }
-                        
+                    {...(username && {_hover:{bg:'gray.300'}})} position='relative' mr='30px' transition='all 0.4s ease'>
+                       {username?(<Button type='button' bg='transparent' h='30px' fontSize='16px' border='none' outline='none' onClick={()=>{
+                               if(!didilikeit())triggerAnimation();
+                               handleSubmit();
+                               }}>
+                               <Box
+                                   key={animate ? 'bounce' : 'static'}
+                                   animation={animate ? `${bounce} 0.8s ease` : 'none'}
+                                   as="span"
+                                   transition="transform 0.2s ease" // 클릭할 때 부드럽게
+                                   _active={{ transform: "scale(0.8)" }}
+                               >
+                                   <Image loading='lazy' src={ didilikeit()?'https://cdn-icons-png.flaticon.com/128/5953/5953425.png'
+                                   :'https://cdn-icons-png.flaticon.com/128/9807/9807775.png'} w='20px' h='20px'/>
+                               </Box>
+                           </Button>
+                       ):<Image loading='lazy' src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px' opacity='0.5'></Image>
+                       }
+                       
+                       <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color='#666691'>{likenumber}</Text>
+                   </Flex>
+                   :
+                   <>
+                    <Text pr='50px' color='gray'>-  {movieInfo.title}</Text>
+                    <Flex flexDirection='column' justifyContent='center' alignItems='center' w='60px' h='60px'>
+                        <Image loading='lazy' src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px' opacity='0.5'></Image>
                         <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color='#666691'>{likenumber}</Text>
                     </Flex>
+                   </>
+                   }
+                    
                 </Flex>
             </Flex>
         </Flex>
