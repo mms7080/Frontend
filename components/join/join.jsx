@@ -1,7 +1,7 @@
 'use client';
 
 import React,{useState,useEffect} from 'react';
-import {Flex,Box,VStack,Input,HStack,Button,Text,RadioGroup} from '@chakra-ui/react';
+import {Flex,Box,VStack,Input,HStack,Button,Text,Textarea,RadioGroup} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
 
 export default function Joindetail(){
@@ -29,6 +29,24 @@ export default function Joindetail(){
         const script = document.createElement("script");
         script.src = "//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
         document.body.appendChild(script);
+
+        async function fetchAgreement() {
+            const term1 = document.querySelector("#term1");
+            const term2 = document.querySelector("#term2");
+            const term3 = document.querySelector("#term3");
+
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/agreement`, {
+                method: 'GET',
+                credentials: 'include',  // ← 쿠키 사용 시 필수
+            });
+
+            term1.value=res[0];
+            term2.value=res[1];
+            term3.value=res[2];
+        }
+
+        fetchAgreement();
+
     }, []);
 
       // 2. 주소 검색 버튼 클릭 시 실행할 함수
@@ -371,9 +389,12 @@ export default function Joindetail(){
                                 </tbody>
                             </table>
 
-                            <HStack><input id="agreement1" name="agreement1" type="checkbox" required/><label htmlFor="agreement1">[필수] 이용약관에 동의합니다.</label></HStack>
-                            <HStack><input id="agreement2" name="agreement2" type="checkbox" required/><label htmlFor="agreement2">[필수] 개인정보 수집 및 이용에 동의합니다.</label></HStack>
-                            <HStack><input id="agreement3" name="agreement3" type="checkbox"/><label htmlFor="agreement3">[선택] 쇼핑정보 수신에 동의합니다.</label></HStack>
+                            <Textarea id='term1' name='term1' disabled></Textarea>
+                            <Flex justifyContent='flex-end'><input id="agreement1" name="agreement1" type="checkbox" required/><label htmlFor="agreement1">[필수] 이용약관에 동의합니다.</label></Flex>
+                            <Textarea id='term2' name='term2' disabled></Textarea>
+                            <Flex justifyContent='flex-end'><input id="agreement2" name="agreement2" type="checkbox" required/><label htmlFor="agreement2">[필수] 개인정보 수집 및 이용에 동의합니다.</label></Flex>
+                            <Textarea id='term3' name='term3' disabled></Textarea>
+                            <Flex justifyContent='flex-end'><input id="agreement3" name="agreement3" type="checkbox"/><label htmlFor="agreement3">[선택] 위치기반 서비스 이용약관에 동의합니다.</label></Flex>
 
                             <Button type="submit" bg='#6B46C1' _hover={{bg:'#553C9A'}}>회원가입</Button>
                         </Flex>
