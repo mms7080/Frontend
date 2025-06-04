@@ -1,5 +1,5 @@
 "use client";
-export default async function fetchClient(url, options={}) {
+export default async function FetchClient(url, options={}) {
   const defaultOptions = {
     credentials: 'include',
     headers: {

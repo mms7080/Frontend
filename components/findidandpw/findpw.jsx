@@ -4,7 +4,7 @@ import React,{useState} from 'react';
 import {RadioGroup,Input,Box,VStack,Flex,Button,Text} from '@chakra-ui/react';
 import {Header} from '../../components';
 
-export default function findpwdetail({userData}){
+export default function Findpwdetail({userData}){
     const [found,setFound]=useState(false);
     const [layout,setLayout]=useState('email');
     const [formData,setFormData]=useState({method:'email',id:'',name:'',email:'',phone_number:''});

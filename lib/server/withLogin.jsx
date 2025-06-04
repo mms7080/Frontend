@@ -3,7 +3,7 @@ import React from 'react';
 import {fetch} from '.';
 import {redirect} from 'next/navigation';
 
-export default async function withLogin(Component){/* 로그인 되어있나 여부를 확인함 */
+export default async function WithLogin(Component){/* 로그인 되어있나 여부를 확인함 */
     
     const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
 

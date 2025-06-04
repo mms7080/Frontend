@@ -6,7 +6,7 @@ const getCachedCookies = cache(async ()=>{
   return cookieStore.getAll().map(cookie=>`${cookie.name}=${cookie.value}`).join("; ");
 });
 
-export default async function fetchServer(url, options = {}) {
+export default async function FetchServer(url, options = {}) {
   const cookieString = await getCachedCookies();
   const defaultOptions = {
     credentials: 'include',

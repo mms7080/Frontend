@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
 
-export default function reviewWrite({modifyid,setModifyId,username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
+export default function ReviewWrite({modifyid,setModifyId,username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
 
     const [content, setContent] = useState(initialContent);
     const [score, setScore] = useState(initialScore);

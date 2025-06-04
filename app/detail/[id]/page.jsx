@@ -1,9 +1,7 @@
 import React from 'react';
 import {Box,Flex,VStack,Image,Button,Tabs} from '@chakra-ui/react';
 import {Header} from '../../../components';
-import {Reviews,Filmstill} from '../../../components/detail';
-import {FaHeart} from 'react-icons/fa';
-
+import {Reviews,Filmstill,Likepart} from '../../../components/detail';
 import {fetch} from '../../../lib/server';
 
 export const metadata = {
@@ -11,7 +9,7 @@ export const metadata = {
     description: '영화에 대한 상세한 정보를 볼 수 있는 페이지입니다.',
 };
 
-export default async function detail({params}){
+export default async function Detailpage({params}){
 
         const {id} = await params;
         
@@ -34,10 +32,7 @@ export default async function detail({params}){
                         <span style={{fontSize:50,textShadow:'4px 4px 6px black'}}>{movieinfo.title}</span>
                         <span style={{fontSize:30,position:'relative',bottom:15}}>{movieinfo.titleEnglish}</span>
                         <Flex gap='10px' pt='10px' overflow='visible'>
-                            <Button fontSize='15px' boxShadow='4px 4px 6px black'><FaHeart color='red'/>{
-                                movieinfo.likeNumber > 999 ? Math.floor(movieinfo.likeNumber / 100) / 10 + 'k' : movieinfo.likeNumber                                
-                            }</Button>
-                            <Button fontSize='15px' boxShadow='4px 4px 6px black'>공유하기</Button>
+                            <Likepart id={id} res={res} movieinfo={movieinfo}/>
                         </Flex>
 
                         <Flex gap='10px' color='black' fontSize='15px' py='5px' overflow='visible'>

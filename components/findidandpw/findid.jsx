@@ -7,7 +7,7 @@ import {Header} from '../../components';
 import Link from 'next/link';
 import {fetch} from '../../lib/client';
 
-export default function findiddetail({userData}){
+export default function Findiddetail({userData}){
     const [foundID,setFoundID]=useState('');
     const [layout,setLayout]=useState('email');
     const [formData,setFormData]=useState({method:'email',name:'',email:'',phone_number:''});
