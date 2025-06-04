@@ -16,9 +16,9 @@ export default async function Reviews({reviewInfo}){
             {reviewInfo.map((review,index)=>{
                     if(index<4){
                         let movieinfo=entiremovieinfo[review.movieid-1];
-                        return <Link href={`/detail/${review.movieid}`}><Box h='70px' overflow='visible'><Detailreview key={index}
+                        return <Link href={`/detail/${review.movieid}`} style={{overflow:'visible'}}><Detailreview key={index}
                         id={review.id} author={review.author} score={review.score} content={review.content}
-                        likenum={review.likenumber} likeusers={review.likeusers} movieInfo={movieinfo} isHome={true}></Detailreview></Box></Link>;
+                        likenum={review.likenumber} likeusers={review.likeusers} movieInfo={movieinfo} isHome={true}></Detailreview></Link>;
                     }
                 }
             )}

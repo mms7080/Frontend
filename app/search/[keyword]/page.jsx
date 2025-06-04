@@ -12,5 +12,6 @@ export default async function Searchpage({params}){
     const userres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
     const movieres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);
     const eventres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event`);
-    return <Search userData={userres} movieData={movieres} serverEvents={eventres} keywordData={decodeURIComponent(params.keyword)}/>;
+    const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/all`);
+    return <Search userData={userres} movieData={movieres} serverEvents={eventres} reviewInfo={reviewinfo} keywordData={decodeURIComponent(params.keyword)}/>;
 }

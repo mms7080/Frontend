@@ -16,7 +16,7 @@ export default async function Homepage(){
     const userres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);/* 로그인 중인 유저 정보 fetch */
     const movieres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);/* 영화 fetch */
     const eventres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event`);/* 이벤트 fetch */
-    const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/all`);
+    const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/all`);/* 리뷰 fetch */
 
     return <>
         <Header userInfo={userres}></Header>

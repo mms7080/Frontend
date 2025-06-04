@@ -8,23 +8,36 @@ import Link from "next/link";
 import {Header} from '..';
 import MovieCard from '../movie/moviecard';
 import Event from '../element/event';
+import Detailreview from '../element/detailreview';
 
-export default function Searchdetail({userData,movieData,serverEvents,keywordData}){
+export default function Searchdetail({userData,movieData,serverEvents,reviewInfo,keywordData}){
     const router = useRouter();
     const [movies, setMovies] = useState(movieData);
     const [searchWord, setSearchWord] = useState(keywordData);
     const [displayNumber, setDisplayNumber] = useState(8);/* 검색된 영화 더보기 버튼 */
     const [displayNumber2, setDisplayNumber2] = useState(8);/* 검색된 이벤트 더보기 버튼 */
+    const [displayNumber3, setDisplayNumber3] = useState(5);/* 검색된 리뷰 더보기 버튼 */
     const [events] = useState(serverEvents || {});
 
     const handleSearch = () => {
+        if(document.querySelector('#keyword').value===''){
+            alert('검색어를 입력하세요.');
+            return;
+        }
         router.push(`/search/${document.querySelector('#keyword').value}`);
     }    
     
     // 검색어 포함 유무로 분류
     const searchedMovies = searchWord === "" ? movies:
     movies.filter((movie) => {
-        return movie.title.toLowerCase().includes(searchWord.toLowerCase()) || movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase());
+        return (
+          movie.title.toLowerCase().includes(searchWord.toLowerCase()) ||
+          movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()) ||
+          movie.description.toLowerCase().includes(searchWord.toLowerCase()) ||
+          movie.genre.toLowerCase().includes(searchWord.toLowerCase()) ||
+          movie.director.toLowerCase().includes(searchWord.toLowerCase()) ||
+          movie.cast.toLowerCase().includes(searchWord.toLowerCase())
+        );
     });
     
     // 영화 더보기 버튼
@@ -36,21 +49,22 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
                             _hover={{borderColor : "white"}}
                             onClick={()=>{setDisplayNumber(displayNumber+8)}}
                         >더보기</Button>
-                    </Box>)
+                    </Box>);
     };
 
     useEffect(()=>{
         setDisplayNumber(8);
         setDisplayNumber2(8);
+        setDisplayNumber3(5);
     },[searchWord]);
 
     {/* 영화카드들 */}
     const MovieCards = () => {
         if(searchWord != "" && searchedMovies.length < 1)
             return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
-                    display='flex' alignItems='center' justifyContent='center'>
+                    display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
-                    </Box>
+                    </Box>;
         else return (<Box className="movie-grid">
                         {searchedMovies.map((movie,index) => {
                             if(index < displayNumber)
@@ -59,7 +73,7 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
                                             movie={movie}
                                         />)
                         })}
-                    </Box>)
+                    </Box>);
     }
 
     const categoryOrder = ["Pick", "영화", "극장", "제휴/할인", "시사회/무대인사"];
@@ -83,15 +97,15 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
                             _hover={{borderColor : "white"}}
                             onClick={()=>{setDisplayNumber2(displayNumber2+8)}}
                         >더보기</Button>
-                    </Box>)
+                    </Box>);
     };        
 
     const EventCards = () => {/* 이벤트 카드들 */
         if(searchWord != "" && searchedEvents.length < 1)
             return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
-                    display='flex' alignItems='center' justifyContent='center'>
+                    display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
-                    </Box>
+                    </Box>;
         else return (<Box className="movie-grid" overflow='visible'>
                     {searchedEvents.flat().filter((_,index)=>index%2=== 1).flat().map((items,index) =>{
                         if(index<displayNumber2)
@@ -99,8 +113,55 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
                                     <Event content={items.title} src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${items.image}`} url={`/event/view/${items.id}`}></Event>
                                 </Box>;
                     })}
-                </Box>)
-    }    
+                </Box>);
+    }
+
+    const searchedReviews = searchWord === "" ? reviewInfo:reviewInfo/* 검색 키워드를 포함하는 리뷰 추려내기 */
+        .filter((review,index)=>{
+            let result=review.content.toLowerCase().includes(searchWord.toLowerCase());
+            let movie=movies[review.movieid-1];
+            return result || movie.title.toLowerCase().includes(searchWord.toLowerCase()) ||
+                movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()) ||
+                movie.description.toLowerCase().includes(searchWord.toLowerCase()) ||
+                movie.genre.toLowerCase().includes(searchWord.toLowerCase()) ||
+                movie.director.toLowerCase().includes(searchWord.toLowerCase()) ||
+                movie.cast.toLowerCase().includes(searchWord.toLowerCase());
+        });
+
+    // 리뷰 더보기 버튼
+    const MoreButton3 = () => {
+        if(displayNumber3 < searchedReviews.length)
+            return (<Box pt={10} >
+                        <Button
+                            w='100%' bg="#1e1e1e" border="1px solid gray" 
+                            _hover={{borderColor : "white"}}
+                            onClick={()=>{setDisplayNumber3(displayNumber3+5)}}
+                        >더보기</Button>
+                    </Box>);
+    };        
+
+    const ReviewCards = () => {/* 리뷰 카드들 */
+        if(searchWord != "" && searchedReviews.length < 1)
+            return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
+                    display='flex' alignItems='center' justifyContent='center' pb='50px'>
+                    검색 결과가 없습니다
+                    </Box>;
+        else return (<Flex w='100%' direction='column' gap='30px' overflow='visible'>
+            {searchedReviews.map((review,index)=>{
+                    if(index<displayNumber3){
+                        let movieinfo=movies[review.movieid-1];
+                        return <Link href={`/detail/${review.movieid}`} style={{overflow:'visible'}} key={index}><Detailreview 
+                        id={review.id} author={review.author} score={review.score} content={review.content}
+                        likenum={review.likenumber} likeusers={review.likeusers}
+                        movieInfo={movieinfo} isHome={true} authorColor='white' bgColor='gray.400' contentColor='black'
+                        titleColor='black.300' likeColor='black.100'
+                        ></Detailreview></Link>;
+                    }
+                }
+            )}
+        </Flex>);
+
+    }
 
     return <>
         <Header userInfo={userData}></Header>
@@ -182,6 +243,9 @@ export default function Searchdetail({userData,movieData,serverEvents,keywordDat
                 >
                     리뷰 검색결과
                 </Text>
+
+                <ReviewCards/>
+                <MoreButton3/>
             </Box>
         </div>
         </>;
