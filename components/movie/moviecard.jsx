@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 import { createIcon } from '@chakra-ui/react';
 import Modal, { useModal } from '../../components/movie/modal'
@@ -28,6 +28,12 @@ const MovieCard = ({ movie, user, rank, crit }) => {
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
   const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
 
+  useEffect(() => {
+    if(user && user.likemovies.includes(movie.id))
+      likedController(true);
+  }
+  ,[user])
+
   const likeChange = async () => {
     if(!user)
       openModal();
@@ -38,6 +44,14 @@ const MovieCard = ({ movie, user, rank, crit }) => {
         if(res.ok) {
           likedController(!liked);
           setLikeNumber(data > 999 ? Math.floor(data / 100) / 10 + 'k' : data);
+          const res2 = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${movie.id}`, {
+            method: 'GET',
+            credentials: 'include' 
+          });
+          if(res2.ok) {
+            const result = res2.json();
+            console.log(result);
+          }
         }
       } catch (err) {
         console.log(err.message);
