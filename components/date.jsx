@@ -2,32 +2,28 @@
 import React from 'react';
 import { HStack, Button } from '@chakra-ui/react';
 
-const getNext14Days = () => {
-  const days = [];
-  const today = new Date();
+const formatDates = (availableDates) => {
   const weekday = ['일', '월', '화', '수', '목', '금', '토'];
 
-  for (let i = 0; i < 5; i++) {
-    const day = new Date(today);
-    day.setDate(today.getDate() + i);
-
-    const dateStr = day.toISOString().split('T')[0];  // YYYY-MM-DD
-    const dayOfWeek = weekday[day.getDay()];          // 요일 문자
-
-    days.push({ value: dateStr, label: `${dateStr} (${dayOfWeek})` });
-  }
-  return days;
+  return availableDates.map(dateStr => {
+    const date = new Date(dateStr);
+    const dayOfWeek = weekday[date.getDay()];
+    return {
+      value: dateStr,
+      label: `${dateStr} (${dayOfWeek})`
+    };
+  });
 };
 
-export default function DateSelector({ selectedDate, setSelectedDate }) {
-  const dates = getNext14Days();
+export default function DateSelector({ selectedDate, setSelectedDate, availableDates }) {
+  const dates = formatDates(availableDates || []);
 
   return (
     <HStack spacing={3} wrap="wrap">
-        {dates.map(({ value, label }) => {
+      {dates.map(({ value, label }) => {
         const isSelected = selectedDate === value;
         return (
-            <Button
+          <Button
             key={value}
             onClick={() => setSelectedDate(value)}
             variant="outline"
@@ -38,11 +34,11 @@ export default function DateSelector({ selectedDate, setSelectedDate }) {
             w="100%"
             h="100px"
             fontSize="lg"
-            >
+          >
             {label}
-            </Button>
+          </Button>
         );
-        })}
+      })}
     </HStack>
   );
 }

@@ -4,11 +4,10 @@ import React, {useState, useEffect} from 'react';
 import { Flex, Box, Text, Button, Image, Wrap, Grid, GridItem } from '@chakra-ui/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay } from 'swiper/modules';
-import { Header, Footer } from '../../components';
+import { Header } from '../../components';
 import { useRouter } from 'next/navigation';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
-import { theaterList } from '../../components/theaterList';
 import {FaHeart} from 'react-icons/fa';
 
 import 'swiper/css';
@@ -22,6 +21,7 @@ export default function Booking2Page() {
     const [movies, setMovies] = useState([]);
     const [regionList, setRegionList] = useState([]);
     const [theaterList, setTheaterList] = useState([]);
+    const [availableDates, setAvailableDates] = useState([]);
 
     const [swiperReady, setSwiperReady] = useState(false);
     const [user, setUser] = useState(null);
@@ -90,13 +90,24 @@ export default function Booking2Page() {
               const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/theaters`);
               const result = await res.json();
               if (result.success && Array.isArray(result.data)) {
-                setRegionList(result.data);
+                setTheaterList(result.data);
               }
             } catch (e) {
               console.error("극장 데이터 불러오기 실패:", e);
             }
         })();
       }, []);
+
+      useEffect(() => {
+        if (activeMovie && selectedTheater) {
+          const theater = theaterList.find(t => t.name === selectedTheater);
+          if (theater) {
+            fetchAvailableDates(activeMovie.id, theater.theaterId);
+          }
+        } else {
+          setAvailableDates([]);
+        }
+      }, [activeMovie, selectedTheater]);
 
       const fetchTheatersByRegion = async (region) => {
         try {
@@ -110,6 +121,21 @@ export default function Booking2Page() {
         } catch (e) {
           console.error("극장 목록 불러오기 실패:", e);
           setTheaterList([]);
+        }
+      };
+
+      const fetchAvailableDates = async (movieId, theaterId) => {
+        try {
+          const res = await fetch(`http://localhost:9999/api/booking/available-dates?movieId=${movieId}&theaterId=${theaterId}`);
+          const result = await res.json();
+          if (result.success && Array.isArray(result.data)) {
+            setAvailableDates(result.data);
+          } else {
+            setAvailableDates([]);
+          }
+        } catch (e) {
+          console.error("날짜 불러오기 실패:", e);
+          setAvailableDates([]);
         }
       };
 
@@ -437,7 +463,8 @@ export default function Booking2Page() {
                                     setSelectedDate(date);
                                     setSelectedTime(null); // 날짜 바꾸면 시간 초기화
                                     }}
-                                    selectedTheater={selectedTheater}
+                                    // selectedTheater={selectedTheater}
+                                    availableDates={availableDates}
                                 />
                                 ) : (
                                 <Text fontSize="md" color="gray.300" mt={4}>
