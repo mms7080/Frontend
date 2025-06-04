@@ -21,7 +21,7 @@ export default function Bottombox({res,movieinfo,reviewinfo}){
                             </Tabs.Trigger>
                         </Tabs.List>
                         <Tabs.Content value="trailer">
-                            <Filmstill></Filmstill>
+                            <Filmstill movieinfo={movieinfo}></Filmstill>
                         </Tabs.Content>
                         <Tabs.Content value="review">
                             <Reviews key={version} userInfo={res} movieInfo={movieinfo} reviewInfo={reviewinfo}></Reviews>
