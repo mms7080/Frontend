@@ -14,7 +14,6 @@ const Movie = () => {
     const [activeCategory, setActiveCategory] = useState('전체영화');
     const [movies, setMovies] = useState([]);
     const [user, setUser] = useState(null);
-    const [inputValue, setInputValue] = useState("");
     const [searchWord, setSearchWord] = useState("");
     const [displayNumber, setDisplayNumber] = useState(8);
 
@@ -41,7 +40,7 @@ const Movie = () => {
         })();
     }, []);
 
-    const handleSearch = () => {
+    const handleSearch = (inputValue) => {
         if(inputValue != searchWord) 
             setSearchWord(inputValue);
     }
@@ -127,17 +126,15 @@ const Movie = () => {
                         border="1px solid gray"
                         fontSize="15px" color="white"
                         _hover={{borderColor : "white"}}
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
                         onKeyDown={(e) => {
-                            if(e.key === 'Enter') handleSearch();
+                            if(e.key === 'Enter') handleSearch(e.target.value);
                         }}
                     />
                     <Button
                         marginLeft={4} px={6} bg="#1e1e1e"
                         border="1px solid gray" 
                         _hover={{borderColor : "white"}}
-                        onClick={handleSearch}
+                        onClick={(e)=>{handleSearch(e.target.previousSibling.value)}}
                         transform="translate(0, 1px)"
                     >
                         검색
