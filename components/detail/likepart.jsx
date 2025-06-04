@@ -9,7 +9,9 @@ import {AiOutlineHeart,AiFillHeart} from 'react-icons/ai';
 
 export default function LikePart({id,res,movieinfo}){
 
-    const [liked, likedController] = useState(res?(res.likemovies.includes(id)):false);
+    console.log(res.likemovies);
+
+    const [liked, likedController] = useState(res?(res.likemovies.includes(Number(id))):false);
     const [likeNumber, setLikeNumber] = useState(movieinfo.likeNumber > 999 ? Math.floor(movieinfo.likeNumber / 100) / 10 + 'k' : movieinfo.likeNumber);
     const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
     

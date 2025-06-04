@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
 
-export default function ReviewWrite({modifyid,setModifyId,username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
+export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
 
     const [content, setContent] = useState(initialContent);
     const [score, setScore] = useState(initialScore);
@@ -58,7 +58,9 @@ export default function ReviewWrite({modifyid,setModifyId,username,reviewList,so
         else if(sortkey==='likenumber')sorted=[...filtered].sort((a,b) => (b.likenumber-a.likenumber!=0)?(b.likenumber-a.likenumber):(new Date(b.writetime)-new Date(a.writetime)));
         else if(sortkey==='score')sorted=[...filtered].sort((a,b) => (b.score-a.score!=0)?(b.score-a.score):(new Date(b.writetime)-new Date(a.writetime)));
 
-        setReviewList([writtenitem,...sorted]);
+        sorted.splice(topindex,0,writtenitem);
+
+        setReviewList(sorted);
         setContent(''); // 입력값 초기화
         setScore(10);
     };

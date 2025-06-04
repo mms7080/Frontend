@@ -59,7 +59,7 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
             
             <Flex flexDirection='column' gap='15px'>
                 <Flex w='100%' gap='15px'>
-                    <Reviewwrite modifyid={-1} username={userInfo?userInfo.username:''} reviewList={reviewList} sortkey={sortkey} 
+                    <Reviewwrite topindex={indexOfFirstReview} modifyid={-1} username={userInfo?userInfo.username:''} reviewList={reviewList} sortkey={sortkey} 
                     setReviewList={setReviewList} movieInfo={movieInfo}
                     initialContent='' initialScore={10}></Reviewwrite>
                 </Flex>
