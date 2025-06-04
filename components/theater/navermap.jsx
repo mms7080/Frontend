@@ -23,7 +23,7 @@ const loadScript = (src) => {
     });
 };
 
-const NaverMap = ({address}) => {
+const NaverMap = ({myAddress, activeAddress}) => {
     
     const [isMapLoaded, setMapLoaded] = useState(false);
     const [isScriptLoaded, setScriptLoaded] = useState(false);
@@ -122,10 +122,10 @@ const NaverMap = ({address}) => {
 
     // 주소가 변경될 때 geocoding 실행
     useEffect(() => {
-        if (isScriptLoaded && address) {
-            geocodeAddress(address);
+        if (isScriptLoaded && myAddress) {
+            geocodeAddress(myAddress);
         }
-    }, [address, isScriptLoaded]);
+    }, [myAddress, isScriptLoaded]);
 
     // 좌표가 변경될 때 지도 초기화
     useEffect(() => {

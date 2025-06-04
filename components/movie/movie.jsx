@@ -1,6 +1,6 @@
 "use client"
 
-import React,{useEffect,useState} from 'react';
+import React,{useEffect,useState, useMemo} from 'react';
 import {Button, Flex, Box, Input} from '@chakra-ui/react';
 
 import MovieCard from '../../components/movie/moviecard';
@@ -45,25 +45,27 @@ const Movie = () => {
             setSearchWord(inputValue);
     }
     
-    // 현재 시간과 개봉일 비교해서 카테고리 분류
-    const filteredMovies = activeCategory === '전체영화' ? movies : 
-    movies.filter((movie) => {
+   const filteredMovies = useMemo(() => {
+    const filtered = activeCategory === '전체영화' ? movies : 
+      movies.filter((movie) => {
         let rd = new Date(movie.releaseDate);
         let nd = new Date();
-        return ((activeCategory === '개봉작') === (rd <= nd)) && !isNaN(rd)
-    });
+        return ((activeCategory === '개봉작') === (rd <= nd)) && !isNaN(rd);
+      });
     
-    // 검색어 포함 유무로 분류
-    const searchedMovies = searchWord === "" ? filteredMovies :
-    filteredMovies.filter((movie) => movie.title.includes(searchWord) || movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()));
+    const searched = searchWord === "" ? filtered :
+      filtered.filter((movie) => 
+        movie.title.includes(searchWord) || 
+        movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase())
+      );
     
-    // 예매율 기준 정렬렬
-    const sortedMovies = searchedMovies.sort((a,b)=>b.reserveRate - a.reserveRate);
+    return searched.sort((a,b) => b.reserveRate - a.reserveRate);
+  }, [movies, activeCategory, searchWord]);
     
     
     // 더보기 버튼
     const MoreButton = () => {
-        if(displayNumber < searchedMovies.length)
+        if(displayNumber < filteredMovies.length)
             return (<Box pt={10} >
                         <Button
                             w='100%' bg="#1e1e1e" border="1px solid gray" 
@@ -78,13 +80,13 @@ const Movie = () => {
     
     // 영화카드들
     const MovieCards = () => {
-        if(searchWord != "" && searchedMovies.length < 1)
+        if(searchWord != "" && filteredMovies.length < 1)
             return <Box w='100%' h='50vh' bg='#1e1e1e' fontSize='4xl' color='white'
                         display='flex' alignItems='center' justifyContent='center'>
                     검색 결과가 없습니다
                     </Box>
         else return (<Box className="movie-grid">
-                        {searchedMovies.map((movie,index) => {
+                        {filteredMovies.map((movie,index) => {
                             if(index < displayNumber)
                                 return (<MovieCard 
                                             key={movie.id}
