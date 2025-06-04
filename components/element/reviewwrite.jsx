@@ -2,12 +2,13 @@ import React,{useState} from 'react';
 import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
 
-export default function reviewWrite({username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
+export default function reviewWrite({modifyid,setModifyId,username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
 
     const [content, setContent] = useState(initialContent);
     const [score, setScore] = useState(initialScore);
 
     const reviewExist=()=>{
+        if(modifyid!=-1)return false;
         for(let i=0;i<reviewList.length;i++)
             if(reviewList[i].author===username)
                 return true;
@@ -41,18 +42,75 @@ export default function reviewWrite({username,reviewList,sortkey,setReviewList,m
             body: JSON.stringify(dataToSend)
         });
 
+        let writtenindex,writtenitem;
+
+        for(let i=0;i<res.length;i++)
+            if(res[i].author===username){
+                writtenindex=i;
+                writtenitem=res[i];
+                break;
+            }
+
+        let filtered=res.filter((_, idx) => idx !== writtenindex);
         let sorted;
 
-        if(sortkey==='writetime')sorted=[...res].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)!=0)?(new Date(b.writetime)-new Date(a.writetime)):(b.likenumber-a.likenumber));
-        else if(sortkey==='likenumber')sorted=[...res].sort((a,b) => (b.likenumber-a.likenumber!=0)?(b.likenumber-a.likenumber):(new Date(b.writetime)-new Date(a.writetime)));
-        else if(sortkey==='score')sorted=[...res].sort((a,b) => (b.score-a.score!=0)?(b.score-a.score):(new Date(b.writetime)-new Date(a.writetime)));
+        if(sortkey==='writetime')sorted=[...filtered].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)!=0)?(new Date(b.writetime)-new Date(a.writetime)):(b.likenumber-a.likenumber));
+        else if(sortkey==='likenumber')sorted=[...filtered].sort((a,b) => (b.likenumber-a.likenumber!=0)?(b.likenumber-a.likenumber):(new Date(b.writetime)-new Date(a.writetime)));
+        else if(sortkey==='score')sorted=[...filtered].sort((a,b) => (b.score-a.score!=0)?(b.score-a.score):(new Date(b.writetime)-new Date(a.writetime)));
 
-        setReviewList(sorted);
+        setReviewList([writtenitem,...sorted]);
         setContent(''); // 입력값 초기화
         setScore(10);
     };
 
+    const handleModify=async (e)=>{/* 댓글 수정시에 fetch로 데이터를 넘겨주는 과정 */
+
+        let dataToSend={id:modifyid,content:content,score:score};
+
+        if(content===''){
+            e.preventDefault();
+            alert('내용을 입력해주세요.');
+            return;
+        }
+
+        let modifyindex,modifyitem,newmindex;
+
+        for(let i=0;i<reviewList.length;i++)
+            if(reviewList[i].id===modifyid){
+                modifyindex=i;
+                break;
+            }
+
+        const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/modify/logic`, {
+            method: 'POST',
+            body: JSON.stringify(dataToSend)
+        });
+
+
+        for(let i=0;i<res.length;i++)
+            if(res[i].id===modifyid){
+                newmindex=i;
+                modifyitem=res[i];
+                break;
+            }
+
+        let filtered=res.filter((_, idx) => idx !== newmindex);
+        let sorted;
+
+        if(sortkey==='writetime')sorted=[...filtered].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)!=0)?(new Date(b.writetime)-new Date(a.writetime)):(b.likenumber-a.likenumber));
+        else if(sortkey==='likenumber')sorted=[...filtered].sort((a,b) => (b.likenumber-a.likenumber!=0)?(b.likenumber-a.likenumber):(new Date(b.writetime)-new Date(a.writetime)));
+        else if(sortkey==='score')sorted=[...filtered].sort((a,b) => (b.score-a.score!=0)?(b.score-a.score):(new Date(b.writetime)-new Date(a.writetime)));
+
+        sorted.splice(modifyindex,0,modifyitem);
+
+        setReviewList(sorted);
+        setContent(''); // 입력값 초기화
+        setScore(10);
+        setModifyId(-1);
+    };
+
     return <>
+    <Flex w='100%' gap='15px'>
      <Flex w='120px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{username?username:'로그인 필요'}</Flex>
         <Flex h='70px' border='1px solid #666666' borderRadius='5px' alignItems='center' flex='1'>
             <Textarea border='none' outline='none' 
@@ -79,7 +137,8 @@ export default function reviewWrite({username,reviewList,sortkey,setReviewList,m
                 msOverflowStyle: "none",
                 }}
             id='content' name='content' h='70px' fontSize='16px' onKeyDown={handleKeyDown}
-            placeholder={!username?'로그인이 필요합니다.':(reviewExist()?'리뷰는 한 영화당 한 개만 작성할 수 있습니다.':`${movieInfo.title} 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.`)}
+            placeholder={!username?'로그인이 필요합니다.'
+                :(reviewExist()?'리뷰는 한 영화당 한 개만 작성할 수 있습니다.':`${movieInfo.title} 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.`)}
             readOnly={!reviewOK()}
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -104,7 +163,8 @@ export default function reviewWrite({username,reviewList,sortkey,setReviewList,m
                 </NativeSelect.Field>
                 <NativeSelect.Indicator/>
             </NativeSelect.Root>
-            {reviewOK() && (<Button bg='white' color='#666666' h='60px' fontSize='16px' onClick={handleSubmit}>✏️ 관람평쓰기</Button>)}
+            {reviewOK() && (<Button bg='white' color='#666666' h='60px' fontSize='16px' onClick={modifyid===-1?handleSubmit:handleModify}>✏️ {modifyid===-1?'관람평쓰기':'리뷰 수정하기'}</Button>)}
+        </Flex>
         </Flex>
     </>;
 }

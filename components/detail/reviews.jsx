@@ -10,6 +10,7 @@ import { LuChevronLeft, LuChevronRight } from "react-icons/lu"
 
 export default function Reviews({userInfo,movieInfo,reviewInfo}){
 
+    const [modifyid,setModifyId]=useState(-1);
     const [acolor, setacolor] = useState('black'); 
     const [bcolor, setbcolor] = useState('gray.500');
     const [ccolor, setccolor] = useState('gray.500');
@@ -58,14 +59,21 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
             
             <Flex flexDirection='column' gap='15px'>
                 <Flex w='100%' gap='15px'>
-                    <Reviewwrite username={userInfo?userInfo.username:''} reviewList={reviewList} sortkey={sortkey} 
+                    <Reviewwrite modifyid={-1} username={userInfo?userInfo.username:''} reviewList={reviewList} sortkey={sortkey} 
                     setReviewList={setReviewList} movieInfo={movieInfo}
                     initialContent='' initialScore={10}></Reviewwrite>
                 </Flex>
                 {currentReviews.map((review,index)=>
-                    <Detailreview username={userInfo?userInfo.username:''} key={indexOfFirstReview+index}
-                     id={review.id} author={review.author} score={review.score} content={review.content}
-                      likenum={review.likenumber} likeusers={review.likeusers} setReviewList={setReviewList} movieInfo={movieInfo} isHome={false}></Detailreview>    
+                {
+                    if(modifyid===review.id)return <Reviewwrite setModifyId={setModifyId} modifyid={modifyid} username={review.author} key={indexOfFirstReview+index} 
+                    reviewList={reviewList} sortkey={sortkey} 
+                    setReviewList={setReviewList} movieInfo={movieInfo}
+                    initialContent={review.content} initialScore={review.score}></Reviewwrite>;
+                    else return <Detailreview userInfo={userInfo} key={indexOfFirstReview+index}
+                      id={review.id} author={review.author} score={review.score} content={review.content}
+                      likenum={review.likenumber} likeusers={review.likeusers}
+                      setReviewList={setReviewList} setModifyId={setModifyId} movieInfo={movieInfo} isHome={false}></Detailreview>;
+                }
                 )}
             </Flex>
             

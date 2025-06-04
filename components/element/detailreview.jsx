@@ -2,16 +2,15 @@
 
 import React,{useState} from 'react';
 
-import {Flex,Text,Box,Button,Image} from '@chakra-ui/react';
+import {Flex,Text,Box,Button,Image,Menu,Portal} from '@chakra-ui/react';
 import {keyframes} from '@emotion/react';
 import {fetch} from '../../lib/client';
 
-export default function Detailreview({id,username,author,score,content,likenum,likeusers,setReviewList,movieInfo,isHome=false,authorColor='black',bgColor='#F8F8FA',contentColor='#666691',titleColor='gray',likeColor='#666691'}){
+export default function Detailreview({id,userInfo,author,score,content,likenum,likeusers,setReviewList,setModifyId,movieInfo,isHome=false,authorColor='black',bgColor='#F8F8FA',contentColor='#666691',titleColor='gray',likeColor='#666691'}){
 
-    const [likenumber,setLikenumber]=useState(likenum);
-    const [likeuserlist,setLikeuserlist]=useState(likeusers);
+    let username=userInfo?userInfo.username:'';
     
-    const didilikeit=()=>likeuserlist.includes(username);
+    const didilikeit=()=>likeusers.includes(username);
 
     const handleSubmit=async (e)=>{/* fetch로 데이터를 넘겨주는 과정 */
     
@@ -24,8 +23,6 @@ export default function Detailreview({id,username,author,score,content,likenum,l
             body: JSON.stringify(dataToSend)
         });
 
-        setLikeuserlist(res);
-        setLikenumber(res.length);
         setReviewList(prevList => prevList.map(review => {
           if (review.id === id) {
             return {
@@ -63,8 +60,9 @@ export default function Detailreview({id,username,author,score,content,likenum,l
                     <Box bg='#DFDFE1' w='1px' h='50px'></Box>
                     <Text pl='20px' flex='1' color={contentColor}>{content}</Text>
                     {!isHome?
+                    <>
                     <Flex flexDirection='column' justifyContent='center' alignItems='center' w='60px' h='60px' borderRadius='50%'
-                    {...(username && {_hover:{bg:'gray.300'}})} position='relative' mr='30px' transition='all 0.4s ease'>
+                    {...(username && {_hover:{bg:'gray.300'}})} position='relative' {...(author===username||userInfo?.auth==='ADMIN')?{mr:'-24.5px'}:{mr:'30px'}} {...(isHome && {transition:'all 0.4s ease'})}>
                        {username?(<Button type='button' bg='transparent' h='30px' fontSize='16px' border='none' outline='none' onClick={()=>{
                                if(!didilikeit())triggerAnimation();
                                handleSubmit();
@@ -83,8 +81,26 @@ export default function Detailreview({id,username,author,score,content,likenum,l
                        ):<Image loading='lazy' src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px' opacity='0.5'></Image>
                        }
                        
-                       <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color='#666691'>{likenumber}</Text>
+                       <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color='#666691'>{likenum}</Text>
                    </Flex>
+                   {author===username||userInfo?.auth==='ADMIN'?
+                    <Menu.Root>
+                      <Menu.Trigger asChild>
+                        <Button variant="outline" fontSize='20px' bg='transparent' outline='none' border='none'>
+                          ⋮
+                        </Button>
+                      </Menu.Trigger>
+                      <Portal>
+                        <Menu.Positioner overflow='visible'>
+                          <Menu.Content position='relative' bottom='25px'>
+                            <Menu.Item value="new-txt" onSelect={()=>setModifyId(id)}>수정</Menu.Item>
+                            <Menu.Item value="new-file">삭제</Menu.Item>
+                          </Menu.Content>
+                        </Menu.Positioner>
+                      </Portal>
+                    </Menu.Root>
+                    :<></>}
+                    </>
                    :
                    <>
                     <Text pr='50px' color={titleColor}>-  {movieInfo.title}</Text>
