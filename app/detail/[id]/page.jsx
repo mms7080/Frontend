@@ -1,7 +1,7 @@
 import React from 'react';
-import {Box,Flex,VStack,Image,Button,Tabs} from '@chakra-ui/react';
+import {Box,Flex,VStack,Image,Button} from '@chakra-ui/react';
 import {Header} from '../../../components';
-import {Reviews,Filmstill,Likepart} from '../../../components/detail';
+import {Likepart,Bottombox} from '../../../components/detail';
 import {fetch} from '../../../lib/server';
 
 export const metadata = {
@@ -102,28 +102,7 @@ export default async function Detailpage({params}){
                         </Flex>
                     </Box>
                 </VStack>
-                <VStack>
-                    <Box w='1200px' px='30px' borderRadius='10px' bg='white'>
-                        <Flex w='1140px' flexDirection='column' gap='30px' pt='40px' pb='80px'>
-                            <Tabs.Root key='outline' defaultValue="trailer" variant='outline' fitted>
-                                <Tabs.List>
-                                    <Tabs.Trigger value="trailer">
-                                        스틸컷
-                                    </Tabs.Trigger>
-                                    <Tabs.Trigger value="review">
-                                        실관람평
-                                    </Tabs.Trigger>
-                                </Tabs.List>
-                                <Tabs.Content value="trailer">
-                                    <Filmstill></Filmstill>
-                                </Tabs.Content>
-                                <Tabs.Content value="review">
-                                    <Reviews userInfo={res} movieInfo={movieinfo} reviewInfo={reviewinfo}></Reviews>
-                                </Tabs.Content>
-                            </Tabs.Root>
-                        </Flex>
-                    </Box>
-                </VStack>
+                <Bottombox res={res} movieinfo={movieinfo} reviewinfo={reviewinfo}></Bottombox>
             </Box>
         </>;
 }

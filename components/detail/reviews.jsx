@@ -1,6 +1,6 @@
 'use client';
 
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {Flex,VStack} from '@chakra-ui/react';
 import Detailreview from '../element/detailreview';
 import Reviewwrite from '../element/reviewwrite';
@@ -24,6 +24,10 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
     const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
     const currentReviews = reviewList.slice(indexOfFirstReview, indexOfLastReview);
 
+    useEffect(() => {
+      setModifyId(-1);
+    }, [currentPage]);
+
     return <>
         <Flex flexDirection='column'>
             <span style={{color:'#352461',fontSize:25}}>{movieInfo.title}에 대한 <span style={{color:'#01738B'}}>{reviewList.length}</span>개의 이야기가 있어요!</span>
@@ -35,7 +39,26 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                         setacolor('black');
                         setbcolor('gray.500');
                         setccolor('gray.500');
-                        setReviewList([...reviewList].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)!=0)?(new Date(b.writetime)-new Date(a.writetime)):(b.likenumber-a.likenumber)));
+                        if(modifyid==-1)
+                          setReviewList([...reviewList].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)!=0)?(new Date(b.writetime)-new Date(a.writetime)):(b.likenumber-a.likenumber)));
+                        else{
+                          let writtenindex,writtenitem;
+                          for(let i=0;i<reviewList.length;i++)
+                            if(reviewList[i].id===modifyid){
+                              writtenindex=i;
+                              writtenitem=reviewList[i];
+                              break;
+                            }
+
+                          let filtered=reviewList.filter((_, idx) => idx !== writtenindex);
+                          let sorted;
+                                            
+                          sorted=[...filtered].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)!=0)?(new Date(b.writetime)-new Date(a.writetime)):(b.likenumber-a.likenumber));
+                                            
+                          sorted.splice(writtenindex,0,writtenitem);
+                                            
+                          setReviewList(sorted);
+                        }
                     }}>최신순</Flex>
                     <Flex color='gray.500'>|</Flex>
                     <Flex color={bcolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
@@ -43,7 +66,26 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                         setacolor('gray.500');
                         setbcolor('black');
                         setccolor('gray.500');
-                        setReviewList([...reviewList].sort((a,b) => (b.likenumber-a.likenumber!=0)?(b.likenumber-a.likenumber):(new Date(b.writetime)-new Date(a.writetime))));
+                        if(modifyid==-1)
+                          setReviewList([...reviewList].sort((a,b) => (b.likenumber-a.likenumber!=0)?(b.likenumber-a.likenumber):(new Date(b.writetime)-new Date(a.writetime))));
+                        else{
+                          let writtenindex,writtenitem;
+                          for(let i=0;i<reviewList.length;i++)
+                            if(reviewList[i].id===modifyid){
+                              writtenindex=i;
+                              writtenitem=reviewList[i];
+                              break;
+                            }
+
+                          let filtered=reviewList.filter((_, idx) => idx !== writtenindex);
+                          let sorted;
+                                            
+                          sorted=[...filtered].sort((a,b) => (b.likenumber-a.likenumber!=0)?(b.likenumber-a.likenumber):(new Date(b.writetime)-new Date(a.writetime)));
+                                            
+                          sorted.splice(writtenindex,0,writtenitem);
+                                            
+                          setReviewList(sorted);
+                        }
                     }}>공감순</Flex>
                     <Flex color='gray.500'>|</Flex>
                     <Flex color={ccolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
@@ -51,7 +93,26 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                         setacolor('gray.500');
                         setbcolor('gray.500');
                         setccolor('black');
-                        setReviewList([...reviewList].sort((a,b) => (b.score-a.score!=0)?(b.score-a.score):(new Date(b.writetime)-new Date(a.writetime))));
+                        if(modifyid==-1)
+                          setReviewList([...reviewList].sort((a,b) => (b.score-a.score!=0)?(b.score-a.score):(new Date(b.writetime)-new Date(a.writetime))));
+                        else{
+                          let writtenindex,writtenitem;
+                          for(let i=0;i<reviewList.length;i++)
+                            if(reviewList[i].id===modifyid){
+                              writtenindex=i;
+                              writtenitem=reviewList[i];
+                              break;
+                            }
+
+                          let filtered=reviewList.filter((_, idx) => idx !== writtenindex);
+                          let sorted;
+                                            
+                          sorted=[...filtered].sort((a,b) => (b.score-a.score!=0)?(b.score-a.score):(new Date(b.writetime)-new Date(a.writetime)));
+                                            
+                          sorted.splice(writtenindex,0,writtenitem);
+                                            
+                          setReviewList(sorted);
+                        }
                     }}>평점순</Flex>
                 </Flex>
             </Flex>
