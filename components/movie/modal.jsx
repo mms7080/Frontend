@@ -72,7 +72,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal}) => {
                 onClick={(e) => e.stopPropagation()}
             >
                 <Box textAlign="center">
-                    <Box mb="6" fontSize="xl">
+                    <Box mb="6" fontSize="xl" color="black">
                         로그인 후 이용가능한 서비스 입니다.
                     </Box>
                     <Button
