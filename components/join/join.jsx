@@ -35,10 +35,7 @@ export default function Joindetail(){
             const term2 = document.querySelector("#term2");
             const term3 = document.querySelector("#term3");
 
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/agreement`, {
-                method: 'GET',
-                credentials: 'include',  // ← 쿠키 사용 시 필수
-            });
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/agreement`);
 
             term1.value=res[0];
             term2.value=res[1];
