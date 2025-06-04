@@ -22,6 +22,8 @@ export default function Booking2Page() {
     const [regionList, setRegionList] = useState([]);
     const [theaterList, setTheaterList] = useState([]);
     const [availableDates, setAvailableDates] = useState([]);
+    const [availableTimes, setAvailableTimes] = useState([]);
+
 
     const [swiperReady, setSwiperReady] = useState(false);
     const [user, setUser] = useState(null);
@@ -109,6 +111,18 @@ export default function Booking2Page() {
         }
       }, [activeMovie, selectedTheater]);
 
+      useEffect(() => {
+        if (activeMovie && selectedTheater && selectedDate) {
+          const theater = theaterList.find(t => t.name === selectedTheater);
+          if (theater) {
+            fetchAvailableTimes(activeMovie.id, theater.theaterId, selectedDate);
+          }
+        } else {
+          setAvailableTimes([]);
+        }
+      }, [activeMovie, selectedTheater, selectedDate]);
+      
+
       const fetchTheatersByRegion = async (region) => {
         try {
           const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/theaters?region=${encodeURIComponent(region)}`);
@@ -136,6 +150,21 @@ export default function Booking2Page() {
         } catch (e) {
           console.error("날짜 불러오기 실패:", e);
           setAvailableDates([]);
+        }
+      };
+
+      const fetchAvailableTimes = async (movieId, theaterId, date) => {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes?movieId=${movieId}&theaterId=${theaterId}&date=${date}`);
+          const result = await res.json();
+          if (result.success && Array.isArray(result.data)) {
+            setAvailableTimes(result.data); // ✅ 전체 시간 데이터 저장
+          } else {
+            setAvailableTimes([]);
+          }
+        } catch (e) {
+          console.error("시간 불러오기 실패:", e);
+          setAvailableTimes([]);
         }
       };
 
@@ -493,6 +522,7 @@ export default function Booking2Page() {
                                     selectedTime={selectedTime}
                                     setSelectedTime={setSelectedTime}
                                     movieTitle={activeMovie?.title}
+                                    availableTimes={availableTimes}
                                 />
                                 ) : (
                                 <Text fontSize="md" color="gray.300" mt={4}>
