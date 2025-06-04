@@ -28,6 +28,25 @@ export default function AdminDashboard({ userData }) {
   const [events, setEvents] = useState([]);
   const [payments, setPayments] = useState([]);
   const [loadingUser, setLoadingUser] = useState(false);
+  //유저 검색창
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [confirmedKeyword, setConfirmedKeyword] = useState("");
+  //이벤트 검색창
+  const [eventSearchKeyword, setEventSearchKeyword] = useState("");
+  const [eventConfirmedKeyword, setEventConfirmedKeyword] = useState("");
+  //영화 검색창
+  const [movieSearchKeyword, setMovieSearchKeyword] = useState("");
+  const [movieConfirmedKeyword, setMovieConfirmedKeyword] = useState("");
+  //스토어 검색창
+  const [storeSearchKeyword, setStoreSearchKeyword] = useState("");
+  const [storeConfirmedKeyword, setStoreConfirmedKeyword] = useState("");
+  //매출 검색창
+  const [paymentSearchKeyword, setPaymentSearchKeyword] = useState("");
+  const [paymentConfirmedKeyword, setPaymentConfirmedKeyword] = useState("");
+
+
+
+
 
   const dummyStats = {
     movies: 8,
@@ -129,594 +148,786 @@ export default function AdminDashboard({ userData }) {
   ];
 
   const renderList = () => {
-    if (selectedSection === "유저") {
-      return (
-        <div
+if (selectedSection === "유저") {
+  const filteredUsers = users.filter((u) =>
+    [u.name, u.username, u.email, u.phone]
+      .some((v) => v?.toLowerCase().includes(confirmedKeyword.toLowerCase()))
+  );
+
+  return (
+    <div style={{ marginTop: 30 }}>
+      {/* 🔍 검색창 + 버튼 */}
+      <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
+        <input
+          type="text"
+          placeholder="유저 이름/ID/이메일/전화번호 검색"
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
           style={{
-            marginTop: 30,
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 24,
-            paddingBottom: 40,
+            width: 300,
+            padding: "8px 12px",
+            fontSize: 14,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            backgroundColor: "#fff", // ✅ 흰 배경
+          }}
+        />
+        <button
+          onClick={() => setConfirmedKeyword(searchKeyword)}
+          style={{
+            padding: "8px 16px",
+            fontSize: 14,
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
           }}
         >
-          {users.map((u, i) => (
-            <div
-              key={i}
-              style={{
-                background: "#fff",
-                padding: 20,
-                borderRadius: 16,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                transition: "transform 0.2s, box-shadow 0.2s",
-                cursor: "default",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.05)";
-              }}
-            >
-              <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 10 }}>
-                {u.name}
-              </h3>
-              <p style={{ fontSize: 14, color: "#444", marginBottom: 6 }}>
-                <strong>ID:</strong> {u.username}
-              </p>
-              <p style={{ fontSize: 14, color: "#666", marginBottom: 6 }}>
-                <strong>Email:</strong> {u.email}
-              </p>
-              <p style={{ fontSize: 14, color: "#666" }}>
-                <strong>Phone:</strong> {u.phone}
-              </p>
-            </div>
-          ))}
-        </div>
-      );
-    }
+          검색
+        </button>
+      </div>
 
-    if (selectedSection === "스토어") {
-      const groupedByCategory = products.reduce((acc, product) => {
-        if (!acc[product.category]) acc[product.category] = [];
-        acc[product.category].push(product);
-        return acc;
-      }, {});
-
-      const handleDelete = async (id) => {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${id}`,
-            {
-              method: "DELETE",
-              credentials: "include",
-            }
-          );
-          if (res.ok) {
-            setProducts((prev) => prev.filter((p) => p.id !== id));
-          } else {
-            alert("삭제에 실패했습니다.");
-          }
-        } catch {
-          alert("삭제 중 오류 발생");
-        }
-      };
-
-      return (
-        <div style={{ marginTop: 40 }}>
-          {/* 스토어 등록 버튼 */}
+      {/* 유저 카드 목록 */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 24,
+          paddingBottom: 40,
+        }}
+      >
+        {filteredUsers.map((u, i) => (
           <div
+            key={i}
             style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginBottom: 20,
+              background: "#fff",
+              padding: 20,
+              borderRadius: 16,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              transition: "transform 0.2s, box-shadow 0.2s",
+              cursor: "default",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-3px)";
+              e.currentTarget.style.boxShadow =
+                "0 4px 12px rgba(0,0,0,0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow =
+                "0 2px 8px rgba(0,0,0,0.05)";
             }}
           >
-            <button
-              onClick={() => router.push("/store/upload")}
-              style={{
-                backgroundColor: "#6B46C1",
-                color: "#fff",
-                padding: "8px 16px",
-                borderRadius: 8,
-                border: "none",
-                fontSize: 14,
-                cursor: "pointer",
-              }}
-            >
-              + 스토어 등록
-            </button>
+            <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 10 }}>
+              {u.name}
+            </h3>
+            <p style={{ fontSize: 14, color: "#444", marginBottom: 6 }}>
+              <strong>ID:</strong> {u.username}
+            </p>
+            <p style={{ fontSize: 14, color: "#666", marginBottom: 6 }}>
+              <strong>Email:</strong> {u.email}
+            </p>
+            <p style={{ fontSize: 14, color: "#666" }}>
+              <strong>Phone:</strong> {u.phone}
+            </p>
           </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-          {Object.keys(groupedByCategory).map((category) => (
-            <div key={category} style={{ marginBottom: 40 }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  margin: "16px 0",
-                }}
-              >
-                <div
-                  style={{
-                    width: 4,
-                    height: 20,
-                    backgroundColor: "#6B46C1",
-                    borderRadius: 2,
-                    marginRight: 10,
-                  }}
-                />
-                <h2
-                  style={{ fontSize: 18, fontWeight: "bold", color: "#2D3748" }}
-                >
-                  {category}
-                </h2>
-              </div>
 
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                  gap: 20,
-                }}
-              >
-                {groupedByCategory[category].map((p, i) => (
-                  <div
-                    key={i}
-                    onClick={() => router.push(`/store/detail/${p.id}`)} // ✅ 카드 전체 클릭으로 이동
-                    style={{
-                      background: "#fff",
-                      borderRadius: 12,
-                      boxShadow: "0 3px 8px rgba(0,0,0,0.05)",
-                      overflow: "hidden",
-                      transition: "transform 0.2s, box-shadow 0.2s",
-                      position: "relative",
-                      cursor: "pointer", // ✅ 포인터로 변경
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-3px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 6px 14px rgba(0,0,0,0.12)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 3px 8px rgba(0,0,0,0.05)";
-                    }}
-                  >
-                    <img
-                      src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${p.imgUrl}`}
-                      alt={p.title}
-                      style={{
-                        width: "100%",
-                        height: 100,
-                        objectFit: "cover",
-                        display: "block",
-                      }}
-                    />
 
-                    <div style={{ padding: "12px 16px" }}>
-                      <h3
-                        style={{
-                          fontSize: 15,
-                          fontWeight: "600",
-                          marginBottom: 4,
-                        }}
-                      >
-                        {p.title}
-                      </h3>
-                      <p
-                        style={{ fontSize: 13, color: "#666", marginBottom: 8 }}
-                      >
-                        {p.subtitle}
-                      </p>
-                      <p
-                        style={{
-                          fontSize: 14,
-                          fontWeight: "bold",
-                          color: "#2D3748",
-                          marginBottom: 4,
-                        }}
-                      >
-                        {Number(p.price).toLocaleString()}원
-                      </p>
-                      {p.badge && (
-                        <span
-                          style={{
-                            display: "inline-block",
-                            background: p.badgeColor || "#4e73df",
-                            color: "white",
-                            padding: "2px 8px",
-                            borderRadius: 10,
-                            fontSize: 11,
-                            fontWeight: "500",
-                          }}
-                        >
-                          {p.badge}
-                        </span>
-                      )}
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        {
-                          handleDelete(p.id);
-                        }
-                      }}
-                      style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        background: "#e53e3e",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: 6,
-                        padding: "4px 8px",
-                        fontSize: 12,
-                        cursor: "pointer",
-                      }}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+ if (selectedSection === "스토어") {
+  const groupedByCategory = products.reduce((acc, product) => {
+    if (!acc[product.category]) acc[product.category] = [];
+    acc[product.category].push(product);
+    return acc;
+  }, {});
+
+  // ✅ 카테고리별 상품 필터링
+  const filteredGrouped = Object.entries(groupedByCategory).reduce(
+    (acc, [category, productList]) => {
+      const filtered = productList.filter((p) =>
+        [p.title, p.subtitle, p.category]
+          .some((v) =>
+            v?.toLowerCase().includes(storeConfirmedKeyword.toLowerCase())
+          )
       );
+      if (filtered.length > 0) acc[category] = filtered;
+      return acc;
+    },
+    {}
+  );
+
+  const handleDelete = async (id) => {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      if (res.ok) {
+        setProducts((prev) => prev.filter((p) => p.id !== id));
+      } else {
+        alert("삭제에 실패했습니다.");
+      }
+    } catch {
+      alert("삭제 중 오류 발생");
     }
-    if (selectedSection === "영화") {
-      return (
-        <div
+  };
+
+  return (
+    <div style={{ marginTop: 40 }}>
+      {/* 🔍 검색창 + 버튼 */}
+      <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
+        <input
+          type="text"
+          placeholder="상품명/부제목/카테고리 검색"
+          value={storeSearchKeyword}
+          onChange={(e) => setStoreSearchKeyword(e.target.value)}
           style={{
-            marginTop: 30,
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 24,
-            paddingBottom: 40,
+            width: 300,
+            padding: "8px 12px",
+            fontSize: 14,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+          }}
+        />
+        <button
+          onClick={() => setStoreConfirmedKeyword(storeSearchKeyword)}
+          style={{
+            padding: "8px 16px",
+            fontSize: 14,
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
           }}
         >
-          {movies.map((m, i) => (
+          검색
+        </button>
+      </div>
+
+      {/* 스토어 등록 버튼 */}
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 20 }}>
+        <button
+          onClick={() => router.push("/store/upload")}
+          style={{
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            padding: "8px 16px",
+            borderRadius: 8,
+            border: "none",
+            fontSize: 14,
+            cursor: "pointer",
+          }}
+        >
+          + 스토어 등록
+        </button>
+      </div>
+
+      {/* 카테고리별 상품 목록 */}
+      {Object.entries(filteredGrouped).map(([category, items]) => (
+        <div key={category} style={{ marginBottom: 40 }}>
+          <div style={{ display: "flex", alignItems: "center", margin: "16px 0" }}>
             <div
-              key={i}
               style={{
-                background: "#fff",
-                padding: 20,
-                borderRadius: 16,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                width: 4,
+                height: 20,
+                backgroundColor: "#6B46C1",
+                borderRadius: 2,
+                marginRight: 10,
               }}
-            >
-              <img
-                src={
-                  m.poster.startsWith("http")
-                    ? m.poster
-                    : `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${m.poster}`
-                }
-                alt={m.title}
+            />
+            <h2 style={{ fontSize: 18, fontWeight: "bold", color: "#2D3748" }}>
+              {category}
+            </h2>
+          </div>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+              gap: 20,
+            }}
+          >
+            {items.map((p, i) => (
+              <div
+                key={i}
+                onClick={() => router.push(`/store/detail/${p.id}`)}
                 style={{
-                  width: "100%",
-                  height: 150,
-                  objectFit: "cover",
+                  background: "#fff",
                   borderRadius: 12,
-                  marginBottom: 10,
+                  boxShadow: "0 3px 8px rgba(0,0,0,0.05)",
+                  overflow: "hidden",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                  position: "relative",
+                  cursor: "pointer",
                 }}
-              />
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 6px 14px rgba(0,0,0,0.12)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 3px 8px rgba(0,0,0,0.05)";
+                }}
+              >
+                <img
+                  src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${p.imgUrl}`}
+                  alt={p.title}
+                  style={{
+                    width: "100%",
+                    height: 100,
+                    objectFit: "cover",
+                    display: "block",
+                  }}
+                />
 
-              <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 6 }}>
-                {m.title}
-              </h3>
-              <p style={{ fontSize: 14, color: "#666", marginBottom: 4 }}>
-                평점: {m.score}
-              </p>
-              <p style={{ fontSize: 13, color: "#888" }}>
-                개봉일: {m.releaseDate}
-              </p>
-            </div>
-          ))}
+                <div style={{ padding: "12px 16px" }}>
+                  <h3 style={{ fontSize: 15, fontWeight: "600", marginBottom: 4 }}>
+                    {p.title}
+                  </h3>
+                  <p style={{ fontSize: 13, color: "#666", marginBottom: 8 }}>
+                    {p.subtitle}
+                  </p>
+                  <p style={{ fontSize: 14, fontWeight: "bold", color: "#2D3748", marginBottom: 4 }}>
+                    {Number(p.price).toLocaleString()}원
+                  </p>
+                  {p.badge && (
+                    <span
+                      style={{
+                        display: "inline-block",
+                        background: p.badgeColor || "#4e73df",
+                        color: "white",
+                        padding: "2px 8px",
+                        borderRadius: 10,
+                        fontSize: 11,
+                        fontWeight: "500",
+                      }}
+                    >
+                      {p.badge}
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(p.id);
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                    background: "#e53e3e",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 6,
+                    padding: "4px 8px",
+                    fontSize: 12,
+                    cursor: "pointer",
+                  }}
+                >
+                  삭제
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
+      ))}
+    </div>
+  );
+}
+
+if (selectedSection === "영화") {
+  const filteredMovies = movies.filter((m) =>
+    [m.title, m.releaseDate]
+      .some((v) =>
+        v?.toLowerCase().includes(movieConfirmedKeyword.toLowerCase())
+      )
+  );
+
+  return (
+    <div style={{ marginTop: 30 }}>
+      {/* 🔍 검색창 + 버튼 */}
+      <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
+        <input
+          type="text"
+          placeholder="영화 제목/개봉일 검색"
+          value={movieSearchKeyword}
+          onChange={(e) => setMovieSearchKeyword(e.target.value)}
+          style={{
+            width: 300,
+            padding: "8px 12px",
+            fontSize: 14,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+          }}
+        />
+        <button
+          onClick={() => setMovieConfirmedKeyword(movieSearchKeyword)}
+          style={{
+            padding: "8px 16px",
+            fontSize: 14,
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          검색
+        </button>
+      </div>
+
+      {/* 영화 카드 목록 */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
+          gap: 24,
+          paddingBottom: 40,
+        }}
+      >
+        {filteredMovies.map((m, i) => (
+          <div
+            key={i}
+            style={{
+              background: "#fff",
+              padding: 20,
+              borderRadius: 16,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            }}
+          >
+            <img
+              src={
+                m.poster.startsWith("http")
+                  ? m.poster
+                  : `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${m.poster}`
+              }
+              alt={m.title}
+              style={{
+                width: "100%",
+                height: 150,
+                objectFit: "cover",
+                borderRadius: 12,
+                marginBottom: 10,
+              }}
+            />
+
+            <h3 style={{ fontSize: 18, fontWeight: "600", marginBottom: 6 }}>
+              {m.title}
+            </h3>
+            <p style={{ fontSize: 14, color: "#666", marginBottom: 4 }}>
+              평점: {m.score}
+            </p>
+            <p style={{ fontSize: 13, color: "#888" }}>
+              개봉일: {m.releaseDate}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+if (selectedSection === "이벤트") {
+  const groupedByCategory = events.reduce((acc, event) => {
+    if (!acc[event.category]) acc[event.category] = [];
+    acc[event.category].push(event);
+    return acc;
+  }, {});
+
+  // ✅ 검색된 이벤트만 필터링
+  const filteredGrouped = Object.entries(groupedByCategory).reduce(
+    (acc, [category, eventList]) => {
+      const filtered = eventList.filter((e) =>
+        [e.title, e.date, e.category]
+          .some((v) =>
+            v?.toLowerCase().includes(eventConfirmedKeyword.toLowerCase())
+          )
       );
-    }
+      if (filtered.length > 0) acc[category] = filtered;
+      return acc;
+    },
+    {}
+  );
 
-    if (selectedSection === "이벤트") {
-      const groupedByCategory = events.reduce((acc, event) => {
-        if (!acc[event.category]) acc[event.category] = [];
-        acc[event.category].push(event);
-        return acc;
-      }, {});
-
-      const handleDelete = async (id) => {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${id}`,
-            {
-              method: "DELETE",
-              credentials: "include",
-            }
-          );
-          if (res.ok) {
-            setEvents((prev) => prev.filter((e) => e.id !== id));
-          } else {
-            alert("삭제에 실패했습니다.");
-          }
-        } catch {
-          alert("삭제 중 오류 발생");
+  const handleDelete = async (id) => {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
         }
-      };
+      );
+      if (res.ok) {
+        setEvents((prev) => prev.filter((e) => e.id !== id));
+      } else {
+        alert("삭제에 실패했습니다.");
+      }
+    } catch {
+      alert("삭제 중 오류 발생");
+    }
+  };
 
-      return (
-        <div style={{ marginTop: 40 }}>
+  return (
+    <div style={{ marginTop: 40 }}>
+      {/* 🔍 검색창 + 버튼 */}
+      <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
+        <input
+          type="text"
+          placeholder="이벤트 제목/날짜/카테고리 검색"
+          value={eventSearchKeyword}
+          onChange={(e) => setEventSearchKeyword(e.target.value)}
+          style={{
+            width: 300,
+            padding: "8px 12px",
+            fontSize: 14,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+          }}
+        />
+        <button
+          onClick={() => setEventConfirmedKeyword(eventSearchKeyword)}
+          style={{
+            padding: "8px 16px",
+            fontSize: 14,
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          검색
+        </button>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: 20,
+        }}
+      >
+        <button
+          onClick={() => router.push("/event/upload")}
+          style={{
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            padding: "8px 16px",
+            borderRadius: 8,
+            border: "none",
+            fontSize: 14,
+            cursor: "pointer",
+          }}
+        >
+          + 이벤트 등록
+        </button>
+      </div>
+
+      {Object.entries(filteredGrouped).map(([category, items]) => (
+        <div key={category} style={{ marginBottom: 40 }}>
           <div
             style={{
               display: "flex",
-              justifyContent: "flex-end",
-              marginBottom: 20,
+              alignItems: "center",
+              margin: "16px 0",
             }}
           >
-            <button
-              onClick={() => router.push("/event/upload")}
+            <div
               style={{
+                width: 4,
+                height: 20,
                 backgroundColor: "#6B46C1",
-                color: "#fff",
-                padding: "8px 16px",
-                borderRadius: 8,
-                border: "none",
-                fontSize: 14,
-                cursor: "pointer",
+                borderRadius: 2,
+                marginRight: 10,
+              }}
+            />
+            <h2
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: "#2D3748",
               }}
             >
-              + 이벤트 등록
-            </button>
+              {category}
+            </h2>
           </div>
 
-          {Object.entries(groupedByCategory).map(([category, items]) => (
-            <div key={category} style={{ marginBottom: 40 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gap: 20,
+            }}
+          >
+            {items.map((e) => (
               <div
+                key={e.id}
+                onClick={() => router.push(`/event/view/${e.id}`)}
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  margin: "16px 0",
+                  background: "#fff",
+                  borderRadius: 12,
+                  boxShadow: "0 3px 8px rgba(0,0,0,0.05)",
+                  overflow: "hidden",
+                  position: "relative",
+                  cursor: "pointer",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 6px 14px rgba(0,0,0,0.12)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow =
+                    "0 3px 8px rgba(0,0,0,0.05)";
                 }}
               >
-                <div
+                <img
+                  src={
+                    e.images?.[0]?.startsWith("http")
+                      ? e.images[0]
+                      : `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${e.images[0]}`
+                  }
+                  alt={e.title}
                   style={{
-                    width: 4,
-                    height: 20,
-                    backgroundColor: "#6B46C1",
-                    borderRadius: 2,
-                    marginRight: 10,
+                    width: "100%",
+                    height: 150,
+                    objectFit: "cover",
                   }}
                 />
-                <h2
-                  style={{ fontSize: 18, fontWeight: "bold", color: "#2D3748" }}
-                >
-                  {category}
-                </h2>
-              </div>
-
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                  gap: 20,
-                }}
-              >
-                {items.map((e) => (
-                  <div
-                    key={e.id}
-                    onClick={() => router.push(`/event/view/${e.id}`)}
+                <div style={{ padding: "12px 16px" }}>
+                  <h3
                     style={{
-                      background: "#fff",
-                      borderRadius: 12,
-                      boxShadow: "0 3px 8px rgba(0,0,0,0.05)",
-                      overflow: "hidden",
-                      position: "relative",
-                      cursor: "pointer",
-                      transition: "transform 0.2s, box-shadow 0.2s", // 부드러운 효과 추가
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "translateY(-3px)";
-                      e.currentTarget.style.boxShadow =
-                        "0 6px 14px rgba(0,0,0,0.12)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow =
-                        "0 3px 8px rgba(0,0,0,0.05)";
+                      fontSize: 16,
+                      fontWeight: "600",
+                      marginBottom: 6,
                     }}
                   >
-                    <img
-                      src={
-                        e.images?.[0]?.startsWith("http")
-                          ? e.images[0]
-                          : `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${e.images[0]}`
-                      }
-                      alt={e.title}
-                      style={{ width: "100%", height: 150, objectFit: "cover" }}
-                    />
-                    <div style={{ padding: "12px 16px" }}>
-                      <h3
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "600",
-                          marginBottom: 6,
-                        }}
-                      >
-                        {e.title}
-                      </h3>
-                      <p style={{ fontSize: 13, color: "#666" }}>{e.date}</p>
-                      <span
-                        style={{
-                          fontSize: 12,
-                          backgroundColor: "#6B46C1",
-                          color: "#fff",
-                          padding: "2px 8px",
-                          borderRadius: 12,
-                          marginTop: 4,
-                          display: "inline-block",
-                        }}
-                      >
-                        {e.category}
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={(event) => {
-                        event.stopPropagation(); // ✅ 클릭 전파 차단
-                        handleDelete(e.id);
-                      }}
-                      style={{
-                        position: "absolute",
-                        top: 8,
-                        right: 8,
-                        background: "#e53e3e",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: 6,
-                        padding: "4px 8px",
-                        fontSize: 12,
-                        cursor: "pointer",
-                      }}
-                    >
-                      삭제
-                    </button>
-                  </div>
-                ))}
+                    {e.title}
+                  </h3>
+                  <p style={{ fontSize: 13, color: "#666" }}>{e.date}</p>
+                  <span
+                    style={{
+                      fontSize: 12,
+                      backgroundColor: "#6B46C1",
+                      color: "#fff",
+                      padding: "2px 8px",
+                      borderRadius: 12,
+                      marginTop: 4,
+                      display: "inline-block",
+                    }}
+                  >
+                    {e.category}
+                  </span>
+                </div>
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleDelete(e.id);
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                    background: "#e53e3e",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 6,
+                    padding: "4px 8px",
+                    fontSize: 12,
+                    cursor: "pointer",
+                  }}
+                >
+                  삭제
+                </button>
               </div>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    if (selectedSection === "매출") {
-      const salesByProduct = payments.reduce((acc, cur) => {
-        acc[cur.orderName] = (acc[cur.orderName] || 0) + cur.amount;
-        return acc;
-      }, {});
-
-      const chartData = Object.entries(salesByProduct).map(
-        ([name, amount]) => ({
-          name,
-          amount,
-        })
-      );
-
-      return (
-        <div style={{ marginTop: 40 }}>
-          {/* 💰 매출 차트 영역 */}
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 10,
-              padding: 20,
-              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-              marginBottom: 30,
-            }}
-          >
-            <h3 style={{ fontSize: 18, marginBottom: 16 }}>
-              💰 상품별 매출 차트
-            </h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData}>
-                <XAxis dataKey="name" />
-                <YAxis allowDecimals={false} />
-                <Tooltip />
-                <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
-                  {chartData.map((_, idx) => (
-                    <Cell key={idx} fill={colors[idx % colors.length]} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+            ))}
           </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-          {/* 📋 매출 테이블 영역 */}
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 10,
-              padding: 20,
-              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-            }}
-          >
-            <h3 style={{ fontSize: 18, marginBottom: 16 }}>
-              📋 전체 매출 목록
-            </h3>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ background: "#f1f1f1" }}>
-                  <th style={thStyle}>주문번호</th>
-                  <th style={thStyle}>상품명</th>
-                  <th style={thStyle}>유저ID</th>
-                  <th style={thStyle}>결제금액</th>
-                  <th style={thStyle}>결제일</th>
-                  <th style={thStyle}>결제수단</th>
-                  <th style={thStyle}>카드사</th>
-                  <th style={thStyle}>환불</th>
-                </tr>
-              </thead>
-              <tbody>
-                {payments.map((p, idx) => (
-                  <tr key={idx}>
-                    <td style={tdStyle}>{p.orderId}</td>
-                    <td style={tdStyle}>{p.orderName}</td>
-                    <td style={tdStyle}>{p.userId}</td>
-                    <td style={tdStyle}>{p.amount.toLocaleString()}원</td>
-                    <td style={tdStyle}>
-                      {new Date(p.approvedAt).toLocaleString()}
-                    </td>
-                    <td style={tdStyle}>{p.method}</td>
-                    <td style={tdStyle}>{p.cardCompany || "-"}</td>
-                    <td style={tdStyle}>
-                      <button
-                        onClick={async () => {
-                          if (confirm("환불 및 취소 처리하시겠습니까?")) {
-                            try {
-                              const res = await fetch(
-                                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/${p.id}`,
-                                {
-                                  method: "DELETE",
-                                  credentials: "include",
-                                }
-                              );
-                              if (res.ok) {
-                                alert("환불 완료");
-                                setPayments((prev) =>
-                                  prev.filter((item) => item.id !== p.id)
-                                );
-                              } else {
-                                alert("환불 실패");
-                              }
-                            } catch (e) {
-                              alert("에러 발생: " + e.message);
+if (selectedSection === "매출") {
+  const filteredPayments = payments.filter((p) =>
+    [p.orderName, p.userId, p.cardCompany, p.method]
+      .some((v) =>
+        v?.toLowerCase().includes(paymentConfirmedKeyword.toLowerCase())
+      )
+  );
+
+  const salesByProduct = filteredPayments.reduce((acc, cur) => {
+    acc[cur.orderName] = (acc[cur.orderName] || 0) + cur.amount;
+    return acc;
+  }, {});
+
+  const chartData = Object.entries(salesByProduct).map(([name, amount]) => ({
+    name,
+    amount,
+  }));
+
+  return (
+    <div style={{ marginTop: 40 }}>
+      {/* 🔍 검색창 + 버튼 */}
+      <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
+        <input
+          type="text"
+          placeholder="상품명/유저ID/카드사/결제수단 검색"
+          value={paymentSearchKeyword}
+          onChange={(e) => setPaymentSearchKeyword(e.target.value)}
+          style={{
+            width: 300,
+            padding: "8px 12px",
+            fontSize: 14,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+          }}
+        />
+        <button
+          onClick={() => setPaymentConfirmedKeyword(paymentSearchKeyword)}
+          style={{
+            padding: "8px 16px",
+            fontSize: 14,
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          검색
+        </button>
+      </div>
+
+      {/* 💰 매출 차트 */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 10,
+          padding: 20,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+          marginBottom: 30,
+        }}
+      >
+        <h3 style={{ fontSize: 18, marginBottom: 16 }}>💰 상품별 매출 차트</h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={chartData}>
+            <XAxis dataKey="name" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="amount" radius={[4, 4, 0, 0]}>
+              {chartData.map((_, idx) => (
+                <Cell key={idx} fill={colors[idx % colors.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* 📋 매출 목록 테이블 */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 10,
+          padding: 20,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h3 style={{ fontSize: 18, marginBottom: 16 }}>📋 전체 매출 목록</h3>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ background: "#f1f1f1" }}>
+              <th style={thStyle}>주문번호</th>
+              <th style={thStyle}>상품명</th>
+              <th style={thStyle}>유저ID</th>
+              <th style={thStyle}>결제금액</th>
+              <th style={thStyle}>결제일</th>
+              <th style={thStyle}>결제수단</th>
+              <th style={thStyle}>카드사</th>
+              <th style={thStyle}>환불</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredPayments.map((p, idx) => (
+              <tr key={idx}>
+                <td style={tdStyle}>{p.orderId}</td>
+                <td style={tdStyle}>{p.orderName}</td>
+                <td style={tdStyle}>{p.userId}</td>
+                <td style={tdStyle}>{p.amount.toLocaleString()}원</td>
+                <td style={tdStyle}>
+                  {new Date(p.approvedAt).toLocaleString()}
+                </td>
+                <td style={tdStyle}>{p.method}</td>
+                <td style={tdStyle}>{p.cardCompany || "-"}</td>
+                <td style={tdStyle}>
+                  <button
+                    onClick={async () => {
+                      if (confirm("환불 및 취소 처리하시겠습니까?")) {
+                        try {
+                          const res = await fetch(
+                            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/${p.id}`,
+                            {
+                              method: "DELETE",
+                              credentials: "include",
                             }
+                          );
+                          if (res.ok) {
+                            alert("환불 완료");
+                            setPayments((prev) =>
+                              prev.filter((item) => item.id !== p.id)
+                            );
+                          } else {
+                            alert("환불 실패");
                           }
-                        }}
-                        style={{
-                          background: "#e53e3e",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: 4,
-                          padding: "4px 8px",
-                          fontSize: 12,
-                          cursor: "pointer",
-                        }}
-                      >
-                        환불
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      );
-    }
+                        } catch (e) {
+                          alert("에러 발생: " + e.message);
+                        }
+                      }
+                    }}
+                    style={{
+                      background: "#e53e3e",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: 4,
+                      padding: "4px 8px",
+                      fontSize: 12,
+                      cursor: "pointer",
+                    }}
+                  >
+                    환불
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 
     return null;
   };
