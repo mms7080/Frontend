@@ -69,6 +69,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                         {searchedMovies.map((movie,index) => {
                             if(index < displayNumber)
                                 return (<MovieCard 
+                                            user={userData}
                                             key={movie.id}
                                             movie={movie}
                                         />)

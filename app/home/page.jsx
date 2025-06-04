@@ -23,7 +23,7 @@ export default async function Homepage(){
         <Box w='100vw' minW='1000px'>
             <Flex w='100%' flexDirection='column'>
                 <Swipers></Swipers>
-                <Movies movieInfo={movieres}></Movies>
+                <Movies userInfo={userres} movieInfo={movieres}></Movies>
                 <Bookmark></Bookmark>
                 <Events Fetchedevents={eventres}></Events>
                 <Reviews movieInfo={userres} reviewInfo={reviewinfo}></Reviews>

@@ -5,7 +5,7 @@ import Link from "next/link";
 import {VStack,Grid,Flex,Box} from '@chakra-ui/react';
 import MovieCard from '../movie/moviecard';
 
-export default function Movies({movieInfo}){
+export default function Movies({userInfo,movieInfo}){
     const [sortkey, setSortkey] = useState('likeNumber');
     const [rdcolor, setrdColor] = useState('white'); 
     const [lncolor, setlnColor] = useState('gray.500');
@@ -71,6 +71,7 @@ export default function Movies({movieInfo}){
                         if(index < 8)
                             return (<Box overflow='visible' key={movie.id}>
                                     <MovieCard 
+                                        user={userInfo}
                                         movie={movie}
                                     /></Box>);
                     }):
@@ -78,6 +79,7 @@ export default function Movies({movieInfo}){
                         if(index < 8)
                             return (<Box overflow='visible' key={movie.id}>
                                         <MovieCard 
+                                        user={userInfo}
                                         movie={movie}
                                     /></Box>);
                     })}
