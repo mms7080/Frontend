@@ -138,7 +138,7 @@ export default function reviewWrite({modifyid,setModifyId,username,reviewList,so
                 }}
             id='content' name='content' h='70px' fontSize='16px' onKeyDown={handleKeyDown}
             placeholder={!username?'로그인이 필요합니다.'
-                :(reviewExist()?'리뷰는 한 영화당 한 개만 작성할 수 있습니다.':`${movieInfo.title} 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.`)}
+                :(reviewExist()?'리뷰는 한 영화당 한 개만 작성할 수 있습니다.':`${movieInfo.title} 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.(최대 150자)`)}
             readOnly={!reviewOK()}
             value={content}
             onChange={(e) => setContent(e.target.value)}

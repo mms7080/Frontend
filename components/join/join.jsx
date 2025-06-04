@@ -386,12 +386,12 @@ export default function Joindetail(){
                                 </tbody>
                             </table>
 
-                            <Textarea id='term1' name='term1' rows='10' disabled></Textarea>
-                            <Flex justifyContent='flex-end'><input id="agreement1" name="agreement1" type="checkbox" required/><label htmlFor="agreement1">[필수] 이용약관에 동의합니다.</label></Flex>
-                            <Textarea id='term2' name='term2' rows='10' disabled></Textarea>
-                            <Flex justifyContent='flex-end'><input id="agreement2" name="agreement2" type="checkbox" required/><label htmlFor="agreement2">[필수] 개인정보 수집 및 이용에 동의합니다.</label></Flex>
-                            <Textarea id='term3' name='term3' rows='10' disabled></Textarea>
-                            <Flex justifyContent='flex-end'><input id="agreement3" name="agreement3" type="checkbox"/><label htmlFor="agreement3">[선택] 위치기반 서비스 이용약관에 동의합니다.</label></Flex>
+                            <Textarea resize="none" id='term1' name='term1' rows='10' readOnly></Textarea>
+                            <Flex justifyContent='flex-end'><input id="agreement1" name="agreement1" type="checkbox" required/><label style={{position:'relative',top:'1px'}} htmlFor="agreement1">&nbsp;&nbsp;[필수] 이용약관에 동의합니다.</label></Flex>
+                            <Textarea resize="none" id='term2' name='term2' rows='10' readOnly></Textarea>
+                            <Flex justifyContent='flex-end'><input id="agreement2" name="agreement2" type="checkbox" required/><label style={{position:'relative',top:'1px'}} htmlFor="agreement2">&nbsp;&nbsp;[필수] 개인정보 수집 및 이용에 동의합니다.</label></Flex>
+                            <Textarea resize="none" id='term3' name='term3' rows='10' readOnly></Textarea>
+                            <Flex justifyContent='flex-end'><input id="agreement3" name="agreement3" type="checkbox"/><label style={{position:'relative',top:'1px'}} htmlFor="agreement3">&nbsp;&nbsp;[선택] 위치기반 서비스 이용약관에 동의합니다.</label></Flex>
 
                             <Button type="submit" bg='#6B46C1' _hover={{bg:'#553C9A'}}>회원가입</Button>
                         </Flex>
