@@ -110,7 +110,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
         else return (<Box className="movie-grid" overflow='visible'>
                     {searchedEvents.flat().filter((_,index)=>index%2=== 1).flat().map((items,index) =>{
                         if(index<displayNumber2)
-                            return <Box overflow='visible' key={items.id}>
+                            return <Box overflow='visible' key={items.id} scroll={true} passHref>
                                     <Event content={items.title} src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${items.image}`} url={`/event/view/${items.id}`}></Event>
                                 </Box>;
                     })}
@@ -120,7 +120,14 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     const searchedReviews = searchWord === "" ? reviewInfo:reviewInfo/* 검색 키워드를 포함하는 리뷰 추려내기 */
         .filter((review,index)=>{
             let result=review.content.toLowerCase().includes(searchWord.toLowerCase());
-            let movie=movies[review.movieid-1];
+            let movie;
+            for(let i=0;i<movies.length;i++){
+                if(movies[i].id===review.movieid)
+                {
+                    movie=movies[i];
+                    break;
+                }
+            }
             return result || movie.title.toLowerCase().includes(searchWord.toLowerCase()) ||
                 movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()) ||
                 movie.description.toLowerCase().includes(searchWord.toLowerCase()) ||
@@ -150,8 +157,15 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
         else return (<Flex w='100%' direction='column' gap='30px' overflow='visible'>
             {searchedReviews.map((review,index)=>{
                     if(index<displayNumber3){
-                        let movieinfo=movies[review.movieid-1];
-                        return <Link href={`/detail/${review.movieid}`} style={{overflow:'visible'}} key={index}><Detailreview 
+                        let movieinfo;
+                        for(let i=0;i<movies.length;i++){
+                            if(movies[i].id===review.movieid)
+                            {
+                                movieinfo=movies[i];
+                                break;
+                            }
+                        }
+                        return <Link href={`/detail/${review.movieid}`} scroll={true} passHref style={{width:'100%',overflow:'visible'}} key={index}><Detailreview 
                         id={review.id} author={review.author} score={review.score} content={review.content}
                         likenum={review.likenumber} likeusers={review.likeusers}
                         movieInfo={movieinfo} isHome={true} authorColor='white' bgColor='gray.400' contentColor='black'
@@ -166,8 +180,8 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
 
     return <>
         <Header userInfo={userData}></Header>
-        <div className="bg-[#141414]">
-            <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
+        <div style={{width:'100%'}} className="bg-[#141414]">
+            <Box w='70%' bg="#141414" pt={20} pb={10} px={6} mx="auto">
                 <Box pb={6}>
                     <Flex gap={2} justify={'space-between'} >
                         <Box transform="translate(-23px, 0)">

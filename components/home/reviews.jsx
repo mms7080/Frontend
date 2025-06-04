@@ -12,10 +12,17 @@ export default async function Reviews({reviewInfo}){
 
     return <VStack w='100%' bg='#f1f1f1' pt='80px' pb='100px'>
         <h1 style={{color:'black',fontSize:25,paddingBottom:15}}>🔥 관람평 BEST</h1>
-        <Flex w='60%' direction='column' gap='30px' overflow='visible'>
+        <Flex w='68%' direction='column' gap='30px' overflow='visible'>
             {reviewInfo.map((review,index)=>{
                     if(index<4){
-                        let movieinfo=entiremovieinfo[review.movieid-1];
+                        let movieinfo;
+                        for(let i=0;i<entiremovieinfo.length;i++){
+                            if(entiremovieinfo[i].id===review.movieid)
+                            {
+                                movieinfo=entiremovieinfo[i];
+                                break;
+                            }
+                        }
                         return <Link href={`/detail/${review.movieid}`} style={{overflow:'visible'}} key={index}><Detailreview
                         id={review.id} author={review.author} score={review.score} content={review.content}
                         likenum={review.likenumber} likeusers={review.likeusers} movieInfo={movieinfo} isHome={true}></Detailreview></Link>;

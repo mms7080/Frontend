@@ -113,7 +113,7 @@ export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,re
 
     return <>
     <Flex w='100%' gap='15px'>
-     <Flex w='120px' h='70px' justifyContent='center' alignItems='center' mr='5px'>{username?username:'로그인 필요'}</Flex>
+     <Flex w='125px' h='70px' justifyContent='center' alignItems='center' mr='5px' whiteSpace="normal" wordBreak="break-word">{username?username:'로그인 필요'}</Flex>
         <Flex h='70px' border='1px solid #666666' borderRadius='5px' alignItems='center' flex='1'>
             <Textarea border='none' outline='none' 
                 maxLength='150'

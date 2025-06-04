@@ -62,8 +62,8 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
 
     return <>
         <Flex w='100%' gap='15px' transition='all 0.2s ease' {...(isHome && {_hover:{transform:'translateY(-5px)'}})}>
-            <Flex w='120px' h='70px' justifyContent='center' alignItems='center' mr='5px' color={authorColor}>{author.substring(0,2)+'**'+author.substring(4)}</Flex>
-            <Flex w='100%' h='70px' flex='1' bg='#F8F8FA' borderRadius='5px' alignItems='center' bg={bgColor}>
+            <Flex w='125px' h='100px' justifyContent='center' alignItems='center' mr='5px' color={authorColor} whiteSpace="normal" wordBreak="break-word">{author.substring(0,2)+'**'+author.substring(4)}</Flex>
+            <Flex w='100%' h='100px' flex='1' bg='#F8F8FA' borderRadius='5px' alignItems='center' bg={bgColor}>
                 <Flex w='100%' gap='15px' alignItems='center'>
                     <span style={{color:'#352461',paddingLeft:20,width:100}}>관람평</span>
                     <span style={{color:'#352461',fontSize:40,width:50}}>{score}</span>
