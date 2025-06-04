@@ -39,7 +39,7 @@ export default function CartPaymentSuccessPage() {
   useEffect(() => {
     const confirmPayment = async () => {
       try {
-        const res = await fetch("http://localhost:9999/api/payments/confirm", {
+        const res = await fetch("http://localhost:9999/api/payments/confirm/store", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

@@ -23,7 +23,7 @@ export default function PaymentSuccessPage({userData}) {
   useEffect(() => {
     const confirmPayment = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/store`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ paymentKey, orderId, amount: parseInt(amount), userId }),
