@@ -12,7 +12,7 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
     
     const didilikeit=()=>likeusers.includes(username);
 
-    const handleSubmit=async (e)=>{/* fetch로 데이터를 넘겨주는 과정 */
+    const handleSubmit=async ()=>{/* 공감/비공감시 fetch로 데이터를 넘겨주는 과정 */
     
         let dataToSend={};
         dataToSend.liked=didilikeit();
@@ -34,6 +34,14 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
           return review;
         }));
     };
+
+    const deletereview=async ()=>{
+        const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`, {
+            method: 'POST'
+        });
+
+        setReviewList(prevList => prevList.filter(review => review.id!==id));
+    }
 
     const bounce = keyframes`
       0% { transform: scale(1); }
@@ -94,7 +102,7 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
                         <Menu.Positioner overflow='visible'>
                           <Menu.Content position='relative' bottom='25px'>
                             <Menu.Item value="new-txt" onSelect={()=>setModifyId(id)}>수정</Menu.Item>
-                            <Menu.Item value="new-file">삭제</Menu.Item>
+                            <Menu.Item value="new-file" onSelect={()=>deletereview()}>삭제</Menu.Item>
                           </Menu.Content>
                         </Menu.Positioner>
                       </Portal>
@@ -106,7 +114,7 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
                     <Text pr='50px' color={titleColor}>-  {movieInfo.title}</Text>
                     <Flex flexDirection='column' justifyContent='center' alignItems='center' w='60px' h='60px'>
                         <Image loading='lazy' src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px' opacity='0.5'></Image>
-                        <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color={likeColor}>{likenumber}</Text>
+                        <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color={likeColor}>{likenum}</Text>
                     </Flex>
                    </>
                    }
