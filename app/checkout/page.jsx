@@ -71,36 +71,6 @@ export default function CheckoutPage() {
     // } finally {
     //   setLoading(false);
     // }
-
-    const showtimeId = searchParams.get('showtimeId');  // 반드시 포함되어 있어야 함
-
-    try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/reservations`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-            showtimeId: Number(showtimeId),
-            seats: selectedSeats,  // ["A1", "A2", ...]
-            userId: user?.id || null,
-            personCounts,
-        }),
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-        alert("좌석 정보가 성공적으로 저장되었습니다.");
-        // 추후에 결제 페이지 이동 등을 여기에 추가 가능
-        } else {
-        alert("좌석 저장 실패: " + data.message);
-        }
-    } catch (err) {
-        console.error("좌석 저장 에러", err);
-        alert("서버 오류로 좌석 저장에 실패했습니다.");
-    }
   };
 
   return (

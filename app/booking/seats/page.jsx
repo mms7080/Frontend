@@ -44,11 +44,11 @@ export default function SeatsPage() {
     const [seatData, setSeatData] = useState([]);
 
     const bookedSeats = seatData
-    .filter(seat => seat.status === "BOOKED")
+    .filter(seat => seat.status === "RESERVED")
     .map(seat => seat.fullSeatName);
 
     const disabledSeats = seatData
-    .filter(seat => seat.status === "DISABLED")
+    .filter(seat => seat.status === "UNAVAILABLE")
     .map(seat => seat.fullSeatName);
 
 
