@@ -38,8 +38,33 @@ export default function SeatsPage() {
 
     const isButtonDisabled = (selectedSeats.length === 0 || selectedSeats.length < totalPeople);
 
-    const disabledSeats = ["A3", "A4", "A9", "A10"];
-    const bookedSeats =["B3", "B4"];
+    // const disabledSeats = ["A3", "A4", "A9", "A10"];
+    // const bookedSeats =["B3", "B4"];
+
+    const [seatData, setSeatData] = useState([]);
+
+    const bookedSeats = seatData
+    .filter(seat => seat.status === "BOOKED")
+    .map(seat => seat.fullSeatName);
+
+    const disabledSeats = seatData
+    .filter(seat => seat.status === "DISABLED")
+    .map(seat => seat.fullSeatName);
+
+
+    useEffect(() => {
+        const fetchSeats = async () => {
+          try {
+            const showtimeId = searchParams.get("showtimeId"); // URL에서 가져오기
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seats`);
+            const json = await res.json();
+            setSeatData(json.data || []);
+          } catch (e) {
+            console.error("좌석 정보 로딩 실패", e);
+          }
+        };
+        fetchSeats();
+      }, []);
 
     const toggleSeat = (seatId) => {
         if (bookedSeats.includes(seatId)) return; // 예약 완료 좌석 클릭 막기
@@ -340,6 +365,9 @@ export default function SeatsPage() {
                                 (colIndex > 2 ? -1 : 0) +
                                 (colIndex > 11 ? -1 : 0);
                             const seatId = `${rowLabel}${seatNumber}`;
+
+                            // const isValidSeat = seatData.some((seat) => seat.fullSeatName === seatId);
+                            // if (!isValidSeat) return <Box key={seatId} />;
 
                             return (
                                 <Box

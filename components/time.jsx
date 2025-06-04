@@ -43,13 +43,14 @@ export default function TimeSelector({ selectedTime, setSelectedTime, movieTitle
   return (
     <HStack spacing={3} wrap="wrap" width="100%">
       {availableTimes.map((item) => {
-        const time = typeof item === 'string' ? item : item.time;
-        const screen = item.screen || "-관";  // 관 정보만 표시
+        const time = item.startTime.split(" ")[1]; // "2025-06-04 10:00" → "10:00"
+        const screen = item.auditoriumName || "-관";
 
         const isSelected = selectedTime === time;
+
         return (
           <Button
-            key={time}
+            key={item.showtimeId}
             onClick={() => setSelectedTime(time)}
             variant="outline"
             bg={isSelected ? '#6B46C1' : 'transparent'}
@@ -62,17 +63,12 @@ export default function TimeSelector({ selectedTime, setSelectedTime, movieTitle
             px={6}
           >
             <Flex w="100%" align="center" justify="space-between">
-              {/* 왼쪽: 시간 */}
               <Box minW="80px">
                 <Text fontSize="lg">{time}</Text>
               </Box>
-
-              {/* 가운데: 영화 제목 */}
               <Box flex="1" textAlign="center">
                 <Text fontSize="lg" noOfLines={1}>{movieTitle}</Text>
               </Box>
-
-              {/* 오른쪽: 관 정보만 */}
               <Box minW="80px" textAlign="right">
                 <Text fontSize="md" color="gray.400">{screen}</Text>
               </Box>
