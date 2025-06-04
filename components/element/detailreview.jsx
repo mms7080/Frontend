@@ -37,8 +37,6 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
 
     const deletereview=async ()=>{
 
-        console.log(id);
-
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`, {
           method: "POST",
           credentials: "include"  // 쿠키 세션 등 필요하면
