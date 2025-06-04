@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 export default function Footer() {
   const pathname = usePathname();
    const isHome = pathname === '/' || pathname.startsWith('/home') 
-  || pathname.startsWith('/movie') || pathname.startsWith('/booking') || pathname.startsWith('/search') || pathname.startsWith("/checkout");
+  || pathname.startsWith('/movie') && !pathname.startsWith('/movie/payment') || pathname.startsWith('/booking') || pathname.startsWith('/search') || pathname.startsWith("/checkout");
   const footerBg = isHome ? '#1a1a1a' : 'white';
   const footerColor = isHome ? 'white' : 'black';
   const footerBorder = isHome ? 'transparent' : '#ccc';
