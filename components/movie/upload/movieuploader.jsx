@@ -30,6 +30,7 @@ const MovieUploader = ({userInfo}) => {
         cast: "",
         poster: null,
         wideImage: null,
+        stillCut: [],
         trailer: "",
         label: "",
     });
@@ -71,14 +72,24 @@ const MovieUploader = ({userInfo}) => {
     
     const handleFileChange = (e) => {
         const {name} = e.target;
-        const file = e.target.files[0];
-        if(file) {
-            const preview = ({
+        if(name === "stillCut") {
+            const files = Array.from(e.target.files);
+            const previews = files.map((file) => ({
                 file,
                 url: URL.createObjectURL(file),
-            });
-            setForm((prev) => ({ ...prev, [name]: preview }));
-        } else console.log("no file");
+            }));
+            setForm((prev) => ({ ...prev, stillCut: previews }));
+        }
+        else {
+            const file = e.target.files[0];
+            if(file) {
+                const preview = ({
+                    file,
+                    url: URL.createObjectURL(file),
+                });
+                setForm((prev) => ({ ...prev, [name]: preview }));
+            } else console.log("no file");
+        }
     };
     
     const formatDate = (date) => {
@@ -90,9 +101,9 @@ const MovieUploader = ({userInfo}) => {
     };
     
     const handleSubmit = async () => {
-            const { title, titleEnglish, rate, description, runningTime, genre, director, cast, poster, wideImage, trailer, label } = form;
+            const { title, titleEnglish, rate, description, runningTime, genre, director, cast, poster, wideImage, stillCut, trailer, label } = form;
         
-            if (!title || !titleEnglish || !rate || !releaseDate || !description || runningTime < 1 || !genre || !director || !cast || !poster || !wideImage || !trailer) {
+            if (!title || !titleEnglish || !rate || !releaseDate || !description || runningTime < 1 || !genre || !director || !cast || !poster || !wideImage || !stillCut || !trailer) {
                 alert("모든 항목을 입력해주세요.");
                 console.log(form);
                 return;
@@ -112,6 +123,7 @@ const MovieUploader = ({userInfo}) => {
         data.append("cast", cast);
         data.append("poster", poster.file);
         data.append("wideImage", wideImage.file);
+        stillCut.forEach(({ file }) => data.append("stillCut", file));
         data.append("label", label);
         data.append("trailer", trailer)
 
@@ -343,6 +355,34 @@ const MovieUploader = ({userInfo}) => {
                                 w="100%" h="100%" objectFit="cover"
                             />
                         </Box>
+                    </Flex>
+                )}
+            </Box>
+            <Box w="100%" p={1}>
+                <Text fontWeight="bold" mb={2}>
+                    스틸컷 업로드
+                </Text>
+                <Input
+                    name="stillCut"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleFileChange}
+                />
+                {form.stillCut.length > 0 && (
+                    <Flex mt={4} gap={4} wrap="wrap">
+                        {form.stillCut.map((img, idx) => {
+                            <Box
+                                key={`stillCut-${idx}`} w="100px" h="100px"
+                                border="1px solid #ccc" borderRadius="md"
+                                overflow="hidden"
+                            >
+                                <Image
+                                    src={img.url} alt={`stillCut-preview-${idx}`}
+                                    w="100%" h="100%" objectFit="cover"
+                                />
+                            </Box>
+                        })}
                     </Flex>
                 )}
             </Box>
