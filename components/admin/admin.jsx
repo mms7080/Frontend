@@ -55,12 +55,6 @@ export default function AdminDashboard({ userData }) {
   const [reviewSearchKeyword, setReviewSearchKeyword] = useState("");
   const [reviewConfirmedKeyword, setReviewConfirmedKeyword] = useState("");
 
-  const dummyStats = {
-    movies: 8,
-    reservations: 0,
-    reviews: 0,
-    events: 0,
-  };
 
   try {
     if (!user) throw new Error();
@@ -103,15 +97,14 @@ export default function AdminDashboard({ userData }) {
     )
       .then((res) => res.json())
       .then(setReservationCount);
-   fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/review-count`, {
-  credentials: "include",
-})
-  .then((res) => res.json())
-  .then((count) => {
-    setReviewCount(count); 
-    setDummyStats((prev) => ({ ...prev, reviews: count }));
-  });
-
+    fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/review-count`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((count) => {
+        setReviewCount(count);
+        setDummyStats((prev) => ({ ...prev, reviews: count }));
+      });
   }, []);
 
   useEffect(() => {
@@ -207,13 +200,36 @@ export default function AdminDashboard({ userData }) {
     { title: "매출 관리", key: "매출" },
   ];
 
-  const movieMap = useMemo(() => {
-    const map = {};
-    movies.forEach((m) => {
-      map[m.id] = m.title;
-    });
-    return map;
-  }, [movies]);
+// 영화 ID -> 영화 제목으로 변환하는 매핑 객체
+const movieMap = useMemo(() => {
+  const map = {};
+  movies.forEach((m) => {
+    map[m.id] = m.title;
+  });
+  return map;
+}, [movies]);
+
+const dynamicMovieStats = useMemo(() => {
+  const stats = {};
+
+  // 1. 모든 영화 ID를 먼저 0건으로 초기화
+  movies.forEach((movie) => {
+    stats[movie.id] = 0;
+  });
+
+  // 2. reservations 기반으로 예매 수 누적
+  reservations.forEach((r) => {
+    stats[r.movieId] = (stats[r.movieId] || 0) + 1;
+  });
+
+  // 3. { title, reservations } 형태로 변환
+  return Object.entries(stats).map(([movieId, count]) => ({
+    title: movieMap[movieId] || movieId,
+    reservations: count,
+  }));
+}, [reservations, movies, movieMap]);
+
+
 
   const userMap = useMemo(() => {
     const map = {};
@@ -942,95 +958,125 @@ export default function AdminDashboard({ userData }) {
         </div>
       );
     }
-    if (selectedSection === "예매") {
-      const filteredReservations = reservations.filter((r) =>
-        [r.orderId, r.theater, r.region, r.date, r.time].some((v) =>
-          v?.toLowerCase().includes(reservationConfirmedKeyword.toLowerCase())
-        )
-      );
+ if (selectedSection === "예매") {
+  const filteredReservations = reservations.filter((r) =>
+    [r.orderId, r.theater, r.region, r.date, r.time].some((v) =>
+      v?.toLowerCase().includes(reservationConfirmedKeyword.toLowerCase())
+    )
+  );
 
-      return (
-        <div style={{ marginTop: 40 }}>
-          {/* 🔍 검색창 */}
-          <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
-            <input
-              type="text"
-              placeholder="주문번호/극장/지역/날짜/시간 검색"
-              value={reservationSearchKeyword}
-              onChange={(e) => setReservationSearchKeyword(e.target.value)}
-              style={{
-                width: 300,
-                padding: "8px 12px",
-                fontSize: 14,
-                borderRadius: 6,
-                border: "1px solid #ccc",
-                backgroundColor: "#fff",
-              }}
-            />
-            <button
-              onClick={() =>
-                setReservationConfirmedKeyword(reservationSearchKeyword)
-              }
-              style={{
-                padding: "8px 16px",
-                fontSize: 14,
-                backgroundColor: "#6B46C1",
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer",
-              }}
-            >
-              검색
-            </button>
-          </div>
+  return (
+    <div style={{ marginTop: 40 }}>
+      {/* 🔍 검색창 */}
+      <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
+        <input
+          type="text"
+          placeholder="주문번호/극장/지역/날짜/시간 검색"
+          value={reservationSearchKeyword}
+          onChange={(e) => setReservationSearchKeyword(e.target.value)}
+          style={{
+            width: 300,
+            padding: "8px 12px",
+            fontSize: 14,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+          }}
+        />
+        <button
+          onClick={() =>
+            setReservationConfirmedKeyword(reservationSearchKeyword)
+          }
+          style={{
+            padding: "8px 16px",
+            fontSize: 14,
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          검색
+        </button>
+      </div>
 
-          {/* 📋 예매 목록 테이블 */}
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 10,
-              padding: 20,
-              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-            }}
-          >
-            <h3 style={{ fontSize: 18, marginBottom: 16 }}>📋 예매 내역</h3>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ background: "#f1f1f1" }}>
-                  <th style={thStyle}>주문번호</th>
-                  <th style={thStyle}>유저</th>
-                  <th style={thStyle}>영화</th>
-                  <th style={thStyle}>지역</th>
-                  <th style={thStyle}>극장</th>
-                  <th style={thStyle}>날짜</th>
-                  <th style={thStyle}>시간</th>
-                  <th style={thStyle}>좌석</th>
-                  <th style={thStyle}>총액</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredReservations.map((r, idx) => (
-                  <tr key={idx}>
-                    <td style={tdStyle}>{r.orderId}</td>
-                    <td style={tdStyle}>{userMap[r.userId] || r.userId}</td>
-                    <td style={tdStyle}>{movieMap[r.movieId] || r.movieId}</td>
-                    <td style={tdStyle}>{r.region}</td>
-                    <td style={tdStyle}>{r.theater}</td>
-                    <td style={tdStyle}>{r.date}</td>
-                    <td style={tdStyle}>{r.time}</td>
-                    <td style={tdStyle}>{r.seats}</td>
-                    <td style={tdStyle}>
-                      {Number(r.totalPrice).toLocaleString()}원
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      );
-    }
+      {/* 🎟️ 영화별 예매 차트 - 여기로 이동 */}
+      <section
+        style={{
+          background: "white",
+          borderRadius: 10,
+          padding: 20,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+          marginBottom: 30,
+        }}
+      >
+        <h3 style={{ fontSize: 18, marginBottom: 16 }}>
+          🎟️ 영화별 예매 현황
+        </h3>
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={dynamicMovieStats}>
+            <XAxis dataKey="title" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Bar dataKey="reservations" radius={[4, 4, 0, 0]}>
+              {dynamicMovieStats.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={colors[index % colors.length]}
+                />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </section>
+
+      {/* 📋 예매 목록 테이블 */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 10,
+          padding: 20,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h3 style={{ fontSize: 18, marginBottom: 16 }}>📋 예매 내역</h3>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ background: "#f1f1f1" }}>
+              <th style={thStyle}>주문번호</th>
+              <th style={thStyle}>유저</th>
+              <th style={thStyle}>영화</th>
+              <th style={thStyle}>지역</th>
+              <th style={thStyle}>극장</th>
+              <th style={thStyle}>날짜</th>
+              <th style={thStyle}>시간</th>
+              <th style={thStyle}>좌석</th>
+              <th style={thStyle}>총액</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredReservations.map((r, idx) => (
+              <tr key={idx}>
+                <td style={tdStyle}>{r.orderId}</td>
+                <td style={tdStyle}>{userMap[r.userId] || r.userId}</td>
+                <td style={tdStyle}>{movieMap[r.movieId] || r.movieId}</td>
+                <td style={tdStyle}>{r.region}</td>
+                <td style={tdStyle}>{r.theater}</td>
+                <td style={tdStyle}>{r.date}</td>
+                <td style={tdStyle}>{r.time}</td>
+                <td style={tdStyle}>{r.seats}</td>
+                <td style={tdStyle}>
+                  {Number(r.totalPrice).toLocaleString()}원
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
 
     if (selectedSection === "매출") {
       const filteredPayments = payments.filter((p) =>
@@ -1366,35 +1412,8 @@ export default function AdminDashboard({ userData }) {
               onClick={() => setSelectedSection("이벤트")}
             />
           </section>
-          {selectedSection === "영화" && (
-            <section
-              style={{
-                background: "white",
-                borderRadius: 10,
-                padding: 20,
-                boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-              }}
-            >
-              <h3 style={{ fontSize: 18, marginBottom: 16 }}>
-                🎟️ 영화별 예매 현황
-              </h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={movieStats}>
-                  <XAxis dataKey="title" />
-                  <YAxis allowDecimals={false} />
-                  <Tooltip />
-                  <Bar dataKey="reservations" radius={[4, 4, 0, 0]}>
-                    {movieStats.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={colors[index % colors.length]}
-                      />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </section>
-          )}
+
+
           {renderList()}
         </main>
       </div>
