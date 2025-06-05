@@ -27,8 +27,9 @@ const NaverMap = ({myAddress, activeAddress}) => {
     
     const [isMapLoaded, setMapLoaded] = useState(false);
     const [isScriptLoaded, setScriptLoaded] = useState(false);
-    const [latitude, setLatitude] = useState(37.3595704);
-    const [longitude, setLongitude] = useState(127.105399);
+    const [latitude, setLatitude] = useState(null);
+    const [longitude, setLongitude] = useState(null);
+    const [activeMarker, setActiveMarker] = useState(null);
     const [error, setError] = useState(null);
 
     // 주소를 좌표로 변환하는 함수
@@ -84,10 +85,16 @@ const NaverMap = ({myAddress, activeAddress}) => {
 
             mapInstance = new window.naver.maps.Map('map', mapOptions);
 
+            if(activeMarker) {
+                activeMarker.setMap(null);
+            }
+
             const marker = new window.naver.maps.Marker({
                 position: new window.naver.maps.LatLng(latitude, longitude),
                 map: mapInstance
             });
+
+            setActiveMarker(marker);
 
             setMapLoaded(true);
             setError(null);
@@ -122,10 +129,10 @@ const NaverMap = ({myAddress, activeAddress}) => {
 
     // 주소가 변경될 때 geocoding 실행
     useEffect(() => {
-        if (isScriptLoaded && myAddress) {
-            geocodeAddress(myAddress);
+        if (isScriptLoaded && activeAddress) {
+            geocodeAddress(activeAddress);
         }
-    }, [myAddress, isScriptLoaded]);
+    }, [activeAddress, isScriptLoaded]);
 
     // 좌표가 변경될 때 지도 초기화
     useEffect(() => {
@@ -135,12 +142,19 @@ const NaverMap = ({myAddress, activeAddress}) => {
                 const newCenter = new window.naver.maps.LatLng(latitude, longitude);
                 mapInstance.setCenter(newCenter);
                 
+                if (activeMarker) {
+                    activeMarker.setMap(null);
+                }
+
                 // 마커도 새 위치로 이동
                 const marker = new window.naver.maps.Marker({
                     position: newCenter,
                     map: mapInstance
                 });
+
+                setActiveMarker(marker);
             } else {
+
                 let attempts = 0;
                 const maxAttempts = 50; // 최대 50번 시도 (5초)
 

@@ -41,7 +41,7 @@ const theaters = [
 const Theater = ({userInfo}) => {
     const [myAddress, setMyAddress] = useState(null);
     const [activeRegion, setActiveRegion] = useState('서울');
-    const [activeTheater, setActiveTheater] = useState(null);
+    const [activeTheater, setActiveTheater] = useState(theaters[0]);
 
     // 사용자의 주소 정보가 있으면 그 주소를 세팅
     useEffect(() => {
