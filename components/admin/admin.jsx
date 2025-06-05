@@ -103,7 +103,7 @@ export default function AdminDashboard({ userData }) {
       .then((res) => res.json())
       .then((count) => {
         setReviewCount(count);
-        setDummyStats((prev) => ({ ...prev, reviews: count }));
+        // setDummyStats((prev) => ({ ...prev, reviews: count }));
       });
   }, []);
 
