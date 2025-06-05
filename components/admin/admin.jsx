@@ -241,7 +241,7 @@ const dynamicMovieStats = useMemo(() => {
     if (selectedSection === "유저") {
       const filteredUsers = users.filter((u) =>
         [u.name, u.username, u.email, u.phone].some((v) =>
-          v?.toLowerCase().includes(confirmedKeyword.toLowerCase())
+          v?.replace(/\s+/g, '').toLowerCase().includes(confirmedKeyword.replace(/\s+/g, '').toLowerCase())
         )
       );
 
@@ -343,7 +343,7 @@ const dynamicMovieStats = useMemo(() => {
         (acc, [category, productList]) => {
           const filtered = productList.filter((p) =>
             [p.title, p.subtitle, p.category].some((v) =>
-              v?.toLowerCase().includes(storeConfirmedKeyword.toLowerCase())
+              v?.replace(/\s+/g, '').toLowerCase().includes(storeConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
             )
           );
           if (filtered.length > 0) acc[category] = filtered;
@@ -570,8 +570,8 @@ const dynamicMovieStats = useMemo(() => {
 
     if (selectedSection === "영화") {
       const filteredMovies = movies.filter((m) =>
-        [m.title, m.releaseDate].some((v) =>
-          v?.toLowerCase().includes(movieConfirmedKeyword.toLowerCase())
+        [m.title, m.releaseDate,m.titleEnglish,m.description,m.genre,m.director,m.cast].some((v) =>
+          v?.replace(/\s+/g, '').toLowerCase().includes(movieConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
         )
       );
 
@@ -744,7 +744,7 @@ const dynamicMovieStats = useMemo(() => {
         (acc, [category, eventList]) => {
           const filtered = eventList.filter((e) =>
             [e.title, e.date, e.category].some((v) =>
-              v?.toLowerCase().includes(eventConfirmedKeyword.toLowerCase())
+              v?.replace(/\s+/g, '').toLowerCase().includes(eventConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
             )
           );
           if (filtered.length > 0) acc[category] = filtered;
@@ -959,7 +959,7 @@ const dynamicMovieStats = useMemo(() => {
  if (selectedSection === "예매") {
   const filteredReservations = reservations.filter((r) =>
     [r.orderId, r.theater, r.region, r.date, r.time].some((v) =>
-      v?.toLowerCase().includes(reservationConfirmedKeyword.toLowerCase())
+      v?.replace(/\s+/g, '').toLowerCase().includes(reservationConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
     )
   );
 
@@ -1079,7 +1079,7 @@ const dynamicMovieStats = useMemo(() => {
     if (selectedSection === "매출") {
       const filteredPayments = payments.filter((p) =>
         [p.orderName, p.userId, p.cardCompany, p.method].some((v) =>
-          v?.toLowerCase().includes(paymentConfirmedKeyword.toLowerCase())
+          v?.replace(/\s+/g, '').toLowerCase().includes(paymentConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
         )
       );
 
@@ -1244,7 +1244,7 @@ const dynamicMovieStats = useMemo(() => {
       const filteredReviews = reviews.filter((r) => {
         const title = movieMap[r.movieid] || "";
         return [r.author, r.content, title].some((v) =>
-          v?.toLowerCase().includes(reviewConfirmedKeyword.toLowerCase())
+          v?.replace(/\s+/g, '').toLowerCase().includes(reviewConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
         );
       });
 
