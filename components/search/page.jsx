@@ -84,7 +84,9 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
         .map(([category, items]) => [
           category,
           items.filter((e) =>
-            e.title.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase())
+            [e.title, e.date, e.category].some((v) =>
+              v?.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase())
+            )
           ),
         ])
         .filter(([_, items]) => items.length > 0);

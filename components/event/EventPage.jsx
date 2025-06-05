@@ -59,7 +59,9 @@ export default function EventPage({ serverEvents, userData }) {
     .map(([category, items]) => [
       category,
       items.filter((e) =>
-        e.title.replace(/\s+/g, '').toLowerCase().includes(confirmedKeyword.replace(/\s+/g, '').toLowerCase())
+        [e.title, e.date, e.category].some((v) =>
+              v?.replace(/\s+/g, '').toLowerCase().includes(confirmedKeyword.replace(/\s+/g, '').toLowerCase())
+            )
       ),
     ])
     .filter(([_, items]) => items.length > 0);
