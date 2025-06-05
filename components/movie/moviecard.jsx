@@ -49,8 +49,8 @@ const MovieCard = ({ movie, user, rank, crit }) => {
             credentials: 'include' 
           });
           if(res2.ok) {
-            const result = res2.json();
-            console.log(result);
+            const data2 = await res2.json();
+            user.likemovies = data2;
           }
         }
       } catch (err) {

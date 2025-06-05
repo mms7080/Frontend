@@ -15,6 +15,6 @@ export default async function Moviepage(){
 
     return <div className="bg-[#141414]">
         <Header userInfo={userRes}/>
-        <Movie/>
+        <Movie userInfo={userRes}/>
     </div>;
 }

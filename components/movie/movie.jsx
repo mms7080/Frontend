@@ -9,26 +9,17 @@ import {fetch} from '../../lib/client';
 const categories = ['전체영화', '개봉작', '상영예정작'];
 
 
-const Movie = () => {
+const Movie = (userInfo) => {
 
     const [activeCategory, setActiveCategory] = useState('전체영화');
     const [movies, setMovies] = useState([]);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(userInfo.userInfo);
     const [searchWord, setSearchWord] = useState("");
     const [displayNumber, setDisplayNumber] = useState(8);
 
     useEffect(() => {
         document.title = '전체 영화 - 필모라';
 
-        // User Fetch
-        (async () => {
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-                setUser(res);
-            } catch(err) {
-                console.log("USER FETCH ERROR! : " + err.message);
-            }
-        })();
         // Movie Fetch
         (async () => {
             try {
