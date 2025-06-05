@@ -56,7 +56,11 @@ const Movie = () => {
     const searched = searchWord === "" ? filtered :
       filtered.filter((movie) => 
         movie.title.includes(searchWord) || 
-        movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase())
+        movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()) ||
+        movie.description.toLowerCase().includes(searchWord.toLowerCase()) ||
+        movie.genre.toLowerCase().includes(searchWord.toLowerCase()) ||
+        movie.director.toLowerCase().includes(searchWord.toLowerCase()) ||
+        movie.cast.toLowerCase().includes(searchWord.toLowerCase())
       );
     
     return searched.sort((a,b) => b.reserveRate - a.reserveRate);
