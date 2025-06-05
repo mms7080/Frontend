@@ -1,6 +1,6 @@
 "use client"
 
-import React,{useEffect,useState, useMemo} from 'react';
+import React,{useEffect,useState, useMemo, useRef} from 'react';
 import {Button, Flex, Box, Input} from '@chakra-ui/react';
 
 import MovieCard from '../../components/movie/moviecard';
@@ -16,6 +16,18 @@ const Movie = (userInfo) => {
     const [user, setUser] = useState(userInfo.userInfo);
     const [searchWord, setSearchWord] = useState("");
     const [displayNumber, setDisplayNumber] = useState(8);
+    const inputRef = useRef("");
+    const clearInputValue = () => {
+        if(inputRef.current) {
+            inputRef.current.value = '';
+        }
+    };
+    const getInputValue = () => {
+        if (inputRef.current) {
+            return inputRef.current.value;
+        }
+        return '';
+    };
 
     useEffect(() => {
         document.title = '전체 영화 - 필모라';
@@ -109,7 +121,7 @@ const Movie = (userInfo) => {
                             fontSize={'2xl'}
                             fontWeight={'normal'}
                             color={activeCategory === category ? 'white' : 'gray.500'}
-                            onClick={() => {setActiveCategory(category);}}
+                            onClick={() => {setActiveCategory(category); setSearchWord(""); clearInputValue();}}
                             _hover={{ bg: 'transparent', color: 'white' }}
                         >
                             {category}
@@ -123,15 +135,16 @@ const Movie = (userInfo) => {
                         border="1px solid gray"
                         fontSize="15px" color="white"
                         _hover={{borderColor : "white"}}
+                        ref={inputRef}
                         onKeyDown={(e) => {
-                            if(e.key === 'Enter') handleSearch(e.target.value);
+                            if(e.key === 'Enter') handleSearch(getInputValue());
                         }}
                     />
                     <Button
                         marginLeft={4} px={6} bg="#1e1e1e"
                         border="1px solid gray" 
                         _hover={{borderColor : "white"}}
-                        onClick={(e)=>{handleSearch(e.target.previousSibling.value)}}
+                        onClick={(e)=>{handleSearch(getInputValue())}}
                         transform="translate(0, 1px)"
                     >
                         검색
