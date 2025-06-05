@@ -73,6 +73,14 @@ export default function Joindetail(){
     const [inputsvalue, setInputsValue] = useState('');
     const [isComposing, setIsComposing] = useState(false);
 
+    const [buttonlabel1,setButtonLabel1]=useState('글자 확대');
+    const [buttonlabel2,setButtonLabel2]=useState('글자 확대');
+    const [buttonlabel3,setButtonLabel3]=useState('글자 확대');
+
+    const [fontsize1,setFontSize1]=useState(14);
+    const [fontsize2,setFontSize2]=useState(14);
+    const [fontsize3,setFontSize3]=useState(14);
+
     const handleCompositionStart = () => {
       setIsComposing(true);
     };
@@ -137,6 +145,39 @@ export default function Joindetail(){
 
         alert('회원가입이 완료되었습니다!');
     };
+
+    const adjustsize1=()=>{
+        if(buttonlabel1==='글자 확대'){
+            setFontSize1(18);
+            setButtonLabel1('글자 축소');
+        }
+        else if(buttonlabel1==='글자 축소'){
+            setFontSize1(14);
+            setButtonLabel1('글자 확대');
+        }
+    }
+
+    const adjustsize2=()=>{
+        if(buttonlabel2==='글자 확대'){
+            setFontSize2(18);
+            setButtonLabel2('글자 축소');
+        }
+        else if(buttonlabel2==='글자 축소'){
+            setFontSize2(14);
+            setButtonLabel2('글자 확대');
+        }
+    }
+
+    const adjustsize3=()=>{
+        if(buttonlabel3==='글자 확대'){
+            setFontSize3(18);
+            setButtonLabel3('글자 축소');
+        }
+        else if(buttonlabel3==='글자 축소'){
+            setFontSize3(14);
+            setButtonLabel3('글자 확대');
+        }
+    }
 
     return <Box w='100vw' minW='1000px'>
             <VStack w='100%'>
@@ -386,12 +427,12 @@ export default function Joindetail(){
                                 </tbody>
                             </table>
 
-                            <Textarea resize="none" id='term1' name='term1' rows='10' readOnly></Textarea>
-                            <Flex justifyContent='flex-end'><input id="agreement1" name="agreement1" type="checkbox" required/><label style={{position:'relative',top:'1px'}} htmlFor="agreement1">&nbsp;&nbsp;[필수] 이용약관에 동의합니다.</label></Flex>
-                            <Textarea resize="none" id='term2' name='term2' rows='10' readOnly></Textarea>
-                            <Flex justifyContent='flex-end'><input id="agreement2" name="agreement2" type="checkbox" required/><label style={{position:'relative',top:'1px'}} htmlFor="agreement2">&nbsp;&nbsp;[필수] 개인정보 수집 및 이용에 동의합니다.</label></Flex>
-                            <Textarea resize="none" id='term3' name='term3' rows='10' readOnly></Textarea>
-                            <Flex justifyContent='flex-end'><input id="agreement3" name="agreement3" type="checkbox"/><label style={{position:'relative',top:'1px'}} htmlFor="agreement3">&nbsp;&nbsp;[선택] 위치기반 서비스 이용약관에 동의합니다.</label></Flex>
+                            <Textarea resize="none" id='term1' name='term1' rows='10' fontSize={fontsize1} readOnly></Textarea>
+                            <Flex justifyContent='space-between'><Button onClick={adjustsize1}>{buttonlabel1}</Button><Flex><input id="agreement1" name="agreement1" type="checkbox" style={{position:'relative',bottom:'10px'}} required/><label htmlFor="agreement1">&nbsp;&nbsp;[필수] 이용약관에 동의합니다.</label></Flex></Flex>
+                            <Textarea resize="none" id='term2' name='term2' rows='10' fontSize={fontsize2} readOnly></Textarea>
+                            <Flex justifyContent='space-between'><Button onClick={adjustsize2}>{buttonlabel2}</Button><Flex><input id="agreement2" name="agreement2" type="checkbox" style={{position:'relative',bottom:'10px'}} required/><label htmlFor="agreement2">&nbsp;&nbsp;[필수] 개인정보 수집 및 이용에 동의합니다.</label></Flex></Flex>
+                            <Textarea resize="none" id='term3' name='term3' rows='10' fontSize={fontsize3} readOnly></Textarea>
+                            <Flex justifyContent='space-between'><Button onClick={adjustsize3}>{buttonlabel3}</Button><Flex><input id="agreement3" name="agreement3" type="checkbox" style={{position:'relative',bottom:'10px'}}/><label htmlFor="agreement3">&nbsp;&nbsp;[선택] 위치기반 서비스 이용약관에 동의합니다.</label></Flex></Flex>
 
                             <Button type="submit" bg='#6B46C1' _hover={{bg:'#553C9A'}}>회원가입</Button>
                         </Flex>

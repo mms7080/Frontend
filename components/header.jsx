@@ -245,6 +245,7 @@ export default function Header({ userInfo }) {
               빠른예매
             </Link>
           </Text>
+          { userInfo?
           <Link href="/mypage" style={{overflow:'visible'}}>
             <Icon
               as={FiUser}
@@ -260,6 +261,8 @@ export default function Header({ userInfo }) {
               }}
             />
           </Link>
+          :<Box w='24px' h='24.25px'></Box>
+          }
         </Flex>
       </Flex>
     </>
