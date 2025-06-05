@@ -58,12 +58,12 @@ const Movie = (userInfo) => {
     
     const searched = searchWord === "" ? filtered :
       filtered.filter((movie) => 
-        movie.title.includes(searchWord) || 
-        movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()) ||
-        movie.description.toLowerCase().includes(searchWord.toLowerCase()) ||
-        movie.genre.toLowerCase().includes(searchWord.toLowerCase()) ||
-        movie.director.toLowerCase().includes(searchWord.toLowerCase()) ||
-        movie.cast.toLowerCase().includes(searchWord.toLowerCase())
+        movie.title.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) || 
+        movie.titleEnglish.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+        movie.description.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+        movie.genre.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+        movie.director.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+        movie.cast.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase())
       );
     
     return searched.sort((a,b) => b.reserveRate - a.reserveRate);
