@@ -502,6 +502,30 @@ export default function AdminDashboard({ userData }) {
         )
       );
 
+      const handleDelete = async (id) => {
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${id}`,
+            {
+              method: "DELETE",
+              credentials: "include",
+            }
+          );
+          if (res.ok) {
+            for(u of users) {
+              if(u && u.likemovies.includes(id))
+                await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${id}`);
+            }
+            setMovies((prev) => prev.filter((m) => m.id !== id));
+          } else {
+            alert("삭제에 실패했습니다.");
+          }
+        } catch {
+          alert("삭제 중 오류 발생");
+        }
+      };
+
       return (
         <div style={{ marginTop: 30 }}>
           {/* 🔍 검색창 + 버튼 */}
@@ -535,6 +559,29 @@ export default function AdminDashboard({ userData }) {
               검색
             </button>
           </div>
+          {/* 영화 등록 버튼 */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginBottom: 20,
+            }}
+          >
+            <button
+              onClick={() => router.push("/movie/upload")}
+              style={{
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                padding: "8px 16px",
+                borderRadius: 8,
+                border: "none",
+                fontSize: 14,
+                cursor: "pointer",
+              }}
+            >
+              + 영화 등록
+            </button>
+          </div>
 
           {/* 영화 카드 목록 */}
           <div
@@ -549,6 +596,7 @@ export default function AdminDashboard({ userData }) {
               <div
                 key={i}
                 style={{
+                  position:"relative",
                   background: "#fff",
                   padding: 20,
                   borderRadius: 16,
@@ -582,6 +630,26 @@ export default function AdminDashboard({ userData }) {
                 <p style={{ fontSize: 13, color: "#888" }}>
                   개봉일: {m.releaseDate}
                 </p>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDelete(m.id);
+                  }}
+                  style={{
+                    position: "absolute",
+                    top: 8,
+                    right: 8,
+                    background: "#e53e3e",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 6,
+                    padding: "4px 8px",
+                    fontSize: 12,
+                    cursor: "pointer",
+                  }}
+                >
+                  삭제
+                </button>
               </div>
             ))}
           </div>
