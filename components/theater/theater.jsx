@@ -114,7 +114,7 @@ const Theater = ({userInfo}) => {
                     return <Box 
                                 key={index} textAlign="center" alignContent="center"
                                 width="15%" height="60px"
-                                backgroundColor={activeTheater.name === theater.name ? "#e2e8f0" : "white"}
+                                backgroundColor={(activeTheater && activeTheater.name === theater.name) ? "#e2e8f0" : "white"}
                                 border="1px solid #e2e8f0" borderRadius="md"
                                 position="relative"
                                 transition="transform 0.2s ease, box-shadow 0.2s ease"
