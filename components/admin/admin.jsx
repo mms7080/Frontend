@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "../../components";
 import SkeletonHeader from "../../components/SkeletonHeader";
@@ -142,6 +142,18 @@ export default function AdminDashboard({ userData }) {
       })
         .then((res) => res.json())
         .then(setReservations);
+      // 유저도 같이 불러오기
+      fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/users`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then(setUsers);
+      //영화
+      fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/movies`, {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then(setMovies);
     }
   }, [selectedSection]);
 
@@ -163,6 +175,22 @@ export default function AdminDashboard({ userData }) {
     { title: "이벤트 관리", key: "이벤트" },
     { title: "매출 관리", key: "매출" },
   ];
+
+  const movieMap = useMemo(() => {
+    const map = {};
+    movies.forEach((m) => {
+      map[m.id] = m.title;
+    });
+    return map;
+  }, [movies]);
+
+  const userMap = useMemo(() => {
+    const map = {};
+    users.forEach((u) => {
+      map[u.id] = `${u.name} (${u.username})`;
+    });
+    return map;
+  }, [users]);
 
   const renderList = () => {
     if (selectedSection === "유저") {
@@ -513,9 +541,11 @@ export default function AdminDashboard({ userData }) {
             }
           );
           if (res.ok) {
-            for(u of users) {
-              if(u && u.likemovies.includes(id))
-                await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${id}`);
+            for (u of users) {
+              if (u && u.likemovies.includes(id))
+                await fetch(
+                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${id}`
+                );
             }
             setMovies((prev) => prev.filter((m) => m.id !== id));
           } else {
@@ -596,7 +626,7 @@ export default function AdminDashboard({ userData }) {
               <div
                 key={i}
                 style={{
-                  position:"relative",
+                  position: "relative",
                   background: "#fff",
                   padding: 20,
                   borderRadius: 16,
@@ -938,8 +968,8 @@ export default function AdminDashboard({ userData }) {
               <thead>
                 <tr style={{ background: "#f1f1f1" }}>
                   <th style={thStyle}>주문번호</th>
-                  <th style={thStyle}>유저ID</th>
-                  <th style={thStyle}>영화ID</th>
+                  <th style={thStyle}>유저</th>
+                  <th style={thStyle}>영화</th>
                   <th style={thStyle}>지역</th>
                   <th style={thStyle}>극장</th>
                   <th style={thStyle}>날짜</th>
@@ -952,8 +982,8 @@ export default function AdminDashboard({ userData }) {
                 {filteredReservations.map((r, idx) => (
                   <tr key={idx}>
                     <td style={tdStyle}>{r.orderId}</td>
-                    <td style={tdStyle}>{r.userId}</td>
-                    <td style={tdStyle}>{r.movieId}</td>
+                    <td style={tdStyle}>{userMap[r.userId] || r.userId}</td>
+                    <td style={tdStyle}>{movieMap[r.movieId] || r.movieId}</td>
                     <td style={tdStyle}>{r.region}</td>
                     <td style={tdStyle}>{r.theater}</td>
                     <td style={tdStyle}>{r.date}</td>
