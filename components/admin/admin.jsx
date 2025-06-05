@@ -212,22 +212,20 @@ const movieMap = useMemo(() => {
 const dynamicMovieStats = useMemo(() => {
   const stats = {};
 
-  // 1. 모든 영화 ID를 먼저 0건으로 초기화
-  movies.forEach((movie) => {
-    stats[movie.id] = 0;
-  });
-
-  // 2. reservations 기반으로 예매 수 누적
+  // 1. 예매 수 카운트 (0 이상)
   reservations.forEach((r) => {
     stats[r.movieId] = (stats[r.movieId] || 0) + 1;
   });
 
-  // 3. { title, reservations } 형태로 변환
-  return Object.entries(stats).map(([movieId, count]) => ({
-    title: movieMap[movieId] || movieId,
-    reservations: count,
-  }));
-}, [reservations, movies, movieMap]);
+  // 2. 예매 수가 1건 이상인 영화만 변환
+  return Object.entries(stats)
+    .filter(([_, count]) => count > 0)
+    .map(([movieId, count]) => ({
+      title: movieMap[movieId] || movieId,
+      reservations: count,
+    }));
+}, [reservations, movieMap]);
+
 
 
 
