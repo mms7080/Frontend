@@ -31,12 +31,12 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     const searchedMovies = searchWord === "" ? movies:
     movies.filter((movie) => {
         return (
-          movie.title.toLowerCase().includes(searchWord.toLowerCase()) ||
-          movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()) ||
-          movie.description.toLowerCase().includes(searchWord.toLowerCase()) ||
-          movie.genre.toLowerCase().includes(searchWord.toLowerCase()) ||
-          movie.director.toLowerCase().includes(searchWord.toLowerCase()) ||
-          movie.cast.toLowerCase().includes(searchWord.toLowerCase())
+          movie.title.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+          movie.titleEnglish.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+          movie.description.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+          movie.genre.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+          movie.director.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+          movie.cast.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase())
         );
     });
     
@@ -84,7 +84,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
         .map(([category, items]) => [
           category,
           items.filter((e) =>
-            e.title.toLowerCase().includes(searchWord.toLowerCase())
+            e.title.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase())
           ),
         ])
         .filter(([_, items]) => items.length > 0);
@@ -119,7 +119,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
 
     const searchedReviews = searchWord === "" ? reviewInfo:reviewInfo/* 검색 키워드를 포함하는 리뷰 추려내기 */
         .filter((review,index)=>{
-            let result=review.content.toLowerCase().includes(searchWord.toLowerCase());
+            let result=review.content.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase());
             let movie;
             for(let i=0;i<movies.length;i++){
                 if(movies[i].id===review.movieid)
@@ -128,12 +128,12 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     break;
                 }
             }
-            return result || movie.title.toLowerCase().includes(searchWord.toLowerCase()) ||
-                movie.titleEnglish.toLowerCase().includes(searchWord.toLowerCase()) ||
-                movie.description.toLowerCase().includes(searchWord.toLowerCase()) ||
-                movie.genre.toLowerCase().includes(searchWord.toLowerCase()) ||
-                movie.director.toLowerCase().includes(searchWord.toLowerCase()) ||
-                movie.cast.toLowerCase().includes(searchWord.toLowerCase());
+            return result || movie.title.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+                movie.titleEnglish.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+                movie.description.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+                movie.genre.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+                movie.director.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase()) ||
+                movie.cast.replace(/\s+/g, '').toLowerCase().includes(searchWord.replace(/\s+/g, '').toLowerCase());
         });
 
     // 리뷰 더보기 버튼
