@@ -13,7 +13,8 @@ export default function CheckoutPage() {
   const params = useSearchParams();
 
   const movieId = parseInt(params.get("movieId"));
-  const movie = movies.find((m) => m.id === movieId);
+//   const movie = movies.find((m) => m.id === movieId);
+const [movie, setMovie] = useState(null);
   const region = params.get("region");
   const theater = params.get("theater");
   const date = params.get("date");
@@ -53,6 +54,28 @@ export default function CheckoutPage() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
+        if (!res.ok) throw new Error('영화 정보를 불러오는 데 실패했습니다.');
+        const data = await res.json();
+  
+        const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
+        const updated = {
+          ...data,
+          poster: baseURL + data.poster,
+          wideImage: data.wideImage ? baseURL + data.wideImage : null,
+        };
+        setMovie(updated);
+      } catch (e) {
+        console.error("영화 정보 로딩 실패", e);
+      }
+    };
+  
+    fetchMovie();
+  }, [movieId]);
 
   const handlePayment = async () => {
     setLoading(true);
@@ -96,6 +119,16 @@ export default function CheckoutPage() {
     }
   };
 
+  if (!movie) {
+    return (
+      <>
+        <Header headerColor="black" headerBg="white" userInfo={user} />
+        <div style={{ color: "white", textAlign: "center", marginTop: "100px" }}>
+          🎬 영화 정보를 불러오는 중입니다...
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -108,7 +141,7 @@ export default function CheckoutPage() {
             <img src={movie.poster} alt={movie.title} />
             <div className="details">
               <strong>{movie.title}</strong>
-              <p>{movie.subtitle}</p>
+              <p>{movie.titleEnglish}</p>
               <p>{theater}</p>
               <p>{date}</p>
               <p>{time}</p>

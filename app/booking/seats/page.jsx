@@ -19,7 +19,8 @@ export default function SeatsPage() {
     const theater = searchParams.get('theater');
     const date = searchParams.get('date');
     const time = searchParams.get('time');
-    const movie = movies.find((m) => m.id === movieId);
+    // const movie = movies.find((m) => m.id === movieId);
+    const [movie, setMovie] = useState(null);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const rows = 9;
     const cols = 12;
@@ -65,6 +66,29 @@ export default function SeatsPage() {
         };
         fetchSeats();
       }, []);
+
+      useEffect(() => {
+        const fetchMovie = async () => {
+          try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
+            if (!res.ok) throw new Error('영화 정보를 불러오는 데 실패했습니다.');
+            const data = await res.json();
+      
+            const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
+            const updated = {
+              ...data,
+              poster: baseURL + data.poster,
+              wideImage: data.wideImage ? baseURL + data.wideImage : null,
+            };
+            setMovie(updated);
+          } catch (e) {
+            console.error("영화 정보 로딩 실패", e);
+          }
+        };
+      
+        fetchMovie();
+      }, [movieId]);
+      
 
     const toggleSeat = (seatId) => {
         if (bookedSeats.includes(seatId)) return; // 예약 완료 좌석 클릭 막기
