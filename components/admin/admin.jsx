@@ -1353,6 +1353,26 @@ const dynamicMovieStats = useMemo(() => {
           v?.replace(/\s+/g, '').toLowerCase().includes(reviewConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
         );
       });
+      const handleReviewDelete = async (id) => {
+  if (!confirm("정말 삭제하시겠습니까?")) return;
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`,
+      {
+        method: "POST",
+        credentials: "include",
+      }
+    );
+    if (res.ok) {
+      setReviews((prev) => prev.filter((r) => r.id !== id));
+    } else {
+      alert("삭제에 실패했습니다.");
+    }
+  } catch {
+    alert("삭제 중 오류 발생");
+  }
+};
+
 
       return (
         <div style={{ marginTop: 40 }}>
@@ -1422,18 +1442,36 @@ const dynamicMovieStats = useMemo(() => {
                   <th style={thStyle}>평점</th>
                   <th style={thStyle}>좋아요</th>
                   <th style={thStyle}>작성일</th>
+                  <th style={thStyle}>관리</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredReviews.map((r, idx) => (
-                  <tr key={idx}>
-                    <td style={tdStyle}>{r.author}</td>
-                    <td style={tdStyle}>{movieMap[r.movieid] || "-"}</td>
-                    <td style={tdStyle}>{r.content}</td>
-                    <td style={tdStyle}>⭐ {r.score}</td>
-                    <td style={tdStyle}>{r.likenumber}</td>
-                    <td style={tdStyle}>{r.writetime}</td>
-                  </tr>
+ <tr key={idx}>
+  <td style={tdStyle}>{r.author}</td>
+  <td style={tdStyle}>{movieMap[r.movieid] || "-"}</td>
+  <td style={tdStyle}>{r.content}</td>
+  <td style={tdStyle}>⭐ {r.score}</td>
+  <td style={tdStyle}>{r.likenumber}</td>
+  <td style={tdStyle}>{r.writetime}</td>
+  <td style={tdStyle}>
+    <button
+      onClick={() => handleReviewDelete(r.id)}
+      style={{
+        background: "#e53e3e",
+        color: "#fff",
+        border: "none",
+        borderRadius: 6,
+        padding: "4px 8px",
+        fontSize: 12,
+        cursor: "pointer",
+      }}
+    >
+      삭제
+    </button>
+  </td>
+</tr>
+
                 ))}
               </tbody>
             </table>
