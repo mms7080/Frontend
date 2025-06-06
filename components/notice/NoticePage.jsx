@@ -38,7 +38,7 @@ export default function NoticePage({ notices, userData }) {
           : searchOption === "title_content"
           ? `${n.title} ${n.content}`
           : "";
-      return target?.toLowerCase().includes(confirmedKeyword.toLowerCase());
+      return target?.replace(/\s+/g, '').toLowerCase().includes(confirmedKeyword.replace(/\s+/g, '').toLowerCase());
     });
     setFiltered(result);
     setCurrentPage(1);
@@ -197,10 +197,41 @@ export default function NoticePage({ notices, userData }) {
             onChange={(e) => setSearchKeyword(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
+                if(searchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+                }
                 setConfirmedKeyword(searchKeyword);
               }
             }}
           />
+          <button
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              padding: "8px 20px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "15px",
+              transition: "all 0.3s",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = "#6B46C1")
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = "black")
+            }
+            onClick={() => {
+              if(searchKeyword.replace(/\s+/g, '')===''){
+                alert('유효한 검색어를 입력해주세요!');
+                return;
+              }
+              setConfirmedKeyword(searchKeyword);
+            }}
+          >
+            검색
+          </button>
         </div>
         {/* 공지사항 테이블 */}
         <table
