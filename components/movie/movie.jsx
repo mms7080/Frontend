@@ -91,7 +91,7 @@ const Movie = (userInfo) => {
     // 영화카드들
     const MovieCards = () => {
         if(searchWord != "" && filteredMovies.length < 1)
-            return <Box w='100%' h='50vh' bg='#1e1e1e' fontSize='4xl' color='white'
+            return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
                         display='flex' alignItems='center' justifyContent='center'>
                     검색 결과가 없습니다
                     </Box>
