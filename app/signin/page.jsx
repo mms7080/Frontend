@@ -1,10 +1,10 @@
 import React from 'react';
-import {Flex,Box,VStack,Input,Button,Image,Text} from '@chakra-ui/react';
+import {Flex,Box,VStack,Image,Text} from '@chakra-ui/react';
 import Link from 'next/link';
 import {Header} from '../../components';
 import {redirect} from 'next/navigation';
 import {fetch} from '../../lib/server';
-import SigninClientAlert from '../../components/signin/SigninClientAlert';
+import Signinpart from '../../components/signin/Signinpart';
 
 export const metadata = {
     title: "로그인",
@@ -19,7 +19,6 @@ export default async function Signin(){
 
     return <>
         <Header></Header>
-        <SigninClientAlert/>
         <Box w='100vw' minW='1000px' h='540px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%'>
@@ -29,16 +28,7 @@ export default async function Signin(){
                             <span style={{color:'#555'}}>&gt;로그인</span>
                         </span>
                         <span style={{fontSize:28,marginBottom:10}}>로그인</span>
-                        <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/signin/logic`} method='post'>
-                            <Flex w='400px' flexDirection='column' gap='15px'>
-                                <Input id="id" name="id" placeholder='아이디' required/>
-                                <Input id="pw" name="pw" type="password" placeholder='비밀번호' required/>
-                                <Flex w='100%' justifyContent='flex-start' fontSize='15px' color='#555'>
-                                    <span><input id="rl" type="checkbox" name="remember-login"/><label htmlFor='rl'>&nbsp;&nbsp;아이디 저장</label></span>
-                                </Flex>
-                                <Button type='submit' fontSize='17px' w='100%' bg='#6B46C1' _hover={{bg:'#553C9A'}} mt='10px'>로그인</Button>
-                            </Flex>
-                        </form>
+                        <Signinpart/>
                         <Flex w='100%' gap='10px' justifyContent='center'>
                             <Link href='/join'>
                                 <Text _hover={{textDecoration:'underline'}}>
