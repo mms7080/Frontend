@@ -23,6 +23,12 @@ export default function NoticePage({ notices, userData }) {
   const itemsPerPage = 5;
   // 로딩 여부 (스켈레톤 표시용)
   const [loadingUser, setLoadingUser] = useState(false);
+  // 검색 버튼 클릭 여부 (클릭 하면 목록버튼 등장)
+  const [searchbutton,setSearchButton]=useState(false);
+
+  useEffect(()=>{
+    if(confirmedKeyword!=='')setSearchButton(true);
+  },[confirmedKeyword])
 
   // 공지 목록 필터링
   useEffect(() => {
@@ -232,6 +238,11 @@ export default function NoticePage({ notices, userData }) {
           >
             검색
           </button>
+          {!searchbutton && (
+            <div style={{width:63.2,height:44.5}}>
+            </div>
+          )}
+          {searchbutton && (
           <button
             style={{
               backgroundColor: "black",
@@ -253,8 +264,8 @@ export default function NoticePage({ notices, userData }) {
               setConfirmedKeyword('');
             }}
           >
-            전체보기
-          </button>
+            목록
+          </button>)}
         </div>
         {/* 공지사항 테이블 */}
         <table

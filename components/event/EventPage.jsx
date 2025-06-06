@@ -4,12 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Box, Flex, Text, Button, Image, SimpleGrid } from "@chakra-ui/react";
 import { Header } from "..";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import SkeletonHeader from "../../components/SkeletonHeader";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -32,10 +27,15 @@ export default function EventPage({ serverEvents, userData }) {
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const router = useRouter();
   const [loadingUser, setLoadingUser] = useState(false);
+  const [searchbutton,setSearchButton]=useState(false);
 
   useEffect(() => {
     document.title = "진행중인 이벤트 - 필모라";
   }, []);
+
+  useEffect(()=>{
+    if(confirmedKeyword!=='')setSearchButton(true);
+  },[confirmedKeyword])  
 
   const getEventStatus = (dateRange) => {
     const now = new Date();
@@ -334,6 +334,7 @@ export default function EventPage({ serverEvents, userData }) {
             검색
           </Button>
 
+          {searchbutton && (
           <Button
             colorScheme="purple"
             onClick={() => {
@@ -342,8 +343,8 @@ export default function EventPage({ serverEvents, userData }) {
             px={6}
             fontWeight="normal"
           >
-            전체보기
-          </Button>
+            목록
+          </Button>)}
         </Box>
 
         <Flex gap={2} borderBottom="1px solid #6B46C1" flexWrap="wrap" mb={10}>
