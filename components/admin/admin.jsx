@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "../../components";
 import SkeletonHeader from "../../components/SkeletonHeader";
@@ -29,8 +29,8 @@ export default function AdminDashboard({ userData }) {
   const [movies, setMovies] = useState([]);
   const [events, setEvents] = useState([]);
   const [payments, setPayments] = useState([]);
-  const [loadingUser, setLoadingUser] = useState(false);
-  const [redirected, setRedirected] = useState(false);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const redirected=useRef(false);
 
   //유저 검색창
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -58,22 +58,17 @@ export default function AdminDashboard({ userData }) {
   const [reviewConfirmedKeyword, setReviewConfirmedKeyword] = useState("");
 
   useEffect(() => {
-    if (loadingUser || redirected) return;
-
-    if (!user) {
-      setRedirected(true);
-      setTimeout(() => {
+    if(!redirected.current){
+      if (!user) {
         alert("로그인 후 이용해주세요.");
         router.push("/signin");
-      }, 0);
-    } else if (user.auth !== "ADMIN") {
-      setRedirected(true);
-      setTimeout(() => {
+      } else if (user.auth !== "ADMIN") {
         alert("접근 권한이 없습니다.");
         router.push("/home");
-      }, 0);
-    }
-  }, [user, loadingUser, redirected]);
+      }
+      redirected.current=true;
+    } 
+  }, [loadingUser]);
 
   useEffect(() => {
     if (userData) {
