@@ -57,7 +57,7 @@ export default function Findpwdetail({userData}){
             setFound(false);
             return;
         }
-        console.log(res);
+
         if(!res) {
             alert('해당하는 사용자 정보가 없습니다.');
             setFound(false);

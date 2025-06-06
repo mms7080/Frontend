@@ -105,7 +105,6 @@ const MovieUploader = ({userInfo}) => {
         
             if (!title || !titleEnglish || !rate || !releaseDate || !description || runningTime < 1 || !genre || !director || !cast || !poster || !wideImage || !stillCut || !trailer) {
                 alert("모든 항목을 입력해주세요.");
-                console.log(form);
                 return;
             }
 
