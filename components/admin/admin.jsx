@@ -62,6 +62,8 @@ export default function AdminDashboard({ userData }) {
   const [reviewConfirmedKeyword, setReviewConfirmedKeyword] = useState("");
   const [currentReviewPage, setCurrentReviewPage] = useState(1);
   const reviewsPerPage = 10;
+  const [sortKey, setSortKey] = useState(null); 
+  const [sortOrder, setSortOrder] = useState("desc"); 
 
   // 매출 관련
   const [payments, setPayments] = useState([]);
@@ -238,7 +240,7 @@ export default function AdminDashboard({ userData }) {
         .then(setMovies);
     }
   }, [selectedSection]);
-  
+
   // 📊 색상 팔레트 (그래프용)
   const colors = ["#4e73df", "#1cc88a", "#36b9cc", "#f6c23e", "#e74a3b"];
 
@@ -1592,190 +1594,211 @@ export default function AdminDashboard({ userData }) {
       );
     }
 
-    if (selectedSection === "리뷰") {
-      const filteredReviews = reviews.filter((r) => {
-        const title = movieMap[r.movieid] || "";
-        return [r.author, r.content, title].some((v) =>
-          v
-            ?.replace(/\s+/g, "")
-            .toLowerCase()
-            .includes(reviewConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
-        );
-      });
+if (selectedSection === "리뷰") {
+  const filteredReviews = reviews.filter((r) => {
+    const title = movieMap[r.movieid] || "";
+    return [r.author, r.content, title].some((v) =>
+      v?.replace(/\s+/g, "")
+        .toLowerCase()
+        .includes(reviewConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
+    );
+  });
 
-      const paginatedReviews = filteredReviews.slice(
-        (currentReviewPage - 1) * reviewsPerPage,
-        currentReviewPage * reviewsPerPage
-      );
+  const sortedReviews = [...filteredReviews];
+  if (sortKey) {
+    sortedReviews.sort((a, b) => {
+      const aVal = a[sortKey] ?? 0;
+      const bVal = b[sortKey] ?? 0;
+      return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+    });
+  }
 
-      const handleReviewDelete = async (id) => {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`,
-            {
-              method: "POST",
-              credentials: "include",
-            }
-          );
-          if (res.ok) {
-            setReviews((prev) => prev.filter((r) => r.id !== id));
-          } else {
-            alert("삭제에 실패했습니다.");
-          }
-        } catch {
-          alert("삭제 중 오류 발생");
+  const paginatedReviews = sortedReviews.slice(
+    (currentReviewPage - 1) * reviewsPerPage,
+    currentReviewPage * reviewsPerPage
+  );
+
+  const handleReviewDelete = async (id) => {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`,
+        {
+          method: "POST",
+          credentials: "include",
         }
-      };
-
-      return (
-        <div style={{ marginTop: 40 }}>
-          {/* 검색창 */}
-          <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
-            <input
-              type="text"
-              placeholder="작성자/내용/영화제목 검색"
-              value={reviewSearchKeyword}
-              onChange={(e) => setReviewSearchKeyword(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  if (reviewSearchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
-                    return;
-                  }
-                  setReviewConfirmedKeyword(reviewSearchKeyword);
-                  setCurrentReviewPage(1);
-                }
-              }}
-              style={{
-                width: 300,
-                padding: "8px 12px",
-                fontSize: 14,
-                borderRadius: 6,
-                border: "1px solid #ccc",
-                backgroundColor: "#fff",
-              }}
-            />
-            <button
-              onClick={() => {
-                if (reviewSearchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
-                  return;
-                }
-                setReviewConfirmedKeyword(reviewSearchKeyword);
-                setCurrentReviewPage(1);
-              }}
-              style={{
-                padding: "8px 16px",
-                fontSize: 14,
-                backgroundColor: "#6B46C1",
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer",
-              }}
-            >
-              검색
-            </button>
-
-            <button
-              onClick={() => {
-                setReviewConfirmedKeyword("");
-                setCurrentReviewPage(1);
-              }}
-              style={{
-                padding: "8px 16px",
-                fontSize: 14,
-                backgroundColor: "#6B46C1",
-                color: "#fff",
-                border: "none",
-                borderRadius: 6,
-                cursor: "pointer",
-              }}
-            >
-              전체보기
-            </button>
-          </div>
-
-          {/* 표 형식 리스트 */}
-          <div
-            style={{
-              background: "#fff",
-              borderRadius: 10,
-              padding: 20,
-              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-            }}
-          >
-            <h3 style={{ fontSize: 18, marginBottom: 16 }}>💬 리뷰 목록</h3>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr style={{ background: "#f1f1f1" }}>
-                  <th style={thStyle}>작성자</th>
-                  <th style={thStyle}>영화 제목</th>
-                  <th style={thStyle}>내용</th>
-                  <th style={thStyle}>평점</th>
-                  <th style={thStyle}>좋아요</th>
-                  <th style={thStyle}>작성일</th>
-                  <th style={thStyle}>관리</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedReviews.map((r, idx) => (
-                  <tr key={idx}>
-                    <td style={tdStyle}>{r.author}</td>
-                    <td style={tdStyle}>{movieMap[r.movieid] || "-"}</td>
-                    <td style={tdStyle}>{r.content}</td>
-                    <td style={tdStyle}>⭐ {r.score}</td>
-                    <td style={tdStyle}>{r.likenumber}</td>
-                    <td style={tdStyle}>{r.writetime}</td>
-                    <td style={tdStyle}>
-                      <button
-                        onClick={() => handleReviewDelete(r.id)}
-                        style={{
-                          background: "#e53e3e",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: 6,
-                          padding: "4px 8px",
-                          fontSize: 12,
-                          cursor: "pointer",
-                        }}
-                      >
-                        삭제
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            {/* 페이지네이션 */}
-            <div style={{ marginTop: 20, textAlign: "center" }}>
-              {Array.from({
-                length: Math.ceil(filteredReviews.length / reviewsPerPage),
-              }).map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setCurrentReviewPage(idx + 1)}
-                  style={{
-                    margin: "0 5px",
-                    padding: "6px 12px",
-                    backgroundColor:
-                      currentReviewPage === idx + 1 ? "#6B46C1" : "#eee",
-                    color: currentReviewPage === idx + 1 ? "#fff" : "#333",
-                    border: "none",
-                    borderRadius: 4,
-                    cursor: "pointer",
-                  }}
-                >
-                  {idx + 1}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
       );
+      if (res.ok) {
+        setReviews((prev) => prev.filter((r) => r.id !== id));
+      } else {
+        alert("삭제에 실패했습니다.");
+      }
+    } catch {
+      alert("삭제 중 오류 발생");
     }
+  };
+
+  const handleSort = (key) => {
+    if (sortKey === key) {
+      setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortOrder("desc");
+    }
+  };
+
+  return (
+    <div style={{ marginTop: 40 }}>
+      {/* 검색창 */}
+      <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
+        <input
+          type="text"
+          placeholder="작성자/내용/영화제목 검색"
+          value={reviewSearchKeyword}
+          onChange={(e) => setReviewSearchKeyword(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              if (reviewSearchKeyword.replace(/\s+/g, "") === "") {
+                alert("유효한 검색어를 입력해주세요!");
+                return;
+              }
+              setReviewConfirmedKeyword(reviewSearchKeyword);
+              setCurrentReviewPage(1);
+            }
+          }}
+          style={{
+            width: 300,
+            padding: "8px 12px",
+            fontSize: 14,
+            borderRadius: 6,
+            border: "1px solid #ccc",
+            backgroundColor: "#fff",
+          }}
+        />
+        <button
+          onClick={() => {
+            if (reviewSearchKeyword.replace(/\s+/g, "") === "") {
+              alert("유효한 검색어를 입력해주세요!");
+              return;
+            }
+            setReviewConfirmedKeyword(reviewSearchKeyword);
+            setCurrentReviewPage(1);
+          }}
+          style={{
+            padding: "8px 16px",
+            fontSize: 14,
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          검색
+        </button>
+
+        <button
+          onClick={() => {
+            setReviewConfirmedKeyword("");
+            setCurrentReviewPage(1);
+          }}
+          style={{
+            padding: "8px 16px",
+            fontSize: 14,
+            backgroundColor: "#6B46C1",
+            color: "#fff",
+            border: "none",
+            borderRadius: 6,
+            cursor: "pointer",
+          }}
+        >
+          전체보기
+        </button>
+      </div>
+
+      {/* 표 형식 리스트 */}
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 10,
+          padding: 20,
+          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h3 style={{ fontSize: 18, marginBottom: 16 }}>💬 리뷰 목록</h3>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ background: "#f1f1f1" }}>
+              <th style={thStyle}>작성자</th>
+              <th style={thStyle}>영화 제목</th>
+              <th style={thStyle}>내용</th>
+              <th style={thStyle} onClick={() => handleSort("score")}>
+                평점 {sortKey === "score" ? (sortOrder === "asc" ? "🔼" : "🔽") : ""}
+              </th>
+              <th style={thStyle} onClick={() => handleSort("likenumber")}>
+                좋아요 {sortKey === "likenumber" ? (sortOrder === "asc" ? "🔼" : "🔽") : ""}
+              </th>
+              <th style={thStyle}>작성일</th>
+              <th style={thStyle}>관리</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paginatedReviews.map((r, idx) => (
+              <tr key={idx}>
+                <td style={tdStyle}>{r.author}</td>
+                <td style={tdStyle}>{movieMap[r.movieid] || "-"}</td>
+                <td style={tdStyle}>{r.content}</td>
+                <td style={tdStyle}>⭐ {r.score}</td>
+                <td style={tdStyle}>{r.likenumber}</td>
+                <td style={tdStyle}>{r.writetime}</td>
+                <td style={tdStyle}>
+                  <button
+                    onClick={() => handleReviewDelete(r.id)}
+                    style={{
+                      background: "#e53e3e",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: 6,
+                      padding: "4px 8px",
+                      fontSize: 12,
+                      cursor: "pointer",
+                    }}
+                  >
+                    삭제
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* 페이지네이션 */}
+        <div style={{ marginTop: 20, textAlign: "center" }}>
+          {Array.from({
+            length: Math.ceil(filteredReviews.length / reviewsPerPage),
+          }).map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentReviewPage(idx + 1)}
+              style={{
+                margin: "0 5px",
+                padding: "6px 12px",
+                backgroundColor:
+                  currentReviewPage === idx + 1 ? "#6B46C1" : "#eee",
+                color: currentReviewPage === idx + 1 ? "#fff" : "#333",
+                border: "none",
+                borderRadius: 4,
+                cursor: "pointer",
+              }}
+            >
+              {idx + 1}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
     return null;
   };
@@ -1907,13 +1930,14 @@ const SummaryCard = ({ title, value, icon, onClick }) => (
 
 const thStyle = {
   padding: "10px",
-  borderBottom: "1px solid #ccc",
+  borderBottom: "1px solid #ddd",
   textAlign: "left",
-  fontWeight: "bold",
+  cursor: "pointer",
 };
 
 const tdStyle = {
-  padding: "8px",
+  padding: "10px",
   borderBottom: "1px solid #eee",
-  fontSize: 14,
 };
+
+
