@@ -213,6 +213,15 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                                 marginLeft={4} px={6} bg="#1e1e1e"
                                 border="1px solid gray" 
                                 _hover={{borderColor : "white"}}
+                                onClick={()=>setSearchWord('')}
+                                transform="translate(0, 1px)"
+                            >
+                            전체보기
+                            </Button>
+                            <Button
+                                marginLeft={4} px={6} bg="#1e1e1e"
+                                border="1px solid gray" 
+                                _hover={{borderColor : "white"}}
                                 transform="translate(0, 1px)"
                             >
                                 <Link href='/home'>

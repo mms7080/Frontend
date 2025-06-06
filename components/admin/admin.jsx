@@ -318,6 +318,22 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
+            <button
+              onClick={() => {
+                setConfirmedKeyword('');
+              }}
+              style={{
+                padding: "8px 16px",
+                fontSize: 14,
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                cursor: "pointer",
+              }}
+            >
+              전체보기
+            </button>
           </div>
 
           {/* 유저 카드 목록 */}
@@ -464,6 +480,23 @@ export default function AdminDashboard({ userData }) {
               }}
             >
               검색
+            </button>
+
+            <button
+              onClick={() => {
+                setStoreConfirmedKeyword('');
+              }}
+              style={{
+                padding: "8px 16px",
+                fontSize: 14,
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                cursor: "pointer",
+              }}
+            >
+              전체보기
             </button>
           </div>
 
@@ -720,6 +753,22 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
+            <button
+              onClick={() => {
+                setMovieConfirmedKeyword('');
+              }}
+              style={{
+                padding: "8px 16px",
+                fontSize: 14,
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                cursor: "pointer",
+              }}
+            >
+              전체보기
+            </button>
           </div>
           {/* 영화 등록 버튼 */}
           <div
@@ -911,6 +960,23 @@ export default function AdminDashboard({ userData }) {
               }}
             >
               검색
+            </button>
+
+            <button
+              onClick={() => {
+                setEventConfirmedKeyword('');
+              }}
+              style={{
+                padding: "8px 16px",
+                fontSize: 14,
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                cursor: "pointer",
+              }}
+            >
+              전체보기
             </button>
           </div>
 
@@ -1122,6 +1188,23 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
+
+            <button
+              onClick={() => {
+                setReservationConfirmedKeyword('');
+              }}
+              style={{
+                padding: "8px 16px",
+                fontSize: 14,
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                cursor: "pointer",
+              }}
+            >
+              전체보기
+            </button>
           </div>
 
           {/* 🎟️ 영화별 예매 차트 - 여기로 이동 */}
@@ -1269,6 +1352,22 @@ export default function AdminDashboard({ userData }) {
               }}
             >
               검색
+            </button>
+            <button
+              onClick={() => {
+                setPaymentConfirmedKeyword('');
+              }}
+              style={{
+                padding: "8px 16px",
+                fontSize: 14,
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                cursor: "pointer",
+              }}
+            >
+              전체보기
             </button>
           </div>
 
@@ -1459,6 +1558,23 @@ export default function AdminDashboard({ userData }) {
               }}
             >
               검색
+            </button>
+
+            <button
+              onClick={() => {
+                setReviewConfirmedKeyword('');
+              }}
+              style={{
+                padding: "8px 16px",
+                fontSize: 14,
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                cursor: "pointer",
+              }}
+            >
+              전체보기
             </button>
           </div>
 

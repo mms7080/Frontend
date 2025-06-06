@@ -232,6 +232,29 @@ export default function NoticePage({ notices, userData }) {
           >
             검색
           </button>
+          <button
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              padding: "8px 20px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "15px",
+              transition: "all 0.3s",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = "#6B46C1")
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = "black")
+            }
+            onClick={() => {
+              setConfirmedKeyword('');
+            }}
+          >
+            전체보기
+          </button>
         </div>
         {/* 공지사항 테이블 */}
         <table

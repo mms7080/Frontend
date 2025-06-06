@@ -333,6 +333,17 @@ export default function EventPage({ serverEvents, userData }) {
           >
             검색
           </Button>
+
+          <Button
+            colorScheme="purple"
+            onClick={() => {
+              setConfirmedKeyword('');
+            }}
+            px={6}
+            fontWeight="normal"
+          >
+            전체보기
+          </Button>
         </Box>
 
         <Flex gap={2} borderBottom="1px solid #6B46C1" flexWrap="wrap" mb={10}>
