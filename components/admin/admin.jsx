@@ -16,79 +16,64 @@ import {
 
 export default function AdminDashboard({ userData }) {
   const router = useRouter();
-  const [user, setUser] = useState(userData);
-  const [selectedSection, setSelectedSection] = useState(null);
-  const [userCount, setUserCount] = useState(0);
-  const [storeCount, setStoreCount] = useState(0);
-  const [movieCount, setMovieCount] = useState(0);
-  const [eventCount, setEventCount] = useState(0);
-  const [reviewCount, setReviewCount] = useState(0);
-  const [reservationCount, setReservationCount] = useState(0);
-  const [users, setUsers] = useState([]);
-  const [products, setProducts] = useState([]);
-  const [movies, setMovies] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [payments, setPayments] = useState([]);
-  const [loadingUser, setLoadingUser] = useState(true);
-  const redirected=useRef(false);
+  const redirected = useRef(false);
 
-  //유저 검색창
+  // 유저 관련
+  const [user, setUser] = useState(userData);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [users, setUsers] = useState([]);
+  const [userCount, setUserCount] = useState(0);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
-  //이벤트 검색창
-  const [eventSearchKeyword, setEventSearchKeyword] = useState("");
-  const [eventConfirmedKeyword, setEventConfirmedKeyword] = useState("");
-  //영화 검색창
+  const usersPerPage = 10;
+  const [currentUserPage, setCurrentUserPage] = useState(1);
+
+  // 영화 관련
+  const [movies, setMovies] = useState([]);
+  const [movieCount, setMovieCount] = useState(0);
   const [movieSearchKeyword, setMovieSearchKeyword] = useState("");
   const [movieConfirmedKeyword, setMovieConfirmedKeyword] = useState("");
-  //스토어 검색창
+
+  // 스토어 관련
+  const [products, setProducts] = useState([]);
+  const [storeCount, setStoreCount] = useState(0);
   const [storeSearchKeyword, setStoreSearchKeyword] = useState("");
   const [storeConfirmedKeyword, setStoreConfirmedKeyword] = useState("");
-  //매출 검색창
-  const [paymentSearchKeyword, setPaymentSearchKeyword] = useState("");
-  const [paymentConfirmedKeyword, setPaymentConfirmedKeyword] = useState("");
-  //예매
+
+  // 이벤트 관련
+  const [events, setEvents] = useState([]);
+  const [eventCount, setEventCount] = useState(0);
+  const [eventSearchKeyword, setEventSearchKeyword] = useState("");
+  const [eventConfirmedKeyword, setEventConfirmedKeyword] = useState("");
+
+  // 예매 관련
   const [reservations, setReservations] = useState([]);
+  const [reservationCount, setReservationCount] = useState(0);
   const [reservationSearchKeyword, setReservationSearchKeyword] = useState("");
   const [reservationConfirmedKeyword, setReservationConfirmedKeyword] =
     useState("");
-  //리뷰
+  const reservationsPerPage = 10;
+  const [currentReservationPage, setCurrentReservationPage] = useState(1);
+
+  // 리뷰 관련
   const [reviews, setReviews] = useState([]);
+  const [reviewCount, setReviewCount] = useState(0);
   const [reviewSearchKeyword, setReviewSearchKeyword] = useState("");
   const [reviewConfirmedKeyword, setReviewConfirmedKeyword] = useState("");
+  const [currentReviewPage, setCurrentReviewPage] = useState(1);
+  const reviewsPerPage = 10;
 
-  const [userbutton,setUserButton]=useState(false);
-  const [eventbutton,setEventButton]=useState(false);
-  const [moviebutton,setMovieButton]=useState(false);
-  const [storebutton,setStoreButton]=useState(false);
-  const [paymentbutton,setPaymentButton]=useState(false);
-  const [reviewbutton,setReviewButton]=useState(false);
-  const [reservationbutton,setReservationButton]=useState(false);
+  // 매출 관련
+  const [payments, setPayments] = useState([]);
+  const [paymentSearchKeyword, setPaymentSearchKeyword] = useState("");
+  const [paymentConfirmedKeyword, setPaymentConfirmedKeyword] = useState("");
+  const paymentsPerPage = 10;
+  const [currentPaymentPage, setCurrentPaymentPage] = useState(1);
+  const [selectedSection, setSelectedSection] = useState(null);
 
-  useEffect(()=>{
-    if(confirmedKeyword!=='')setUserButton(true);
-  },[confirmedKeyword]);
-  useEffect(()=>{
-    if(eventConfirmedKeyword!=='')setEventButton(true);
-  },[eventConfirmedKeyword]);
-  useEffect(()=>{
-    if(movieConfirmedKeyword!=='')setMovieButton(true);
-  },[movieConfirmedKeyword]);
-  useEffect(()=>{
-    if(storeConfirmedKeyword!=='')setStoreButton(true);
-  },[storeConfirmedKeyword]);
-  useEffect(()=>{
-    if(paymentConfirmedKeyword!=='')setPaymentButton(true);
-  },[paymentConfirmedKeyword]);
-  useEffect(()=>{
-    if(reviewConfirmedKeyword!=='')setReviewButton(true);
-  },[reviewConfirmedKeyword]);
-  useEffect(()=>{
-    if(reservationConfirmedKeyword!=='')setReservationButton(true);
-  },[reservationConfirmedKeyword]);
-
+  // ✅ 로그인 여부 및 권한 확인 → 관리자가 아니면 리다이렉트
   useEffect(() => {
-    if(!redirected.current){
+    if (!redirected.current) {
       if (!user) {
         alert("로그인 후 이용해주세요.");
         router.push("/signin");
@@ -96,10 +81,11 @@ export default function AdminDashboard({ userData }) {
         alert("접근 권한이 없습니다.");
         router.push("/home");
       }
-      redirected.current=true;
-    } 
+      redirected.current = true;
+    }
   }, [loadingUser]);
 
+  // ✅ props로 받은 userData를 상태로 설정
   useEffect(() => {
     if (userData) {
       setUser(userData);
@@ -107,6 +93,7 @@ export default function AdminDashboard({ userData }) {
     }
   }, [userData]);
 
+  // ✅ 관리자 대시보드 상단 요약 카드에서 사용할 개수 데이터들 불러오기
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/user-count`, {
       credentials: "include",
@@ -119,16 +106,19 @@ export default function AdminDashboard({ userData }) {
     })
       .then((res) => res.json())
       .then(setStoreCount);
+
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/movie-count`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then(setMovieCount);
+
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/event-count`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then(setEventCount);
+
     fetch(
       `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reservation-count`,
       {
@@ -137,17 +127,19 @@ export default function AdminDashboard({ userData }) {
     )
       .then((res) => res.json())
       .then(setReservationCount);
+
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/review-count`, {
       credentials: "include",
     })
       .then((res) => res.json())
       .then((count) => {
         setReviewCount(count);
-        // setDummyStats((prev) => ({ ...prev, reviews: count }));
       });
   }, []);
 
+  // ✅ 관리 섹션 변경 시 필요한 데이터 fetch + 검색어 상태 초기화
   useEffect(() => {
+    // 🔄 검색 키워드 초기화
     setSearchKeyword("");
     setStoreSearchKeyword("");
     setMovieSearchKeyword("");
@@ -156,6 +148,7 @@ export default function AdminDashboard({ userData }) {
     setPaymentSearchKeyword("");
     setReviewSearchKeyword("");
 
+    // 🔄 검색 확정 키워드 초기화
     setConfirmedKeyword("");
     setStoreConfirmedKeyword("");
     setMovieConfirmedKeyword("");
@@ -164,14 +157,7 @@ export default function AdminDashboard({ userData }) {
     setPaymentConfirmedKeyword("");
     setReviewConfirmedKeyword("");
 
-    setUserButton(false);
-    setEventButton(false);
-    setMovieButton(false);
-    setStoreButton(false);
-    setPaymentButton(false);
-    setReviewButton(false);
-    setReservationButton(false);
-
+    // 👥 유저 목록
     if (selectedSection === "유저") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/users`, {
         credentials: "include",
@@ -179,6 +165,8 @@ export default function AdminDashboard({ userData }) {
         .then((res) => res.json())
         .then(setUsers);
     }
+
+    // 🛒 스토어 상품 목록
     if (selectedSection === "스토어") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/store`, {
         credentials: "include",
@@ -186,6 +174,8 @@ export default function AdminDashboard({ userData }) {
         .then((res) => res.json())
         .then(setProducts);
     }
+
+    // 🎬 영화 목록
     if (selectedSection === "영화") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/movies`, {
         credentials: "include",
@@ -193,6 +183,8 @@ export default function AdminDashboard({ userData }) {
         .then((res) => res.json())
         .then(setMovies);
     }
+
+    // 🎉 이벤트 목록
     if (selectedSection === "이벤트") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/events`, {
         credentials: "include",
@@ -200,6 +192,8 @@ export default function AdminDashboard({ userData }) {
         .then((res) => res.json())
         .then(setEvents);
     }
+
+    // 💰 매출 내역
     if (selectedSection === "매출") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`, {
         credentials: "include",
@@ -207,19 +201,21 @@ export default function AdminDashboard({ userData }) {
         .then((res) => res.json())
         .then(setPayments);
     }
+
+    // 🎟️ 예매 내역 + 유저/영화 정보
     if (selectedSection === "예매") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reservations`, {
         credentials: "include",
       })
         .then((res) => res.json())
         .then(setReservations);
-      // 유저도 같이 불러오기
+
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/users`, {
         credentials: "include",
       })
         .then((res) => res.json())
         .then(setUsers);
-      //영화
+
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/movies`, {
         credentials: "include",
       })
@@ -227,7 +223,7 @@ export default function AdminDashboard({ userData }) {
         .then(setMovies);
     }
 
-    //리뷰
+    // 💬 리뷰 목록 + 영화 정보
     if (selectedSection === "리뷰") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reviews`, {
         credentials: "include",
@@ -235,7 +231,6 @@ export default function AdminDashboard({ userData }) {
         .then((res) => res.json())
         .then(setReviews);
 
-      // 영화 정보도 같이 불러오기 (리뷰에 영화 제목 쓰려면)
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/movies`, {
         credentials: "include",
       })
@@ -243,17 +238,11 @@ export default function AdminDashboard({ userData }) {
         .then(setMovies);
     }
   }, [selectedSection]);
-
-  const movieStats = [
-    { title: "파묘", reservations: 540 },
-    { title: "범죄도시4", reservations: 430 },
-    { title: "쿵푸팬더4", reservations: 310 },
-    { title: "듄2", reservations: 220 },
-    { title: "고질라x콩", reservations: 180 },
-  ];
-
+  
+  // 📊 색상 팔레트 (그래프용)
   const colors = ["#4e73df", "#1cc88a", "#36b9cc", "#f6c23e", "#e74a3b"];
 
+  // 🧭 사이드 메뉴 항목 리스트
   const managementSections = [
     { title: "유저 관리", key: "유저" },
     { title: "스토어 관리", key: "스토어" },
@@ -264,7 +253,7 @@ export default function AdminDashboard({ userData }) {
     { title: "매출 관리", key: "매출" },
   ];
 
-  // 영화 ID -> 영화 제목으로 변환하는 매핑 객체
+  // 📌 영화 ID → 영화 제목으로 매핑 (그래프나 표에 표시할 때 사용)
   const movieMap = useMemo(() => {
     const map = {};
     movies.forEach((m) => {
@@ -273,15 +262,13 @@ export default function AdminDashboard({ userData }) {
     return map;
   }, [movies]);
 
+  // 📊 예매 정보로부터 동적으로 영화별 예매 수 통계 생성 (BarChart에 사용)
   const dynamicMovieStats = useMemo(() => {
     const stats = {};
-
-    // 1. 예매 수 카운트 (0 이상)
     reservations.forEach((r) => {
       stats[r.movieId] = (stats[r.movieId] || 0) + 1;
     });
 
-    // 2. 예매 수가 1건 이상인 영화만 변환
     return Object.entries(stats)
       .filter(([_, count]) => count > 0)
       .map(([movieId, count]) => ({
@@ -290,6 +277,7 @@ export default function AdminDashboard({ userData }) {
       }));
   }, [reservations, movieMap]);
 
+  // 🧑 유저 ID → 유저 이름(아이디) 매핑 (예매 등에서 유저 표시할 때 사용)
   const userMap = useMemo(() => {
     const map = {};
     users.forEach((u) => {
@@ -309,6 +297,11 @@ export default function AdminDashboard({ userData }) {
         )
       );
 
+      const paginatedUsers = filteredUsers.slice(
+        (currentUserPage - 1) * usersPerPage,
+        currentUserPage * usersPerPage
+      );
+
       return (
         <div style={{ marginTop: 30 }}>
           {/* 🔍 검색창 + 버튼 */}
@@ -325,6 +318,7 @@ export default function AdminDashboard({ userData }) {
                     return;
                   }
                   setConfirmedKeyword(searchKeyword);
+                  setCurrentUserPage(1);
                 }
               }}
               style={{
@@ -333,7 +327,7 @@ export default function AdminDashboard({ userData }) {
                 fontSize: 14,
                 borderRadius: 6,
                 border: "1px solid #ccc",
-                backgroundColor: "#fff", // ✅ 흰 배경
+                backgroundColor: "#fff",
               }}
             />
             <button
@@ -343,6 +337,7 @@ export default function AdminDashboard({ userData }) {
                   return;
                 }
                 setConfirmedKeyword(searchKeyword);
+                setCurrentUserPage(1);
               }}
               style={{
                 padding: "8px 16px",
@@ -356,10 +351,10 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-            {userbutton && (
-              <button
+            <button
               onClick={() => {
-                setConfirmedKeyword('');
+                setConfirmedKeyword("");
+                setCurrentUserPage(1);
               }}
               style={{
                 padding: "8px 16px",
@@ -371,59 +366,68 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              목록
+              전체보기
             </button>
-            )}
-            
           </div>
 
-          {/* 유저 카드 목록 */}
+          {/* 📋 유저 목록 테이블 */}
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 24,
-              paddingBottom: 40,
+              background: "#fff",
+              borderRadius: 10,
+              padding: 20,
+              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
             }}
           >
-            {filteredUsers.map((u, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "#fff",
-                  padding: 20,
-                  borderRadius: 16,
-                  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                  transition: "transform 0.2s, box-shadow 0.2s",
-                  cursor: "default",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                  e.currentTarget.style.boxShadow =
-                    "0 4px 12px rgba(0,0,0,0.1)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow =
-                    "0 2px 8px rgba(0,0,0,0.05)";
-                }}
-              >
-                <h3
-                  style={{ fontSize: 18, fontWeight: "600", marginBottom: 10 }}
+            <h3 style={{ fontSize: 18, marginBottom: 16 }}>📋 유저 목록</h3>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ background: "#f1f1f1" }}>
+                  <th style={thStyle}>이름</th>
+                  <th style={thStyle}>아이디</th>
+                  <th style={thStyle}>이메일</th>
+                  <th style={thStyle}>전화번호</th>
+                  <th style={thStyle}>가입일</th>
+                  <th style={thStyle}>권한</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedUsers.map((u, i) => (
+                  <tr key={i}>
+                    <td style={tdStyle}>{u.name}</td>
+                    <td style={tdStyle}>{u.username}</td>
+                    <td style={tdStyle}>{u.email}</td>
+                    <td style={tdStyle}>{u.phone}</td>
+                    <td style={tdStyle}>{u.joinDate || "-"}</td>
+                    <td style={tdStyle}>{u.auth || "USER"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* ✅ 페이지네이션 */}
+            <div style={{ marginTop: 20, textAlign: "center" }}>
+              {Array.from({
+                length: Math.ceil(filteredUsers.length / usersPerPage),
+              }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentUserPage(idx + 1)}
+                  style={{
+                    margin: "0 5px",
+                    padding: "6px 12px",
+                    backgroundColor:
+                      currentUserPage === idx + 1 ? "#6B46C1" : "#eee",
+                    color: currentUserPage === idx + 1 ? "#fff" : "#333",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
                 >
-                  {u.name}
-                </h3>
-                <p style={{ fontSize: 14, color: "#444", marginBottom: 6 }}>
-                  <strong>ID:</strong> {u.username}
-                </p>
-                <p style={{ fontSize: 14, color: "#666", marginBottom: 6 }}>
-                  <strong>Email:</strong> {u.email}
-                </p>
-                <p style={{ fontSize: 14, color: "#666" }}>
-                  <strong>Phone:</strong> {u.phone}
-                </p>
-              </div>
-            ))}
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       );
@@ -522,10 +526,10 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-              {storebutton && (
+
             <button
               onClick={() => {
-                setStoreConfirmedKeyword('');
+                setStoreConfirmedKeyword("");
               }}
               style={{
                 padding: "8px 16px",
@@ -537,8 +541,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              목록
-            </button>)}
+              전체보기
+            </button>
           </div>
 
           {/* 스토어 등록 버튼 */}
@@ -794,10 +798,9 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-            {moviebutton &&(
             <button
               onClick={() => {
-                setMovieConfirmedKeyword('');
+                setMovieConfirmedKeyword("");
               }}
               style={{
                 padding: "8px 16px",
@@ -809,8 +812,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              목록
-            </button>)}
+              전체보기
+            </button>
           </div>
           {/* 영화 등록 버튼 */}
           <div
@@ -1003,10 +1006,10 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-              {eventbutton && (
+
             <button
               onClick={() => {
-                setEventConfirmedKeyword('');
+                setEventConfirmedKeyword("");
               }}
               style={{
                 padding: "8px 16px",
@@ -1018,8 +1021,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              목록
-            </button>)}
+              전체보기
+            </button>
           </div>
 
           <div
@@ -1183,6 +1186,11 @@ export default function AdminDashboard({ userData }) {
         )
       );
 
+      const paginatedReservations = filteredReservations.slice(
+        (currentReservationPage - 1) * reservationsPerPage,
+        currentReservationPage * reservationsPerPage
+      );
+
       return (
         <div style={{ marginTop: 40 }}>
           {/* 🔍 검색창 */}
@@ -1199,6 +1207,7 @@ export default function AdminDashboard({ userData }) {
                     return;
                   }
                   setReservationConfirmedKeyword(reservationSearchKeyword);
+                  setCurrentReservationPage(1); // 검색 시 첫 페이지로 이동
                 }
               }}
               style={{
@@ -1217,6 +1226,7 @@ export default function AdminDashboard({ userData }) {
                   return;
                 }
                 setReservationConfirmedKeyword(reservationSearchKeyword);
+                setCurrentReservationPage(1);
               }}
               style={{
                 padding: "8px 16px",
@@ -1230,10 +1240,10 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-              {reservationbutton && (
             <button
               onClick={() => {
-                setReservationConfirmedKeyword('');
+                setReservationConfirmedKeyword("");
+                setCurrentReservationPage(1);
               }}
               style={{
                 padding: "8px 16px",
@@ -1245,11 +1255,11 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              목록
-            </button>)}
+              전체보기
+            </button>
           </div>
 
-          {/* 🎟️ 영화별 예매 차트 - 여기로 이동 */}
+          {/* 🎟️ 영화별 예매 차트 */}
           <section
             style={{
               background: "white",
@@ -1304,7 +1314,7 @@ export default function AdminDashboard({ userData }) {
                 </tr>
               </thead>
               <tbody>
-                {filteredReservations.map((r, idx) => (
+                {paginatedReservations.map((r, idx) => (
                   <tr key={idx}>
                     <td style={tdStyle}>{r.orderId}</td>
                     <td style={tdStyle}>{userMap[r.userId] || r.userId}</td>
@@ -1321,6 +1331,32 @@ export default function AdminDashboard({ userData }) {
                 ))}
               </tbody>
             </table>
+
+            {/* ✅ 페이지네이션 */}
+            <div style={{ marginTop: 20, textAlign: "center" }}>
+              {Array.from({
+                length: Math.ceil(
+                  filteredReservations.length / reservationsPerPage
+                ),
+              }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentReservationPage(idx + 1)}
+                  style={{
+                    margin: "0 5px",
+                    padding: "6px 12px",
+                    backgroundColor:
+                      currentReservationPage === idx + 1 ? "#6B46C1" : "#eee",
+                    color: currentReservationPage === idx + 1 ? "#fff" : "#333",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       );
@@ -1334,6 +1370,11 @@ export default function AdminDashboard({ userData }) {
             .toLowerCase()
             .includes(paymentConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
         )
+      );
+
+      const paginatedPayments = filteredPayments.slice(
+        (currentPaymentPage - 1) * paymentsPerPage,
+        currentPaymentPage * paymentsPerPage
       );
 
       const salesByProduct = filteredPayments.reduce((acc, cur) => {
@@ -1364,6 +1405,7 @@ export default function AdminDashboard({ userData }) {
                     return;
                   }
                   setPaymentConfirmedKeyword(paymentSearchKeyword);
+                  setCurrentPaymentPage(1); // 검색 시 페이지 초기화
                 }
               }}
               style={{
@@ -1382,6 +1424,7 @@ export default function AdminDashboard({ userData }) {
                   return;
                 }
                 setPaymentConfirmedKeyword(paymentSearchKeyword);
+                setCurrentPaymentPage(1);
               }}
               style={{
                 padding: "8px 16px",
@@ -1395,10 +1438,10 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-            {paymentbutton && (
             <button
               onClick={() => {
-                setPaymentConfirmedKeyword('');
+                setPaymentConfirmedKeyword("");
+                setCurrentPaymentPage(1);
               }}
               style={{
                 padding: "8px 16px",
@@ -1410,8 +1453,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              목록
-            </button>)}
+              전체보기
+            </button>
           </div>
 
           {/* 💰 매출 차트 */}
@@ -1467,7 +1510,7 @@ export default function AdminDashboard({ userData }) {
                 </tr>
               </thead>
               <tbody>
-                {filteredPayments.map((p, idx) => (
+                {paginatedPayments.map((p, idx) => (
                   <tr key={idx}>
                     <td style={tdStyle}>{p.orderId}</td>
                     <td style={tdStyle}>{p.orderName}</td>
@@ -1520,6 +1563,30 @@ export default function AdminDashboard({ userData }) {
                 ))}
               </tbody>
             </table>
+
+            {/* ✅ 페이지네이션 버튼 */}
+            <div style={{ marginTop: 20, textAlign: "center" }}>
+              {Array.from({
+                length: Math.ceil(filteredPayments.length / paymentsPerPage),
+              }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentPaymentPage(idx + 1)}
+                  style={{
+                    margin: "0 5px",
+                    padding: "6px 12px",
+                    backgroundColor:
+                      currentPaymentPage === idx + 1 ? "#6B46C1" : "#eee",
+                    color: currentPaymentPage === idx + 1 ? "#fff" : "#333",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       );
@@ -1535,6 +1602,12 @@ export default function AdminDashboard({ userData }) {
             .includes(reviewConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
         );
       });
+
+      const paginatedReviews = filteredReviews.slice(
+        (currentReviewPage - 1) * reviewsPerPage,
+        currentReviewPage * reviewsPerPage
+      );
+
       const handleReviewDelete = async (id) => {
         if (!confirm("정말 삭제하시겠습니까?")) return;
         try {
@@ -1571,6 +1644,7 @@ export default function AdminDashboard({ userData }) {
                     return;
                   }
                   setReviewConfirmedKeyword(reviewSearchKeyword);
+                  setCurrentReviewPage(1);
                 }
               }}
               style={{
@@ -1589,6 +1663,7 @@ export default function AdminDashboard({ userData }) {
                   return;
                 }
                 setReviewConfirmedKeyword(reviewSearchKeyword);
+                setCurrentReviewPage(1);
               }}
               style={{
                 padding: "8px 16px",
@@ -1602,10 +1677,11 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-              {reviewbutton && (
+
             <button
               onClick={() => {
-                setReviewConfirmedKeyword('');
+                setReviewConfirmedKeyword("");
+                setCurrentReviewPage(1);
               }}
               style={{
                 padding: "8px 16px",
@@ -1617,8 +1693,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              목록
-            </button>)}
+              전체보기
+            </button>
           </div>
 
           {/* 표 형식 리스트 */}
@@ -1644,7 +1720,7 @@ export default function AdminDashboard({ userData }) {
                 </tr>
               </thead>
               <tbody>
-                {filteredReviews.map((r, idx) => (
+                {paginatedReviews.map((r, idx) => (
                   <tr key={idx}>
                     <td style={tdStyle}>{r.author}</td>
                     <td style={tdStyle}>{movieMap[r.movieid] || "-"}</td>
@@ -1672,6 +1748,30 @@ export default function AdminDashboard({ userData }) {
                 ))}
               </tbody>
             </table>
+
+            {/* 페이지네이션 */}
+            <div style={{ marginTop: 20, textAlign: "center" }}>
+              {Array.from({
+                length: Math.ceil(filteredReviews.length / reviewsPerPage),
+              }).map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentReviewPage(idx + 1)}
+                  style={{
+                    margin: "0 5px",
+                    padding: "6px 12px",
+                    backgroundColor:
+                      currentReviewPage === idx + 1 ? "#6B46C1" : "#eee",
+                    color: currentReviewPage === idx + 1 ? "#fff" : "#333",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       );
