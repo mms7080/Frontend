@@ -30,6 +30,8 @@ export default function AdminDashboard({ userData }) {
   const [events, setEvents] = useState([]);
   const [payments, setPayments] = useState([]);
   const [loadingUser, setLoadingUser] = useState(false);
+  const [redirected, setRedirected] = useState(false);
+
   //유저 검색창
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
@@ -55,17 +57,30 @@ export default function AdminDashboard({ userData }) {
   const [reviewSearchKeyword, setReviewSearchKeyword] = useState("");
   const [reviewConfirmedKeyword, setReviewConfirmedKeyword] = useState("");
 
+  useEffect(() => {
+    if (loadingUser || redirected) return;
 
-  try {
-    if (!user) throw new Error();
-    if (user.auth !== "ADMIN") {
-      alert("접근 권한이 없습니다.");
-      router.push("/home");
+    if (!user) {
+      setRedirected(true);
+      setTimeout(() => {
+        alert("로그인 후 이용해주세요.");
+        router.push("/signin");
+      }, 0);
+    } else if (user.auth !== "ADMIN") {
+      setRedirected(true);
+      setTimeout(() => {
+        alert("접근 권한이 없습니다.");
+        router.push("/home");
+      }, 0);
     }
-  } catch {
-    alert("로그인 후 이용해주세요.");
-    router.push("/signin");
-  }
+  }, [user, loadingUser, redirected]);
+
+  useEffect(() => {
+    if (userData) {
+      setUser(userData);
+      setLoadingUser(false);
+    }
+  }, [userData]);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/user-count`, {
@@ -108,22 +123,21 @@ export default function AdminDashboard({ userData }) {
   }, []);
 
   useEffect(() => {
+    setSearchKeyword("");
+    setStoreSearchKeyword("");
+    setMovieSearchKeyword("");
+    setEventSearchKeyword("");
+    setReservationSearchKeyword("");
+    setPaymentSearchKeyword("");
+    setReviewSearchKeyword("");
 
-    setSearchKeyword('');
-    setStoreSearchKeyword('');
-    setMovieSearchKeyword('');
-    setEventSearchKeyword('');
-    setReservationSearchKeyword('');
-    setPaymentSearchKeyword('');
-    setReviewSearchKeyword('');
-      
-    setConfirmedKeyword('');
-    setStoreConfirmedKeyword('');
-    setMovieConfirmedKeyword('');
-    setEventConfirmedKeyword('');
-    setReservationConfirmedKeyword('');
-    setPaymentConfirmedKeyword('');
-    setReviewConfirmedKeyword('');
+    setConfirmedKeyword("");
+    setStoreConfirmedKeyword("");
+    setMovieConfirmedKeyword("");
+    setEventConfirmedKeyword("");
+    setReservationConfirmedKeyword("");
+    setPaymentConfirmedKeyword("");
+    setReviewConfirmedKeyword("");
 
     if (selectedSection === "유저") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/users`, {
@@ -217,34 +231,31 @@ export default function AdminDashboard({ userData }) {
     { title: "매출 관리", key: "매출" },
   ];
 
-// 영화 ID -> 영화 제목으로 변환하는 매핑 객체
-const movieMap = useMemo(() => {
-  const map = {};
-  movies.forEach((m) => {
-    map[m.id] = m.title;
-  });
-  return map;
-}, [movies]);
+  // 영화 ID -> 영화 제목으로 변환하는 매핑 객체
+  const movieMap = useMemo(() => {
+    const map = {};
+    movies.forEach((m) => {
+      map[m.id] = m.title;
+    });
+    return map;
+  }, [movies]);
 
-const dynamicMovieStats = useMemo(() => {
-  const stats = {};
+  const dynamicMovieStats = useMemo(() => {
+    const stats = {};
 
-  // 1. 예매 수 카운트 (0 이상)
-  reservations.forEach((r) => {
-    stats[r.movieId] = (stats[r.movieId] || 0) + 1;
-  });
+    // 1. 예매 수 카운트 (0 이상)
+    reservations.forEach((r) => {
+      stats[r.movieId] = (stats[r.movieId] || 0) + 1;
+    });
 
-  // 2. 예매 수가 1건 이상인 영화만 변환
-  return Object.entries(stats)
-    .filter(([_, count]) => count > 0)
-    .map(([movieId, count]) => ({
-      title: movieMap[movieId] || movieId,
-      reservations: count,
-    }));
-}, [reservations, movieMap]);
-
-
-
+    // 2. 예매 수가 1건 이상인 영화만 변환
+    return Object.entries(stats)
+      .filter(([_, count]) => count > 0)
+      .map(([movieId, count]) => ({
+        title: movieMap[movieId] || movieId,
+        reservations: count,
+      }));
+  }, [reservations, movieMap]);
 
   const userMap = useMemo(() => {
     const map = {};
@@ -258,7 +269,10 @@ const dynamicMovieStats = useMemo(() => {
     if (selectedSection === "유저") {
       const filteredUsers = users.filter((u) =>
         [u.name, u.username, u.email, u.phone].some((v) =>
-          v?.replace(/\s+/g, '').toLowerCase().includes(confirmedKeyword.replace(/\s+/g, '').toLowerCase())
+          v
+            ?.replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(confirmedKeyword.replace(/\s+/g, "").toLowerCase())
         )
       );
 
@@ -272,9 +286,9 @@ const dynamicMovieStats = useMemo(() => {
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
               onKeyDown={(e) => {
-                if(e.key === 'Enter'){
-                  if(searchKeyword.replace(/\s+/g, '')===''){
-                    alert('유효한 검색어를 입력해주세요!');
+                if (e.key === "Enter") {
+                  if (searchKeyword.replace(/\s+/g, "") === "") {
+                    alert("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setConfirmedKeyword(searchKeyword);
@@ -291,8 +305,8 @@ const dynamicMovieStats = useMemo(() => {
             />
             <button
               onClick={() => {
-                if(searchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                if (searchKeyword.replace(/\s+/g, "") === "") {
+                  alert("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setConfirmedKeyword(searchKeyword);
@@ -375,7 +389,12 @@ const dynamicMovieStats = useMemo(() => {
         (acc, [category, productList]) => {
           const filtered = productList.filter((p) =>
             [p.title, p.subtitle, p.category].some((v) =>
-              v?.replace(/\s+/g, '').toLowerCase().includes(storeConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
+              v
+                ?.replace(/\s+/g, "")
+                .toLowerCase()
+                .includes(
+                  storeConfirmedKeyword.replace(/\s+/g, "").toLowerCase()
+                )
             )
           );
           if (filtered.length > 0) acc[category] = filtered;
@@ -414,9 +433,9 @@ const dynamicMovieStats = useMemo(() => {
               value={storeSearchKeyword}
               onChange={(e) => setStoreSearchKeyword(e.target.value)}
               onKeyDown={(e) => {
-                if(e.key === 'Enter'){
-                  if(storeSearchKeyword.replace(/\s+/g, '')===''){
-                    alert('유효한 검색어를 입력해주세요!');
+                if (e.key === "Enter") {
+                  if (storeSearchKeyword.replace(/\s+/g, "") === "") {
+                    alert("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setStoreConfirmedKeyword(storeSearchKeyword);
@@ -433,8 +452,8 @@ const dynamicMovieStats = useMemo(() => {
             />
             <button
               onClick={() => {
-                if(storeSearchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                if (storeSearchKeyword.replace(/\s+/g, "") === "") {
+                  alert("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setStoreConfirmedKeyword(storeSearchKeyword);
@@ -617,8 +636,19 @@ const dynamicMovieStats = useMemo(() => {
 
     if (selectedSection === "영화") {
       const filteredMovies = movies.filter((m) =>
-        [m.title, m.releaseDate,m.titleEnglish,m.description,m.genre,m.director,m.cast].some((v) =>
-          v?.replace(/\s+/g, '').toLowerCase().includes(movieConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
+        [
+          m.title,
+          m.releaseDate,
+          m.titleEnglish,
+          m.description,
+          m.genre,
+          m.director,
+          m.cast,
+        ].some((v) =>
+          v
+            ?.replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(movieConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
         )
       );
 
@@ -658,9 +688,9 @@ const dynamicMovieStats = useMemo(() => {
               value={movieSearchKeyword}
               onChange={(e) => setMovieSearchKeyword(e.target.value)}
               onKeyDown={(e) => {
-                if(e.key === 'Enter'){
-                  if(movieSearchKeyword.replace(/\s+/g, '')===''){
-                    alert('유효한 검색어를 입력해주세요!');
+                if (e.key === "Enter") {
+                  if (movieSearchKeyword.replace(/\s+/g, "") === "") {
+                    alert("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setMovieConfirmedKeyword(movieSearchKeyword);
@@ -677,8 +707,8 @@ const dynamicMovieStats = useMemo(() => {
             />
             <button
               onClick={() => {
-                if(movieSearchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                if (movieSearchKeyword.replace(/\s+/g, "") === "") {
+                  alert("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setMovieConfirmedKeyword(movieSearchKeyword);
@@ -806,7 +836,12 @@ const dynamicMovieStats = useMemo(() => {
         (acc, [category, eventList]) => {
           const filtered = eventList.filter((e) =>
             [e.title, e.date, e.category].some((v) =>
-              v?.replace(/\s+/g, '').toLowerCase().includes(eventConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
+              v
+                ?.replace(/\s+/g, "")
+                .toLowerCase()
+                .includes(
+                  eventConfirmedKeyword.replace(/\s+/g, "").toLowerCase()
+                )
             )
           );
           if (filtered.length > 0) acc[category] = filtered;
@@ -845,13 +880,13 @@ const dynamicMovieStats = useMemo(() => {
               value={eventSearchKeyword}
               onChange={(e) => setEventSearchKeyword(e.target.value)}
               onKeyDown={(e) => {
-                if(e.key === 'Enter'){
-                  if(eventSearchKeyword.replace(/\s+/g, '')===''){
-                    alert('유효한 검색어를 입력해주세요!');
+                if (e.key === "Enter") {
+                  if (eventSearchKeyword.replace(/\s+/g, "") === "") {
+                    alert("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setEventConfirmedKeyword(eventSearchKeyword);
-                };
+                }
               }}
               style={{
                 width: 300,
@@ -864,8 +899,8 @@ const dynamicMovieStats = useMemo(() => {
             />
             <button
               onClick={() => {
-                if(eventSearchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                if (eventSearchKeyword.replace(/\s+/g, "") === "") {
+                  alert("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setEventConfirmedKeyword(eventSearchKeyword);
@@ -1033,144 +1068,151 @@ const dynamicMovieStats = useMemo(() => {
         </div>
       );
     }
- if (selectedSection === "예매") {
-  const filteredReservations = reservations.filter((r) =>
-    [r.orderId, r.theater, r.region, r.date, r.time].some((v) =>
-      v?.replace(/\s+/g, '').toLowerCase().includes(reservationConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
-    )
-  );
+    if (selectedSection === "예매") {
+      const filteredReservations = reservations.filter((r) =>
+        [r.orderId, r.theater, r.region, r.date, r.time].some((v) =>
+          v
+            ?.replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(
+              reservationConfirmedKeyword.replace(/\s+/g, "").toLowerCase()
+            )
+        )
+      );
 
-  return (
-    <div style={{ marginTop: 40 }}>
-      {/* 🔍 검색창 */}
-      <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
-        <input
-          type="text"
-          placeholder="주문번호/극장/지역/날짜/시간 검색"
-          value={reservationSearchKeyword}
-          onChange={(e) => setReservationSearchKeyword(e.target.value)}
-          onKeyDown={(e) => {
-            if(e.key === 'Enter'){
-              if(reservationSearchKeyword.replace(/\s+/g, '')===''){
-                alert('유효한 검색어를 입력해주세요!');
-                return;
-              }
-              setReservationConfirmedKeyword(reservationSearchKeyword);
-            }
-          }}
-          style={{
-            width: 300,
-            padding: "8px 12px",
-            fontSize: 14,
-            borderRadius: 6,
-            border: "1px solid #ccc",
-            backgroundColor: "#fff",
-          }}
-        />
-        <button
-          onClick={() =>{
-            if(reservationSearchKeyword.replace(/\s+/g, '')===''){
-              alert('유효한 검색어를 입력해주세요!');
-              return;
-            }
-            setReservationConfirmedKeyword(reservationSearchKeyword);
-          }
-          }
-          style={{
-            padding: "8px 16px",
-            fontSize: 14,
-            backgroundColor: "#6B46C1",
-            color: "#fff",
-            border: "none",
-            borderRadius: 6,
-            cursor: "pointer",
-          }}
-        >
-          검색
-        </button>
-      </div>
+      return (
+        <div style={{ marginTop: 40 }}>
+          {/* 🔍 검색창 */}
+          <div style={{ marginBottom: 20, display: "flex", gap: 8 }}>
+            <input
+              type="text"
+              placeholder="주문번호/극장/지역/날짜/시간 검색"
+              value={reservationSearchKeyword}
+              onChange={(e) => setReservationSearchKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  if (reservationSearchKeyword.replace(/\s+/g, "") === "") {
+                    alert("유효한 검색어를 입력해주세요!");
+                    return;
+                  }
+                  setReservationConfirmedKeyword(reservationSearchKeyword);
+                }
+              }}
+              style={{
+                width: 300,
+                padding: "8px 12px",
+                fontSize: 14,
+                borderRadius: 6,
+                border: "1px solid #ccc",
+                backgroundColor: "#fff",
+              }}
+            />
+            <button
+              onClick={() => {
+                if (reservationSearchKeyword.replace(/\s+/g, "") === "") {
+                  alert("유효한 검색어를 입력해주세요!");
+                  return;
+                }
+                setReservationConfirmedKeyword(reservationSearchKeyword);
+              }}
+              style={{
+                padding: "8px 16px",
+                fontSize: 14,
+                backgroundColor: "#6B46C1",
+                color: "#fff",
+                border: "none",
+                borderRadius: 6,
+                cursor: "pointer",
+              }}
+            >
+              검색
+            </button>
+          </div>
 
-      {/* 🎟️ 영화별 예매 차트 - 여기로 이동 */}
-      <section
-        style={{
-          background: "white",
-          borderRadius: 10,
-          padding: 20,
-          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-          marginBottom: 30,
-        }}
-      >
-        <h3 style={{ fontSize: 18, marginBottom: 16 }}>
-          🎟️ 영화별 예매 현황
-        </h3>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={dynamicMovieStats}>
-            <XAxis dataKey="title" />
-            <YAxis allowDecimals={false} />
-            <Tooltip />
-            <Bar dataKey="reservations" radius={[4, 4, 0, 0]}>
-              {dynamicMovieStats.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={colors[index % colors.length]}
-                />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      </section>
+          {/* 🎟️ 영화별 예매 차트 - 여기로 이동 */}
+          <section
+            style={{
+              background: "white",
+              borderRadius: 10,
+              padding: 20,
+              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+              marginBottom: 30,
+            }}
+          >
+            <h3 style={{ fontSize: 18, marginBottom: 16 }}>
+              🎟️ 영화별 예매 현황
+            </h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={dynamicMovieStats}>
+                <XAxis dataKey="title" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="reservations" radius={[4, 4, 0, 0]}>
+                  {dynamicMovieStats.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={colors[index % colors.length]}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </section>
 
-      {/* 📋 예매 목록 테이블 */}
-      <div
-        style={{
-          background: "#fff",
-          borderRadius: 10,
-          padding: 20,
-          boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
-        }}
-      >
-        <h3 style={{ fontSize: 18, marginBottom: 16 }}>📋 예매 내역</h3>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ background: "#f1f1f1" }}>
-              <th style={thStyle}>주문번호</th>
-              <th style={thStyle}>유저</th>
-              <th style={thStyle}>영화</th>
-              <th style={thStyle}>지역</th>
-              <th style={thStyle}>극장</th>
-              <th style={thStyle}>날짜</th>
-              <th style={thStyle}>시간</th>
-              <th style={thStyle}>좌석</th>
-              <th style={thStyle}>총액</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredReservations.map((r, idx) => (
-              <tr key={idx}>
-                <td style={tdStyle}>{r.orderId}</td>
-                <td style={tdStyle}>{userMap[r.userId] || r.userId}</td>
-                <td style={tdStyle}>{movieMap[r.movieId] || r.movieId}</td>
-                <td style={tdStyle}>{r.region}</td>
-                <td style={tdStyle}>{r.theater}</td>
-                <td style={tdStyle}>{r.date}</td>
-                <td style={tdStyle}>{r.time}</td>
-                <td style={tdStyle}>{r.seats}</td>
-                <td style={tdStyle}>
-                  {Number(r.totalPrice).toLocaleString()}원
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
+          {/* 📋 예매 목록 테이블 */}
+          <div
+            style={{
+              background: "#fff",
+              borderRadius: 10,
+              padding: 20,
+              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+            }}
+          >
+            <h3 style={{ fontSize: 18, marginBottom: 16 }}>📋 예매 내역</h3>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ background: "#f1f1f1" }}>
+                  <th style={thStyle}>주문번호</th>
+                  <th style={thStyle}>유저</th>
+                  <th style={thStyle}>영화</th>
+                  <th style={thStyle}>지역</th>
+                  <th style={thStyle}>극장</th>
+                  <th style={thStyle}>날짜</th>
+                  <th style={thStyle}>시간</th>
+                  <th style={thStyle}>좌석</th>
+                  <th style={thStyle}>총액</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredReservations.map((r, idx) => (
+                  <tr key={idx}>
+                    <td style={tdStyle}>{r.orderId}</td>
+                    <td style={tdStyle}>{userMap[r.userId] || r.userId}</td>
+                    <td style={tdStyle}>{movieMap[r.movieId] || r.movieId}</td>
+                    <td style={tdStyle}>{r.region}</td>
+                    <td style={tdStyle}>{r.theater}</td>
+                    <td style={tdStyle}>{r.date}</td>
+                    <td style={tdStyle}>{r.time}</td>
+                    <td style={tdStyle}>{r.seats}</td>
+                    <td style={tdStyle}>
+                      {Number(r.totalPrice).toLocaleString()}원
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+    }
 
     if (selectedSection === "매출") {
       const filteredPayments = payments.filter((p) =>
         [p.orderName, p.userId, p.cardCompany, p.method].some((v) =>
-          v?.replace(/\s+/g, '').toLowerCase().includes(paymentConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
+          v
+            ?.replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(paymentConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
         )
       );
 
@@ -1196,9 +1238,9 @@ const dynamicMovieStats = useMemo(() => {
               value={paymentSearchKeyword}
               onChange={(e) => setPaymentSearchKeyword(e.target.value)}
               onKeyDown={(e) => {
-                if(e.key === 'Enter'){
-                  if(paymentSearchKeyword.replace(/\s+/g, '')===''){
-                    alert('유효한 검색어를 입력해주세요!');
+                if (e.key === "Enter") {
+                  if (paymentSearchKeyword.replace(/\s+/g, "") === "") {
+                    alert("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setPaymentConfirmedKeyword(paymentSearchKeyword);
@@ -1215,8 +1257,8 @@ const dynamicMovieStats = useMemo(() => {
             />
             <button
               onClick={() => {
-                if(paymentSearchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                if (paymentSearchKeyword.replace(/\s+/g, "") === "") {
+                  alert("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setPaymentConfirmedKeyword(paymentSearchKeyword);
@@ -1350,29 +1392,31 @@ const dynamicMovieStats = useMemo(() => {
       const filteredReviews = reviews.filter((r) => {
         const title = movieMap[r.movieid] || "";
         return [r.author, r.content, title].some((v) =>
-          v?.replace(/\s+/g, '').toLowerCase().includes(reviewConfirmedKeyword.replace(/\s+/g, '').toLowerCase())
+          v
+            ?.replace(/\s+/g, "")
+            .toLowerCase()
+            .includes(reviewConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
         );
       });
       const handleReviewDelete = async (id) => {
-  if (!confirm("정말 삭제하시겠습니까?")) return;
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`,
-      {
-        method: "POST",
-        credentials: "include",
-      }
-    );
-    if (res.ok) {
-      setReviews((prev) => prev.filter((r) => r.id !== id));
-    } else {
-      alert("삭제에 실패했습니다.");
-    }
-  } catch {
-    alert("삭제 중 오류 발생");
-  }
-};
-
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`,
+            {
+              method: "POST",
+              credentials: "include",
+            }
+          );
+          if (res.ok) {
+            setReviews((prev) => prev.filter((r) => r.id !== id));
+          } else {
+            alert("삭제에 실패했습니다.");
+          }
+        } catch {
+          alert("삭제 중 오류 발생");
+        }
+      };
 
       return (
         <div style={{ marginTop: 40 }}>
@@ -1384,9 +1428,9 @@ const dynamicMovieStats = useMemo(() => {
               value={reviewSearchKeyword}
               onChange={(e) => setReviewSearchKeyword(e.target.value)}
               onKeyDown={(e) => {
-                if(e.key === 'Enter'){
-                  if(reviewSearchKeyword.replace(/\s+/g, '')===''){
-                    alert('유효한 검색어를 입력해주세요!');
+                if (e.key === "Enter") {
+                  if (reviewSearchKeyword.replace(/\s+/g, "") === "") {
+                    alert("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setReviewConfirmedKeyword(reviewSearchKeyword);
@@ -1403,8 +1447,8 @@ const dynamicMovieStats = useMemo(() => {
             />
             <button
               onClick={() => {
-                if(reviewSearchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                if (reviewSearchKeyword.replace(/\s+/g, "") === "") {
+                  alert("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setReviewConfirmedKeyword(reviewSearchKeyword);
@@ -1447,31 +1491,30 @@ const dynamicMovieStats = useMemo(() => {
               </thead>
               <tbody>
                 {filteredReviews.map((r, idx) => (
- <tr key={idx}>
-  <td style={tdStyle}>{r.author}</td>
-  <td style={tdStyle}>{movieMap[r.movieid] || "-"}</td>
-  <td style={tdStyle}>{r.content}</td>
-  <td style={tdStyle}>⭐ {r.score}</td>
-  <td style={tdStyle}>{r.likenumber}</td>
-  <td style={tdStyle}>{r.writetime}</td>
-  <td style={tdStyle}>
-    <button
-      onClick={() => handleReviewDelete(r.id)}
-      style={{
-        background: "#e53e3e",
-        color: "#fff",
-        border: "none",
-        borderRadius: 6,
-        padding: "4px 8px",
-        fontSize: 12,
-        cursor: "pointer",
-      }}
-    >
-      삭제
-    </button>
-  </td>
-</tr>
-
+                  <tr key={idx}>
+                    <td style={tdStyle}>{r.author}</td>
+                    <td style={tdStyle}>{movieMap[r.movieid] || "-"}</td>
+                    <td style={tdStyle}>{r.content}</td>
+                    <td style={tdStyle}>⭐ {r.score}</td>
+                    <td style={tdStyle}>{r.likenumber}</td>
+                    <td style={tdStyle}>{r.writetime}</td>
+                    <td style={tdStyle}>
+                      <button
+                        onClick={() => handleReviewDelete(r.id)}
+                        style={{
+                          background: "#e53e3e",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: 6,
+                          padding: "4px 8px",
+                          fontSize: 12,
+                          cursor: "pointer",
+                        }}
+                      >
+                        삭제
+                      </button>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>
@@ -1569,7 +1612,6 @@ const dynamicMovieStats = useMemo(() => {
               onClick={() => setSelectedSection("이벤트")}
             />
           </section>
-
 
           {renderList()}
         </main>
