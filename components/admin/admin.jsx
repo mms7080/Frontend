@@ -47,7 +47,7 @@ export default function AdminDashboard({ userData }) {
   //매출 검색창
   const [paymentSearchKeyword, setPaymentSearchKeyword] = useState("");
   const [paymentConfirmedKeyword, setPaymentConfirmedKeyword] = useState("");
-  //예메
+  //예매
   const [reservations, setReservations] = useState([]);
   const [reservationSearchKeyword, setReservationSearchKeyword] = useState("");
   const [reservationConfirmedKeyword, setReservationConfirmedKeyword] =
@@ -56,6 +56,36 @@ export default function AdminDashboard({ userData }) {
   const [reviews, setReviews] = useState([]);
   const [reviewSearchKeyword, setReviewSearchKeyword] = useState("");
   const [reviewConfirmedKeyword, setReviewConfirmedKeyword] = useState("");
+
+  const [userbutton,setUserButton]=useState(false);
+  const [eventbutton,setEventButton]=useState(false);
+  const [moviebutton,setMovieButton]=useState(false);
+  const [storebutton,setStoreButton]=useState(false);
+  const [paymentbutton,setPaymentButton]=useState(false);
+  const [reviewbutton,setReviewButton]=useState(false);
+  const [reservationbutton,setReservationButton]=useState(false);
+
+  useEffect(()=>{
+    if(confirmedKeyword!=='')setUserButton(true);
+  },[confirmedKeyword]);
+  useEffect(()=>{
+    if(eventConfirmedKeyword!=='')setEventButton(true);
+  },[eventConfirmedKeyword]);
+  useEffect(()=>{
+    if(movieConfirmedKeyword!=='')setMovieButton(true);
+  },[movieConfirmedKeyword]);
+  useEffect(()=>{
+    if(storeConfirmedKeyword!=='')setStoreButton(true);
+  },[storeConfirmedKeyword]);
+  useEffect(()=>{
+    if(paymentConfirmedKeyword!=='')setPaymentButton(true);
+  },[paymentConfirmedKeyword]);
+  useEffect(()=>{
+    if(reviewConfirmedKeyword!=='')setReviewButton(true);
+  },[reviewConfirmedKeyword]);
+  useEffect(()=>{
+    if(reservationConfirmedKeyword!=='')setReservationButton(true);
+  },[reservationConfirmedKeyword]);
 
   useEffect(() => {
     if(!redirected.current){
@@ -133,6 +163,14 @@ export default function AdminDashboard({ userData }) {
     setReservationConfirmedKeyword("");
     setPaymentConfirmedKeyword("");
     setReviewConfirmedKeyword("");
+
+    setUserButton(false);
+    setEventButton(false);
+    setMovieButton(false);
+    setStoreButton(false);
+    setPaymentButton(false);
+    setReviewButton(false);
+    setReservationButton(false);
 
     if (selectedSection === "유저") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/users`, {
@@ -318,7 +356,8 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-            <button
+            {userbutton && (
+              <button
               onClick={() => {
                 setConfirmedKeyword('');
               }}
@@ -332,8 +371,10 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              전체보기
+              목록
             </button>
+            )}
+            
           </div>
 
           {/* 유저 카드 목록 */}
@@ -481,7 +522,7 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-
+              {storebutton && (
             <button
               onClick={() => {
                 setStoreConfirmedKeyword('');
@@ -496,8 +537,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              전체보기
-            </button>
+              목록
+            </button>)}
           </div>
 
           {/* 스토어 등록 버튼 */}
@@ -753,6 +794,7 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
+            {moviebutton &&(
             <button
               onClick={() => {
                 setMovieConfirmedKeyword('');
@@ -767,8 +809,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              전체보기
-            </button>
+              목록
+            </button>)}
           </div>
           {/* 영화 등록 버튼 */}
           <div
@@ -961,7 +1003,7 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-
+              {eventbutton && (
             <button
               onClick={() => {
                 setEventConfirmedKeyword('');
@@ -976,8 +1018,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              전체보기
-            </button>
+              목록
+            </button>)}
           </div>
 
           <div
@@ -1188,7 +1230,7 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-
+              {reservationbutton && (
             <button
               onClick={() => {
                 setReservationConfirmedKeyword('');
@@ -1203,8 +1245,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              전체보기
-            </button>
+              목록
+            </button>)}
           </div>
 
           {/* 🎟️ 영화별 예매 차트 - 여기로 이동 */}
@@ -1353,6 +1395,7 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
+            {paymentbutton && (
             <button
               onClick={() => {
                 setPaymentConfirmedKeyword('');
@@ -1367,8 +1410,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              전체보기
-            </button>
+              목록
+            </button>)}
           </div>
 
           {/* 💰 매출 차트 */}
@@ -1559,7 +1602,7 @@ export default function AdminDashboard({ userData }) {
             >
               검색
             </button>
-
+              {reviewbutton && (
             <button
               onClick={() => {
                 setReviewConfirmedKeyword('');
@@ -1574,8 +1617,8 @@ export default function AdminDashboard({ userData }) {
                 cursor: "pointer",
               }}
             >
-              전체보기
-            </button>
+              목록
+            </button>)}
           </div>
 
           {/* 표 형식 리스트 */}
