@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useCart } from "./CartContext";
 import { useRouter } from "next/navigation";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
@@ -20,6 +20,38 @@ export default function CartSidebar() {
   );
 
   const [user, setUser] = useState(null);
+  const [position, setPosition] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("cartSidebarPosition");
+      return saved ? JSON.parse(saved) : { x: window.innerWidth - 340, y: 450 };
+    }
+    return { x: 1000, y: 450 };
+  });
+
+  const dragging = useRef(false);
+  const offset = useRef({ x: 0, y: 0 });
+
+  const startDrag = (e) => {
+    dragging.current = true;
+    offset.current = {
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    };
+  };
+
+  const onDrag = (e) => {
+    if (!dragging.current) return;
+    const newPos = {
+      x: e.clientX - offset.current.x,
+      y: e.clientY - offset.current.y,
+    };
+    setPosition(newPos);
+    localStorage.setItem("cartSidebarPosition", JSON.stringify(newPos));
+  };
+
+  const endDrag = () => {
+    dragging.current = false;
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -68,7 +100,13 @@ export default function CartSidebar() {
   };
 
   return (
-    <div style={sidebarStyle}>
+    <div
+      style={{ ...sidebarStyle, left: position.x, top: position.y }}
+      onMouseDown={startDrag}
+      onMouseMove={onDrag}
+      onMouseUp={endDrag}
+      onMouseLeave={endDrag}
+    >
       <h3 style={titleStyle}>장바구니 🛒</h3>
       <div style={{ maxHeight: "240px", overflowY: "auto" }}>
         {cartItems.length === 0 ? (
@@ -121,11 +159,8 @@ export default function CartSidebar() {
   );
 }
 
-
 const sidebarStyle = {
   position: "fixed",
-  right: "20px",
-  top: "450px",
   width: "300px",
   background: "rgba(255, 255, 255, 0.9)",
   boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
@@ -133,6 +168,7 @@ const sidebarStyle = {
   borderRadius: "12px",
   zIndex: 1000,
   fontFamily: "sans-serif",
+  cursor: "move",
 };
 
 const titleStyle = {
@@ -155,14 +191,12 @@ const qtyButtonStyle = {
   border: "1px solid #ccc",
   background: "#fff",
   cursor: "pointer",
-  
 };
 
 const qtyPlusButtonStyle = {
   ...qtyButtonStyle,
   marginLeft: "-15px",
 };
-
 
 const qtyInputStyle = {
   width: "40px",
