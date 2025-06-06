@@ -83,16 +83,16 @@ export default function Header({ userInfo }) {
           top="0"
           left="0"
           w="100%"
-          bg="#fef3c7"
-          borderBottom="1px solid #facc15"
-          color="#78350f"
+          bg="#dbf4ff"
+          borderBottom="1px solid #38bdf8"
+          color="#0369a1"
           fontSize="14px"
           fontWeight="medium"
           py={2}
           textAlign="center"
           zIndex="9999"
           cursor="pointer"
-          _hover={{ bg: "#fde68a" }}
+          _hover={{ bg: "#bae6fd" }}
           onClick={clearReservationAlert}
         >
           🛎️ <strong>[{reservationAlert.title}]</strong> 예매가 완료되었습니다! (마이페이지로 이동)
