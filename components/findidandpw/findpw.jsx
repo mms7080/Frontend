@@ -3,6 +3,7 @@
 import React,{useState} from 'react';
 import {RadioGroup,Input,Box,VStack,Flex,Button,Text} from '@chakra-ui/react';
 import {Header} from '../../components';
+import {fetch} from '../../lib/client';
 
 export default function Findpwdetail({userData}){
     const [found,setFound]=useState(false);
@@ -56,7 +57,7 @@ export default function Findpwdetail({userData}){
             setFound(false);
             return;
         }
-
+        console.log(res);
         if(!res) {
             alert('해당하는 사용자 정보가 없습니다.');
             setFound(false);
