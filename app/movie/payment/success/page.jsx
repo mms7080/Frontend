@@ -16,6 +16,25 @@ export default function MoviePaymentSuccessPage() {
   const params = useSearchParams();
   const ticketRef = useRef();
 
+  const requestNotificationPermission = async () => {
+    if (!("Notification" in window)) return false;
+    const permission = await Notification.requestPermission();
+    return permission === "granted";
+  };
+
+  const scheduleNotification = (title, notifyTime) => {
+    const now = new Date();
+    const fireAt = new Date(notifyTime);
+    const delay = fireAt.getTime() - now.getTime();
+    if (delay <= 0) return;
+    setTimeout(() => {
+      new Notification("🎬 영화 상영 알림", {
+        body: `\"${title}\" 상영까지 30분 남았습니다.`,
+        icon: "/favicon.ico",
+      });
+    }, delay);
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -27,7 +46,6 @@ export default function MoviePaymentSuccessPage() {
         setUser(null);
       }
     };
-
     fetchUser();
   }, []);
 
@@ -37,7 +55,6 @@ export default function MoviePaymentSuccessPage() {
       const orderId = params.get("orderId");
       const amount = parseInt(params.get("amount"));
       const userId = params.get("userId");
-
       const movieId = parseInt(params.get("movieId"));
       const region = params.get("region");
       const theater = params.get("theater");
@@ -88,11 +105,17 @@ export default function MoviePaymentSuccessPage() {
         };
         setMovie(fullMovie);
 
-        const rawTime = new Date(`${date}T${time}:00`);
-        const showKST = new Date(rawTime.getTime() + 9 * 60 * 60 * 1000);
+        const showKST = new Date(`${date}T${time}:00`);
+
         const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000);
 
         localStorage.setItem("latestReservationAlert", JSON.stringify({ title: data.title, movieId, notifyTime: notifyTime.toISOString() }));
+        localStorage.setItem("latestReservationCountdown", JSON.stringify({ title: data.title, movieId, showTime: showKST.toISOString() }));
+
+        const permissionGranted = await requestNotificationPermission();
+        if (permissionGranted) {
+          scheduleNotification(data.title, notifyTime);
+        }
 
         setReservationInfo({
           movie: fullMovie,
@@ -135,11 +158,9 @@ export default function MoviePaymentSuccessPage() {
   return (
     <>
       <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
-
       <div className="wrapper">
         <div className="container">
           <h1 className="status">{status}</h1>
-
           {reservationInfo && reservationInfo.movie && (
             <div className="card" ref={ticketRef}>
               <img src={reservationInfo.movie.poster} alt={reservationInfo.movie.title} className="poster" />
@@ -158,7 +179,6 @@ export default function MoviePaymentSuccessPage() {
               </div>
             </div>
           )}
-
           <div className="button-group">
             <button onClick={() => router.push("/")} className="home-button">홈으로 돌아가기</button>
             <button onClick={handleDownloadPDF} className="home-button">PDF 저장</button>
@@ -166,7 +186,6 @@ export default function MoviePaymentSuccessPage() {
           </div>
         </div>
       </div>
-
       <style jsx>{`
         .wrapper {
           display: flex;

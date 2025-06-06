@@ -1,15 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Flex, Box, Icon, Text } from "@chakra-ui/react";
+import { Flex, Box, Icon, Text, Button, Image, Progress } from "@chakra-ui/react";
 import { FiUser } from "react-icons/fi";
 
 export default function Header({ userInfo }) {
   const [mounted, setMounted] = useState(false);
   const [reservationAlert, setReservationAlert] = useState(null);
   const [showingAlert, setShowingAlert] = useState(null);
+  const [countdown, setCountdown] = useState(null);
+  const [countdownMinimized, setCountdownMinimized] = useState(false);
+  const [position, setPosition] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("countdownPosition");
+      return saved ? JSON.parse(saved) : { x: 20, y: 80 };
+    }
+    return { x: 20, y: 80 };
+  });
+  const countdownRef = useRef(null);
+  const dragging = useRef(false);
+  const offset = useRef({ x: 0, y: 0 });
+  const [posterUrl, setPosterUrl] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -27,10 +41,6 @@ export default function Header({ userInfo }) {
   const headerColor = isHome ? "white" : "black";
   const hoverColor = "gray.500";
 
-  
-
-
-
   useEffect(() => {
     setMounted(true);
 
@@ -40,22 +50,60 @@ export default function Header({ userInfo }) {
       setReservationAlert(parsed);
     }
 
-    const interval = setInterval(() => {
-      const data = localStorage.getItem("latestReservationAlert");
-      if (!data) return;
+    const applyCountdown = () => {
+      const countdownData = localStorage.getItem("latestReservationCountdown");
+      if (countdownData && userInfo) {
+        const { title, showTime, movieId } = JSON.parse(countdownData);
+        const now = new Date().getTime();
+        const target = new Date(showTime).getTime();
+        const diff = target - now;
+        const total = target - new Date().setHours(0, 0, 0, 0);
+        if (diff <= 0) {
+          setCountdown(null);
+          localStorage.removeItem("latestReservationCountdown");
+        } else {
+          const hours = Math.floor(diff / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+          setCountdown({
+            title,
+            timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
+          });
 
-      const { title, notifyTime } = JSON.parse(data);
-      const now = Date.now();
+          setProgress(Math.max(0, Math.min(100, (1 - diff / total) * 100)));
 
-      if (notifyTime && now >= new Date(notifyTime).getTime()) {
-        setShowingAlert({ title });
-        localStorage.removeItem("latestReservationAlert");
-        setReservationAlert(null);
+          // fetch poster
+          fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
+            .then(res => res.json())
+            .then(data => {
+              if (data?.poster) {
+                setPosterUrl(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`);
+              }
+            })
+            .catch(() => {});
+        }
       }
-    }, 5000); // 5초마다 체크
+    };
+
+    applyCountdown();
+
+    const interval = setInterval(() => {
+      const alertData = localStorage.getItem("latestReservationAlert");
+      if (alertData) {
+        const { title, notifyTime } = JSON.parse(alertData);
+        const now = Date.now();
+        if (notifyTime && now >= new Date(notifyTime).getTime()) {
+          setShowingAlert({ title });
+          localStorage.removeItem("latestReservationAlert");
+          setReservationAlert(null);
+        }
+      }
+
+      applyCountdown();
+    }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [userInfo]);
 
   const clearReservationAlert = () => {
     localStorage.removeItem("latestReservationAlert");
@@ -63,20 +111,37 @@ export default function Header({ userInfo }) {
     router.push("/mypage");
   };
 
-  if (!mounted) {
-    return (
-      <Flex
-        w="100%"
-        h={{ base: "auto", md: "100px" }}
-        bg={headerBg}
-        p={{ base: "20px", md: "40px" }}
-      />
-    );
-  }
+  const clearCountdown = () => {
+    localStorage.removeItem("latestReservationCountdown");
+    setCountdown(null);
+  };
+
+  const startDrag = (e) => {
+    dragging.current = true;
+    offset.current = {
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    };
+  };
+
+  const onDrag = (e) => {
+    if (!dragging.current) return;
+    const newPos = {
+      x: e.clientX - offset.current.x,
+      y: e.clientY - offset.current.y,
+    };
+    setPosition(newPos);
+    localStorage.setItem("countdownPosition", JSON.stringify(newPos));
+  };
+
+  const endDrag = () => {
+    dragging.current = false;
+  };
+
+  if (!mounted) return null;
 
   return (
     <>
-      {/* ✅ 예매 완료 알림 */}
       {reservationAlert && (
         <Box
           position="fixed"
@@ -99,7 +164,6 @@ export default function Header({ userInfo }) {
         </Box>
       )}
 
-      {/* ✅ 상영 30분 전 알림 */}
       {showingAlert && (
         <Box
           position="fixed"
@@ -122,7 +186,49 @@ export default function Header({ userInfo }) {
         </Box>
       )}
 
-      {/* ✅ 기존 헤더 */}
+      {countdown && userInfo && (
+        <Flex
+          ref={countdownRef}
+          position="fixed"
+          left={`${position.x}px`}
+          top={`${position.y}px`}
+          onMouseDown={startDrag}
+          onMouseMove={onDrag}
+          onMouseUp={endDrag}
+          onMouseLeave={endDrag}
+          bg="rgba(255, 255, 255, 0.5)"
+          color="black"
+          p={3}
+          borderRadius="lg"
+          boxShadow="lg"
+          zIndex="9999"
+          fontSize="14px"
+          cursor="move"
+          userSelect="none"
+          alignItems="center"
+        >
+          {posterUrl && (
+            <Image src={posterUrl} alt="포스터" boxSize="60px" borderRadius="md" mr={3} />
+          )}
+          {!countdownMinimized ? (
+            <Box textAlign="left">
+              <Text mb={1}><strong>{countdown.title}</strong> 상영까지</Text>
+              <Text mb={2}>🕙 {countdown.timeLeft}</Text>
+              <Flex justify="flex-end" gap={2}>
+                <Button size="xs" onClick={() => setCountdownMinimized(true)}>작게</Button>
+                <Button size="xs" onClick={clearCountdown} colorScheme="red">닫기</Button>
+              </Flex>
+            </Box>
+          ) : (
+            <Flex align="center" gap={2}>
+              <Text fontSize="sm">🕙 {countdown.timeLeft}</Text>
+              <Button size="xs" onClick={() => setCountdownMinimized(false)}>펼치기</Button>
+              <Button size="xs" onClick={clearCountdown} colorScheme="red">X</Button>
+            </Flex>
+          )}
+        </Flex>
+      )}
+
       <Flex
         w="100%"
         minW="300px"
@@ -144,7 +250,6 @@ export default function Header({ userInfo }) {
         borderBottom="1px solid rgba(0, 0, 0, 0.1)"
         gap={{ base: 4, md: 0 }}
       >
-        {/* 로고 */}
         <Box>
           <Link href="/home">
             <Text
@@ -163,7 +268,6 @@ export default function Header({ userInfo }) {
           </Text>
         </Box>
 
-        {/* 메뉴 */}
         <Flex
           direction={{ base: "column", md: "row" }}
           gap={{ base: 2, md: 5 }}
@@ -194,7 +298,6 @@ export default function Header({ userInfo }) {
           ))}
         </Flex>
 
-        {/* 유저 영역 */}
         <Flex
           direction={{ base: "column", md: "row" }}
           align={{ base: "flex-start", md: "center" }}
