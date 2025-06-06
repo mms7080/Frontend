@@ -108,6 +108,23 @@ export default function AdminDashboard({ userData }) {
   }, []);
 
   useEffect(() => {
+
+    setSearchKeyword('');
+    setStoreSearchKeyword('');
+    setMovieSearchKeyword('');
+    setEventSearchKeyword('');
+    setReservationSearchKeyword('');
+    setPaymentSearchKeyword('');
+    setReviewSearchKeyword('');
+      
+    setConfirmedKeyword('');
+    setStoreConfirmedKeyword('');
+    setMovieConfirmedKeyword('');
+    setEventConfirmedKeyword('');
+    setReservationConfirmedKeyword('');
+    setPaymentConfirmedKeyword('');
+    setReviewConfirmedKeyword('');
+
     if (selectedSection === "유저") {
       fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/users`, {
         credentials: "include",
@@ -254,6 +271,15 @@ const dynamicMovieStats = useMemo(() => {
               placeholder="유저 이름/ID/이메일/전화번호 검색"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === 'Enter'){
+                  if(searchKeyword.replace(/\s+/g, '')===''){
+                    alert('유효한 검색어를 입력해주세요!');
+                    return;
+                  }
+                  setConfirmedKeyword(searchKeyword);
+                }
+              }}
               style={{
                 width: 300,
                 padding: "8px 12px",
@@ -264,7 +290,13 @@ const dynamicMovieStats = useMemo(() => {
               }}
             />
             <button
-              onClick={() => setConfirmedKeyword(searchKeyword)}
+              onClick={() => {
+                if(searchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+                }
+                setConfirmedKeyword(searchKeyword);
+              }}
               style={{
                 padding: "8px 16px",
                 fontSize: 14,
@@ -381,6 +413,15 @@ const dynamicMovieStats = useMemo(() => {
               placeholder="상품명/부제목/카테고리 검색"
               value={storeSearchKeyword}
               onChange={(e) => setStoreSearchKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === 'Enter'){
+                  if(storeSearchKeyword.replace(/\s+/g, '')===''){
+                    alert('유효한 검색어를 입력해주세요!');
+                    return;
+                  }
+                  setStoreConfirmedKeyword(storeSearchKeyword);
+                }
+              }}
               style={{
                 width: 300,
                 padding: "8px 12px",
@@ -391,7 +432,13 @@ const dynamicMovieStats = useMemo(() => {
               }}
             />
             <button
-              onClick={() => setStoreConfirmedKeyword(storeSearchKeyword)}
+              onClick={() => {
+                if(storeSearchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+                }
+                setStoreConfirmedKeyword(storeSearchKeyword);
+              }}
               style={{
                 padding: "8px 16px",
                 fontSize: 14,
@@ -610,6 +657,15 @@ const dynamicMovieStats = useMemo(() => {
               placeholder="영화 제목/개봉일 검색"
               value={movieSearchKeyword}
               onChange={(e) => setMovieSearchKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === 'Enter'){
+                  if(movieSearchKeyword.replace(/\s+/g, '')===''){
+                    alert('유효한 검색어를 입력해주세요!');
+                    return;
+                  }
+                  setMovieConfirmedKeyword(movieSearchKeyword);
+                }
+              }}
               style={{
                 width: 300,
                 padding: "8px 12px",
@@ -620,7 +676,13 @@ const dynamicMovieStats = useMemo(() => {
               }}
             />
             <button
-              onClick={() => setMovieConfirmedKeyword(movieSearchKeyword)}
+              onClick={() => {
+                if(movieSearchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+                }
+                setMovieConfirmedKeyword(movieSearchKeyword);
+              }}
               style={{
                 padding: "8px 16px",
                 fontSize: 14,
@@ -782,6 +844,15 @@ const dynamicMovieStats = useMemo(() => {
               placeholder="이벤트 제목/날짜/카테고리 검색"
               value={eventSearchKeyword}
               onChange={(e) => setEventSearchKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === 'Enter'){
+                  if(eventSearchKeyword.replace(/\s+/g, '')===''){
+                    alert('유효한 검색어를 입력해주세요!');
+                    return;
+                  }
+                  setEventConfirmedKeyword(eventSearchKeyword);
+                };
+              }}
               style={{
                 width: 300,
                 padding: "8px 12px",
@@ -792,7 +863,13 @@ const dynamicMovieStats = useMemo(() => {
               }}
             />
             <button
-              onClick={() => setEventConfirmedKeyword(eventSearchKeyword)}
+              onClick={() => {
+                if(eventSearchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+                }
+                setEventConfirmedKeyword(eventSearchKeyword);
+              }}
               style={{
                 padding: "8px 16px",
                 fontSize: 14,
@@ -972,6 +1049,15 @@ const dynamicMovieStats = useMemo(() => {
           placeholder="주문번호/극장/지역/날짜/시간 검색"
           value={reservationSearchKeyword}
           onChange={(e) => setReservationSearchKeyword(e.target.value)}
+          onKeyDown={(e) => {
+            if(e.key === 'Enter'){
+              if(reservationSearchKeyword.replace(/\s+/g, '')===''){
+                alert('유효한 검색어를 입력해주세요!');
+                return;
+              }
+              setReservationConfirmedKeyword(reservationSearchKeyword);
+            }
+          }}
           style={{
             width: 300,
             padding: "8px 12px",
@@ -982,8 +1068,13 @@ const dynamicMovieStats = useMemo(() => {
           }}
         />
         <button
-          onClick={() =>
-            setReservationConfirmedKeyword(reservationSearchKeyword)
+          onClick={() =>{
+            if(reservationSearchKeyword.replace(/\s+/g, '')===''){
+              alert('유효한 검색어를 입력해주세요!');
+              return;
+            }
+            setReservationConfirmedKeyword(reservationSearchKeyword);
+          }
           }
           style={{
             padding: "8px 16px",
@@ -1104,6 +1195,15 @@ const dynamicMovieStats = useMemo(() => {
               placeholder="상품명/유저ID/카드사/결제수단 검색"
               value={paymentSearchKeyword}
               onChange={(e) => setPaymentSearchKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === 'Enter'){
+                  if(paymentSearchKeyword.replace(/\s+/g, '')===''){
+                    alert('유효한 검색어를 입력해주세요!');
+                    return;
+                  }
+                  setPaymentConfirmedKeyword(paymentSearchKeyword);
+                }
+              }}
               style={{
                 width: 300,
                 padding: "8px 12px",
@@ -1114,7 +1214,13 @@ const dynamicMovieStats = useMemo(() => {
               }}
             />
             <button
-              onClick={() => setPaymentConfirmedKeyword(paymentSearchKeyword)}
+              onClick={() => {
+                if(paymentSearchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+                }
+                setPaymentConfirmedKeyword(paymentSearchKeyword);
+              }}
               style={{
                 padding: "8px 16px",
                 fontSize: 14,
@@ -1257,6 +1363,15 @@ const dynamicMovieStats = useMemo(() => {
               placeholder="작성자/내용/영화제목 검색"
               value={reviewSearchKeyword}
               onChange={(e) => setReviewSearchKeyword(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === 'Enter'){
+                  if(reviewSearchKeyword.replace(/\s+/g, '')===''){
+                    alert('유효한 검색어를 입력해주세요!');
+                    return;
+                  }
+                  setReviewConfirmedKeyword(reviewSearchKeyword);
+                }
+              }}
               style={{
                 width: 300,
                 padding: "8px 12px",
@@ -1267,7 +1382,13 @@ const dynamicMovieStats = useMemo(() => {
               }}
             />
             <button
-              onClick={() => setReviewConfirmedKeyword(reviewSearchKeyword)}
+              onClick={() => {
+                if(reviewSearchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+                }
+                setReviewConfirmedKeyword(reviewSearchKeyword);
+              }}
               style={{
                 padding: "8px 16px",
                 fontSize: 14,
