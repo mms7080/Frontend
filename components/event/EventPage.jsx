@@ -301,9 +301,15 @@ export default function EventPage({ serverEvents, userData }) {
             placeholder="이벤트 검색"
             value={searchKeyword}
             onChange={(e) => setSearchKeyword(e.target.value)}
-            onKeyDown={(e) =>
-              e.key === "Enter" && setConfirmedKeyword(searchKeyword)
-            }
+            onKeyDown={(e) =>{
+              if(e.key === "Enter"){
+                if(searchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+                }
+                setConfirmedKeyword(searchKeyword);
+              }
+            }}
             style={{
               width: "100%",
               maxWidth: "300px",
@@ -315,7 +321,13 @@ export default function EventPage({ serverEvents, userData }) {
           />
           <Button
             colorScheme="purple"
-            onClick={() => setConfirmedKeyword(searchKeyword)}
+            onClick={() => {
+              if(searchKeyword.replace(/\s+/g, '')===''){
+                  alert('유효한 검색어를 입력해주세요!');
+                  return;
+              }
+              setConfirmedKeyword(searchKeyword);
+            }}
             px={6}
             fontWeight="normal"
           >

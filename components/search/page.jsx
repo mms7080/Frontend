@@ -20,8 +20,8 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     const [events] = useState(serverEvents || {});
 
     const handleSearch = () => {
-        if(document.querySelector('#keyword').value===''){
-            alert('검색어를 입력하세요.');
+        if(document.querySelector('#keyword').value.replace(/\s+/g, '')===''){
+            alert('유효한 검색어를 입력해주세요!');
             return;
         }
         router.push(`/search/${document.querySelector('#keyword').value}`);

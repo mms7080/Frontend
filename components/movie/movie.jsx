@@ -44,8 +44,11 @@ const Movie = (userInfo) => {
     }, []);
 
     const handleSearch = (inputValue) => {
-        if(inputValue != searchWord) 
-            setSearchWord(inputValue);
+        if(inputValue.replace(/\s+/g, '')===''){
+            alert('유효한 검색어를 입력해주세요!');
+            return;
+        }
+        setSearchWord(inputValue);
     }
     
    const filteredMovies = useMemo(() => {

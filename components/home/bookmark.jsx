@@ -19,8 +19,8 @@ export default function Bookmark(){
                  onChange={(e)=>setInputValue(e.target.value)}
                  onKeyDown={(e)=>{
                     if(e.key==='Enter'){
-                        if(e.target.value===''){
-                            alert('검색어를 입력하세요.');
+                        if(e.target.value.replace(/\s+/g, '')===''){
+                            alert('유효한 검색어를 입력해주세요!');
                             return;
                         }
                         router.push(`/search/${e.target.value}`);
@@ -30,8 +30,8 @@ export default function Bookmark(){
                  />
                 
                 <Button h='24px' bg='none' onClick={()=>{
-                    if(inputValue===''){
-                        alert('검색어를 입력하세요.');
+                    if(inputValue.replace(/\s+/g, '')===''){
+                        alert('유효한 검색어를 입력해주세요!');
                         return;
                     }
                     router.push(`/search/${inputValue}`);
