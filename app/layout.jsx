@@ -3,9 +3,11 @@ import '../styles/globals.css';
 import { Provider } from '../components/ui/provider';
 import { Footer } from '../components';
 
+
 export default function Layout({ children }) {
   return (
     <html lang="ko">
+      <link rel="icon" href="/favicon.png" />
       <head />
       <body>
         <Provider>
@@ -16,7 +18,6 @@ export default function Layout({ children }) {
               minHeight: '100vh',
             }}
           >
-            
             <main style={{ flex: 1 }}>{children}</main>
             <Footer />
           </div>

@@ -30,7 +30,7 @@ export default function EventPage({ serverEvents, userData }) {
   const [searchbutton,setSearchButton]=useState(false);
 
   useEffect(() => {
-    document.title = "진행중인 이벤트 - 필모라";
+    document.title = "이벤트 - FILMORA";
   }, []);
 
   useEffect(()=>{

@@ -4,8 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Header } from "..";
 import SkeletonHeader from "../SkeletonHeader";
 
-
-  // 공지사항 페이지 컴포넌트
+// 공지사항 페이지 컴포넌트
 export default function NoticePage({ notices, userData }) {
   // 검색 옵션 (제목, 내용, 제목+내용, 작성자)
   const [searchOption, setSearchOption] = useState("title");
@@ -24,11 +23,15 @@ export default function NoticePage({ notices, userData }) {
   // 로딩 여부 (스켈레톤 표시용)
   const [loadingUser, setLoadingUser] = useState(false);
   // 검색 버튼 클릭 여부 (클릭 하면 목록버튼 등장)
-  const [searchbutton,setSearchButton]=useState(false);
+  const [searchbutton, setSearchButton] = useState(false);
 
-  useEffect(()=>{
-    if(confirmedKeyword!=='')setSearchButton(true);
-  },[confirmedKeyword])
+  useEffect(() => {
+    document.title = "공지 - FILMORA";
+  }, []);
+
+  useEffect(() => {
+    if (confirmedKeyword !== "") setSearchButton(true);
+  }, [confirmedKeyword]);
 
   // 공지 목록 필터링
   useEffect(() => {
@@ -44,13 +47,16 @@ export default function NoticePage({ notices, userData }) {
           : searchOption === "title_content"
           ? `${n.title} ${n.content}`
           : "";
-      return target?.replace(/\s+/g, '').toLowerCase().includes(confirmedKeyword.replace(/\s+/g, '').toLowerCase());
+      return target
+        ?.replace(/\s+/g, "")
+        .toLowerCase()
+        .includes(confirmedKeyword.replace(/\s+/g, "").toLowerCase());
     });
     setFiltered(result);
     setCurrentPage(1);
   }, [confirmedKeyword, searchOption, notices]);
 
-   // 전체 페이지 수 계산 (최소 1)
+  // 전체 페이지 수 계산 (최소 1)
   const totalPages = useMemo(() => {
     return Math.max(1, Math.ceil(filtered.length / itemsPerPage));
   }, [filtered]);
@@ -103,8 +109,8 @@ export default function NoticePage({ notices, userData }) {
 
   return (
     <>
-     {/* 로딩 중일 땐 SkeletonHeader, 아니면 실제 Header 표시 */}
-     {/* 근데 이제 안써서 필요없음 */}
+      {/* 로딩 중일 땐 SkeletonHeader, 아니면 실제 Header 표시 */}
+      {/* 근데 이제 안써서 필요없음 */}
       {loadingUser ? (
         <SkeletonHeader />
       ) : (
@@ -118,7 +124,7 @@ export default function NoticePage({ notices, userData }) {
           textAlign: "center",
         }}
       >
-         {/* 로고 헤더 */}
+        {/* 로고 헤더 */}
         <h1
           style={{
             fontSize: "24px",
@@ -203,8 +209,8 @@ export default function NoticePage({ notices, userData }) {
             onChange={(e) => setSearchKeyword(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                if(searchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                if (searchKeyword.replace(/\s+/g, "") === "") {
+                  alert("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setConfirmedKeyword(searchKeyword);
@@ -229,8 +235,8 @@ export default function NoticePage({ notices, userData }) {
               (e.currentTarget.style.backgroundColor = "black")
             }
             onClick={() => {
-              if(searchKeyword.replace(/\s+/g, '')===''){
-                alert('유효한 검색어를 입력해주세요!');
+              if (searchKeyword.replace(/\s+/g, "") === "") {
+                alert("유효한 검색어를 입력해주세요!");
                 return;
               }
               setConfirmedKeyword(searchKeyword);
@@ -238,34 +244,32 @@ export default function NoticePage({ notices, userData }) {
           >
             검색
           </button>
-          {!searchbutton && (
-            <div style={{width:63.2,height:44.5}}>
-            </div>
-          )}
+          {!searchbutton && <div style={{ width: 63.2, height: 44.5 }}></div>}
           {searchbutton && (
-          <button
-            style={{
-              backgroundColor: "black",
-              color: "white",
-              padding: "8px 20px",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontSize: "15px",
-              transition: "all 0.3s",
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = "#6B46C1")
-            }
-            onMouseOut={(e) =>
-              (e.currentTarget.style.backgroundColor = "black")
-            }
-            onClick={() => {
-              setConfirmedKeyword('');
-            }}
-          >
-            목록
-          </button>)}
+            <button
+              style={{
+                backgroundColor: "black",
+                color: "white",
+                padding: "8px 20px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "15px",
+                transition: "all 0.3s",
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#6B46C1")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "black")
+              }
+              onClick={() => {
+                setConfirmedKeyword("");
+              }}
+            >
+              목록
+            </button>
+          )}
         </div>
         {/* 공지사항 테이블 */}
         <table
@@ -555,7 +559,6 @@ export default function NoticePage({ notices, userData }) {
           </button>
         </div>
       </div>
-
     </>
   );
 }

@@ -1,24 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Text,
-  Image,
-  SimpleGrid,
-  Flex,
-  Button,
-} from "@chakra-ui/react";
+import { Box, Text, Image, SimpleGrid, Flex, Button } from "@chakra-ui/react";
 import { Header } from "..";
 import { useRouter } from "next/navigation";
 import SkeletonHeader from "../SkeletonHeader";
 import { useCart } from "./CartContext";
 import CartSidebar from "./CartSidebar";
-
-
-
-
-
 
 const defaultCategories = ["전체", "티켓", "팝콘/음료/콤보", "포인트몰"];
 
@@ -29,6 +17,10 @@ export default function MegaboxStorePage({ userData }) {
   const router = useRouter();
   const [loadingUser, setLoadingUser] = useState(false);
   const { addToCart } = useCart();
+
+  useEffect(() => {
+    document.title = "스토어 - FILMORA";
+  }, []);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store`, {
@@ -63,7 +55,13 @@ export default function MegaboxStorePage({ userData }) {
         <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
       )}
 
-      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
+      <Box
+        maxW="1200px"
+        mx="auto"
+        pt={{ base: 10, md: 20 }}
+        px={{ base: 4 }}
+        pb={10}
+      >
         <h1
           style={{
             fontSize: "24px",
@@ -108,7 +106,10 @@ export default function MegaboxStorePage({ userData }) {
             ))}
           </Flex>
           {user?.auth === "ADMIN" && (
-            <Button onClick={() => router.push("/store/upload")} mt={{ base: 4, md: 0 }}>
+            <Button
+              onClick={() => router.push("/store/upload")}
+              mt={{ base: 4, md: 0 }}
+            >
               + 스토어 등록
             </Button>
           )}
@@ -127,7 +128,11 @@ export default function MegaboxStorePage({ userData }) {
                 {category}
               </Text>
             )}
-            <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={{ base: 6, md: 10 }} justifyItems="center">
+            <SimpleGrid
+              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+              spacing={{ base: 6, md: 10 }}
+              justifyItems="center"
+            >
               {(storeData[category] || []).map((item) => (
                 <Box
                   key={item.id}
@@ -151,7 +156,12 @@ export default function MegaboxStorePage({ userData }) {
                     borderRadius="md"
                   />
                   <Box>
-                    <Flex justifyContent="space-between" alignItems="center" mb={2} gap={2}>
+                    <Flex
+                      justifyContent="space-between"
+                      alignItems="center"
+                      mb={2}
+                      gap={2}
+                    >
                       <Text fontWeight="normal" fontSize="15px" isTruncated>
                         {item.title}
                       </Text>
@@ -173,18 +183,45 @@ export default function MegaboxStorePage({ userData }) {
                     <Text fontSize="13px" color="#666" mb={1} noOfLines={2}>
                       {item.subtitle}
                     </Text>
-                    <Flex alignItems="center" gap={2} mb={2} flexWrap="wrap" bg="#FAF5FF" px={2} py={1} borderRadius="6px">
+                    <Flex
+                      alignItems="center"
+                      gap={2}
+                      mb={2}
+                      flexWrap="wrap"
+                      bg="#FAF5FF"
+                      px={2}
+                      py={1}
+                      borderRadius="6px"
+                    >
                       {item.originalPrice && (
                         <>
-                          <Text fontSize="13px" color="#aaa" textDecoration="line-through" fontWeight="normal">
+                          <Text
+                            fontSize="13px"
+                            color="#aaa"
+                            textDecoration="line-through"
+                            fontWeight="normal"
+                          >
                             {formatPrice(item.originalPrice)}
                           </Text>
-                          <Text fontSize="12px" color="red" fontWeight="semibold" bg="#FED7D7" px={2} py={0.5} borderRadius="4px">
+                          <Text
+                            fontSize="12px"
+                            color="red"
+                            fontWeight="semibold"
+                            bg="#FED7D7"
+                            px={2}
+                            py={0.5}
+                            borderRadius="4px"
+                          >
                             SALE
                           </Text>
                         </>
                       )}
-                      <Text fontSize="18px" fontWeight="bold" color="#6B46C1" letterSpacing="-0.5px">
+                      <Text
+                        fontSize="18px"
+                        fontWeight="bold"
+                        color="#6B46C1"
+                        letterSpacing="-0.5px"
+                      >
                         {formatPrice(item.price)}
                       </Text>
                     </Flex>

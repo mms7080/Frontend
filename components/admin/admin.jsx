@@ -72,6 +72,11 @@ export default function AdminDashboard({ userData }) {
   const [currentPaymentPage, setCurrentPaymentPage] = useState(1);
   const [selectedSection, setSelectedSection] = useState(null);
 
+
+  useEffect(() => {
+  document.title = "관리자 - FILMORA";
+}, []);
+
   // ✅ 로그인 여부 및 권한 확인 → 관리자가 아니면 리다이렉트
   useEffect(() => {
     if (!redirected.current) {
