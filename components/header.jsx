@@ -233,7 +233,7 @@ const endDrag = () => {
           _hover={{ bg: "#bae6fd" }}
           onClick={() => router.push("/mypage")}
         >
-          ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 준비해주세요!
+          ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 입장 부탁드립니다
         </Box>
       )}
 
