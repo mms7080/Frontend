@@ -1,20 +1,13 @@
-'use client';
-
-import React,{Suspense,lazy} from 'react';
+import React from 'react';
 import {Flex,Box,VStack,Image,Text} from '@chakra-ui/react';
 import Link from 'next/link';
 import Signinpart from './Signinpart';
-import SkeletonHeader from "../SkeletonHeader";
+import {Header} from '..';
 
 export default function Signin(){
 
-    const Header = lazy(() => import('../header'));
-
     return <>
-        {/* Suspense로 감싸고 fallback에 SkeletonHeader를 지정 */}
-        <Suspense fallback={<SkeletonHeader bg='white'/>}>
-            <Header />
-        </Suspense>
+        <Header/>
         <Box w='100vw' minW='1000px' h='540px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%'>
