@@ -364,7 +364,7 @@ export default function Booking2Page() {
                     bgPosition="center"
                     transform="scale(1.1)"
                 />
-                <Box position="absolute" top={0} left={0} width="100%" height="100%" bg="rgba(0,0,0,0.8)" />
+                <Box position="absolute" top={0} left={0} width="100%" height="100%" bg="rgba(0,0,0,0.8)" onClick={() => setActiveMovie(null)} />
                 <Box 
                     position="relative" 
                     mx="auto" 
@@ -386,6 +386,7 @@ export default function Booking2Page() {
                         bg="rgba(0,0,0,0.7)"  // 투명도 조절해서 어둡기 강도 변경
                         borderRadius="md"
                         zIndex={1}
+                        onClick={(e) => e.stopPropagation()}
                     />
                     <Box position="relative" zIndex={2}>
                     <Flex justify="space-between" align="center" mb={4} ml="7.5%">
