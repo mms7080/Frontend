@@ -2,13 +2,13 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { movies } from "../../../../components/moviePoster";
 import { Header } from "../../../../components";
 
 export default function MoviePaymentSuccessPage() {
   const [status, setStatus] = useState("🎬 결제 확인 중입니다...");
   const [reservationInfo, setReservationInfo] = useState(null);
   const [user, setUser] = useState(null);
+  const [movie, setMovie] = useState(null);
   const router = useRouter();
   const params = useSearchParams();
 
@@ -17,9 +17,7 @@ export default function MoviePaymentSuccessPage() {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
-          }
+          { credentials: "include" }
         );
         if (!res.ok) throw new Error();
         const data = await res.json();
@@ -40,11 +38,10 @@ export default function MoviePaymentSuccessPage() {
       const userId = params.get("userId");
 
       const movieId = parseInt(params.get("movieId"));
-      const movie = movies.find((m) => m.id === movieId);
       const region = params.get("region");
       const theater = params.get("theater");
-      const date = params.get("date");
-      const time = params.get("time");
+      const date = params.get("date"); // YYYY-MM-DD
+      const time = params.get("time"); // HH:mm
       const seats = params.get("seats")?.split(",") || [];
       const adult = parseInt(params.get("adult") || "0");
       const teen = parseInt(params.get("teen") || "0");
@@ -52,6 +49,7 @@ export default function MoviePaymentSuccessPage() {
       const special = parseInt(params.get("special") || "0");
 
       try {
+        // 1. 결제 승인
         await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/reservation`,
           {
@@ -62,6 +60,7 @@ export default function MoviePaymentSuccessPage() {
           }
         );
 
+        // 2. 예매 저장
         const reservation = {
           userId,
           movieId,
@@ -88,8 +87,36 @@ export default function MoviePaymentSuccessPage() {
           }
         );
 
+        // 3. 영화 정보 불러오기
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
+        );
+        const data = await res.json();
+        const base = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
+        const fullMovie = {
+          ...data,
+          poster: base + data.poster,
+          wideImage: data.wideImage ? base + data.wideImage : null,
+        };
+        setMovie(fullMovie);
+
+        // 4. 로컬스토리지 알림 저장 (상영 30분 전)
+        const rawTime = new Date(`${date}T${time}:00`);
+        const showKST = new Date(rawTime.getTime() + 9 * 60 * 60 * 1000); // KST → UTC
+        const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000); // 30분 전
+
+        localStorage.setItem(
+          "latestReservationAlert",
+          JSON.stringify({
+            title: data.title,
+            movieId,
+            notifyTime: notifyTime.toISOString(), // UTC 기준 저장
+          })
+        );
+
+        // 5. 상태 업데이트
         setReservationInfo({
-          movie,
+          movie: fullMovie,
           region,
           theater,
           date,
@@ -99,10 +126,10 @@ export default function MoviePaymentSuccessPage() {
           amount,
         });
 
-        setStatus("✅  예매가 완료되었습니다.");
+        setStatus("✅ 예매가 완료되었습니다.");
       } catch (err) {
         console.error("❌ 처리 중 오류 발생:", err);
-        setStatus("✅  예매가 완료되었습니다.");
+        setStatus("❌ 오류가 발생했습니다. 관리자에게 문의하세요.");
       }
     };
 
@@ -163,7 +190,7 @@ export default function MoviePaymentSuccessPage() {
           display: flex;
           justify-content: center;
           align-items: center;
-          min-height: calc(100vh - 80px); /* 헤더 제외한 높이 */
+          min-height: calc(100vh - 80px);
           padding: 20px;
         }
 
