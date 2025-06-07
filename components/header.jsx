@@ -3,7 +3,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Flex, Box, Icon, Text, Button, Image, Progress } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Icon,
+  Text,
+  Button,
+  Image,
+} from "@chakra-ui/react";
 import { FiUser } from "react-icons/fi";
 
 export default function Header({ userInfo }) {
@@ -23,7 +30,6 @@ export default function Header({ userInfo }) {
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
   const [posterUrl, setPosterUrl] = useState(null);
-  const [progress, setProgress] = useState(0);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -43,7 +49,22 @@ export default function Header({ userInfo }) {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
 
+  useEffect(() => {
+    const handleStorage = () => {
+      const alertData = localStorage.getItem("latestReservationShowAlert");
+      if (alertData) {
+        const { title } = JSON.parse(alertData);
+        setShowingAlert({ title });
+        localStorage.removeItem("latestReservationShowAlert");
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
+  useEffect(() => {
     const alertData = localStorage.getItem("latestReservationAlert");
     if (alertData) {
       const parsed = JSON.parse(alertData);
@@ -70,12 +91,14 @@ export default function Header({ userInfo }) {
             timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
           });
 
-          setProgress(Math.max(0, Math.min(100, (1 - diff / total) * 100)));
+          // 무조건 showingAlert 표시 (30분 전이면)
+          if (diff <= 30 * 60 * 1000) {
+            setShowingAlert({ title });
+          }
 
-          // fetch poster
           fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
-            .then(res => res.json())
-            .then(data => {
+            .then((res) => res.json())
+            .then((data) => {
               if (data?.poster) {
                 setPosterUrl(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`);
               }
@@ -98,7 +121,6 @@ export default function Header({ userInfo }) {
           setReservationAlert(null);
         }
       }
-
       applyCountdown();
     }, 1000);
 
@@ -148,19 +170,19 @@ export default function Header({ userInfo }) {
           top="0"
           left="0"
           w="100%"
-          bg="#dbf4ff"
-          borderBottom="1px solid #38bdf8"
-          color="#0369a1"
+          bg="#f3e8ff"
+          borderBottom="1px solid #a855f7"
+          color="#6b21a8"
           fontSize="14px"
           fontWeight="medium"
           py={2}
           textAlign="center"
           zIndex="9999"
           cursor="pointer"
-          _hover={{ bg: "#bae6fd" }}
+          _hover={{ bg: "#e9d5ff" }}
           onClick={clearReservationAlert}
         >
-          🛎️ <strong>[{reservationAlert.title}]</strong> 예매가 완료되었습니다! (마이페이지로 이동)
+          🔔 <strong>[{reservationAlert.title}]</strong> 예매가 완료되었습니다! (마이페이지로 이동)
         </Box>
       )}
 
@@ -178,9 +200,6 @@ export default function Header({ userInfo }) {
           py={2}
           textAlign="center"
           zIndex="9998"
-          cursor="pointer"
-          _hover={{ bg: "#bae6fd" }}
-          onClick={() => setShowingAlert(null)}
         >
           ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 준비해주세요!
         </Box>
@@ -208,27 +227,44 @@ export default function Header({ userInfo }) {
           alignItems="center"
         >
           {posterUrl && (
-            <Image src={posterUrl} alt="포스터" boxSize="60px" borderRadius="md" mr={3} />
+            <Image
+              src={posterUrl}
+              alt="포스터"
+              boxSize="60px"
+              borderRadius="md"
+              mr={3}
+            />
           )}
           {!countdownMinimized ? (
             <Box textAlign="left">
-              <Text mb={1}><strong>{countdown.title}</strong> 상영까지</Text>
+              <Text mb={1}>
+                <strong>{countdown.title}</strong> 상영까지
+              </Text>
               <Text mb={2}>🕙 {countdown.timeLeft}</Text>
               <Flex justify="flex-end" gap={2}>
-                <Button size="xs" onClick={() => setCountdownMinimized(true)}>작게</Button>
-                <Button size="xs" onClick={clearCountdown} colorScheme="red">닫기</Button>
+                <Button size="xs" onClick={() => setCountdownMinimized(true)}>
+                  작게
+                </Button>
+                <Button size="xs" onClick={clearCountdown} colorScheme="red">
+                  닫기
+                </Button>
               </Flex>
             </Box>
           ) : (
             <Flex align="center" gap={2}>
               <Text fontSize="sm">🕙 {countdown.timeLeft}</Text>
-              <Button size="xs" onClick={() => setCountdownMinimized(false)}>펼치기</Button>
-              <Button size="xs" onClick={clearCountdown} colorScheme="red">X</Button>
+              <Button size="xs" onClick={() => setCountdownMinimized(false)}>
+                펼치기
+              </Button>
+              <Button size="xs" onClick={clearCountdown} colorScheme="red">
+                X
+              </Button>
             </Flex>
           )}
         </Flex>
       )}
 
+      {/* ✅ 정상 위치로 이동된 헤더 */}
       <Flex
         w="100%"
         minW="300px"
@@ -291,7 +327,7 @@ export default function Header({ userInfo }) {
                   theater: "영화관",
                   store: "스토어",
                   notice: "공지",
-                  event: "이벤트"
+                  event: "이벤트",
                 }[path]}
               </Box>
             </Link>
