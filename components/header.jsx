@@ -324,6 +324,7 @@ const endDrag = () => {
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
         borderBottom="1px solid rgba(0, 0, 0, 0.1)"
         gap={{ base: 4, md: 0 }}
+        _focus={{outline:'none'}}
       >
         <Box>
           <Link href="/home">
