@@ -1,7 +1,7 @@
 "use client";
 
 import React,{useState, useEffect} from "react";
-import { Box, Text, Grid, Flex, Image, Button } from '@chakra-ui/react';
+import { Box, Text, Grid, Flex, Image, Button, Spinner } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { Header, Footer } from '../../../components';
 import { movies } from '../../../components/moviePoster'
@@ -15,11 +15,11 @@ export default function SeatsPage() {
     const [user, setUser] = useState(null);
     const searchParams = useSearchParams();
     const movieId = parseInt(searchParams.get('movieId'));
+    const showtimeId = searchParams.get('showtimeId');
     const region = searchParams.get('region');
     const theater = searchParams.get('theater');
     const date = searchParams.get('date');
     const time = searchParams.get('time');
-    // const movie = movies.find((m) => m.id === movieId);
     const [movie, setMovie] = useState(null);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const rows = 9;
@@ -39,68 +39,83 @@ export default function SeatsPage() {
 
     const isButtonDisabled = (selectedSeats.length === 0 || selectedSeats.length < totalPeople);
 
-    // const disabledSeats = ["A3", "A4", "A9", "A10"];
-    // const bookedSeats =["B3", "B4"];
-
     const [seatData, setSeatData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const bookedSeats = seatData
-    .filter(seat => seat.status === "RESERVED")
-    .map(seat => seat.fullSeatName);
+        .filter(seat => seat.status === "RESERVED")
+        .map(seat => seat.fullSeatName);
 
     const disabledSeats = seatData
-    .filter(seat => seat.status === "UNAVAILABLE")
-    .map(seat => seat.fullSeatName);
+        .filter(seat => seat.status === "UNAVAILABLE")
+        .map(seat => seat.fullSeatName);
 
 
+    // useEffect(() => {
+    //     const fetchSeats = async () => {
+    //       try {
+    //         const showtimeId = searchParams.get("showtimeId"); // URL에서 가져오기
+    //         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seats`);
+    //         const json = await res.json();
+    //         setSeatData(json.data || []);
+    //       } catch (e) {
+    //         console.error("좌석 정보 로딩 실패", e);
+    //       }
+    //     };
+    //     fetchSeats();
+    //   }, []);
     useEffect(() => {
         const fetchSeats = async () => {
-          try {
-            const showtimeId = searchParams.get("showtimeId"); // URL에서 가져오기
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seats`);
-            const json = await res.json();
-            setSeatData(json.data || []);
-          } catch (e) {
-            console.error("좌석 정보 로딩 실패", e);
-          }
+            if (!showtimeId) {
+                console.error("Showtime ID is missing!");
+                setLoading(false);
+                return;
+            }
+            setLoading(true); // 데이터 요청 시작 시 로딩 상태로 변경
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seats`);
+                const json = await res.json();
+                setSeatData(json.data || []);
+            } catch (e) {
+                console.error("좌석 정보 로딩 실패", e);
+                setSeatData([]); // 에러 발생 시 빈 배열로 초기화
+            } finally {
+                setLoading(false); // 요청 완료 시 로딩 상태 해제
+            }
         };
         fetchSeats();
-      }, []);
+    }, [showtimeId]);
 
-      useEffect(() => {
+    useEffect(() => {
         const fetchMovie = async () => {
-          try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
-            if (!res.ok) throw new Error('영화 정보를 불러오는 데 실패했습니다.');
-            const data = await res.json();
-      
-            const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
-            const updated = {
-              ...data,
-              poster: baseURL + data.poster,
-              wideImage: data.wideImage ? baseURL + data.wideImage : null,
-            };
-            setMovie(updated);
-          } catch (e) {
-            console.error("영화 정보 로딩 실패", e);
-          }
+            if (!movieId) return;
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
+                if (!res.ok) throw new Error('영화 정보를 불러오는 데 실패했습니다.');
+                const data = await res.json();
+                const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
+                const updated = {
+                ...data,
+                poster: baseURL + data.poster,
+                wideImage: data.wideImage ? baseURL + data.wideImage : null,
+                };
+                setMovie(updated);
+            } catch (e) {
+                console.error("영화 정보 로딩 실패", e);
+            }
         };
-      
         fetchMovie();
-      }, [movieId]);
+    }, [movieId]);
       
 
     const toggleSeat = (seatId) => {
         if (bookedSeats.includes(seatId)) return; // 예약 완료 좌석 클릭 막기
-    
         const isDisabledSeat = disabledSeats.includes(seatId);
-    
         if (selectedSeats.includes(seatId)) {
             setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
         } else {
             const normalSeats = selectedSeats.filter(s => !disabledSeats.includes(s));
             const selectedDisabledSeats = selectedSeats.filter(s => disabledSeats.includes(s));
-    
             if (isDisabledSeat) {
                 if (selectedDisabledSeats.length >= personCounts.special) {
                     alert("선택한 우대 좌석이 우대 인원 수를 초과했습니다.");
@@ -153,19 +168,19 @@ export default function SeatsPage() {
     useEffect(() => {
         document.title = "예매 - 좌석선택";
         (async () => {
-          try {
-            const res = await fetch(
-              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-              {
-                credentials: "include",
-              }
-            );
-            if (!res.ok) throw new Error();
-            const data = await res.json();
-            setUser(data);
-          } catch (e) {
-            setUser(null);
-          }
+            try {
+                const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+                {
+                    credentials: "include",
+                }
+                );
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                setUser(data);
+            } catch (e) {
+                setUser(null);
+            }
         })();
     }, []);
 
@@ -325,135 +340,142 @@ export default function SeatsPage() {
 
                     {/* 오른쪽: 좌석 그리드 */}
                 <Box flex="3" textAlign="center" overflow="visible">
-                <Box 
-                    mt="-10%"
-                    mb={6} 
-                    textAlign="center" 
-                    position="relative" 
-                    mx="auto"
-                    width="min(100%, 700px)" // 화면 줄어들 때 반응형
-                >
-                    {/* 스크린 바 */}
-                    <Box
-                        width="100%"
-                        height="30px"
-                        borderTop="3px solid #6B46C1"
-                        borderLeft="3px solid transparent"
-                        borderRight="3px solid transparent"
-                        borderRadius="120% / 100%"
-                        mx="auto"
-                        position="relative"
-                        mb={0}
-                    />
-                    <Text
-                        mt={-6}
-                        fontSize="xl"
-                        fontWeight="normal"
-                        letterSpacing="widest"
-                        color="gray.300"
-                        mb={10}
-                    >
-                        SCREEN
-                    </Text>
-
-                    {/* 좌석 그리드 */}
-                    <Grid
-                        templateColumns="repeat(3, 40px) 40px repeat(8, 40px) 40px repeat(2, 40px)" // 좌석 포함한 고정 그리드
-                        gapX="5px"
-                        gapY="20px"
-                        mx="auto"
-                        justifyContent="center"
-                    >
-                    {rowLabels.map((rowLabel) => (
-                        <React.Fragment key={rowLabel}>
-                        {/* 줄 라벨 */}
-                        <Box
-                            fontSize="lg"
-                            w="40px"
-                            h="40px"
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            fontWeight="normal"
+                    {loading ? (
+                                <Flex justify="center" align="center" h="400px">
+                                    <Spinner size="xl" color="purple.500" />
+                                    <Text ml={4}>좌석 정보를 불러오는 중입니다...</Text>
+                                </Flex>
+                            ) : (
+                        <Box 
+                            mt="-10%"
+                            mb={6} 
+                            textAlign="center" 
+                            position="relative" 
+                            mx="auto"
+                            width="min(100%, 700px)" // 화면 줄어들 때 반응형
                         >
-                            {rowLabel}
-                        </Box>
-                        {/* 좌석 박스 */}
-                        {Array.from({ length: cols + 2 }).map((_, colIndex) => {
-                            if (colIndex === 2 || colIndex === 11)
-                                return <Box key={colIndex} />;
+                            {/* 스크린 바 */}
+                            <Box
+                                width="100%"
+                                height="30px"
+                                borderTop="3px solid #6B46C1"
+                                borderLeft="3px solid transparent"
+                                borderRight="3px solid transparent"
+                                borderRadius="120% / 100%"
+                                mx="auto"
+                                position="relative"
+                                mb={0}
+                            />
+                            <Text
+                                mt={-6}
+                                fontSize="xl"
+                                fontWeight="normal"
+                                letterSpacing="widest"
+                                color="gray.300"
+                                mb={10}
+                            >
+                                SCREEN
+                            </Text>
 
-                            const seatNumber =
-                                colIndex +
-                                1 +
-                                (colIndex > 2 ? -1 : 0) +
-                                (colIndex > 11 ? -1 : 0);
-                            const seatId = `${rowLabel}${seatNumber}`;
-
-                            // const isValidSeat = seatData.some((seat) => seat.fullSeatName === seatId);
-                            // if (!isValidSeat) return <Box key={seatId} />;
-
-                            return (
+                            {/* 좌석 그리드 */}
+                            <Grid
+                                templateColumns="repeat(3, 40px) 40px repeat(8, 40px) 40px repeat(2, 40px)" // 좌석 포함한 고정 그리드
+                                gapX="5px"
+                                gapY="20px"
+                                mx="auto"
+                                justifyContent="center"
+                            >
+                            {rowLabels.map((rowLabel) => (
+                                <React.Fragment key={rowLabel}>
+                                {/* 줄 라벨 */}
                                 <Box
-                                    key={seatId}
+                                    fontSize="lg"
                                     w="40px"
                                     h="40px"
-                                    bg={getSeatColor(seatId)}
-                                    // _hover={{ bg: "#6B46C1", cursor: "pointer" }}
-                                    _hover={{
-                                        bg: !bookedSeats.includes(seatId) &&
-                                            !disabledSeats.includes(seatId) &&
-                                            !isSelected(seatId)
-                                            ? "#6B46C1"
-                                            : undefined,
-                                        cursor: bookedSeats.includes(seatId) ? "not-allowed" : "pointer"
-                                    }}                                    
-                                    borderRadius="md"
                                     display="flex"
                                     alignItems="center"
                                     justifyContent="center"
-                                    fontSize="sm"
-                                    onClick={() => toggleSeat(seatId)}
-                                    border={isSelected(seatId) ? "2px solid white" : "none"}
+                                    fontWeight="normal"
                                 >
-                                    {seatNumber}
+                                    {rowLabel}
                                 </Box>
-                            );
-                        })}
-                        </React.Fragment>
-                    ))}
-                    </Grid>
-                    {/* 좌석 상태 정보 */}
-                    <Flex justify="center" mt={8} gap={6} wrap="wrap">
-                        <Flex align="center">
-                            <Box w="20px" h="20px" bg="gray.500" borderRadius="md" mr={2} />
-                            <Text fontSize="md" color="gray.300">예약 가능</Text>
-                        </Flex>
-                        <Flex align="center">
-                            <Box w="20px" h="20px" bg="gray.300" borderRadius="md" mr={2} />
-                            <Text fontSize="md" color="gray.300">예약 완료</Text>
-                        </Flex>
-                        <Flex align="center">
-                            <Box w="20px" h="20px" bg="blue.500" borderRadius="md" mr={2} />
-                            <Text fontSize="md" color="gray.300">장애인석</Text>
-                        </Flex>
-                        <Flex align="center">
-                            <Box w="20px" h="20px" bg="#6B46C1" borderRadius="md" mr={2} border="2px solid white" />
-                            <Text fontSize="md" color="gray.300">선택한 좌석</Text>
-                        </Flex>
-                        <Button
-                            size="sm"
-                            fontSize="sm"
-                            color="white"
-                            _hover={{bg:"#6B46C1"}}
-                            variant="outline"
-                            onClick={handleReset}
-                            mt={{ base: 4, md: 0 }}
-                        >
-                            초기화
-                        </Button>
-                    </Flex>
-                </Box>
+                                {/* 좌석 박스 */}
+                                {Array.from({ length: cols + 2 }).map((_, colIndex) => {
+                                    if (colIndex === 2 || colIndex === 11)
+                                        return <Box key={colIndex} />;
+
+                                    const seatNumber =
+                                        colIndex +
+                                        1 +
+                                        (colIndex > 2 ? -1 : 0) +
+                                        (colIndex > 11 ? -1 : 0);
+                                    const seatId = `${rowLabel}${seatNumber}`;
+
+                                    // const isValidSeat = seatData.some((seat) => seat.fullSeatName === seatId);
+                                    // if (!isValidSeat) return <Box key={seatId} />;
+
+                                    return (
+                                        <Box
+                                            key={seatId}
+                                            w="40px"
+                                            h="40px"
+                                            bg={getSeatColor(seatId)}
+                                            // _hover={{ bg: "#6B46C1", cursor: "pointer" }}
+                                            _hover={{
+                                                bg: !bookedSeats.includes(seatId) &&
+                                                    !disabledSeats.includes(seatId) &&
+                                                    !isSelected(seatId)
+                                                    ? "#6B46C1"
+                                                    : undefined,
+                                                cursor: bookedSeats.includes(seatId) ? "not-allowed" : "pointer"
+                                            }}                                    
+                                            borderRadius="md"
+                                            display="flex"
+                                            alignItems="center"
+                                            justifyContent="center"
+                                            fontSize="sm"
+                                            onClick={() => toggleSeat(seatId)}
+                                            border={isSelected(seatId) ? "2px solid white" : "none"}
+                                        >
+                                            {seatNumber}
+                                        </Box>
+                                    );
+                                })}
+                                </React.Fragment>
+                            ))}
+                            </Grid>
+                            {/* 좌석 상태 정보 */}
+                            <Flex justify="center" mt={8} gap={6} wrap="wrap">
+                                <Flex align="center">
+                                    <Box w="20px" h="20px" bg="gray.500" borderRadius="md" mr={2} />
+                                    <Text fontSize="md" color="gray.300">예약 가능</Text>
+                                </Flex>
+                                <Flex align="center">
+                                    <Box w="20px" h="20px" bg="gray.300" borderRadius="md" mr={2} />
+                                    <Text fontSize="md" color="gray.300">예약 완료</Text>
+                                </Flex>
+                                <Flex align="center">
+                                    <Box w="20px" h="20px" bg="blue.500" borderRadius="md" mr={2} />
+                                    <Text fontSize="md" color="gray.300">장애인석</Text>
+                                </Flex>
+                                <Flex align="center">
+                                    <Box w="20px" h="20px" bg="#6B46C1" borderRadius="md" mr={2} border="2px solid white" />
+                                    <Text fontSize="md" color="gray.300">선택한 좌석</Text>
+                                </Flex>
+                                <Button
+                                    size="sm"
+                                    fontSize="sm"
+                                    color="white"
+                                    _hover={{bg:"#6B46C1"}}
+                                    variant="outline"
+                                    onClick={handleReset}
+                                    mt={{ base: 4, md: 0 }}
+                                >
+                                    초기화
+                                </Button>
+                            </Flex>
+                        </Box>
+                        )}
                 </Box>
 
                 </Flex>
