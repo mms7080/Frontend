@@ -1,18 +1,17 @@
-export default function SkeletonHeader() {
+export default function SkeletonHeader({bg='#f3f3f3'}) {
   return (
     <div
       style={{
-        height: "60px",
-        backgroundColor: "#f3f3f3",
+        height: "100px",
+        backgroundColor:bg,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         padding: "0 24px",
-        borderBottom: "1px solid #ddd",
+        borderBottom:"1px solid rgba(0, 0, 0, 0.1)",
+        boxShadow:"0 2px 4px rgba(0, 0, 0, 0.05)"
       }}
     >
-      <div style={{ width: "120px", height: "20px", background: "#ddd", borderRadius: "4px" }} />
-      <div style={{ width: "80px", height: "20px", background: "#ddd", borderRadius: "4px" }} />
     </div>
   );
 }
