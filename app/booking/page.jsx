@@ -169,6 +169,11 @@ export default function Booking2Page() {
       };
 
     const handleBooking = () => {
+        if (!user) {
+            alert("로그인 후 예매를 진행할 수 있습니다.");
+            router.push("/signin"); // 원하는 로그인 페이지 경로로 수정
+            return;
+        }
         if (!selectedDate || !selectedTime) return;
         router.push(
             `/booking/seats?movieId=${activeMovie.id}` +
