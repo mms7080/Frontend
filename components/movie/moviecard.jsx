@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 import { createIcon } from '@chakra-ui/react';
-import Modal, { useModal } from '../../components/movie/modal'
+import Modal, { useModal } from '../../components/movie/modal';
 import './moviecard.css';
 
 const HeartIcon = createIcon({

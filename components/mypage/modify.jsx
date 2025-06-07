@@ -7,9 +7,9 @@ import Link from "next/link";
 export default function Modify({userInfo}) {/* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
 
     const [form, setForm] = useState({
-        zipcode:userInfo.zipcode ?? '',
-        address:userInfo.address ?? '',
-        address_detail:userInfo.address_detail ?? ''
+        zipcode:userInfo?.zipcode ?? '',
+        address:userInfo?.address ?? '',
+        address_detail:userInfo?.address_detail ?? ''
     });
 
     useEffect(() => {
@@ -33,13 +33,13 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
         }).open();
       };
 
-    const [phone,setPhone] = useState(userInfo.phone);
-    const [email,setEmail] = useState(userInfo.email);
-    const [birthdate,setBirthdate] = useState(userInfo.birthdate ?? '');
+    const [phone,setPhone] = useState(userInfo?.phone);
+    const [email,setEmail] = useState(userInfo?.email);
+    const [birthdate,setBirthdate] = useState(userInfo?.birthdate ?? '');
     const [gender,setGender]=useState('');
-    const [zipcode,setZipcode]=useState(userInfo.zipcode ?? '');
-    const [address,setAddress]=useState(userInfo.address ?? '');
-    const [address_detail,setAddressDetail]=useState(userInfo.address_detail ?? '');
+    const [zipcode,setZipcode]=useState(userInfo?.zipcode ?? '');
+    const [address,setAddress]=useState(userInfo?.address ?? '');
+    const [address_detail,setAddressDetail]=useState(userInfo?.address_detail ?? '');
 
     const [pw,setPw]=useState('');
     const [pwMessage,setPwMessage]=useState('');/* 비밀번호 입력창 밑의 메세지 */
@@ -73,7 +73,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='id'>아이디</label></td>
                                             <td style={{width:605,height:50,paddingLeft:15}}>
-                                                <Text>{userInfo.username}</Text>
+                                                <Text>{userInfo?.username}</Text>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -181,7 +181,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름</label></td>
                                             <td style={{width:605,height:50,paddingLeft:15}}>
-                                                <Text>{userInfo.name}</Text>
+                                                <Text>{userInfo?.name}</Text>
                                             </td>
                                         </tr>
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
@@ -212,7 +212,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="birthdate"><label htmlFor="gender">성별</label></label></td>
                                             <td style={{width:605,height:50,paddingLeft:15}}>
-                                                <RadioGroup.Root defaultValue={userInfo.gender} display='flex' alignItems='center'>
+                                                <RadioGroup.Root defaultValue={userInfo?.gender} display='flex' alignItems='center'>
                                                     <RadioGroup.Item type="radio" value="남성" onClick={(e)=>{setGender(e.target.value)}}>
                                                         <RadioGroup.ItemHiddenInput />
                                                         <RadioGroup.ItemIndicator/>

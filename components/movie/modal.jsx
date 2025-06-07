@@ -35,7 +35,14 @@ export const useModal = () => {
     return {isModalOpen, isModalVisible, openModal, closeModal}
 }
 
-const Modal = ({isModalOpen, isModalVisible, closeModal}) => {
+const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm}) => {
+
+    const handleConfirm = () => {
+        closeModal();
+        setTimeout(() => {
+            if (onConfirm) onConfirm(); // 모달 닫힌 후 후속 작업 실행
+        }, 300); // closeModal 애니메이션 시간과 동일하게 맞춰야 깔끔
+    };
     
     // 모달 나와있는 동안 스크롤 봉인
     useEffect(() => {
@@ -73,13 +80,13 @@ const Modal = ({isModalOpen, isModalVisible, closeModal}) => {
             >
                 <Box textAlign="center">
                     <Box mb="6" fontSize="xl" color="black">
-                        로그인 후 이용가능한 서비스 입니다.
+                        로그인 후 이용해주세요.
                     </Box>
                     <Button
                         width="20%" py="3" padding="8px" fontSize="large"
                         bg="#6b46c1" color="white" borderRadius="4px" 
                         _hover={{bg : "#553c9a"}}
-                        onClick={closeModal}
+                        onClick={handleConfirm}
                     >
                         확인
                     </Button>

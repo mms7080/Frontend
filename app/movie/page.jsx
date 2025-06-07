@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Header,Footer} from '../../components';
+import {Header} from '../../components';
 import {fetch} from '../../lib/server';
 import Movie from '../../components/movie/movie'
 

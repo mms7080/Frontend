@@ -8,11 +8,9 @@ import {Modify} from '.';
 
 //import {Bookingcheck,Qna} from '.';
 
-export default async function Mypage(){
-    const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
+export default async function Mypage({userInfo}){
 
      return <>
-     <Header userInfo={res}></Header>
      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
       <h1
           style={{
@@ -51,7 +49,7 @@ export default async function Mypage(){
             예매/구매내역 확인 페이지(미구현)
           </Tabs.Content>
           <Tabs.Content value="modify">
-            <Modify userInfo={res}></Modify>
+            <Modify userInfo={userInfo}></Modify>
           </Tabs.Content>
           <Tabs.Content value="qna">
             1:1 QnA 페이지(미구현)
