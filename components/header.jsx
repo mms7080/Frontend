@@ -10,26 +10,22 @@ import {
   Text,
   Button,
   Image,
+  Spinner,
 } from "@chakra-ui/react";
 import { FiUser } from "react-icons/fi";
 
-export default function Header({ userInfo }) {
-  const [mounted, setMounted] = useState(false);
+export default function Header() {
+  const [user, setUser] = useState(undefined); // undefined: 로딩, null: 비로그인
   const [reservationAlert, setReservationAlert] = useState(null);
   const [showingAlert, setShowingAlert] = useState(null);
   const [countdown, setCountdown] = useState(null);
   const [countdownMinimized, setCountdownMinimized] = useState(false);
-  const [position, setPosition] = useState(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("countdownPosition");
-      return saved ? JSON.parse(saved) : { x: 20, y: 80 };
-    }
-    return { x: 20, y: 80 };
-  });
+  const [position, setPosition] = useState({ x: 20, y: 80 });
+  const [posterUrl, setPosterUrl] = useState(null);
+
   const countdownRef = useRef(null);
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
-  const [posterUrl, setPosterUrl] = useState(null);
 
   const pathname = usePathname();
   const router = useRouter();
@@ -47,27 +43,46 @@ export default function Header({ userInfo }) {
   const headerColor = isHome ? "white" : "black";
   const hoverColor = "gray.500";
 
+  // ✅ userInfo fetch (로그인 상태 확인)
   useEffect(() => {
-    setMounted(true);
+    const fetchUser = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        setUser(data);
+      } catch {
+        setUser(null);
+      }
+    };
+    fetchUser();
   }, []);
 
   useEffect(() => {
-  const handleResize = () => {
-    const maxX = window.innerWidth - 150; // 타이머 가로 크기
-    const maxY = window.innerHeight - 100;
+    const saved = localStorage.getItem("countdownPosition");
+    if (saved) setPosition(JSON.parse(saved));
+  }, []);
 
-    setPosition((prev) => {
-      const newX = Math.min(prev.x, maxX);
-      const newY = Math.min(prev.y, maxY);
-      const clamped = { x: newX, y: newY };
-      localStorage.setItem("countdownPosition", JSON.stringify(clamped));
-      return clamped;
-    });
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      const maxX = window.innerWidth - 150;
+      const maxY = window.innerHeight - 100;
 
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
+      setPosition((prev) => {
+        const clamped = {
+          x: Math.min(prev.x, maxX),
+          y: Math.min(prev.y, maxY),
+        };
+        localStorage.setItem("countdownPosition", JSON.stringify(clamped));
+        return clamped;
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const handleStorage = () => {
@@ -78,25 +93,23 @@ export default function Header({ userInfo }) {
         localStorage.removeItem("latestReservationShowAlert");
       }
     };
+
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   useEffect(() => {
     const alertData = localStorage.getItem("latestReservationAlert");
-    if (alertData) {
-      const parsed = JSON.parse(alertData);
-      setReservationAlert(parsed);
-    }
+    if (alertData) setReservationAlert(JSON.parse(alertData));
 
     const applyCountdown = () => {
-      const countdownData = localStorage.getItem("latestReservationCountdown");
-      if (countdownData && userInfo) {
-        const { title, showTime, movieId } = JSON.parse(countdownData);
-        const now = new Date().getTime();
+      const data = localStorage.getItem("latestReservationCountdown");
+      if (data && user) {
+        const { title, showTime, movieId } = JSON.parse(data);
+        const now = Date.now();
         const target = new Date(showTime).getTime();
         const diff = target - now;
-        const total = target - new Date().setHours(0, 0, 0, 0);
+
         if (diff <= 0) {
           setCountdown(null);
           localStorage.removeItem("latestReservationCountdown");
@@ -109,16 +122,13 @@ export default function Header({ userInfo }) {
             timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
           });
 
-          if (diff <= 30 * 60 * 1000) {
-            setShowingAlert({ title });
-          }
+          if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
 
           fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
             .then((res) => res.json())
             .then((data) => {
-              if (data?.poster) {
+              if (data?.poster)
                 setPosterUrl(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`);
-              }
             })
             .catch(() => {});
         }
@@ -131,8 +141,7 @@ export default function Header({ userInfo }) {
       const alertData = localStorage.getItem("latestReservationAlert");
       if (alertData) {
         const { title, notifyTime } = JSON.parse(alertData);
-        const now = Date.now();
-        if (notifyTime && now >= new Date(notifyTime).getTime()) {
+        if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
           setShowingAlert({ title });
           localStorage.removeItem("latestReservationAlert");
           setReservationAlert(null);
@@ -142,7 +151,28 @@ export default function Header({ userInfo }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [userInfo]);
+  }, [user]);
+
+  const startDrag = (e) => {
+    dragging.current = true;
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+    offset.current = { x: clientX - position.x, y: clientY - position.y };
+  };
+
+  const onDrag = (e) => {
+    if (!dragging.current) return;
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+    const newX = Math.max(0, Math.min(clientX - offset.current.x, window.innerWidth - 150));
+    const newY = Math.max(0, Math.min(clientY - offset.current.y, window.innerHeight - 100));
+    setPosition({ x: newX, y: newY });
+    localStorage.setItem("countdownPosition", JSON.stringify({ x: newX, y: newY }));
+  };
+
+  const endDrag = () => {
+    dragging.current = false;
+  };
 
   const clearReservationAlert = () => {
     localStorage.removeItem("latestReservationAlert");
@@ -154,42 +184,6 @@ export default function Header({ userInfo }) {
     localStorage.removeItem("latestReservationCountdown");
     setCountdown(null);
   };
-
-const startDrag = (e) => {
-  dragging.current = true;
-  const clientX = e.clientX ?? e.touches?.[0]?.clientX;
-  const clientY = e.clientY ?? e.touches?.[0]?.clientY;
-  offset.current = {
-    x: clientX - position.x,
-    y: clientY - position.y,
-  };
-};
-
-const onDrag = (e) => {
-  if (!dragging.current) return;
-  const clientX = e.clientX ?? e.touches?.[0]?.clientX;
-  const clientY = e.clientY ?? e.touches?.[0]?.clientY;
-  const newPos = {
-    x: clientX - offset.current.x,
-    y: clientY - offset.current.y,
-  };
-
-  // 뷰포트 초과 방지
-  const maxX = window.innerWidth - 150;
-  const maxY = window.innerHeight - 100;
-  newPos.x = Math.max(0, Math.min(newPos.x, maxX));
-  newPos.y = Math.max(0, Math.min(newPos.y, maxY));
-
-  setPosition(newPos);
-  localStorage.setItem("countdownPosition", JSON.stringify(newPos));
-};
-
-const endDrag = () => {
-  dragging.current = false;
-};
-
-
-  if (!mounted) return null;
 
   return (
     <>
@@ -237,72 +231,64 @@ const endDrag = () => {
         </Box>
       )}
 
-{countdown && userInfo && (
-  <Flex
-    ref={countdownRef}
-    position="fixed"
-    left={`${position.x}px`}
-    top={`${position.y}px`}
-    direction={{ base: "column", md: "row" }}
-    onMouseDown={startDrag}
-    onMouseMove={onDrag}
-    onMouseUp={endDrag}
-    onMouseLeave={endDrag}
-    onTouchStart={startDrag}
-    onTouchMove={onDrag}
-    onTouchEnd={endDrag}
-    bg="rgba(255, 255, 255, 0.9)"
-    color="black"
-    p={3}
-    borderRadius="lg"
-    boxShadow="lg"
-    zIndex="9999"
-    fontSize="14px"
-    cursor="grab"
-    userSelect="none"
-    alignItems="center"
-    maxW="calc(100vw - 20px)"
-    wordBreak="keep-all"
-  >
-    {posterUrl && (
-      <Image
-        src={posterUrl}
-        alt="포스터"
-        boxSize="60px"
-        borderRadius="md"
-        mr={3}
-        mb={{ base: 2, md: 0 }}
-      />
-    )}
-    {!countdownMinimized ? (
-      <Box textAlign="left">
-        <Text mb={1}>
-          <strong>{countdown.title}</strong> 상영까지
-        </Text>
-        <Text mb={2}>🕙 {countdown.timeLeft}</Text>
-        <Flex justify="flex-end" gap={2} flexWrap="wrap">
-          <Button size="xs" onClick={() => setCountdownMinimized(true)}>
-            작게
-          </Button>
-          <Button size="xs" onClick={clearCountdown} colorScheme="red">
-            닫기
-          </Button>
+      {countdown && user && (
+        <Flex
+          ref={countdownRef}
+          position="fixed"
+          left={`${position.x}px`}
+          top={`${position.y}px`}
+          direction={{ base: "column", md: "row" }}
+          onMouseDown={startDrag}
+          onMouseMove={onDrag}
+          onMouseUp={endDrag}
+          onMouseLeave={endDrag}
+          onTouchStart={startDrag}
+          onTouchMove={onDrag}
+          onTouchEnd={endDrag}
+          bg="rgba(255, 255, 255, 0.9)"
+          color="black"
+          p={3}
+          borderRadius="lg"
+          boxShadow="lg"
+          zIndex="9999"
+          fontSize="14px"
+          cursor="grab"
+          userSelect="none"
+          alignItems="center"
+          maxW="calc(100vw - 20px)"
+          wordBreak="keep-all"
+        >
+          {posterUrl && (
+            <Image src={posterUrl} alt="포스터" boxSize="60px" borderRadius="md" mr={3} mb={{ base: 2, md: 0 }} />
+          )}
+          {!countdownMinimized ? (
+            <Box textAlign="left">
+              <Text mb={1}>
+                <strong>{countdown.title}</strong> 상영까지
+              </Text>
+              <Text mb={2}>🕙 {countdown.timeLeft}</Text>
+              <Flex justify="flex-end" gap={2} flexWrap="wrap">
+                <Button size="xs" onClick={() => setCountdownMinimized(true)}>
+                  작게
+                </Button>
+                <Button size="xs" onClick={clearCountdown} colorScheme="red">
+                  닫기
+                </Button>
+              </Flex>
+            </Box>
+          ) : (
+            <Flex align="center" gap={2}>
+              <Text fontSize="sm">🕙 {countdown.timeLeft}</Text>
+              <Button size="xs" onClick={() => setCountdownMinimized(false)}>
+                펼치기
+              </Button>
+              <Button size="xs" onClick={clearCountdown} colorScheme="red">
+                X
+              </Button>
+            </Flex>
+          )}
         </Flex>
-      </Box>
-    ) : (
-      <Flex align="center" gap={2}>
-        <Text fontSize="sm">🕙 {countdown.timeLeft}</Text>
-        <Button size="xs" onClick={() => setCountdownMinimized(false)}>
-          펼치기
-        </Button>
-        <Button size="xs" onClick={clearCountdown} colorScheme="red">
-          X
-        </Button>
-      </Flex>
-    )}
-  </Flex>
-)}
-
+      )}
 
       <Flex
         w="100%"
@@ -320,11 +306,9 @@ const endDrag = () => {
         justify="space-between"
         bg={headerBg}
         p={{ base: "20px", md: "40px" }}
-        position="relative"
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
         borderBottom="1px solid rgba(0, 0, 0, 0.1)"
         gap={{ base: 4, md: 0 }}
-        _focus={{outline:'none'}}
       >
         <Box>
           <Link href="/home">
@@ -380,12 +364,12 @@ const endDrag = () => {
           gap={{ base: 2, md: 4 }}
           fontSize="15px"
         >
-          {userInfo ? (
+          {user === undefined ? (
+            <Spinner size="sm" color={headerColor} />
+          ) : user ? (
             <>
-              {isRealHome && (
-                <Text color={headerColor}>{userInfo.name}님 환영합니다</Text>
-              )}
-              {userInfo.auth === "ADMIN" && (
+              {isRealHome && <Text color={headerColor}>{user.name}님 환영합니다</Text>}
+              {user.auth === "ADMIN" && (
                 <Text
                   as={Link}
                   href="/admin"
@@ -397,9 +381,7 @@ const endDrag = () => {
                 </Text>
               )}
               <Text color={headerColor} _hover={{ color: hoverColor }}>
-                <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>
-                  로그아웃
-                </Link>
+                <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>로그아웃</Link>
               </Text>
             </>
           ) : (
@@ -423,7 +405,7 @@ const endDrag = () => {
             <Link href="/booking">빠른예매</Link>
           </Text>
 
-          {userInfo ? (
+          {user ? (
             <Link href="/mypage">
               <Icon
                 as={FiUser}
