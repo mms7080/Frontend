@@ -24,12 +24,12 @@ export default function Booking2Page() {
     const [availableDates, setAvailableDates] = useState([]);
     const [availableTimes, setAvailableTimes] = useState([]);
 
-
     const [swiperReady, setSwiperReady] = useState(false);
     const [user, setUser] = useState(null);
     const [activeMovie, setActiveMovie] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
+    const [selectedShowtime, setSelectedShowtime] = useState(null);
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [selectedTheater, setSelectedTheater] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -172,10 +172,12 @@ export default function Booking2Page() {
         if (!selectedDate || !selectedTime) return;
         router.push(
             `/booking/seats?movieId=${activeMovie.id}` +
+            `&showtimeId=${selectedShowtime.showtimeId}` +
             `&region=${encodeURIComponent(selectedRegion)}` +
             `&theater=${encodeURIComponent(selectedTheater)}` +
             `&date=${encodeURIComponent(selectedDate)}` +
-            `&time=${encodeURIComponent(selectedTime)}`
+            `&time=${encodeURIComponent(selectedShowtime.startTime.split(" ")[1])}`
+            // `&time=${encodeURIComponent(selectedTime)}` 
         );
     };
 
@@ -183,6 +185,7 @@ export default function Booking2Page() {
         setActiveMovie(movie);
         setSelectedDate(null);
         setSelectedTime(null);
+        setSelectedShowtime(null);
         setSelectedRegion(null); 
         setSelectedTheater(null); 
     };
@@ -275,7 +278,6 @@ export default function Booking2Page() {
                         w="80%"
                         margin="50px"
                         borderRadius="md"
-                        // border="2px solid black"
                         objectFit="cover"
                         boxShadow="0px 0px 30px rgba(255,255,255,0.6)"
                     />
@@ -377,7 +379,6 @@ export default function Booking2Page() {
                         width="100%"
                         height="100%"
                         bg="rgba(0,0,0,0.7)"  // 투명도 조절해서 어둡기 강도 변경
-                        // filter="blur(50px)"
                         borderRadius="md"
                         zIndex={1}
                     />
@@ -460,7 +461,6 @@ export default function Booking2Page() {
                                 </Box>
                             </Box>
 
-
                         {/* 날짜/시간 선택 박스 */}
                         <Box
                             width="700px"
@@ -489,10 +489,9 @@ export default function Booking2Page() {
                                 <DateSelector
                                     selectedDate={selectedDate}
                                     setSelectedDate={(date) => {
-                                    setSelectedDate(date);
-                                    setSelectedTime(null); // 날짜 바꾸면 시간 초기화
+                                        setSelectedDate(date);
+                                        setSelectedTime(null); // 날짜 바꾸면 시간 초기화
                                     }}
-                                    // selectedTheater={selectedTheater}
                                     availableDates={availableDates}
                                 />
                                 ) : (
@@ -507,8 +506,8 @@ export default function Booking2Page() {
                                 flex="3" 
                                 display="flex" 
                                 flexDirection="column" 
-                                minW="0" overflow="
-                                auto"
+                                minW="0" 
+                                overflow="auto"
                                 css={{
                                     scrollbarWidth: 'none',          // Firefox
                                     '&::-webkit-scrollbar': {
@@ -519,11 +518,20 @@ export default function Booking2Page() {
                             <Text fontSize="2xl" fontWeight="normal" mb={2}>TIME</Text>
                             {selectedTheater && selectedDate ? (
                                 <TimeSelector
-                                    selectedTime={selectedTime}
-                                    setSelectedTime={setSelectedTime}
+                                    selectedShowtime={selectedShowtime}
+                                    onSelectShowtime={(showtime) => {
+                                        setSelectedShowtime(showtime);
+                                        setSelectedTime(showtime.startTime.split(" ")[1]);
+                                    }}
                                     movieTitle={activeMovie?.title}
                                     availableTimes={availableTimes}
                                 />
+                                // <TimeSelector
+                                //     selectedTime={selectedTime}
+                                //     setSelectedTime={setSelectedTime}
+                                //     movieTitle={activeMovie?.title}
+                                //     availableTimes={availableTimes}
+                                // />
                                 ) : (
                                 <Text fontSize="md" color="gray.300" mt={4}>
                                     날짜를 선택하세요.
