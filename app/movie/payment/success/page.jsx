@@ -16,36 +16,25 @@ export default function MoviePaymentSuccessPage() {
   const params = useSearchParams();
   const ticketRef = useRef();
 
- const requestNotificationPermission = async () => {
+  const requestNotificationPermission = async () => {
     if (!("Notification" in window)) return false;
     const permission = await Notification.requestPermission();
     return permission === "granted";
   };
 
-  useEffect(() => {
-    const checkAndNotify = () => {
-      const data = localStorage.getItem("latestReservationAlert");
-      if (!data) return;
-      const { title, notifyTime } = JSON.parse(data);
-      const now = new Date();
-      if (now >= new Date(notifyTime)) {
-        if (Notification.permission === "granted") {
-          new Notification("🎬 영화 상영 알림", {
-            body: `"${title}" 상영까지 30분 남았습니다.`,
-            icon: "/favicon.ico",
-            requireInteraction: true,
-          });
-        localStorage.setItem("latestReservationShowAlert", JSON.stringify({ title }));
-        localStorage.removeItem("latestReservationAlert");
-
-        window.dispatchEvent(new Event("storage"));
-        }
-      }
-    };
-
-    const interval = setInterval(checkAndNotify, 10000);
-    return () => clearInterval(interval);
-  }, []);
+  const scheduleNotification = (title, notifyTime) => {
+    const now = new Date();
+    const fireAt = new Date(notifyTime);
+    const delay = fireAt.getTime() - now.getTime();
+    if (delay <= 0) return;
+    setTimeout(() => {
+      new Notification("🎬 영화 상영 알림", {
+        body: `\"${title}\" 상영까지 30분 남았습니다.`,
+        icon: "/favicon.ico",
+        requireInteraction: true,
+      });
+    }, delay);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -60,7 +49,6 @@ export default function MoviePaymentSuccessPage() {
     };
     fetchUser();
   }, []);
-
 
   useEffect(() => {
     const confirmAndReserve = async () => {
