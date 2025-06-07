@@ -20,34 +20,76 @@ export default function CartSidebar() {
   );
 
   const [user, setUser] = useState(null);
-  const [position, setPosition] = useState(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("cartSidebarPosition");
-      return saved ? JSON.parse(saved) : { x: window.innerWidth - 340, y: 450 };
-    }
-    return { x: 1000, y: 450 };
-  });
+ const [position, setPosition] = useState(() => {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("cartSidebarPosition");
+    const defaultX = Math.min(window.innerWidth - 320, window.innerWidth - 340);
+    return saved
+      ? JSON.parse(saved)
+      : { x: defaultX < 0 ? 10 : defaultX, y: 450 };
+  }
+  return { x: 1000, y: 450 };
+});
+
 
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
 
-  const startDrag = (e) => {
-    dragging.current = true;
-    offset.current = {
-      x: e.clientX - position.x,
-      y: e.clientY - position.y,
-    };
+  useEffect(() => {
+  const maxX = window.innerWidth - 320;
+  const maxY = window.innerHeight - 100;
+  setPosition((prev) => {
+    const newX = Math.min(prev.x, maxX);
+    const newY = Math.min(prev.y, maxY);
+    const clamped = { x: newX, y: newY };
+    localStorage.setItem("cartSidebarPosition", JSON.stringify(clamped));
+    return clamped;
+  });
+}, []);
+
+
+  useEffect(() => {
+  const handleResize = () => {
+    const maxX = window.innerWidth - 320; // 사이드바 너비 고려
+    const maxY = window.innerHeight - 100;
+
+    setPosition((prev) => {
+      const newX = Math.min(prev.x, maxX);
+      const newY = Math.min(prev.y, maxY);
+      const clamped = { x: newX, y: newY };
+      localStorage.setItem("cartSidebarPosition", JSON.stringify(clamped));
+      return clamped;
+    });
   };
 
-  const onDrag = (e) => {
-    if (!dragging.current) return;
-    const newPos = {
-      x: e.clientX - offset.current.x,
-      y: e.clientY - offset.current.y,
-    };
-    setPosition(newPos);
-    localStorage.setItem("cartSidebarPosition", JSON.stringify(newPos));
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
+
+ const startDrag = (e) => {
+  const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+  const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+  dragging.current = true;
+  offset.current = {
+    x: clientX - position.x,
+    y: clientY - position.y,
   };
+};
+
+const onDrag = (e) => {
+  if (!dragging.current) return;
+  const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+  const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+
+  const newX = Math.max(0, Math.min(clientX - offset.current.x, window.innerWidth - 320));
+  const newY = Math.max(0, Math.min(clientY - offset.current.y, window.innerHeight - 100));
+
+  const newPos = { x: newX, y: newY };
+  setPosition(newPos);
+  localStorage.setItem("cartSidebarPosition", JSON.stringify(newPos));
+};
+
 
   const endDrag = () => {
     dragging.current = false;
@@ -106,6 +148,9 @@ export default function CartSidebar() {
       onMouseMove={onDrag}
       onMouseUp={endDrag}
       onMouseLeave={endDrag}
+      onTouchStart={startDrag}
+      onTouchMove={onDrag}
+      onTouchEnd={endDrag}
     >
       <h3 style={titleStyle}>장바구니 🛒</h3>
       <div style={{ maxHeight: "240px", overflowY: "auto" }}>
@@ -162,6 +207,7 @@ export default function CartSidebar() {
 const sidebarStyle = {
   position: "fixed",
   width: "300px",
+  maxWidth: "95vw",
   background: "rgba(255, 255, 255, 0.9)",
   boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
   padding: "16px",
@@ -169,7 +215,9 @@ const sidebarStyle = {
   zIndex: 1000,
   fontFamily: "sans-serif",
   cursor: "move",
+  overflowWrap: "break-word",
 };
+
 
 const titleStyle = {
   fontWeight: "normal",

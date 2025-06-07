@@ -52,6 +52,24 @@ export default function Header({ userInfo }) {
   }, []);
 
   useEffect(() => {
+  const handleResize = () => {
+    const maxX = window.innerWidth - 150; // 타이머 가로 크기
+    const maxY = window.innerHeight - 100;
+
+    setPosition((prev) => {
+      const newX = Math.min(prev.x, maxX);
+      const newY = Math.min(prev.y, maxY);
+      const clamped = { x: newX, y: newY };
+      localStorage.setItem("countdownPosition", JSON.stringify(clamped));
+      return clamped;
+    });
+  };
+
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
+
+  useEffect(() => {
     const handleStorage = () => {
       const alertData = localStorage.getItem("latestReservationShowAlert");
       if (alertData) {
@@ -91,7 +109,6 @@ export default function Header({ userInfo }) {
             timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
           });
 
-          // 무조건 showingAlert 표시 (30분 전이면)
           if (diff <= 30 * 60 * 1000) {
             setShowingAlert({ title });
           }
@@ -138,27 +155,39 @@ export default function Header({ userInfo }) {
     setCountdown(null);
   };
 
-  const startDrag = (e) => {
-    dragging.current = true;
-    offset.current = {
-      x: e.clientX - position.x,
-      y: e.clientY - position.y,
-    };
+const startDrag = (e) => {
+  dragging.current = true;
+  const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+  const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+  offset.current = {
+    x: clientX - position.x,
+    y: clientY - position.y,
+  };
+};
+
+const onDrag = (e) => {
+  if (!dragging.current) return;
+  const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+  const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+  const newPos = {
+    x: clientX - offset.current.x,
+    y: clientY - offset.current.y,
   };
 
-  const onDrag = (e) => {
-    if (!dragging.current) return;
-    const newPos = {
-      x: e.clientX - offset.current.x,
-      y: e.clientY - offset.current.y,
-    };
-    setPosition(newPos);
-    localStorage.setItem("countdownPosition", JSON.stringify(newPos));
-  };
+  // 뷰포트 초과 방지
+  const maxX = window.innerWidth - 150;
+  const maxY = window.innerHeight - 100;
+  newPos.x = Math.max(0, Math.min(newPos.x, maxX));
+  newPos.y = Math.max(0, Math.min(newPos.y, maxY));
 
-  const endDrag = () => {
-    dragging.current = false;
-  };
+  setPosition(newPos);
+  localStorage.setItem("countdownPosition", JSON.stringify(newPos));
+};
+
+const endDrag = () => {
+  dragging.current = false;
+};
+
 
   if (!mounted) return null;
 
@@ -204,70 +233,77 @@ export default function Header({ userInfo }) {
           _hover={{ bg: "#bae6fd" }}
           onClick={() => router.push("/mypage")}
         >
-          ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 입장 부탁드립니다
+          ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 준비해주세요!
         </Box>
       )}
 
-      {countdown && userInfo && (
-        <Flex
-          ref={countdownRef}
-          position="fixed"
-          left={`${position.x}px`}
-          top={`${position.y}px`}
-          onMouseDown={startDrag}
-          onMouseMove={onDrag}
-          onMouseUp={endDrag}
-          onMouseLeave={endDrag}
-          bg="rgba(255, 255, 255, 0.5)"
-          color="black"
-          p={3}
-          borderRadius="lg"
-          boxShadow="lg"
-          zIndex="9999"
-          fontSize="14px"
-          cursor="move"
-          userSelect="none"
-          alignItems="center"
-        >
-          {posterUrl && (
-            <Image
-              src={posterUrl}
-              alt="포스터"
-              boxSize="60px"
-              borderRadius="md"
-              mr={3}
-            />
-          )}
-          {!countdownMinimized ? (
-            <Box textAlign="left">
-              <Text mb={1}>
-                <strong>{countdown.title}</strong> 상영까지
-              </Text>
-              <Text mb={2}>🕙 {countdown.timeLeft}</Text>
-              <Flex justify="flex-end" gap={2}>
-                <Button size="xs" onClick={() => setCountdownMinimized(true)}>
-                  작게
-                </Button>
-                <Button size="xs" onClick={clearCountdown} colorScheme="red">
-                  닫기
-                </Button>
-              </Flex>
-            </Box>
-          ) : (
-            <Flex align="center" gap={2}>
-              <Text fontSize="sm">🕙 {countdown.timeLeft}</Text>
-              <Button size="xs" onClick={() => setCountdownMinimized(false)}>
-                펼치기
-              </Button>
-              <Button size="xs" onClick={clearCountdown} colorScheme="red">
-                X
-              </Button>
-            </Flex>
-          )}
+{countdown && userInfo && (
+  <Flex
+    ref={countdownRef}
+    position="fixed"
+    left={`${position.x}px`}
+    top={`${position.y}px`}
+    direction={{ base: "column", md: "row" }}
+    onMouseDown={startDrag}
+    onMouseMove={onDrag}
+    onMouseUp={endDrag}
+    onMouseLeave={endDrag}
+    onTouchStart={startDrag}
+    onTouchMove={onDrag}
+    onTouchEnd={endDrag}
+    bg="rgba(255, 255, 255, 0.9)"
+    color="black"
+    p={3}
+    borderRadius="lg"
+    boxShadow="lg"
+    zIndex="9999"
+    fontSize="14px"
+    cursor="grab"
+    userSelect="none"
+    alignItems="center"
+    maxW="calc(100vw - 20px)"
+    wordBreak="keep-all"
+  >
+    {posterUrl && (
+      <Image
+        src={posterUrl}
+        alt="포스터"
+        boxSize="60px"
+        borderRadius="md"
+        mr={3}
+        mb={{ base: 2, md: 0 }}
+      />
+    )}
+    {!countdownMinimized ? (
+      <Box textAlign="left">
+        <Text mb={1}>
+          <strong>{countdown.title}</strong> 상영까지
+        </Text>
+        <Text mb={2}>🕙 {countdown.timeLeft}</Text>
+        <Flex justify="flex-end" gap={2} flexWrap="wrap">
+          <Button size="xs" onClick={() => setCountdownMinimized(true)}>
+            작게
+          </Button>
+          <Button size="xs" onClick={clearCountdown} colorScheme="red">
+            닫기
+          </Button>
         </Flex>
-      )}
+      </Box>
+    ) : (
+      <Flex align="center" gap={2}>
+        <Text fontSize="sm">🕙 {countdown.timeLeft}</Text>
+        <Button size="xs" onClick={() => setCountdownMinimized(false)}>
+          펼치기
+        </Button>
+        <Button size="xs" onClick={clearCountdown} colorScheme="red">
+          X
+        </Button>
+      </Flex>
+    )}
+  </Flex>
+)}
 
-      {/* ✅ 정상 위치로 이동된 헤더 */}
+
       <Flex
         w="100%"
         minW="300px"
