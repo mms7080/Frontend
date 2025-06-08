@@ -194,6 +194,7 @@ export default function Header() {
           left="0"
           w="100%"
           bg="#f3e8ff"
+          h='40px'
           borderBottom="1px solid #a855f7"
           color="#6b21a8"
           fontSize="14px"
@@ -216,6 +217,7 @@ export default function Header() {
           left="0"
           w="100%"
           bg="#dbf4ff"
+          h='40px'
           borderBottom="1px solid #38bdf8"
           color="#0369a1"
           fontSize="14px"
