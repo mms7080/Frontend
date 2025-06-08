@@ -384,6 +384,15 @@ export default function Header() {
               <Text color={headerColor} _hover={{ color: hoverColor }}>
                 <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>로그아웃</Link>
               </Text>
+              <Text
+                color="#ff4d4d"
+                _hover={{
+                  color: "#ff6666",
+                  textShadow: "0 0 5px rgba(255, 77, 77, 0.5)",
+                }}
+              >
+                <Link href="/booking">빠른예매</Link>
+              </Text>
             </>
           ) : (
             <>
@@ -393,18 +402,19 @@ export default function Header() {
               <Text color={headerColor} _hover={{ color: hoverColor }}>
                 <Link href="/join">회원가입</Link>
               </Text>
+                <Text
+                color="#ff4d4d"
+                _hover={{
+                  color: "#ff6666",
+                  textShadow: "0 0 5px rgba(255, 77, 77, 0.5)",
+                }}
+              >
+                <Link href="/booking">빠른예매</Link>
+              </Text>
             </>
           )}
 
-          <Text
-            color="#ff4d4d"
-            _hover={{
-              color: "#ff6666",
-              textShadow: "0 0 5px rgba(255, 77, 77, 0.5)",
-            }}
-          >
-            <Link href="/booking">빠른예매</Link>
-          </Text>
+        
 
           {user ? (
             <Link href="/mypage">

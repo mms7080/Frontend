@@ -43,6 +43,14 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content}) => {
             if (onConfirm) onConfirm(); // 모달 닫힌 후 후속 작업 실행
         }, 300); // closeModal 애니메이션 시간과 동일하게 맞춰야 깔끔
     };
+
+    const handleCancel = () => {
+        closeModal();
+        setTimeout(() => {
+            if (onConfirm) onConfirm(); // 모달 닫힌 후 후속 작업 실행
+        }, 300); // closeModal 애니메이션 시간과 동일하게 맞춰야 깔끔
+    };
+
     
     // 모달 나와있는 동안 스크롤 봉인
     useEffect(() => {
@@ -70,7 +78,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content}) => {
             position="fixed" inset="0" transform="translate(0, -5%)" zIndex="50" 
             display="flex" alignItems="center" justifyContent="center"
             bg="blackAlpha.500"
-            onClick={closeModal}
+            onClick={handleCancel}
         >
             <Box 
                 className={`modal-content ${isModalVisible ? 'show' : ''}`}
