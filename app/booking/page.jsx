@@ -10,6 +10,8 @@ import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
 import {FaHeart} from 'react-icons/fa';
 
+import { useSearchParams } from 'next/navigation';
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -34,6 +36,9 @@ export default function Booking2Page() {
     const [selectedTheater, setSelectedTheater] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const router = useRouter();
+
+    const searchParams = useSearchParams();
+    const sentmovieid = searchParams.get('id');
 
     let headerColor='white';
     let headerBg='#1a1a1a';
@@ -70,6 +75,15 @@ export default function Booking2Page() {
                 }));
             
                 setMovies(updatedMovieList);
+                
+                if(sentmovieid!==null){
+                    for(let index=0;index<updatedMovieList.length;index++){
+                        if(updatedMovieList[index].id==sentmovieid){
+                            handlePosterClick(updatedMovieList[index]);
+                            break;
+                        }
+                    }
+                }
             } catch (err) {
               console.error(err);
             }

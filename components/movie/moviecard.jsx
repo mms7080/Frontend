@@ -103,7 +103,9 @@ const MovieCard = ({ movie, user, rank, crit }) => {
             {likeNumber}
           </div>
         </button>
-        <button className="reserve-button" onClick={() => {}}>예매</button>
+        <Link style={{width:'30%'}} href={`/booking?id=${movie.id}`}>
+          <button className="reserve-button" style={{width:'100%'}} onClick={() => {}}>예매</button>
+        </Link>
       </div>
     </div>
     {isModalOpen && (<Modal
