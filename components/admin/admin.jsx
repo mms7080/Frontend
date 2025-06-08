@@ -3,7 +3,6 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "../../components";
-import SkeletonHeader from "../../components/SkeletonHeader";
 import {
   BarChart,
   Bar,
@@ -1840,11 +1839,7 @@ export default function AdminDashboard({ userData }) {
 
   return (
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-      {loadingUser ? (
-        <SkeletonHeader />
-      ) : (
-        <Header headerColor="black" headerBg="white" userInfo={user} />
-      )}
+      <Header headerColor="black" headerBg="white" userInfo={user} />
       <div style={{ display: "flex" }}>
         <aside
           style={{

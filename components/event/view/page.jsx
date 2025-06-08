@@ -13,7 +13,6 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { Header } from "../..";
-import SkeletonHeader from "../../SkeletonHeader";
 
 export default function EventDetailPage({userData}) {
   const { id } = useParams();
@@ -22,7 +21,6 @@ export default function EventDetailPage({userData}) {
   const [allEvents, setAllEvents] = useState([]);
   const [user, setUser] = useState(userData);
   const [loading, setLoading] = useState(true);
-  const [loadingUser, setLoadingUser] = useState(false);
 
   // 이벤트 데이터 불러오기
   useEffect(() => {
@@ -55,11 +53,7 @@ export default function EventDetailPage({userData}) {
 
   return (
     <>
-            {loadingUser ? (
-        <SkeletonHeader />
-      ) : (
-        <Header headerColor="black" headerBg="white" userInfo={user} />
-      )}
+      <Header headerColor="black" headerBg="white" userInfo={user} />
 
       <Box maxW="800px" mx="auto" mt={20} p={[4, 6]}>
         {loading ? (

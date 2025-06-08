@@ -16,7 +16,6 @@ const Movie = (userInfo) => {
     const [user, setUser] = useState(userInfo.userInfo);
     const [searchWord, setSearchWord] = useState("");
     const [displayNumber, setDisplayNumber] = useState(8);
-    const [moviebutton,setMovieButton]=useState(false);
     const inputRef = useRef("");
     const clearInputValue = () => {
         if(inputRef.current) {
@@ -29,10 +28,6 @@ const Movie = (userInfo) => {
         }
         return '';
     };
-
-    useEffect(()=>{
-        if(searchWord!=='')setMovieButton(true);
-    },[searchWord])
 
     useEffect(() => {
         document.title = '전체 영화 - 필모라';
@@ -158,7 +153,6 @@ const Movie = (userInfo) => {
                         검색
                     </Button>
 
-                    {moviebutton && (
                     <Button
                         marginLeft={4} px={6} bg="#1e1e1e"
                         border="1px solid gray" 
@@ -166,8 +160,8 @@ const Movie = (userInfo) => {
                         onClick={()=>setSearchWord('')}
                         transform="translate(0, 1px)"
                     >
-                        목록
-                    </Button>)}
+                    전체보기
+                    </Button>
                 </Box>
             </Flex>
         </Box>

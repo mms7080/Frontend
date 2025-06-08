@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { Header } from "..";
-import SkeletonHeader from "../SkeletonHeader";
 
 // 공지사항 페이지 컴포넌트
 export default function NoticePage({ notices, userData }) {
@@ -20,18 +19,11 @@ export default function NoticePage({ notices, userData }) {
   const [currentPage, setCurrentPage] = useState(1);
   // 페이지당 표시할 공지 수
   const itemsPerPage = 5;
-  // 로딩 여부 (스켈레톤 표시용)
-  const [loadingUser, setLoadingUser] = useState(false);
   // 검색 버튼 클릭 여부 (클릭 하면 목록버튼 등장)
-  const [searchbutton, setSearchButton] = useState(false);
 
   useEffect(() => {
     document.title = "공지 - FILMORA";
   }, []);
-
-  useEffect(() => {
-    if (confirmedKeyword !== "") setSearchButton(true);
-  }, [confirmedKeyword]);
 
   // 공지 목록 필터링
   useEffect(() => {
@@ -109,13 +101,7 @@ export default function NoticePage({ notices, userData }) {
 
   return (
     <>
-      {/* 로딩 중일 땐 SkeletonHeader, 아니면 실제 Header 표시 */}
-      {/* 근데 이제 안써서 필요없음 */}
-      {loadingUser ? (
-        <SkeletonHeader />
-      ) : (
-        <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      )}
+      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
       <div
         style={{
           maxWidth: "1200px",
@@ -244,8 +230,6 @@ export default function NoticePage({ notices, userData }) {
           >
             검색
           </button>
-          {!searchbutton && <div style={{ width: 63.2, height: 44.5 }}></div>}
-          {searchbutton && (
             <button
               style={{
                 backgroundColor: "black",
@@ -267,9 +251,8 @@ export default function NoticePage({ notices, userData }) {
                 setConfirmedKeyword("");
               }}
             >
-              목록
+            전체보기
             </button>
-          )}
         </div>
         {/* 공지사항 테이블 */}
         <table

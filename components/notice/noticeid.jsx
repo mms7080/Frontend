@@ -3,7 +3,6 @@
 import React,{ useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../header";
-import SkeletonHeader from "../SkeletonHeader"; 
 
 export default function NoticeIdPage({userData}) {
   const params = useParams();
@@ -14,7 +13,6 @@ export default function NoticeIdPage({userData}) {
   const [allNotices, setAllNotices] = useState([]);
   const [prevId, setPrevId] = useState(null);
   const [nextId, setNextId] = useState(null);
-  const [loadingUser, setLoadingUser] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,11 +46,8 @@ export default function NoticeIdPage({userData}) {
 
  return (
   <>
-    {loadingUser ? (
-      <SkeletonHeader />
-    ) : (
       <Header headerColor="black" headerBg="#ffffff" userInfo={user} />
-    )}
+
 
       <div
         style={{

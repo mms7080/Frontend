@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { Box, Text, Image, SimpleGrid, Flex, Button } from "@chakra-ui/react";
 import { Header } from "..";
 import { useRouter } from "next/navigation";
-import SkeletonHeader from "../SkeletonHeader";
 import { useCart } from "./CartContext";
 import CartSidebar from "./CartSidebar";
 
@@ -15,7 +14,6 @@ export default function MegaboxStorePage({ userData }) {
   const [activeCategory, setActiveCategory] = useState(defaultCategories[0]);
   const [user, setUser] = useState(userData);
   const router = useRouter();
-  const [loadingUser, setLoadingUser] = useState(false);
   const { addToCart } = useCart();
 
   useEffect(() => {
@@ -49,12 +47,8 @@ export default function MegaboxStorePage({ userData }) {
 
   return (
     <>
-      {loadingUser ? (
-        <SkeletonHeader />
-      ) : (
-        <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      )}
-
+      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
+      
       <Box
         maxW="1200px"
         mx="auto"

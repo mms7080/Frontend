@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
 import { Header } from "../../components";
-import SkeletonHeader from "../../components/SkeletonHeader";
 
 export default function RandomBoxPage({ userData }) {
   const [user] = useState(userData);
@@ -69,11 +68,8 @@ setTimeout(() => {
 
   return (
     <>
-      {userData === null ? (
-        <SkeletonHeader />
-      ) : (
-        <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      )}
+      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
+      
 
       <div className="random-box-container">
         <div className="event-banner">

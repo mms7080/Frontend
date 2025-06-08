@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Box, Flex, Text, Button, Image, SimpleGrid } from "@chakra-ui/react";
 import { Header } from "..";
-import SkeletonHeader from "../../components/SkeletonHeader";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -26,16 +25,10 @@ export default function EventPage({ serverEvents, userData }) {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const router = useRouter();
-  const [loadingUser, setLoadingUser] = useState(false);
-  const [searchbutton,setSearchButton]=useState(false);
 
   useEffect(() => {
     document.title = "이벤트 - FILMORA";
   }, []);
-
-  useEffect(()=>{
-    if(confirmedKeyword!=='')setSearchButton(true);
-  },[confirmedKeyword])  
 
   const getEventStatus = (dateRange) => {
     const now = new Date();
@@ -68,11 +61,7 @@ export default function EventPage({ serverEvents, userData }) {
 
   return (
     <>
-      {loadingUser ? (
-        <SkeletonHeader />
-      ) : (
-        <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
-      )}
+      <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
 
       <Box
         maxW="1200px"
@@ -334,7 +323,6 @@ export default function EventPage({ serverEvents, userData }) {
             검색
           </Button>
 
-          {searchbutton && (
           <Button
             colorScheme="purple"
             onClick={() => {
@@ -343,8 +331,8 @@ export default function EventPage({ serverEvents, userData }) {
             px={6}
             fontWeight="normal"
           >
-            목록
-          </Button>)}
+          전체보기
+          </Button>
         </Box>
 
         <Flex gap={2} borderBottom="1px solid #6B46C1" flexWrap="wrap" mb={10}>

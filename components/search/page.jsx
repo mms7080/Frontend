@@ -216,7 +216,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                                 onClick={()=>setSearchWord('')}
                                 transform="translate(0, 1px)"
                             >
-                            목록
+                            전체보기
                             </Button>
                             <Button
                                 marginLeft={4} px={6} bg="#1e1e1e"
