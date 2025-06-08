@@ -109,7 +109,8 @@ const MovieCard = ({ movie, user, rank, crit }) => {
     {isModalOpen && (<Modal
     isModalOpen={isModalOpen}
     isModalVisible={isModalVisible}
-    closeModal={closeModal}/>)}
+    closeModal={closeModal}
+    content='로그인 후 이용해주세요.'/>)}
     </>
   );
 };

@@ -35,7 +35,7 @@ export const useModal = () => {
     return {isModalOpen, isModalVisible, openModal, closeModal}
 }
 
-const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm}) => {
+const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content}) => {
 
     const handleConfirm = () => {
         closeModal();
@@ -80,7 +80,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm}) => {
             >
                 <Box textAlign="center">
                     <Box mb="6" fontSize="xl" color="black">
-                        로그인 후 이용해주세요.
+                        {content}
                     </Box>
                     <Button
                         width="20%" py="3" padding="8px" fontSize="large"

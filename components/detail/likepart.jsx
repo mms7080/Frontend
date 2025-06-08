@@ -9,14 +9,20 @@ import {AiOutlineHeart,AiFillHeart} from 'react-icons/ai';
 
 export default function LikePart({id,res,movieinfo}){
 
+
+    // 🔹 모달 내용 상태 추가 
+    const [modalContent, setModalContent] = useState('로그인 후 이용해주세요.');
+  
     const address = `http://localhost:3000/detail/${id}`; // 복사할 주소
 
     const handleCopy = async () => {
       try {
         await navigator.clipboard.writeText(address);
-        alert('현재 페이지의 주소가 클립보드에 복사되었습니다!');
+        setModalContent('현재 페이지의 주소가 클립보드에 복사되었습니다!');
+        openModal();
       } catch (err) {
-        alert('클립보드 접근이 차단되었습니다.');
+        setModalContent('클립보드 접근이 차단되었습니다.');
+        openModal();
       }
     };
 
@@ -26,6 +32,7 @@ export default function LikePart({id,res,movieinfo}){
     
     const likeChange = async () => {
         if(!res){
+            setModalContent('로그인 후 이용해주세요.');
             openModal();
             return;
         }
@@ -45,7 +52,8 @@ export default function LikePart({id,res,movieinfo}){
         {isModalOpen && (<Modal
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}
-        closeModal={closeModal}/>)}
+        closeModal={closeModal}
+        content={modalContent}/>)}
     </>;
 
 }

@@ -24,6 +24,7 @@ export default function Notloginalert({userInfo}){
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}
         closeModal={closeModal}
-        onConfirm={handleConfirm}/>)}
+        onConfirm={handleConfirm}
+        content='로그인 후 이용해주세요.'/>)}
     </>;    
 }
