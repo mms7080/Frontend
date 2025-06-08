@@ -98,60 +98,65 @@ export default function Header() {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  useEffect(() => {
-    const alertData = localStorage.getItem("latestReservationAlert");
-    if (alertData) setReservationAlert(JSON.parse(alertData));
+useEffect(() => {
+  const alertData = localStorage.getItem("latestReservationAlert");
+  if (alertData) setReservationAlert(JSON.parse(alertData));
 
-    const applyCountdown = () => {
-      const data = localStorage.getItem("latestReservationCountdown");
-      if (data && user) {
-        const { title, showTime, movieId } = JSON.parse(data);
-        const now = Date.now();
-        const target = new Date(showTime).getTime();
-        const diff = target - now;
+  const applyCountdown = () => {
+    const data = localStorage.getItem("latestReservationCountdown");
+    if (data && user) {
+      const { title, showTime, movieId } = JSON.parse(data);
+      const now = Date.now();
+      const target = new Date(showTime).getTime();
+      const diff = target - now;
 
-        if (diff <= 0) {
-          setCountdown(null);
-          localStorage.removeItem("latestReservationCountdown");
-        } else {
-          const hours = Math.floor(diff / (1000 * 60 * 60));
-          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-          setCountdown({
-            title,
-            timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
-          });
+      if (diff <= 0) {
+        setCountdown(null);
+        localStorage.removeItem("latestReservationCountdown");
+      } else {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        setCountdown({
+          title,
+          timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
+        });
 
-          if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
+        if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
 
+        
+        if (!posterUrl) {
           fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
             .then((res) => res.json())
             .then((data) => {
-              if (data?.poster)
+              if (data?.poster) {
                 setPosterUrl(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`);
+              }
             })
             .catch(() => {});
         }
       }
-    };
+    }
+  };
 
-    applyCountdown();
+  applyCountdown();
 
-    const interval = setInterval(() => {
-      const alertData = localStorage.getItem("latestReservationAlert");
-      if (alertData) {
-        const { title, notifyTime } = JSON.parse(alertData);
-        if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
-          setShowingAlert({ title });
-          localStorage.removeItem("latestReservationAlert");
-          setReservationAlert(null);
-        }
+  const interval = setInterval(() => {
+    const alertData = localStorage.getItem("latestReservationAlert");
+    if (alertData) {
+      const { title, notifyTime } = JSON.parse(alertData);
+      if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
+        setShowingAlert({ title });
+        localStorage.removeItem("latestReservationAlert");
+        setReservationAlert(null);
       }
-      applyCountdown();
-    }, 1000);
+    }
+    applyCountdown();
+  }, 1000);
 
-    return () => clearInterval(interval);
-  }, [user]);
+  return () => clearInterval(interval);
+}, [user, posterUrl]); 
+
 
   const startDrag = (e) => {
     dragging.current = true;
