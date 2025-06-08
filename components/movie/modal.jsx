@@ -1,6 +1,7 @@
+'use client';
+
 import React, {useState, useEffect} from 'react'
 import {Box, Button} from '@chakra-ui/react'
-
 
 // 모달 애니메이션 CSS
 const modalStyles = `
