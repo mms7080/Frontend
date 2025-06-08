@@ -4,11 +4,11 @@ import {FaFilm,FaQuestion} from 'react-icons/fa';
 import {FiUser} from 'react-icons/fi';
 import {Header} from '../../components';
 import {fetch} from '../../lib/server';
-import {Modify} from '.';
+import {Bookingcheck,Modify,Qna} from '.';
 
 //import {Bookingcheck,Qna} from '.';
 
-export default async function Mypage({userInfo}){
+export default async function Mypage({userInfo,qnaInfo,replyInfo}){
 
      return <>
      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
@@ -46,13 +46,13 @@ export default async function Mypage({userInfo}){
               </Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content value="booking">
-            예매/구매내역 확인 페이지(미구현)
+            <Bookingcheck userInfo={userInfo}></Bookingcheck>
           </Tabs.Content>
           <Tabs.Content value="modify">
             <Modify userInfo={userInfo}></Modify>
           </Tabs.Content>
           <Tabs.Content value="qna">
-            1:1 QnA 페이지(미구현)
+            <Qna userInfo={userInfo} qnaInfo={qnaInfo} replyInfo={replyInfo}></Qna>
           </Tabs.Content>
         </Tabs.Root>
     </Box>

@@ -1,6 +1,5 @@
-//import Bookingcheck from './bookingcheck';
+import Bookingcheck from './bookingcheck';
 import Modify from './modify';
-//import Qna from './qna';
+import Qna from './qna';
 
-export {Modify};
-//export {Bookingcheck,Modify,Qna};
+export {Bookingcheck,Modify,Qna};
