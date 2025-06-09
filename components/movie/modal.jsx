@@ -2,6 +2,7 @@
 
 import React, {useState, useEffect} from 'react'
 import {Box, Button} from '@chakra-ui/react'
+import { CloseIcon } from '@chakra-ui/icons';
 
 // 모달 애니메이션 CSS
 const modalStyles = `
@@ -36,7 +37,7 @@ export const useModal = () => {
     return {isModalOpen, isModalVisible, openModal, closeModal}
 }
 
-const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content}) => {
+const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content,isVideo=false}) => {
 
     const handleConfirm = () => {
         closeModal();
@@ -81,24 +82,34 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content}) => {
             bg="blackAlpha.500"
             onClick={handleCancel}
         >
-            <Box 
+            <Box
                 className={`modal-content ${isModalVisible ? 'show' : ''}`}
                 position="relative" bg="white" borderRadius="xl" shadow="2xl" 
-                p="8" maxW="md" w="full" mx="4"
+                p="8" maxW={isVideo ? "980px" : "md"} w="full" mx="4"
                 onClick={(e) => e.stopPropagation()}
             >
                 <Box textAlign="center">
-                    <Box mb="6" fontSize="xl" color="black">
-                        {content}
+                    {isVideo && <Button
+                        position='absolute'
+                        top='0'
+                        right='0'
+                        fontSize=''
+                        bg='transparent'
+                        onClick={handleConfirm}
+                    >
+                        <CloseIcon color='gray.800' width='10px' height='10px' _hover={{color:'black'}}></CloseIcon>
+                    </Button>}
+                    <Box mb="6" fontSize="xl" color="black" pt='10px' pb='0px'>
+                        <div dangerouslySetInnerHTML={{ __html: content }}/>
                     </Box>
-                    <Button
+                    {!isVideo && <Button
                         width="20%" py="3" padding="8px" fontSize="large"
                         bg="#6b46c1" color="white" borderRadius="4px" 
                         _hover={{bg : "#553c9a"}}
                         onClick={handleConfirm}
                     >
                         확인
-                    </Button>
+                    </Button>}
                 </Box>
             </Box>
         </Box>

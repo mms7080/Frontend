@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React,{useState} from "react";
 import Slider from "react-slick";
 import {IconButton,Image} from "@chakra-ui/react";
 import {FaChevronLeft,FaChevronRight} from "react-icons/fa";
+import Modal,{useModal} from '../movie/modal';
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -46,6 +48,15 @@ function PrevArrow(props) {
 }
 
 export default function SimpleSlider() {
+
+  const trailer=[
+    '<iframe width="920" height="517.5" src="https://www.youtube.com/embed/o8j70yHzTJs?si=jFYHzDscX0JHpvnk&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+    '<iframe width="920" height="517.5" src="https://www.youtube.com/embed/IHrSrP_9Afw?si=t9isfICIT6DtDmzH&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
+    '<iframe width="920" height="517.5" src="https://www.youtube.com/embed/6c3I-gNUUJw?si=nDGKZIeK_2Un04kM&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  ]
+
+  const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
+  const [trailerContent,setTrailerContent]= useState(trailer[0]);
   const settings = {
     dots: false,   
     infinite: true,
@@ -68,6 +79,10 @@ export default function SimpleSlider() {
             h='700px'
             objectFit='cover'
             loading="lazy"
+            onClick={()=>{
+              setTrailerContent(trailer[0]);
+              openModal();
+            }}
           />
         </div>
         <div>
@@ -77,6 +92,10 @@ export default function SimpleSlider() {
             h='700px'
             objectFit='cover'
             loading="lazy"
+            onClick={()=>{
+              setTrailerContent(trailer[1]);
+              openModal();
+            }}
           />
         </div>
         <div>
@@ -86,9 +105,20 @@ export default function SimpleSlider() {
             h='700px'
             objectFit='cover'
             loading="lazy"
+            onClick={()=>{
+              setTrailerContent(trailer[2]);
+              openModal();
+            }}
           />
         </div>
       </Slider>
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      isVideo={true}
+      content={trailerContent}/>)}
+
     </div>
   );
 }
