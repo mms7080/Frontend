@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "..";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 
-export default function PaymentPage({userData}) {
+export default function PaymentPage({ userData }) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -81,7 +81,7 @@ export default function PaymentPage({userData}) {
         orderName: product.title,
         customerName: user?.name || "비회원",
         successUrl: `${window.location.origin}/store/payment/success?userId=${
-          user?.id || "guest"
+          user?.username || "guest"
         }&productId=${product.id}`,
         failUrl: `${window.location.origin}/store/payment/fail`,
       });

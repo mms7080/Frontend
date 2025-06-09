@@ -2,19 +2,21 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { movies } from "../../components/moviePoster";
 import { Header } from "../../components";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 
 export default function CheckoutPage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [movie, setMovie] = useState(null);
+  const [coupons, setCoupons] = useState([]);
+  const [selectedCouponId, setSelectedCouponId] = useState(null);
+  const [discountAmount, setDiscountAmount] = useState(0);
+
   const router = useRouter();
   const params = useSearchParams();
 
   const movieId = parseInt(params.get("movieId"));
-//   const movie = movies.find((m) => m.id === movieId);
-const [movie, setMovie] = useState(null);
   const region = params.get("region");
   const theater = params.get("theater");
   const date = params.get("date");
@@ -29,6 +31,8 @@ const [movie, setMovie] = useState(null);
   const totalPrice =
     adult * 15000 + teen * 12000 + senior * 10000 + special * 8000;
 
+  const finalAmount = Math.max(0, totalPrice - discountAmount);
+
   const priceDetails = [
     { label: "성인", count: adult, price: 15000 },
     { label: "청소년", count: teen, price: 12000 },
@@ -40,16 +44,12 @@ const [movie, setMovie] = useState(null);
     document.title = "예매 - 결제";
     (async () => {
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
-          }
-        );
-        if (!res.ok) throw new Error();
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+          credentials: "include",
+        });
         const data = await res.json();
         setUser(data);
-      } catch (e) {
+      } catch {
         setUser(null);
       }
     })();
@@ -59,23 +59,34 @@ const [movie, setMovie] = useState(null);
     const fetchMovie = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
-        if (!res.ok) throw new Error('영화 정보를 불러오는 데 실패했습니다.');
         const data = await res.json();
-  
         const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
-        const updated = {
+        setMovie({
           ...data,
           poster: baseURL + data.poster,
           wideImage: data.wideImage ? baseURL + data.wideImage : null,
-        };
-        setMovie(updated);
+        });
       } catch (e) {
         console.error("영화 정보 로딩 실패", e);
       }
     };
-  
     fetchMovie();
   }, [movieId]);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons?userId=${user.username}`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setCoupons(data.filter((c) => !c.used));
+      } catch (e) {
+        console.error("❌ 쿠폰 불러오기 실패", e);
+      }
+    })();
+  }, [user]);
 
   const handlePayment = async () => {
     setLoading(true);
@@ -83,29 +94,21 @@ const [movie, setMovie] = useState(null);
       const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
       const orderId = `movie-${Date.now()}`;
 
-      const encodedParams = {
-        userId: encodeURIComponent(user?.id || "guest"),
-        region: encodeURIComponent(region),
-        theater: encodeURIComponent(theater),
-        date: encodeURIComponent(date),
-        time: encodeURIComponent(time),
-        seats: encodeURIComponent(seats.join(",")),
-      };
-
       const queryString =
         `orderId=${orderId}` +
-        `&amount=${totalPrice}` +
-        `&userId=${encodedParams.userId}` +
+        `&amount=${finalAmount}` +
+        `&userId=${encodeURIComponent(user?.username || "guest")}` +
         `&movieId=${movieId}` +
-        `&region=${encodedParams.region}` +
-        `&theater=${encodedParams.theater}` +
-        `&date=${encodedParams.date}` +
-        `&time=${encodedParams.time}` +
-        `&seats=${encodedParams.seats}` +
-        `&adult=${adult}&teen=${teen}&senior=${senior}&special=${special}`;
+        `&region=${encodeURIComponent(region)}` +
+        `&theater=${encodeURIComponent(theater)}` +
+        `&date=${encodeURIComponent(date)}` +
+        `&time=${encodeURIComponent(time)}` +
+        `&seats=${encodeURIComponent(seats.join(","))}` +
+        `&adult=${adult}&teen=${teen}&senior=${senior}&special=${special}` +
+        (selectedCouponId ? `&couponId=${selectedCouponId}` : "");
 
-      toss.requestPayment("카드", {
-        amount: totalPrice,
+      await toss.requestPayment("카드", {
+        amount: finalAmount,
         orderId,
         orderName: "Movie Ticket",
         customerName: user?.name || "비회원",
@@ -147,26 +150,22 @@ const [movie, setMovie] = useState(null);
               <p>{time}</p>
             </div>
           </div>
-          <strong>
-            {seats.length > 0 ? seats.join(", ") : "좌석 정보 없음"}
-          </strong>
+          <strong>{seats.length > 0 ? seats.join(", ") : "좌석 정보 없음"}</strong>
         </div>
 
         <div style={{ margin: "40px 0" }}>
-          <label
-            htmlFor="coupon"
-            style={{
-              display: "block",
-              marginBottom: "8px",
-              fontWeight: "bold",
-              color: "white",
-            }}
-          >
+          <label htmlFor="coupon" style={{ display: "block", marginBottom: "8px", fontWeight: "bold", color: "white" }}>
             쿠폰 선택
           </label>
           <select
             id="coupon"
-            defaultValue="none"
+            value={selectedCouponId || "none"}
+            onChange={(e) => {
+              const id = e.target.value;
+              setSelectedCouponId(id === "none" ? null : id);
+              const selected = coupons.find((c) => c.id === parseInt(id));
+              setDiscountAmount(selected ? selected.discountAmount : 0);
+            }}
             style={{
               padding: "12px",
               borderRadius: "6px",
@@ -176,45 +175,36 @@ const [movie, setMovie] = useState(null);
             }}
           >
             <option value="none">선택 안함</option>
+            {coupons.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.description} ({c.discountAmount.toLocaleString()}원 할인)
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="payment-summary">
           {priceDetails.map((item, idx) => (
             <div className="summary-row" key={idx}>
-              <span>
-                {item.label} x {item.count}
-              </span>
+              <span>{item.label} x {item.count}</span>
               <span>{(item.price * item.count).toLocaleString()}원</span>
             </div>
           ))}
-          <div className="summary-row">
-            <span>총 금액</span>
-            <span>{totalPrice.toLocaleString()}원</span>
-          </div>
-          <div className="summary-row">
-            <span>할인</span>
-            <span>- 0원</span>
-          </div>
+          <div className="summary-row"><span>총 금액</span><span>{totalPrice.toLocaleString()}원</span></div>
+          <div className="summary-row"><span>할인</span><span>- {discountAmount.toLocaleString()}원</span></div>
           <hr />
           <div className="summary-total">
             <span>최종 결제금액</span>
-            <strong>{totalPrice.toLocaleString()}원</strong>
+            <strong>{finalAmount.toLocaleString()}원</strong>
           </div>
           <div className="button-group">
-            <button onClick={() => router.back()} disabled={loading}>
-              이전
-            </button>
-            <button
-              className="confirm"
-              onClick={handlePayment}
-              disabled={loading}
-            >
+            <button onClick={() => router.back()} disabled={loading}>이전</button>
+            <button className="confirm" onClick={handlePayment} disabled={loading}>
               {loading ? "결제 중..." : "결제하기"}
             </button>
           </div>
         </div>
-      </div>
+           </div>
 
       <style jsx>{`
         .payment-container {
