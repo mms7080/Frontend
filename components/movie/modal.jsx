@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState, useEffect} from 'react'
-import {Box, Button} from '@chakra-ui/react'
+import {Box, Button, Flex} from '@chakra-ui/react'
 import { CloseIcon } from '@chakra-ui/icons';
 
 // 모달 애니메이션 CSS
@@ -82,22 +82,24 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content,isVide
             bg="blackAlpha.500"
             onClick={handleCancel}
         >
-            <Box
+            <Flex
                 className={`modal-content ${isModalVisible ? 'show' : ''}`}
-                position="relative" bg="white" borderRadius="xl" shadow="2xl" 
-                p="8" maxW={isVideo ? "980px" : "md"} w="full" mx="4"
+                position="relative" bg={!isVideo?"white":'black'} borderRadius="xl" shadow="2xl" 
+                maxW={isVideo ? "970px" : "md"} w="full" mx="4"
+                justifyContent='center' alignItems='center'
+                pt='15px' pb={!isVideo?'30px':'0px'}
                 onClick={(e) => e.stopPropagation()}
             >
-                <Box textAlign="center">
+                <Flex flexDirection='column' textAlign="center" w='100%' justifyContent='center' alignItems='center'>
                     {isVideo && <Button
                         position='absolute'
-                        top='0'
-                        right='0'
+                        top='-3px'
+                        right='-8px'
                         fontSize=''
                         bg='transparent'
                         onClick={handleConfirm}
                     >
-                        <CloseIcon color='gray.800' width='10px' height='10px' _hover={{color:'black'}}></CloseIcon>
+                        <CloseIcon color='white' width='15px' height='15px' _hover={{color:'gray.500'}}></CloseIcon>
                     </Button>}
                     <Box mb="6" fontSize="xl" color="black" pt='10px' pb='0px'>
                         <div dangerouslySetInnerHTML={{ __html: content }}/>
@@ -110,8 +112,8 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content,isVide
                     >
                         확인
                     </Button>}
-                </Box>
-            </Box>
+                </Flex>
+            </Flex>
         </Box>
     </>
 }

@@ -79,6 +79,7 @@ export default function SimpleSlider() {
             h='700px'
             objectFit='cover'
             loading="lazy"
+            _hover={{cursor:'pointer'}}
             onClick={()=>{
               setTrailerContent(trailer[0]);
               openModal();
@@ -92,6 +93,7 @@ export default function SimpleSlider() {
             h='700px'
             objectFit='cover'
             loading="lazy"
+            _hover={{cursor:'pointer'}}
             onClick={()=>{
               setTrailerContent(trailer[1]);
               openModal();
@@ -105,6 +107,7 @@ export default function SimpleSlider() {
             h='700px'
             objectFit='cover'
             loading="lazy"
+            _hover={{cursor:'pointer'}}
             onClick={()=>{
               setTrailerContent(trailer[2]);
               openModal();

@@ -6,8 +6,6 @@ import {Header} from '../../components';
 import {fetch} from '../../lib/server';
 import {Bookingcheck,Modify,Qna} from '.';
 
-//import {Bookingcheck,Qna} from '.';
-
 export default async function Mypage({userInfo,qnaInfo,replyInfo}){
 
      return <>
