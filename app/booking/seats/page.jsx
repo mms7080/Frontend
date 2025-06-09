@@ -267,7 +267,7 @@ export default function SeatsPage() {
                                         <Button
                                             size="sm"
                                             _hover={{bg: "#6B46C1"}}
-                                            onClick={() =>
+                                            onClick={() => 
                                             setPersonCounts((prev) => ({
                                                 ...prev,
                                                 [type]: Math.max(0, prev[type] - 1),
@@ -280,12 +280,16 @@ export default function SeatsPage() {
                                         <Button
                                             size="sm"
                                             _hover={{bg: "#6B46C1"}}
-                                            onClick={() =>
-                                            setPersonCounts((prev) => ({
-                                                ...prev,
-                                                [type]: prev[type] + 1,
-                                            }))
-                                            }
+                                            onClick={() => {
+                                                if (totalPeople >= 8) {
+                                                  alert("최대 8매까지 예매가능합니다.");
+                                                  return;
+                                                }
+                                                setPersonCounts((prev) => ({
+                                                  ...prev,
+                                                  [type]: prev[type] + 1,
+                                                }));
+                                              }}
                                         >
                                             +
                                         </Button>
@@ -293,6 +297,9 @@ export default function SeatsPage() {
                                 </Flex>
                                 );
                             })}
+                            <Text fontSize="sm" color="gray.400" mt={2} textAlign="right">
+                                ※ 최대 8매까지 예매가능
+                            </Text>
                         </Box>
                         {/* 선택 좌석 */}
                         <Box>
