@@ -307,12 +307,12 @@ useEffect(() => {
             ? "40px"
             : "0"
         }
-        h={{ base: "auto", md: "100px" }}
+        h='100px'
         direction={{ base: "column", md: "row" }}
         align={{ base: "flex-start", md: "center" }}
         justify="space-between"
         bg={headerBg}
-        p={{ base: "20px", md: "40px" }}
+        p='20px'
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
         borderBottom="1px solid rgba(0, 0, 0, 0.1)"
         gap={{ base: 4, md: 0 }}
