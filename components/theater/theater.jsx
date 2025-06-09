@@ -84,7 +84,7 @@ const InfoButton = ({ text = "" }) => {
 }
 
     return (
-        <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
+        <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }}>
             {/* 상단 로고 */}
             <h1
                 style={{
@@ -116,7 +116,7 @@ const InfoButton = ({ text = "" }) => {
                 {activeTheater && (
                     <Flex w="50%" flexDirection="column" textAlign="center" alignItems='center' gap="3%">
                         <Text fontSize="3xl">{activeTheater.name}</Text>
-                        <Text fontSize="md">{activeTheater.address}</Text>
+                        <Text fontSize="md" color="gray.800">{activeTheater.address}</Text>
                         <InfoButton text="🚌 교통안내" />
                         <InfoButton text="🚗 주차안내" />
                         <InfoButton text="🎥 상영시간표" />
@@ -124,7 +124,7 @@ const InfoButton = ({ text = "" }) => {
                 )}
             </Flex>
             {/* 지역 카테고리 */}
-            <Flex gap={2} borderBottom="1px solid #6B46C1" flexWrap="wrap" pt={5} mb={5}>
+            <Flex gap={2} borderBottom="1px solid #6B46C1" flexWrap="wrap" pt={6} mb={5}>
                 {regions.map((region) => (
                     <Button
                         key={region}
@@ -135,7 +135,7 @@ const InfoButton = ({ text = "" }) => {
                                 : "2px solid transparent"
                         }
                         borderRadius="0"
-                        fontWeight={activeRegion === region ? "bold" : "normal"}
+                        fontWeight="normal"
                         color={activeRegion === region ? "#6B46C1" : "black"}
                         onClick={() => setActiveRegion(region)}
                         _hover={{ bg: "transparent", color: "#6B46C1" }}
@@ -150,7 +150,7 @@ const InfoButton = ({ text = "" }) => {
                 ))}
             </Flex>
             {/* 영화관 목록 */}
-            <Flex gap={6}>
+            <Flex gap={6} pb={16}>
                 {filteredTheaters.map((theater, index) => {
                     return <Button
                         key={index} textAlign="center" alignContent="center"
@@ -176,7 +176,7 @@ const InfoButton = ({ text = "" }) => {
                             <>
                                 <Text
                                     fontSize="xl"
-                                    fontWeight="bold"
+                                    fontWeight="md"
                                     pl={2}
                                     borderLeft="4px solid #6B46C1"
                                 >
@@ -189,7 +189,7 @@ const InfoButton = ({ text = "" }) => {
                             <>
                                 <Text
                                     fontSize="xl"
-                                    fontWeight="bold"
+                                    fontWeight="md"
                                     pl={2}
                                     borderLeft="4px solid #6B46C1"
                                 >
@@ -204,7 +204,7 @@ const InfoButton = ({ text = "" }) => {
                             <>
                                 <Text
                                     fontSize="xl"
-                                    fontWeight="bold"
+                                    fontWeight="md"
                                     pl={2}
                                     borderLeft="4px solid #6B46C1"
                                 >
@@ -217,7 +217,7 @@ const InfoButton = ({ text = "" }) => {
                             <>
                                 <Text
                                     fontSize="xl"
-                                    fontWeight="bold"
+                                    fontWeight="md"
                                     pl={2}
                                     borderLeft="4px solid #6B46C1"
                                 >
@@ -230,7 +230,7 @@ const InfoButton = ({ text = "" }) => {
                             <>
                                 <Text
                                     fontSize="xl"
-                                    fontWeight="bold"
+                                    fontWeight="md"
                                     pl={2}
                                     borderLeft="4px solid #6B46C1"
                                 >
