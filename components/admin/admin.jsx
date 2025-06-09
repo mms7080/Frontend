@@ -258,7 +258,6 @@ export default function AdminDashboard({ userData }) {
     { title: "매출 관리", key: "매출" },
   ];
 
-
   // 📌 영화 ID → 영화 제목으로 매핑 (그래프나 표에 표시할 때 사용)
   const movieMap = useMemo(() => {
     const map = {};
@@ -1329,6 +1328,8 @@ export default function AdminDashboard({ userData }) {
                   <th style={thStyle}>좌석</th>
                   <th style={thStyle}>총액</th>
                   <th style={thStyle}>결제 시각</th>
+                  <th style={thStyle}>상태</th>
+                  <th style={thStyle}>환불</th>
                 </tr>
               </thead>
               <tbody>
@@ -1355,6 +1356,59 @@ export default function AdminDashboard({ userData }) {
                             minute: "2-digit",
                           })
                         : "-"}
+                    </td>
+                    <td style={tdStyle}>
+                      {r.status === "CANCELED" ? (
+                        <span style={{ color: "red", fontWeight: "bold" }}>
+                          환불됨
+                        </span>
+                      ) : (
+                        <span style={{ color: "green" }}>정상</span>
+                      )}
+                    </td>
+                    <td style={tdStyle}>
+                      {r.status !== "CANCELED" && (
+                        <button
+                          onClick={async () => {
+                            if (!confirm("이 예매를 환불 처리하시겠습니까?"))
+                              return;
+                            try {
+                              const res = await fetch(
+                                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations/${r.id}/cancel`,
+                                {
+                                  method: "PATCH",
+                                  credentials: "include",
+                                }
+                              );
+                              if (res.ok) {
+                                alert("환불 처리 완료");
+                                // 상태값 업데이트를 위해 목록 재요청
+                                const refreshed = await fetch(
+                                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reservations`,
+                                  { credentials: "include" }
+                                );
+                                const data = await refreshed.json();
+                                setReservations(data);
+                              } else {
+                                alert("환불 실패");
+                              }
+                            } catch (e) {
+                              alert("환불 요청 중 오류 발생: " + e.message);
+                            }
+                          }}
+                          style={{
+                            background: "#e53e3e",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: 4,
+                            padding: "4px 8px",
+                            fontSize: 12,
+                            cursor: "pointer",
+                          }}
+                        >
+                          환불
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
