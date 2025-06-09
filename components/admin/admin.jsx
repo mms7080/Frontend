@@ -416,6 +416,34 @@ export default function AdminDashboard({ userData }) {
 
             {/* ✅ 페이지네이션 */}
             <div style={{ marginTop: 20, textAlign: "center" }}>
+              <button
+                onClick={() => {
+                  if (currentUserPage > 1)
+                    setCurrentUserPage(currentUserPage - 1);
+                }}
+                disabled={currentUserPage === 1}
+                style={{
+                  margin: "0 5px",
+                  backgroundColor: "#eee",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor: currentUserPage === 1 ? "not-allowed" : "pointer",
+                  width: "36px",
+                  height: "36px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (currentUserPage > 1)
+                    e.currentTarget.style.backgroundColor = "#ddd";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#eee";
+                }}
+              >
+                &lt;
+              </button>
+
               {Array.from({
                 length: Math.ceil(filteredUsers.length / usersPerPage),
               }).map((_, idx) => (
@@ -430,15 +458,63 @@ export default function AdminDashboard({ userData }) {
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
-                    width:'36px',
-                    height:'36px',
-                    justifyContent:'center',
-                    alignItems:'center'
+                    width: "36px",
+                    height: "36px",
+                    transition: "background 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (currentUserPage !== idx + 1)
+                      e.currentTarget.style.backgroundColor = "#ddd";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (currentUserPage !== idx + 1)
+                      e.currentTarget.style.backgroundColor = "#eee";
                   }}
                 >
                   {idx + 1}
                 </button>
               ))}
+
+              <button
+                onClick={() => {
+                  const maxPage = Math.ceil(
+                    filteredUsers.length / usersPerPage
+                  );
+                  if (currentUserPage < maxPage)
+                    setCurrentUserPage(currentUserPage + 1);
+                }}
+                disabled={
+                  currentUserPage ===
+                  Math.ceil(filteredUsers.length / usersPerPage)
+                }
+                style={{
+                  margin: "0 5px",
+                  backgroundColor: "#eee",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor:
+                    currentUserPage ===
+                    Math.ceil(filteredUsers.length / usersPerPage)
+                      ? "not-allowed"
+                      : "pointer",
+                  width: "36px",
+                  height: "36px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (
+                    currentUserPage <
+                    Math.ceil(filteredUsers.length / usersPerPage)
+                  )
+                    e.currentTarget.style.backgroundColor = "#ddd";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#eee";
+                }}
+              >
+                &gt;
+              </button>
             </div>
           </div>
         </div>
@@ -1420,6 +1496,35 @@ export default function AdminDashboard({ userData }) {
 
             {/* ✅ 페이지네이션 */}
             <div style={{ marginTop: 20, textAlign: "center" }}>
+              <button
+                onClick={() => {
+                  if (currentReservationPage > 1)
+                    setCurrentReservationPage(currentReservationPage - 1);
+                }}
+                disabled={currentReservationPage === 1}
+                style={{
+                  margin: "0 5px",
+                  backgroundColor: "#eee",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor:
+                    currentReservationPage === 1 ? "not-allowed" : "pointer",
+                  width: "36px",
+                  height: "36px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (currentReservationPage > 1)
+                    e.currentTarget.style.backgroundColor = "#ddd";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#eee";
+                }}
+              >
+                &lt;
+              </button>
+
               {Array.from({
                 length: Math.ceil(
                   filteredReservations.length / reservationsPerPage
@@ -1436,15 +1541,63 @@ export default function AdminDashboard({ userData }) {
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
-                    width:'36px',
-                    height:'36px',
-                    justifyContent:'center',
-                    alignItems:'center'
+                    width: "36px",
+                    height: "36px",
+                    transition: "background 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (currentReservationPage !== idx + 1)
+                      e.currentTarget.style.backgroundColor = "#ddd";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (currentReservationPage !== idx + 1)
+                      e.currentTarget.style.backgroundColor = "#eee";
                   }}
                 >
                   {idx + 1}
                 </button>
               ))}
+
+              <button
+                onClick={() => {
+                  const maxPage = Math.ceil(
+                    filteredReservations.length / reservationsPerPage
+                  );
+                  if (currentReservationPage < maxPage)
+                    setCurrentReservationPage(currentReservationPage + 1);
+                }}
+                disabled={
+                  currentReservationPage ===
+                  Math.ceil(filteredReservations.length / reservationsPerPage)
+                }
+                style={{
+                  margin: "0 5px",
+                  backgroundColor: "#eee",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor:
+                    currentReservationPage ===
+                    Math.ceil(filteredReservations.length / reservationsPerPage)
+                      ? "not-allowed"
+                      : "pointer",
+                  width: "36px",
+                  height: "36px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (
+                    currentReservationPage <
+                    Math.ceil(filteredReservations.length / reservationsPerPage)
+                  )
+                    e.currentTarget.style.backgroundColor = "#ddd";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#eee";
+                }}
+              >
+                &gt;
+              </button>
             </div>
           </div>
         </div>
@@ -1662,6 +1815,34 @@ export default function AdminDashboard({ userData }) {
 
             {/* ✅ 페이지네이션 버튼 */}
             <div style={{ marginTop: 20, textAlign: "center" }}>
+              <button
+                onClick={() => {
+                  if (currentPaymentPage > 1)
+                    setCurrentPaymentPage(currentPaymentPage - 1);
+                }}
+                disabled={currentPaymentPage === 1}
+                style={{
+                  margin: "0 5px",
+                  backgroundColor: "#eee",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor: currentPaymentPage === 1 ? "not-allowed" : "pointer",
+                  width: "36px",
+                  height: "36px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (currentPaymentPage > 1)
+                    e.currentTarget.style.backgroundColor = "#ddd";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#eee";
+                }}
+              >
+                &lt;
+              </button>
+
               {Array.from({
                 length: Math.ceil(filteredPayments.length / paymentsPerPage),
               }).map((_, idx) => (
@@ -1676,15 +1857,63 @@ export default function AdminDashboard({ userData }) {
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
-                    width:'36px',
-                    height:'36px',
-                    justifyContent:'center',
-                    alignItems:'center'
+                    width: "36px",
+                    height: "36px",
+                    transition: "background 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (currentPaymentPage !== idx + 1)
+                      e.currentTarget.style.backgroundColor = "#ddd";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (currentPaymentPage !== idx + 1)
+                      e.currentTarget.style.backgroundColor = "#eee";
                   }}
                 >
                   {idx + 1}
                 </button>
               ))}
+
+              <button
+                onClick={() => {
+                  const maxPage = Math.ceil(
+                    filteredPayments.length / paymentsPerPage
+                  );
+                  if (currentPaymentPage < maxPage)
+                    setCurrentPaymentPage(currentPaymentPage + 1);
+                }}
+                disabled={
+                  currentPaymentPage ===
+                  Math.ceil(filteredPayments.length / paymentsPerPage)
+                }
+                style={{
+                  margin: "0 5px",
+                  backgroundColor: "#eee",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor:
+                    currentPaymentPage ===
+                    Math.ceil(filteredPayments.length / paymentsPerPage)
+                      ? "not-allowed"
+                      : "pointer",
+                  width: "36px",
+                  height: "36px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (
+                    currentPaymentPage <
+                    Math.ceil(filteredPayments.length / paymentsPerPage)
+                  )
+                    e.currentTarget.style.backgroundColor = "#ddd";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#eee";
+                }}
+              >
+                &gt;
+              </button>
             </div>
           </div>
         </div>
@@ -1884,6 +2113,34 @@ export default function AdminDashboard({ userData }) {
 
             {/* 페이지네이션 */}
             <div style={{ marginTop: 20, textAlign: "center" }}>
+              <button
+                onClick={() => {
+                  if (currentReviewPage > 1)
+                    setCurrentReviewPage(currentReviewPage - 1);
+                }}
+                disabled={currentReviewPage === 1}
+                style={{
+                  margin: "0 5px",
+                  backgroundColor: "#eee",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor: currentReviewPage === 1 ? "not-allowed" : "pointer",
+                  width: "36px",
+                  height: "36px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (currentReviewPage > 1)
+                    e.currentTarget.style.backgroundColor = "#ddd";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#eee";
+                }}
+              >
+                &lt;
+              </button>
+
               {Array.from({
                 length: Math.ceil(filteredReviews.length / reviewsPerPage),
               }).map((_, idx) => (
@@ -1898,15 +2155,63 @@ export default function AdminDashboard({ userData }) {
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
-                    width:'36px',
-                    height:'36px',
-                    justifyContent:'center',
-                    alignItems:'center'
+                    width: "36px",
+                    height: "36px",
+                    transition: "background 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (currentReviewPage !== idx + 1)
+                      e.currentTarget.style.backgroundColor = "#ddd";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (currentReviewPage !== idx + 1)
+                      e.currentTarget.style.backgroundColor = "#eee";
                   }}
                 >
                   {idx + 1}
                 </button>
               ))}
+
+              <button
+                onClick={() => {
+                  const maxPage = Math.ceil(
+                    filteredReviews.length / reviewsPerPage
+                  );
+                  if (currentReviewPage < maxPage)
+                    setCurrentReviewPage(currentReviewPage + 1);
+                }}
+                disabled={
+                  currentReviewPage ===
+                  Math.ceil(filteredReviews.length / reviewsPerPage)
+                }
+                style={{
+                  margin: "0 5px",
+                  backgroundColor: "#eee",
+                  color: "#333",
+                  border: "none",
+                  borderRadius: 4,
+                  cursor:
+                    currentReviewPage ===
+                    Math.ceil(filteredReviews.length / reviewsPerPage)
+                      ? "not-allowed"
+                      : "pointer",
+                  width: "36px",
+                  height: "36px",
+                  transition: "background 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  if (
+                    currentReviewPage <
+                    Math.ceil(filteredReviews.length / reviewsPerPage)
+                  )
+                    e.currentTarget.style.backgroundColor = "#ddd";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#eee";
+                }}
+              >
+                &gt;
+              </button>
             </div>
           </div>
         </div>
