@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Box, Flex, Text, Button, Image, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Image, SimpleGrid, IconButton } from "@chakra-ui/react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Header } from "..";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -17,6 +18,44 @@ const categories = [
   "시사회/무대인사",
 ];
 const categoryOrder = ["Pick", "영화", "극장", "제휴/할인", "시사회/무대인사"];
+
+// 커스텀 화살표 컴포넌트
+function NextArrow(props) {
+  const { onClick } = props;
+  return (
+    <IconButton
+      aria-label="Next"
+      position="absolute"
+      bottom="50%"
+      right="5px"
+      transform="translateY(-50%)"
+      zIndex="2"
+      backgroundColor="transparent"
+      onClick={onClick}
+      outline='none'
+      border='none'
+      
+    ><FaChevronRight color='gray' _hover={{color:'gray.300'}}/></IconButton>
+  );
+}
+
+function PrevArrow(props) {
+  const { onClick } = props;
+  return (
+    <IconButton
+      aria-label="Previous"
+      position="absolute"
+      bottom="50%"
+      left="5px"
+      transform="translateY(-50%)"
+      zIndex="2"
+      backgroundColor="transparent"
+      onClick={onClick}
+      outline='none'
+      border='none'
+    ><FaChevronLeft color='gray' _hover={{color:'gray.300'}}/></IconButton>
+  );
+}
 
 export default function EventPage({ serverEvents, userData }) {
   const [events] = useState(serverEvents || {});
@@ -203,6 +242,8 @@ export default function EventPage({ serverEvents, userData }) {
             autoplaySpeed={2000}
             pauseOnHover={true}
             arrows={true}
+            nextArrow={<NextArrow />}
+            prevArrow={<PrevArrow />}
             responsive={[
               {
                 breakpoint: 768,
