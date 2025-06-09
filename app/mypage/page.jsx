@@ -12,8 +12,8 @@ export const metadata={
 
 export default async function Mypagemain(){
     const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-    const qnares1=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/author/${res?.username}`);
-    const qnares2=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/reply/${res?.username}`);
+    const qnares1=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/author/${res?.username}`);
+    const qnares2=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/reply/${res?.username}`);
 
     return <>
         <Header userInfo={res}></Header>

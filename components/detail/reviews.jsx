@@ -1,11 +1,10 @@
 'use client';
 
 import React,{useState,useEffect} from 'react';
-import {Flex,VStack} from '@chakra-ui/react';
+import {Flex,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
 import Detailreview from '../element/detailreview';
 import Reviewwrite from '../element/reviewwrite';
 
-import { ButtonGroup, IconButton, Pagination } from "@chakra-ui/react"
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu"
 
 export default function Reviews({userInfo,movieInfo,reviewInfo}){

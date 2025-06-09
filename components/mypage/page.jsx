@@ -2,8 +2,6 @@ import React from 'react';
 import {Tabs,Box} from "@chakra-ui/react"
 import {FaFilm,FaQuestion} from 'react-icons/fa';
 import {FiUser} from 'react-icons/fi';
-import {Header} from '../../components';
-import {fetch} from '../../lib/server';
 import {Bookingcheck,Modify,Qna} from '.';
 
 export default async function Mypage({userInfo,qnaInfo,replyInfo}){
@@ -31,16 +29,16 @@ export default async function Mypage({userInfo,qnaInfo,replyInfo}){
         />
         </h1>
 
-        <Tabs.Root key='outline' defaultValue="booking" variant='outline' fitted>
+        <Tabs.Root key='outline' defaultValue="booking" variant='outline' fitted overflow='visible'>
           <Tabs.List>
               <Tabs.Trigger value="booking">
-                  예매/구매내역
+                 <FaFilm/> 예매/구매내역
               </Tabs.Trigger>
               <Tabs.Trigger value="modify">
-                  개인정보 수정
+                 <FiUser/> 개인정보 수정
               </Tabs.Trigger>
               <Tabs.Trigger value="qna">
-                  1:1 QnA
+                 <FaQuestion/> 1:1 QnA
               </Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content value="booking">
@@ -49,7 +47,7 @@ export default async function Mypage({userInfo,qnaInfo,replyInfo}){
           <Tabs.Content value="modify">
             <Modify userInfo={userInfo}></Modify>
           </Tabs.Content>
-          <Tabs.Content value="qna">
+          <Tabs.Content value="qna" overflow='visible'>
             <Qna userInfo={userInfo} qnaInfo={qnaInfo} replyInfo={replyInfo}></Qna>
           </Tabs.Content>
         </Tabs.Root>
