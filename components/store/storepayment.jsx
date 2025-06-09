@@ -31,7 +31,7 @@ export default function PaymentSuccessPage({ userData }) {
               paymentKey,
               orderId,
               amount: parseInt(amount),
-              userId: username, 
+              userId: username,
             }),
           }
         );
@@ -40,6 +40,18 @@ export default function PaymentSuccessPage({ userData }) {
 
         const result = await res.json();
         setPayment(result);
+        // 쿠폰 사용 처리
+        const couponId = searchParams.get("couponId");
+        if (couponId) {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/use-coupon`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ couponId: parseInt(couponId) }),
+            }
+          );
+        }
         setMessage("✅ 결제가 완료되었습니다!");
         //쿠폰발급
         await fetch(

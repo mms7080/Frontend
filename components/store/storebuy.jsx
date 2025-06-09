@@ -15,6 +15,9 @@ export default function PaymentPage({ userData }) {
   const [product, setProduct] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [coupons, setCoupons] = useState([]);
+  const [selectedCouponId, setSelectedCouponId] = useState(null);
+  const [discountAmount, setDiscountAmount] = useState(0);
 
   useEffect(() => {
     let didCancel = false;
@@ -23,25 +26,29 @@ export default function PaymentPage({ userData }) {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
-          }
+          { credentials: "include" }
         );
-
         if (!res.ok) throw new Error();
-
         const data = await res.json();
         if (!data || !data.username) throw new Error();
 
         if (!didCancel) {
           setUser(data);
 
+          // 🎟️ 쿠폰 가져오기
+          const couponRes = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons?userId=${data.username}`
+          );
+          if (couponRes.ok) {
+            const list = await couponRes.json();
+            setCoupons(list);
+          }
+
+          // 🛒 상품 가져오기
           if (id) {
             const productRes = await fetch(
               `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/detail/${id}`,
-              {
-                credentials: "include",
-              }
+              { credentials: "include" }
             );
             if (productRes.ok) {
               const productData = await productRes.json();
@@ -52,7 +59,7 @@ export default function PaymentPage({ userData }) {
       } catch (e) {
         if (!didCancel) {
           alert("로그인이 필요합니다.");
-          router.replace("/signin"); // 🔄 replace로 히스토리 제거
+          router.replace("/signin");
         }
       }
     })();
@@ -62,27 +69,34 @@ export default function PaymentPage({ userData }) {
     };
   }, [id]);
 
+  const handleCouponChange = (e) => {
+    const selectedId = e.target.value;
+    setSelectedCouponId(selectedId);
+
+    const coupon = coupons.find((c) => c.id.toString() === selectedId);
+    setDiscountAmount(coupon ? coupon.discountAmount : 0);
+  };
+
   if (!product) return <div>Loading...</div>;
 
   const unitPrice = parseInt(product.price.replace(/[^0-9]/g, ""));
   const totalPrice = unitPrice * qty;
+  const finalPrice = Math.max(totalPrice - discountAmount, 0);
 
   const handlePayment = async () => {
     setLoading(true);
     try {
-      const toss = await loadTossPayments(
-        "test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm"
-      );
+      const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
       const orderId = `order-${Date.now()}`;
 
       toss.requestPayment("카드", {
-        amount: totalPrice,
+        amount: finalPrice,
         orderId,
         orderName: product.title,
         customerName: user?.name || "비회원",
         successUrl: `${window.location.origin}/store/payment/success?userId=${
           user?.username || "guest"
-        }&productId=${product.id}`,
+        }&productId=${product.id}${selectedCouponId ? `&couponId=${selectedCouponId}` : ""}`,
         failUrl: `${window.location.origin}/store/payment/fail`,
       });
     } catch (error) {
@@ -113,6 +127,21 @@ export default function PaymentPage({ userData }) {
           <strong>{totalPrice.toLocaleString()}원</strong>
         </div>
 
+        {/* 🎟️ 쿠폰 선택 */}
+        {coupons.length > 0 && (
+          <div style={{ marginTop: 20 }}>
+            <label>쿠폰 선택: </label>
+            <select onChange={handleCouponChange} value={selectedCouponId || ""}>
+              <option value="">-- 사용 안 함 --</option>
+              {coupons.map((coupon) => (
+                <option key={coupon.id} value={coupon.id}>
+                  [{coupon.type === "GENERAL_TICKET" ? "일반 관람권" : "할인"}] {coupon.description}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
         <div className="payment-summary">
           <div className="summary-row">
             <span>상품금액</span>
@@ -120,12 +149,12 @@ export default function PaymentPage({ userData }) {
           </div>
           <div className="summary-row">
             <span>할인</span>
-            <span>- 0원</span>
+            <span>- {discountAmount.toLocaleString()}원</span>
           </div>
           <hr />
           <div className="summary-total">
             <span>최종 결제금액</span>
-            <strong>{totalPrice.toLocaleString()}원</strong>
+            <strong>{finalPrice.toLocaleString()}원</strong>
           </div>
           <div className="button-group">
             <button onClick={() => router.back()} disabled={loading}>
@@ -141,7 +170,7 @@ export default function PaymentPage({ userData }) {
           </div>
         </div>
       </div>
-
+      
       <style jsx>{`
         .payment-container {
           max-width: 900px;
