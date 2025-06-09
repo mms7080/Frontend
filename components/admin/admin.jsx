@@ -49,7 +49,8 @@ export default function AdminDashboard({ userData }) {
   const [reservations, setReservations] = useState([]);
   const [reservationCount, setReservationCount] = useState(0);
   const [reservationSearchKeyword, setReservationSearchKeyword] = useState("");
-  const [reservationConfirmedKeyword, setReservationConfirmedKeyword] = useState("");
+  const [reservationConfirmedKeyword, setReservationConfirmedKeyword] =
+    useState("");
   const reservationsPerPage = 10;
   const [currentReservationPage, setCurrentReservationPage] = useState(1);
 
@@ -71,10 +72,9 @@ export default function AdminDashboard({ userData }) {
   const [currentPaymentPage, setCurrentPaymentPage] = useState(1);
   const [selectedSection, setSelectedSection] = useState(null);
 
-
   useEffect(() => {
-  document.title = "관리자 - FILMORA";
-}, []);
+    document.title = "관리자 - FILMORA";
+  }, []);
 
   // ✅ 로그인 여부 및 권한 확인 → 관리자가 아니면 리다이렉트
   useEffect(() => {
@@ -257,6 +257,7 @@ export default function AdminDashboard({ userData }) {
     { title: "리뷰 관리", key: "리뷰" },
     { title: "매출 관리", key: "매출" },
   ];
+
 
   // 📌 영화 ID → 영화 제목으로 매핑 (그래프나 표에 표시할 때 사용)
   const movieMap = useMemo(() => {
@@ -1197,9 +1198,9 @@ export default function AdminDashboard({ userData }) {
 
       // 날짜+시간 기준으로 최신순 정렬
       const sortedReservations = [...filteredReservations].sort((a, b) => {
-        const dateTimeA = new Date(`${a.date} ${a.time}`);
-        const dateTimeB = new Date(`${b.date} ${b.time}`);
-        return dateTimeB - dateTimeA; // 최신순
+        const timeA = new Date(a.approvedAt || 0).getTime();
+        const timeB = new Date(b.approvedAt || 0).getTime();
+        return timeB - timeA; // 결제 시각 최신순
       });
 
       const paginatedReservations = sortedReservations.slice(
@@ -1327,6 +1328,7 @@ export default function AdminDashboard({ userData }) {
                   <th style={thStyle}>시간</th>
                   <th style={thStyle}>좌석</th>
                   <th style={thStyle}>총액</th>
+                  <th style={thStyle}>결제 시각</th>
                 </tr>
               </thead>
               <tbody>
@@ -1342,6 +1344,17 @@ export default function AdminDashboard({ userData }) {
                     <td style={tdStyle}>{r.seats}</td>
                     <td style={tdStyle}>
                       {Number(r.totalPrice).toLocaleString()}원
+                    </td>
+                    <td style={tdStyle}>
+                      {r.approvedAt
+                        ? new Date(r.approvedAt).toLocaleString("ko-KR", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "-"}
                     </td>
                   </tr>
                 ))}
