@@ -12,8 +12,15 @@ export const metadata={
 
 export default async function Mypagemain(){
     const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-    const qnares1=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/author/${res?.username}`);
-    const qnares2=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/reply/${res?.username}`);
+    let qnares1=[],qnares2=[];
+
+    if(res.auth!=='ADMIN'){
+        qnares1=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/author/${res?.username}`);
+        qnares2=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/reply/${res?.username}`);
+    }else{
+        qnares1=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/all`);
+        qnares2=[];
+    }
 
     return <>
         <Header userInfo={res}></Header>

@@ -1,28 +1,33 @@
 'use client';
 
 import React, {useState} from "react";
-import {Box,Flex,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
-
+import {Box,Flex,Text,Input,Textarea,VStack,Button,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
 import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
+import {fetch} from '../../lib/client';
 
 export default function Qna({userInfo,qnaInfo,replyInfo}){
 
     const [whichpage,setWhichPage]=useState('all');//'all'-전체 qna 열람 , 'write'-qna 작성창, 'view'-특정 qna 열람
+
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+
     const [viewid,setViewId]=useState(null);
     const [modifyid,setModifyId]=useState(null);
     let count=0;
   
     let tempItems=[...qnaInfo,...replyInfo].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)));
-    let rawItems=[...tempItems].filter((item,index)=>item.replyto===null);
+    
+    let initialv=[...tempItems].filter((item,index)=>item.replyto===null);
     tempItems=[...tempItems].filter((item,index)=>item.replyto!==null);
     tempItems=[...tempItems].sort((a,b) => (new Date(a.writetime)-new Date(b.writetime)));
     while(tempItems.length>0){
       count=0;
-      for(let i=0;i<rawItems.length;i++){
+      for(let i=0;i<initialv.length;i++){
         let loc=i+count+1;
         for(let j=0;j<tempItems.length;j++){
-          if(rawItems[i].id===tempItems[j].replytoid){
-            rawItems.splice(loc,0,tempItems[j]);
+          if(initialv[i].id===tempItems[j].replytoid){
+            initialv.splice(loc,0,tempItems[j]);
             tempItems=[...tempItems].map((item,index)=>(index!=j?item:null));
             count++;
             loc++;
@@ -31,6 +36,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
         tempItems=[...tempItems].filter((item,index)=>item!==null);
       }
     }
+
+    const [rawItems,setrawItems]=useState(initialv);
 
     const [currentPage, setCurrentPage] = useState(1);
     const qnasPerPage = 10;
@@ -57,6 +64,31 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
       const diff = (now - created) / (1000 * 60 * 60 * 24);
       return diff <= 2;
     };
+
+    const handleSubmit=async (e)=>{
+      let dataToSend={title:'',content:''};
+      
+      if(content===''){
+          e.preventDefault();
+          alert('내용을 입력해주세요.');
+          return;
+      }
+
+      dataToSend.title=title;
+      dataToSend.content=content;
+      dataToSend.replyto=null;
+      dataToSend.replytoid=null;
+
+      const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/write/logic`, {
+          method: 'POST',
+          body: JSON.stringify(dataToSend)
+      });
+
+      setrawItems([res,...rawItems])
+      setCurrentPage(1);
+      setWhichPage('all');
+    }
+
     if(whichpage==='all'){
      return <>
       <Box boxShadow="0 4px 10px rgba(0,0,0,0.05)">
@@ -344,7 +376,68 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
     }
     else if(whichpage==='write'){
       return <>
-        
+        <Box maxWidth='800px' my='40px' mx='auto' py='0' px='20px' fontFamily='Segoe UI, sans-serif'>
+          <Text textAlign='center' fontSize='30px' mb='40px' borderBottom='2px solid #ccc' pb='10px'>📝 1:1 QnA 작성</Text>
+  
+          <Flex flexDirection='column' gap='12px'>
+            <Text fontSize='15px' mb='4px'>제목</Text>
+            <Input
+              placeholder="제목을 입력하세요"
+              value={title}
+              p='12px'
+              fontSize='15px'
+              border='1px solid #ccc'
+              borderRadius='4px'
+              outline='none'
+              backgroundColor='#fcfcfc'
+              fontWeight='normal'
+              onChange={(e) => setTitle(e.target.value)}
+            />
+  
+            <Text fontSize='15px' mb='4px'>작성자</Text>
+            <Input
+              value={userInfo.username==='root'?'관리자':userInfo.username}
+              readOnly
+              p='12px'
+              fontSize='15px'
+              border='1px solid #ccc'
+              borderRadius='4px'
+              outline='none'
+              backgroundColor='#fcfcfc'
+              fontWeight='normal'
+              style={{ backgroundColor: '#eee', cursor: 'not-allowed' }}
+            />
+  
+            <Text fontSize='15px' mb='4px'>내용</Text>
+            <Textarea
+              placeholder="QnA 내용을 입력하세요"
+              value={content}
+              p='12px'
+              fontSize='15px'
+              border='1px solid #ccc'
+              borderRadius='4px'
+              outline='none'
+              backgroundColor='#fcfcfc'
+              fontWeight='normal'
+              resize="vertical"
+              onChange={(e) => setContent(e.target.value)}
+              rows={10}
+            />
+  
+            <Flex gap='10px' justifyContent='flex-end' mt='20px'>
+              <Button 
+              bg='#0070f3' color='white' py='10px' px='20px'
+               border='none' borderRadius='4px' cursor='pointer' 
+               transition='all 0.2s' fontWeight='normal'
+               _hover={{bg:'#005bb5'}}
+              onClick={handleSubmit}>QnA 등록하기</Button>
+              <Button bg='#ccc' color='black' py='10px' px='20px' 
+              border='none' borderRadius='4px' cursor='pointer' fontWeight='normal'
+              _hover={{bg:'#bbb'}}
+              onClick={() => setWhichPage('all')}>취소</Button>
+            </Flex>
+          </Flex>
+        </Box>
       </>;
     }
     else{
