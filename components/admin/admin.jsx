@@ -424,13 +424,16 @@ export default function AdminDashboard({ userData }) {
                   onClick={() => setCurrentUserPage(idx + 1)}
                   style={{
                     margin: "0 5px",
-                    padding: "6px 12px",
                     backgroundColor:
                       currentUserPage === idx + 1 ? "#6B46C1" : "#eee",
                     color: currentUserPage === idx + 1 ? "#fff" : "#333",
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
+                    width:'36px',
+                    height:'36px',
+                    justifyContent:'center',
+                    alignItems:'center'
                   }}
                 >
                   {idx + 1}
@@ -1427,13 +1430,16 @@ export default function AdminDashboard({ userData }) {
                   onClick={() => setCurrentReservationPage(idx + 1)}
                   style={{
                     margin: "0 5px",
-                    padding: "6px 12px",
                     backgroundColor:
                       currentReservationPage === idx + 1 ? "#6B46C1" : "#eee",
                     color: currentReservationPage === idx + 1 ? "#fff" : "#333",
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
+                    width:'36px',
+                    height:'36px',
+                    justifyContent:'center',
+                    alignItems:'center'
                   }}
                 >
                   {idx + 1}
@@ -1664,13 +1670,16 @@ export default function AdminDashboard({ userData }) {
                   onClick={() => setCurrentPaymentPage(idx + 1)}
                   style={{
                     margin: "0 5px",
-                    padding: "6px 12px",
                     backgroundColor:
                       currentPaymentPage === idx + 1 ? "#6B46C1" : "#eee",
                     color: currentPaymentPage === idx + 1 ? "#fff" : "#333",
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
+                    width:'36px',
+                    height:'36px',
+                    justifyContent:'center',
+                    alignItems:'center'
                   }}
                 >
                   {idx + 1}
@@ -1883,13 +1892,16 @@ export default function AdminDashboard({ userData }) {
                   onClick={() => setCurrentReviewPage(idx + 1)}
                   style={{
                     margin: "0 5px",
-                    padding: "6px 12px",
                     backgroundColor:
                       currentReviewPage === idx + 1 ? "#6B46C1" : "#eee",
                     color: currentReviewPage === idx + 1 ? "#fff" : "#333",
                     border: "none",
                     borderRadius: 4,
                     cursor: "pointer",
+                    width:'36px',
+                    height:'36px',
+                    justifyContent:'center',
+                    alignItems:'center'
                   }}
                 >
                   {idx + 1}

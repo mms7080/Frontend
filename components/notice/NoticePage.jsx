@@ -494,6 +494,9 @@ export default function NoticePage({ notices, userData }) {
               borderRadius: "4px",
               cursor: currentPage === 1 ? "default" : "pointer",
               opacity: currentPage === 1 ? 0.5 : 1,
+              width:'36px',
+              height:'36px',
+              display: "inline-flex"
             }}
           >
             &lt;
@@ -508,13 +511,17 @@ export default function NoticePage({ notices, userData }) {
               onClick={() => setCurrentPage(page)}
               style={{
                 margin: "0 4px",
-                padding: "6px 12px",
                 borderRadius: "4px",
                 border: "1px solid #ccc",
                 backgroundColor: currentPage === page ? "#6B46C1" : "white",
                 color: currentPage === page ? "white" : "#333",
                 cursor: "pointer",
                 transition: "all 0.3s",
+                width:'36px',
+                height:'36px',
+                display: "inline-flex",
+                justifyContent:'center',
+                alignItems:'center'
               }}
             >
               {page}
@@ -536,6 +543,9 @@ export default function NoticePage({ notices, userData }) {
               borderRadius: "4px",
               cursor: currentPage === totalPages ? "default" : "pointer",
               opacity: currentPage === totalPages ? 0.5 : 1,
+              width:'36px',
+              height:'36px',
+              display: "inline-flex"
             }}
           >
             &gt;
