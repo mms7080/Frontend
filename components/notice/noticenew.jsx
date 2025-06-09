@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import {Box,Flex,Text,Input,Textarea,Button} from '@chakra-ui/react';
+
 import Header from '../header';
 
 export default function NoticeCreatePage({userData}) {
@@ -49,116 +51,68 @@ export default function NoticeCreatePage({userData}) {
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
 
-      <main className="form-container">
-        <h1>📝 공지사항 작성</h1>
+      <Box maxWidth='800px' my='40px' mx='auto' py='0' px='20px' fontFamily='Segoe UI, sans-serif'>
+        <Text textAlign='center' fontSize='30px' mb='40px' borderBottom='2px solid #ccc' pb='10px'>📝 공지사항 작성</Text>
 
-        <div className="form-group">
-          <label>제목</label>
-          <input
+        <Flex flexDirection='column' gap='12px'>
+          <Text fontSize='15px' mb='4px'>제목</Text>
+          <Input
             placeholder="제목을 입력하세요"
             value={title}
+            p='12px'
+            fontSize='15px'
+            border='1px solid #ccc'
+            borderRadius='4px'
+            outline='none'
+            backgroundColor='#fcfcfc'
+            fontWeight='normal'
             onChange={(e) => setTitle(e.target.value)}
           />
 
-          <label>작성자</label>
-          <input
+          <Text fontSize='15px' mb='4px'>작성자</Text>
+          <Input
             value={writer}
             readOnly
+            p='12px'
+            fontSize='15px'
+            border='1px solid #ccc'
+            borderRadius='4px'
+            outline='none'
+            backgroundColor='#fcfcfc'
+            fontWeight='normal'
             style={{ backgroundColor: '#eee', cursor: 'not-allowed' }}
           />
 
-          <label>내용</label>
-          <textarea
+          <Text fontSize='15px' mb='4px'>내용</Text>
+          <Textarea
             placeholder="공지사항 내용을 입력하세요"
             value={content}
+            p='12px'
+            fontSize='15px'
+            border='1px solid #ccc'
+            borderRadius='4px'
+            outline='none'
+            backgroundColor='#fcfcfc'
+            fontWeight='normal'
+            resize="vertical"
             onChange={(e) => setContent(e.target.value)}
             rows={10}
           />
 
-          <div className="button-group">
-            <button className="submit-btn" onClick={handleSubmit}>등록하기</button>
-            <button className="cancel-btn" onClick={() => router.push('/notice')}>취소</button>
-          </div>
-        </div>
-      </main>
-      
-      <style jsx>{`
-        .form-container {
-          max-width: 800px;
-          margin: 40px auto;
-          padding: 0 20px;
-          font-family: 'Segoe UI', sans-serif;
-        }
-
-        h1 {
-          text-align: center;
-          font-size: 30px;
-          margin-bottom: 40px;
-          border-bottom: 2px solid #ccc;
-          padding-bottom: 10px;
-        }
-
-        .form-group {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        label {
-          font-size: 15px;
-          margin-bottom: 4px;
-        }
-
-        input, textarea {
-          padding: 12px;
-          font-size: 15px;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          outline: none;
-          background-color: #fcfcfc;
-          font-weight: normal;
-        }
-
-        textarea {
-          resize: vertical;
-        }
-
-        .button-group {
-          display: flex;
-          gap: 10px;
-          justify-content: flex-end;
-          margin-top: 20px;
-        }
-
-        .submit-btn {
-          background-color: #0070f3;
-          color: white;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.2s;
-          font-weight: normal;
-        }
-
-        .submit-btn:hover {
-          background-color: #005bb5;
-        }
-
-        .cancel-btn {
-          background-color: #ccc;
-          color: black;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          font-weight: normal;
-        }
-
-        .cancel-btn:hover {
-          background-color: #bbb;
-        }
-      `}</style>
+          <Flex gap='10px' justifyContent='flex-end' mt='20px'>
+            <Button 
+            bg='#0070f3' color='white' py='10px' px='20px'
+             border='none' borderRadius='4px' cursor='pointer' 
+             transition='all 0.2s' fontWeight='normal'
+             _hover={{bg:'#005bb5'}}
+            onClick={handleSubmit}>등록하기</Button>
+            <Button bg='#ccc' color='black' py='10px' px='20px' 
+            border='none' borderRadius='4px' cursor='pointer' fontWeight='normal'
+            _hover={{bg:'#bbb'}}
+            onClick={() => router.push('/notice')}>취소</Button>
+          </Flex>
+        </Flex>
+      </Box>
     </>
   );
 }

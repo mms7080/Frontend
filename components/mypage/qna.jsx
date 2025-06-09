@@ -9,18 +9,26 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
 
     const [whichpage,setWhichPage]=useState('all');//'all'-전체 qna 열람 , 'write'-qna 작성창, 'view'-특정 qna 열람
     const [viewid,setViewId]=useState(null);
+    const [modifyid,setModifyId]=useState(null);
     let count=0;
-
-    let rawItems=[...qnaInfo].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)));
-    replyInfo=[...replyInfo].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)));
-    for(let i=0;i<qnaInfo.length;i++){
-      let index=i+count+1;
-      for(let j=0;j<replyInfo.length;j++){
-        if(replyInfo[j].replytoid===qnaInfo[i].id){
-          rawItems.splice(index,0,replyInfo[j]);
-          count++;
-          index++;
+  
+    let tempItems=[...qnaInfo,...replyInfo].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)));
+    let rawItems=[...tempItems].filter((item,index)=>item.replyto===null);
+    tempItems=[...tempItems].filter((item,index)=>item.replyto!==null);
+    tempItems=[...tempItems].sort((a,b) => (new Date(a.writetime)-new Date(b.writetime)));
+    while(tempItems.length>0){
+      count=0;
+      for(let i=0;i<rawItems.length;i++){
+        let loc=i+count+1;
+        for(let j=0;j<tempItems.length;j++){
+          if(rawItems[i].id===tempItems[j].replytoid){
+            rawItems.splice(loc,0,tempItems[j]);
+            tempItems=[...tempItems].map((item,index)=>(index!=j?item:null));
+            count++;
+            loc++;
+          }
         }
+        tempItems=[...tempItems].filter((item,index)=>item!==null);
       }
     }
 
@@ -149,7 +157,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
                               /* href={`/notice/${notice.id}`} */
                           color: "#222",
                           textDecoration: "none",
-                          textAlign:'center',
+                          textAlign:'left',
                           display: "block",
                           transition: "color 0.1s",
                           fontWeight: 400,
@@ -266,6 +274,32 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             }
           `}</style>
           </Box>
+          <Flex w='100%' justifyContent='flex-end' pt='10px'>
+            <button
+            style={{
+              backgroundColor: "black",
+              color: "white",
+              padding: "8px 20px",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "15px",
+              transition: "all 0.3s",
+              width:110
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.backgroundColor = "#6B46C1")
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.backgroundColor = "black")
+            }
+            onClick={() => {
+              setWhichPage('write');
+            }}
+          >
+            질문글쓰기
+          </button>
+          </Flex>
           <VStack pt='15px'>
                   <Pagination.Root count={rawItems.length} 
                    pageSize={qnasPerPage} page={currentPage} onPageChange={({page}) =>setCurrentPage(page)}>
@@ -306,6 +340,15 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             </ButtonGroup>
           </Pagination.Root>
               </VStack>
+      </>;
+    }
+    else if(whichpage==='write'){
+      return <>
+        
+      </>;
+    }
+    else{
+      return <>
       </>;
     }
 }
