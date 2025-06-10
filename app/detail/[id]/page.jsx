@@ -59,7 +59,7 @@ export default async function Detailpage({params}){
                     </Flex>
 
                     <VStack pt='80px' overflow='visible'>
-                        <Image w='280px' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movieinfo.poster}`}/>
+                        <Image w='280px' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movieinfo.poster}`} loading='lazy'/>
                         <Link style={{width:280}} href={`/booking?id=${id}`}>
                             <Button w='280px' boxShadow='4px 4px 6px black'>예매</Button>
                         </Link>

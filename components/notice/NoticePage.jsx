@@ -122,6 +122,7 @@ export default function NoticePage({ notices, userData }) {
             src="http://localhost:9999/images/logo.png"
             alt="logo"
             style={{ width: "141px", height: "68px", objectFit: "contain" }}
+            loading='lazy'
           />
         </h1>
 

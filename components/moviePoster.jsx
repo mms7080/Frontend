@@ -130,6 +130,7 @@ export default function MoviePoster({ onMovieSelect, selectedMovie }) {
                         transition="transform 0.2s"
                         onClick={() => onMovieSelect(movie)}
                         border={selectedMovie?.id === movie.id ? "5px solid purple" : "none"}
+                        loading='lazy'
                     />
                 </Box>
             ))}

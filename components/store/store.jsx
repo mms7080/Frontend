@@ -74,6 +74,7 @@ export default function MegaboxStorePage({ userData }) {
             src="http://localhost:9999/images/logo.png"
             alt="logo"
             style={{ width: "141px", height: "68px", objectFit: "contain" }}
+            loading='lazy'
           />
         </h1>
 
@@ -149,6 +150,7 @@ export default function MegaboxStorePage({ userData }) {
                     h="200px"
                     mb={3}
                     borderRadius="md"
+                    loading='lazy'
                   />
                   <Box>
                     <Flex

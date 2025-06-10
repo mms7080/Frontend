@@ -89,6 +89,7 @@ setTimeout(() => {
               src="http://localhost:9999/images/box.gif"
               alt="상자 열기"
               className="shaking-box"
+              loading='lazy'
             />
             <p className="box-text">열리는 중...</p>
           </div>
@@ -102,6 +103,7 @@ setTimeout(() => {
               <img
                 src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${result.item.imgUrl}`}
                 alt={result.item.title}
+                loading='lazy'
               />
             )}
           </div>

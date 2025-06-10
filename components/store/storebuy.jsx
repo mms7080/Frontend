@@ -117,6 +117,7 @@ export default function PaymentPage({ userData }) {
             <img
               src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${product.imgUrl}`}
               alt="상품이미지"
+              loading='lazy'
             />
             <div className="details">
               <strong>{product.title}</strong>

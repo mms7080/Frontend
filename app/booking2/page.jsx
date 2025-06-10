@@ -228,6 +228,7 @@ export default function BookingTestPage() {
                                     <img
                                         src={movie.poster}
                                         alt={movie.title}
+                                        loading='lazy'
                                         style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
                                         onClick={() => handlePosterClick(movie)}
                                     />
@@ -256,6 +257,7 @@ export default function BookingTestPage() {
                         w="25%"
                         borderRadius="md"
                         objectFit="cover"
+                        loading='lazy'
                     />
                     <Text fontSize="3xl" fontWeight="bold">
                         {currentMovies[activeIndex]?.title || ''}
@@ -308,6 +310,7 @@ export default function BookingTestPage() {
                                 width="350px" // 포스터 크기 고정 또는 반응형 조절
                                 height="525px" // 높이도 비율에 맞게
                                 objectFit="cover"
+                                loading='lazy'
                             />
                             <Box
                                 width="250px"

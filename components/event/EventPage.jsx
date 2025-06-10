@@ -128,6 +128,7 @@ export default function EventPage({ serverEvents, userData }) {
     src="http://localhost:9999/images/logo.png" 
     alt="logo"
     style={{ width: "141px", height: "68px", objectFit: "contain" }}
+    loading='lazy'
   />
 </h1>
       </Box>
@@ -192,6 +193,7 @@ export default function EventPage({ serverEvents, userData }) {
       borderRadius="12px"
       boxShadow="md"
       maxW="150px"
+      loading='lazy'
     />
   </Box>
 
@@ -279,6 +281,7 @@ export default function EventPage({ serverEvents, userData }) {
                         objectFit: "cover",
                         pointerEvents: "none",
                       }}
+                      loading='lazy'
                     />
                   </Box>
                   <Box p={4} position="relative">
@@ -446,6 +449,7 @@ export default function EventPage({ serverEvents, userData }) {
                       w="100%"
                       h="100%"
                       objectFit="cover"
+                      loading='lazy'
                     />
                     <Text
                       position="absolute"

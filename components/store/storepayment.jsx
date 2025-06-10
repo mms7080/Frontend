@@ -132,6 +132,7 @@ export default function PaymentSuccessPage({ userData }) {
                   objectFit: "cover",
                   border: "1px solid #ccc",
                 }}
+                loading='lazy'
               />
               <div>
                 <p

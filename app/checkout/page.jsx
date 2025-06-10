@@ -141,7 +141,7 @@ export default function CheckoutPage() {
 
         <div className="purchase-info">
           <div className="product">
-            <img src={movie.poster} alt={movie.title} />
+            <img src={movie.poster} alt={movie.title} loading='lazy' />
             <div className="details">
               <strong>{movie.title}</strong>
               <p>{movie.titleEnglish}</p>

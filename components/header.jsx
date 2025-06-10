@@ -284,7 +284,7 @@ export default function Header() {
           maxW="calc(100vw - 20px)"
         >
           {posterUrl && !countdownMinimized && (
-            <Image src={posterUrl} alt="포스터" boxSize="60px" borderRadius="md" mr={3} />
+            <Image src={posterUrl} alt="포스터" boxSize="60px" borderRadius="md" mr={3} loading='lazy'/>
           )}
           {!countdownMinimized ? (
             <Box textAlign="left">

@@ -200,6 +200,7 @@ export default function StoreUploadPage({userData}) {
                     maxWidth: "100%",
                     borderRadius: "8px",
                   }}
+                  loading='lazy'
                 />
                 <p style={{ fontSize: "13px", color: "#666" }}>
                   ※ 업로드될 이미지 미리보기입니다.

@@ -42,21 +42,21 @@ export default function Signin(){
                                 <Flex w='40px' h='40px' justifyContent='center' alignItems='center'>
                                     <Image w='35px' h='35px' objectFit='cover' borderRadius='50%' src='https://cdn-icons-png.freepik.com/512/3669/3669973.png'
                                     transition='all 0.3s ease-in-out'
-                                    _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}/>
+                                    _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}} loading='lazy'/>
                                 </Flex>
                             </Link>
                             <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/naver`}>
                                 <Flex w='40px' h='40px' justifyContent='center' alignItems='center'>
                                     <Image w='35px' h='35px' objectFit='cover' borderRadius='50%' src='https://w7.pngwing.com/pngs/344/368/png-transparent-naver-round-logo-search-engines-thumbnail.png'
                                     transition='all 0.3s ease-in-out'
-                                    _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}/>
+                                    _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}} loading='lazy'/>
                                 </Flex>
                             </Link>
                             <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/oauth2/authorization/google`}>
                                 <Flex w='40px' h='40px' justifyContent='center' alignItems='center'>
                                     <Image w='35px' h='35px' objectFit='cover' borderRadius='50%' src='https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png'
                                     transition='all 0.3s ease-in-out'
-                                    _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}/>
+                                    _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}} loading='lazy'/>
                                 </Flex>
                             </Link>
                         </Flex>

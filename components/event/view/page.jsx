@@ -77,6 +77,7 @@ export default function EventDetailPage({ userData }) {
             src="http://localhost:9999/images/logo.png"
             alt="logo"
             style={{ width: "141px", height: "68px", objectFit: "contain" }}
+            loading='lazy'
           />
         </h1>
       </Box>
@@ -131,6 +132,7 @@ export default function EventDetailPage({ userData }) {
                     w="100%"
                     h="auto"
                     objectFit="cover"
+                    loading='lazy'
                   />
                 </Box>
               ))}

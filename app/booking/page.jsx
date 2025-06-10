@@ -267,6 +267,7 @@
 //                         <img
 //                             src={movie.poster}
 //                             alt={movie.title}
+//                             loading='lazy'
 //                             style={{ width: '100%', height: '100%', borderRadius: '12px', objectFit: 'cover' }}
 //                             onClick={() => handlePosterClick(movie)}
 //                         />
@@ -299,6 +300,7 @@
 //                         borderRadius="md"
 //                         objectFit="cover"
 //                         boxShadow="0px 0px 30px rgba(255,255,255,0.6)"
+//                         loading='lazy'
 //                     />
 //                 </Box>
 
@@ -417,6 +419,7 @@
 //                             width="400px"
 //                             height="650px"
 //                             objectFit="cover"
+//                             loading='lazy'
 //                         />
 //                         {/* 극장 선택 박스 */}
 //                         <Box

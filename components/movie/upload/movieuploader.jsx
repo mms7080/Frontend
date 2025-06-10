@@ -327,6 +327,7 @@ const MovieUploader = ({userInfo}) => {
                             <Image
                                 src={form.poster.url} alt={`poster-preview`}
                                 w="100%" h="100%" objectFit="cover"
+                                loading='lazy'
                             />
                         </Box>
                     </Flex>
@@ -352,6 +353,7 @@ const MovieUploader = ({userInfo}) => {
                             <Image
                                 src={form.wideImage.url} alt={`wideImage-preview`}
                                 w="100%" h="100%" objectFit="cover"
+                                loading='lazy'
                             />
                         </Box>
                     </Flex>
@@ -379,6 +381,7 @@ const MovieUploader = ({userInfo}) => {
                                 <Image
                                     src={img.url} alt={`stillCut-preview-${idx}`}
                                     w="100%" h="100%" objectFit="cover"
+                                    loading='lazy'
                                 />
                             </Box>
                         })}

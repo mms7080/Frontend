@@ -107,6 +107,7 @@ const Theater = ({ userInfo }) => {
                     src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/logo.png`}
                     alt="logo"
                     style={{ width: "141px", height: "68px", objectFit: "contain" }}
+                    loading='lazy'
                 />
             </h1>
             <Flex justifyContent="space-between">

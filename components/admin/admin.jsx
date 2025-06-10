@@ -723,6 +723,7 @@ export default function AdminDashboard({ userData }) {
                         objectFit: "cover",
                         display: "block",
                       }}
+                      loading='lazy'
                     />
 
                     <div style={{ padding: "12px 16px" }}>
@@ -961,6 +962,7 @@ export default function AdminDashboard({ userData }) {
                     borderRadius: 12,
                     marginBottom: 10,
                   }}
+                  loading='lazy'
                 />
 
                 <h3
@@ -1208,6 +1210,7 @@ export default function AdminDashboard({ userData }) {
                         height: 150,
                         objectFit: "cover",
                       }}
+                      loading='lazy'
                     />
                     <div style={{ padding: "12px 16px" }}>
                       <h3

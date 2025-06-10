@@ -222,6 +222,7 @@ export default function EventUploader({userData}) {
                       w="100%"
                       h="100%"
                       objectFit="cover"
+                      loading='lazy'
                     />
                   </Box>
                 ))}

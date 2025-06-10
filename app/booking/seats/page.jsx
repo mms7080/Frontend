@@ -220,6 +220,7 @@ export default function SeatsPage() {
                                     objectFit="cover"
                                     w="100%"
                                     maxW="400px"
+                                    loading='lazy'
                                 />
                             )}
                         </Box>

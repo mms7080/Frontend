@@ -175,7 +175,7 @@ export default function MoviePaymentSuccessPage() {
           <h1 className="status">{status}</h1>
           {reservationInfo && reservationInfo.movie && (
             <div className="card" ref={ticketRef}>
-              <img src={reservationInfo.movie.poster} alt={reservationInfo.movie.title} className="poster" />
+              <img src={reservationInfo.movie.poster} alt={reservationInfo.movie.title} className="poster"  loading='lazy'/>
               <div className="details">
                 <h2>{reservationInfo.movie.title}</h2>
                 <p><strong>상영 지역:</strong> {reservationInfo.region}</p>
