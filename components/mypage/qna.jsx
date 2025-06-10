@@ -175,6 +175,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
 
         setReplyTo(null);
         setReplyToId(null);
+        alert('QnA가 등록되었습니다!');
       }
       else{
 
@@ -188,8 +189,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
         setrawItems([...rawItems].map((item,index)=>(item.id===modifyid?res2:item)));
         setModifyId(null);
 
+        alert('QnA가 수정되었습니다!');
       }
-
       setWhichPage('all');
     }
 
