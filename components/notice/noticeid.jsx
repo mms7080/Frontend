@@ -57,25 +57,31 @@ export default function NoticeIdPage({ userData }) {
       <div
         style={{
           maxWidth: "1200px",
-          margin: "60px auto",
-          padding: "30px",
-          backgroundColor: "#ffffff",
-          borderRadius: "10px",
-          fontFamily: "Pretendard, sans-serif",
+          width: "100%",
+          margin: "0 auto",
+          padding: "80px 16px 40px",
+          boxSizing: "border-box",
         }}
       >
         <h1
           style={{
             fontSize: "24px",
-            fontWeight: 400,
+            fontWeight: "normal",
             color: "#222",
-            textAlign: "center",
-            marginBottom: "30px",
             borderBottom: "2px solid #ccc",
             paddingBottom: "12px",
+            marginBottom: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
           }}
         >
-          📢 공지사항
+          <img
+            src="http://localhost:9999/images/logo.png"
+            alt="logo"
+            style={{ width: "141px", height: "68px", objectFit: "contain" }}
+          />
         </h1>
 
         <table
