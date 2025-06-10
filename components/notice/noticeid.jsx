@@ -111,7 +111,7 @@ export default function NoticeIdPage({ userData }) {
             backgroundColor: "#ffffff",
             border: "1px solid #eee",
             borderRadius: "6px",
-            fontSize: "15px",
+            fontSize: "17px",
             color: "#333",
             marginBottom: "30px",
             fontWeight: 400,
