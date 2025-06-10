@@ -6,7 +6,7 @@ import Notloginalert from '../../components/mypage/notloginalert';
 import {fetch} from '../../lib/server';
 
 export const metadata={
-    title: '마이페이지',
+    title: '마이페이지 - FILMORA',
     description: '개인정보 수정, 예매내역 확인 등을 할 수 있는 페이지입니다.',
 };
 

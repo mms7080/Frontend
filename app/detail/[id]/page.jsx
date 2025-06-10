@@ -6,7 +6,7 @@ import {Likepart,Bottombox} from '../../../components/detail';
 import {fetch} from '../../../lib/server';
 
 export const metadata = {
-    title: '영화 상세 페이지',
+    title: '영화 상세 페이지 - FILMORA',
     description: '영화에 대한 상세한 정보를 볼 수 있는 페이지입니다.',
 };
 
