@@ -161,6 +161,9 @@ export default function NoticePage({ notices, userData }) {
             .responsive-inputs button {
               width: 100%;
             }
+            .responsive-hide {
+              display: none;
+            }
           }
         `}</style>
 
@@ -262,9 +265,9 @@ export default function NoticePage({ notices, userData }) {
               <tr style={{ color: "black" }}>
                 <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>번호</th>
                 <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>제목</th>
-                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>작성자</th>
-                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>작성일</th>
-                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>조회수</th>
+                <th className="responsive-hide" style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>작성자</th>
+                <th className="responsive-hide" style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>작성일</th>
+                <th className="responsive-hide" style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>조회수</th>
                 {user?.auth === "ADMIN" && (
                   <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>관리</th>
                 )}
