@@ -123,8 +123,8 @@ export default function MegaboxStorePage({ userData }) {
               </Text>
             )}
             <SimpleGrid
-              columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-              spacing={{ base: 6, md: 10 }}
+              columns={{ base: 2, sm: 2, md: 3, lg: 4 }}
+              spacing={{ base: 6, md: 6 }}
               justifyItems="center"
             >
               {(storeData[category] || []).map((item) => (
@@ -139,6 +139,7 @@ export default function MegaboxStorePage({ userData }) {
                   minH="360px"
                   cursor="pointer"
                   onClick={() => router.push(`/store/detail/${item.id}`)}
+                  mx={{ base: "8px", md: "0px" }}
                 >
                   <Image
                     src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${item.imgUrl}`}
