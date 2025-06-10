@@ -233,20 +233,25 @@ export default function mobilePage() {
                     {activeMovie ? activeMovie.title : "현재 상영작"}
                 </Text>
             </Flex>
-
-                <Box overflowX="auto" whiteSpace="nowrap" px={4}>
+            <Box overflowX="auto" whiteSpace="nowrap" px={4}>
                 <Flex>
                     {movies.map((movie, index) => {
                         const isSelected = activeMovie && movie.id === activeMovie.id;
                         return(
                         <Box
                             key={movie.id}
-                            width="80px"
-                            height="100px"
-                            mr={index !== movies.length - 1 ? 2 : 0} // 마지막 포스터 제외
-                            border={isSelected ? '2px solid #6B46C1;' : 'none'}
+                            minW="100px" // 또는 적절한 최소 너비
+                            width="25vw" // 전체 뷰포트의 25%를 차지하도록
+                            maxW="150px" // 너무 커지지 않도록 최대 너비 제한
+                            height="auto"
+                            mr={index !== movies.length - 1 ? 0 : 0} // 마지막 포스터 제외
+                            border={isSelected ? '2px solid #6B46C1' : 'none'}
                             borderRadius="md"
                             onClick={() => handlePosterClick(movie)}
+                            overflow="hidden"
+                            cursor="pointer"
+                            p={1}
+                            bg={isSelected ? "#2D1F4F" : "transparent"}
                         >
                             <Image
                                 src={movie.poster}
@@ -260,11 +265,10 @@ export default function mobilePage() {
                         </Box>)
                     })}
                 </Flex>
-                </Box>
-                
+            </Box>
             </Box>
             {activeMovie && (
-                <Box bg="#1a1a1a" color="white" py={4} px={4}>
+                <Box bg="#141414" color="white" py={4} px={4}>
                     {/* 지역 선택 */}
                     <Text fontSize="md" mb={1}>지역 선택</Text>
                     <Box
