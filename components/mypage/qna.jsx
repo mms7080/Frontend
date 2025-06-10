@@ -326,6 +326,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
               (e.currentTarget.style.backgroundColor = "black")
             }
             onClick={() => {
+              setTitle('');
+              setContent('');
               setWhichPage('write');
             }}
           >

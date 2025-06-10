@@ -73,7 +73,7 @@ export default function Footer() {
                 h="20px"
                 loading="lazy"
                 borderRadius="5px"
-                src="https://mblogthumb-phinf.pstatic.net/MjAyMTA5MTlfMjUg/MDAxNjMyMDE3OTA4NTA0.dhHpehPf66HwINvBr6OijefwiqeXdPcbcdCU1m1nZ1Ig.3R8X4ori4uDAxmc535BOc6_M8zQHWSfotX-gO8YX4Mwg.PNG.brotherm1n/SE-5c4e2eac-5093-4df9-9626-2bf8df6eb194.png?type=w800"
+                src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/instagram.png`}
                 alt="Instagram Logo"
                 transition='all 0.3s ease-in-out'
                 _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}
@@ -86,7 +86,7 @@ export default function Footer() {
               h="25px"
               loading="lazy"
               borderRadius="5px"
-              src="http://localhost:9999/images/kakao.png"
+              src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/kakao.png`}
               alt="Kakao Logo"
               transition='all 0.3s ease-in-out'
               _hover={{transform:'rotate(-10deg) scale(1.1)',filter:'brightness(1.2)'}}

@@ -84,11 +84,11 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
                                    transition="transform 0.2s ease" // 클릭할 때 부드럽게
                                    _active={{ transform: "scale(0.8)" }}
                                >
-                                   <Image loading='lazy' src={ didilikeit()?'https://cdn-icons-png.flaticon.com/128/5953/5953425.png'
-                                   :'https://cdn-icons-png.flaticon.com/128/9807/9807775.png'} w='20px' h='20px'/>
+                                   <Image loading='lazy' src={ didilikeit()?`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/liked.png`
+                                   :`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/unliked.png`} w='20px' h='20px'/>
                                </Box>
                            </Button>
-                       ):<Image loading='lazy' src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px' opacity='0.5'></Image>
+                       ):<Image loading='lazy' src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/unliked.png`} w='20px' h='20px' opacity='0.5'></Image>
                        }
                        
                        <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color='#666691'>{likenum}</Text>
@@ -115,7 +115,7 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
                    <>
                     <Text pr='50px' color={titleColor}>-  {movieInfo.title}</Text>
                     <Flex flexDirection='column' justifyContent='center' alignItems='center' w='60px' h='60px'>
-                        <Image loading='lazy' src='https://cdn-icons-png.flaticon.com/128/9807/9807775.png' w='20px' h='20px' opacity='0.5'></Image>
+                        <Image loading='lazy' src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/unliked.png`} w='20px' h='20px' opacity='0.5'></Image>
                         <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color={likeColor}>{likenum}</Text>
                     </Flex>
                    </>
