@@ -23,6 +23,14 @@ export default function Header() {
   const [position, setPosition] = useState({ x: 20, y: 80 });
   const [posterUrl, setPosterUrl] = useState(null);
 
+  const [countdownClosed, setCountdownClosed] = useState(() => {
+    return localStorage.getItem("countdownClosed") === "true";
+  });
+
+  const clearCountdown = () => {
+    setCountdownClosed(true); // UI 상태 닫기
+  };
+
   const countdownRef = useRef(null);
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
@@ -47,9 +55,12 @@ export default function Header() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+          {
+            credentials: "include",
+          }
+        );
         if (!res.ok) throw new Error();
         const data = await res.json();
         setUser(data);
@@ -64,6 +75,10 @@ export default function Header() {
     const saved = localStorage.getItem("countdownPosition");
     if (saved) setPosition(JSON.parse(saved));
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("countdownClosed", countdownClosed);
+  }, [countdownClosed]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -98,65 +113,67 @@ export default function Header() {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-useEffect(() => {
-  const alertData = localStorage.getItem("latestReservationAlert");
-  if (alertData) setReservationAlert(JSON.parse(alertData));
+  useEffect(() => {
+    const alertData = localStorage.getItem("latestReservationAlert");
+    if (alertData) setReservationAlert(JSON.parse(alertData));
 
-  const applyCountdown = () => {
-    const data = localStorage.getItem("latestReservationCountdown");
-    if (data && user) {
-      const { title, showTime, movieId } = JSON.parse(data);
-      const now = Date.now();
-      const target = new Date(showTime).getTime();
-      const diff = target - now;
+    const applyCountdown = () => {
+      const data = localStorage.getItem("latestReservationCountdown");
+      if (data && user) {
+        const { title, showTime, movieId } = JSON.parse(data);
+        const now = Date.now();
+        const target = new Date(showTime).getTime();
+        const diff = target - now;
 
-      if (diff <= 0) {
-        setCountdown(null);
-        localStorage.removeItem("latestReservationCountdown");
-      } else {
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        setCountdown({
-          title,
-          timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
-        });
+        if (diff <= 0) {
+          setCountdown(null);
+          localStorage.removeItem("latestReservationCountdown");
+        } else {
+          const hours = Math.floor(diff / (1000 * 60 * 60));
+          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+          setCountdown({
+            title,
+            timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
+          });
 
-        if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
+          if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
 
-        
-        if (!posterUrl) {
-          fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
-            .then((res) => res.json())
-            .then((data) => {
-              if (data?.poster) {
-                setPosterUrl(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`);
-              }
-            })
-            .catch(() => {});
+          if (!posterUrl) {
+            fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                if (data?.poster) {
+                  setPosterUrl(
+                    `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`
+                  );
+                }
+              })
+              .catch(() => {});
+          }
         }
       }
-    }
-  };
+    };
 
-  applyCountdown();
-
-  const interval = setInterval(() => {
-    const alertData = localStorage.getItem("latestReservationAlert");
-    if (alertData) {
-      const { title, notifyTime } = JSON.parse(alertData);
-      if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
-        setShowingAlert({ title });
-        localStorage.removeItem("latestReservationAlert");
-        setReservationAlert(null);
-      }
-    }
     applyCountdown();
-  }, 1000);
 
-  return () => clearInterval(interval);
-}, [user, posterUrl]); 
+    const interval = setInterval(() => {
+      const alertData = localStorage.getItem("latestReservationAlert");
+      if (alertData) {
+        const { title, notifyTime } = JSON.parse(alertData);
+        if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
+          setShowingAlert({ title });
+          localStorage.removeItem("latestReservationAlert");
+          setReservationAlert(null);
+        }
+      }
+      applyCountdown();
+    }, 1000);
 
+    return () => clearInterval(interval);
+  }, [user, posterUrl]);
 
   const startDrag = (e) => {
     dragging.current = true;
@@ -169,10 +186,19 @@ useEffect(() => {
     if (!dragging.current) return;
     const clientX = e.clientX ?? e.touches?.[0]?.clientX;
     const clientY = e.clientY ?? e.touches?.[0]?.clientY;
-    const newX = Math.max(0, Math.min(clientX - offset.current.x, window.innerWidth - 150));
-    const newY = Math.max(0, Math.min(clientY - offset.current.y, window.innerHeight - 100));
+    const newX = Math.max(
+      0,
+      Math.min(clientX - offset.current.x, window.innerWidth - 150)
+    );
+    const newY = Math.max(
+      0,
+      Math.min(clientY - offset.current.y, window.innerHeight - 100)
+    );
     setPosition({ x: newX, y: newY });
-    localStorage.setItem("countdownPosition", JSON.stringify({ x: newX, y: newY }));
+    localStorage.setItem(
+      "countdownPosition",
+      JSON.stringify({ x: newX, y: newY })
+    );
   };
 
   const endDrag = () => {
@@ -185,11 +211,6 @@ useEffect(() => {
     router.push("/mypage");
   };
 
-  const clearCountdown = () => {
-    localStorage.removeItem("latestReservationCountdown");
-    setCountdown(null);
-  };
-
   return (
     <>
       {reservationAlert && (
@@ -199,7 +220,7 @@ useEffect(() => {
           left="0"
           w="100%"
           bg="#f3e8ff"
-          h='40px'
+          h="40px"
           borderBottom="1px solid #a855f7"
           color="#6b21a8"
           fontSize="14px"
@@ -211,10 +232,10 @@ useEffect(() => {
           _hover={{ bg: "#e9d5ff" }}
           onClick={clearReservationAlert}
         >
-          🔔 <strong>[{reservationAlert.title}]</strong> 예매가 완료되었습니다! (마이페이지로 이동)
+          🔔 <strong>[{reservationAlert.title}]</strong> 예매가 완료되었습니다!
+          (마이페이지로 이동)
         </Box>
       )}
-
       {showingAlert && (
         <Box
           position="fixed"
@@ -222,7 +243,7 @@ useEffect(() => {
           left="0"
           w="100%"
           bg="#dbf4ff"
-          h='40px'
+          h="40px"
           borderBottom="1px solid #38bdf8"
           color="#0369a1"
           fontSize="14px"
@@ -234,11 +255,12 @@ useEffect(() => {
           _hover={{ bg: "#bae6fd" }}
           onClick={() => router.push("/mypage")}
         >
-          ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 입장 부탁드립니다
+          ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 입장
+          부탁드립니다
         </Box>
       )}
 
-      {countdown && user && (
+      {countdown && user && !countdownClosed && (
         <Flex
           ref={countdownRef}
           position="fixed"
@@ -265,8 +287,15 @@ useEffect(() => {
           maxW="calc(100vw - 20px)"
           wordBreak="keep-all"
         >
-          {posterUrl && (
-            <Image src={posterUrl} alt="포스터" boxSize="60px" borderRadius="md" mr={3} mb={{ base: 2, md: 0 }} />
+          {posterUrl && !countdownMinimized && (
+            <Image
+              src={posterUrl}
+              alt="포스터"
+              boxSize="60px"
+              borderRadius="md"
+              mr={3}
+              mb={{ base: 2, md: 0 }}
+            />
           )}
           {!countdownMinimized ? (
             <Box textAlign="left">
@@ -278,25 +307,47 @@ useEffect(() => {
                 <Button size="xs" onClick={() => setCountdownMinimized(true)}>
                   작게
                 </Button>
-                <Button size="xs" onClick={clearCountdown} colorScheme="red">
+                <Button
+                  size="xs"
+                  onClick={() => setCountdownClosed(true)}
+                  colorScheme="red"
+                >
                   닫기
                 </Button>
               </Flex>
             </Box>
           ) : (
             <Flex align="center" gap={2}>
-              <Text fontSize="sm">🕙 {countdown.timeLeft}</Text>
+              <Text fontSize="sm">
+                <strong>{countdown.title}</strong> - 🕙 {countdown.timeLeft}
+              </Text>
               <Button size="xs" onClick={() => setCountdownMinimized(false)}>
                 펼치기
               </Button>
-              <Button size="xs" onClick={clearCountdown} colorScheme="red">
+              <Button
+                size="xs"
+                onClick={() => setCountdownClosed(true)}
+                colorScheme="red"
+              >
                 X
               </Button>
             </Flex>
           )}
         </Flex>
       )}
-
+      {countdownClosed && (
+        <Button
+          position="fixed"
+          right="20px"
+          bottom="20px"
+          zIndex="9999"
+          size="sm"
+          colorScheme="purple"
+          onClick={() => setCountdownClosed(false)}
+        >
+          ⏱ 타이머 다시 열기
+        </Button>
+      )}
       <Flex
         w="100%"
         minW="300px"
@@ -307,16 +358,16 @@ useEffect(() => {
             ? "40px"
             : "0"
         }
-        h='100px'
+        h="100px"
         direction={{ base: "column", md: "row" }}
         align={{ base: "flex-start", md: "center" }}
         justify="space-between"
         bg={headerBg}
-        p='20px'
+        p="20px"
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
         borderBottom="1px solid rgba(0, 0, 0, 0.1)"
         gap={{ base: 4, md: 0 }}
-        _focus={{outline:'none'}}
+        _focus={{ outline: "none" }}
       >
         <Box>
           <Link href="/home">
@@ -345,25 +396,29 @@ useEffect(() => {
           left={{ md: "50%" }}
           transform={{ md: "translateX(-50%)" }}
         >
-          {["movie", "booking", "theater", "store", "notice", "event"].map((path) => (
-            <Link key={path} href={`/${path}`}>
-              <Box
-                transition="all 0.2s ease"
-                color={headerColor}
-                cursor="pointer"
-                _hover={{ color: hoverColor }}
-              >
-                {{
-                  movie: "영화",
-                  booking: "예매",
-                  theater: "영화관",
-                  store: "스토어",
-                  notice: "공지",
-                  event: "이벤트",
-                }[path]}
-              </Box>
-            </Link>
-          ))}
+          {["movie", "booking", "theater", "store", "notice", "event"].map(
+            (path) => (
+              <Link key={path} href={`/${path}`}>
+                <Box
+                  transition="all 0.2s ease"
+                  color={headerColor}
+                  cursor="pointer"
+                  _hover={{ color: hoverColor }}
+                >
+                  {
+                    {
+                      movie: "영화",
+                      booking: "예매",
+                      theater: "영화관",
+                      store: "스토어",
+                      notice: "공지",
+                      event: "이벤트",
+                    }[path]
+                  }
+                </Box>
+              </Link>
+            )
+          )}
         </Flex>
 
         <Flex
@@ -376,7 +431,9 @@ useEffect(() => {
             <Spinner size="sm" color={headerColor} />
           ) : user ? (
             <>
-              {isRealHome && <Text color={headerColor}>{user.name}님 환영합니다</Text>}
+              {isRealHome && (
+                <Text color={headerColor}>{user.name}님 환영합니다</Text>
+              )}
               {user.auth === "ADMIN" && (
                 <Text
                   as={Link}
@@ -389,7 +446,11 @@ useEffect(() => {
                 </Text>
               )}
               <Text color={headerColor} _hover={{ color: hoverColor }}>
-                <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>로그아웃</Link>
+                <Link
+                  href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}
+                >
+                  로그아웃
+                </Link>
               </Text>
               <Text
                 color="#ff4d4d"
@@ -408,7 +469,7 @@ useEffect(() => {
               <Text color={headerColor} _hover={{ color: hoverColor }}>
                 <Link href="/join">회원가입</Link>
               </Text>
-                <Text
+              <Text
                 color="#ff4d4d"
                 _hover={{
                   color: "red",
@@ -418,8 +479,6 @@ useEffect(() => {
               </Text>
             </>
           )}
-
-        
 
           {user ? (
             <Link href="/mypage">
