@@ -15,29 +15,9 @@ import {
 import { FiUser } from "react-icons/fi";
 
 export default function Header() {
-  const [user, setUser] = useState(undefined); // undefined: 로딩, null: 비로그인
-  const [reservationAlert, setReservationAlert] = useState(null);
-  const [showingAlert, setShowingAlert] = useState(null);
-  const [countdown, setCountdown] = useState(null);
-  const [countdownMinimized, setCountdownMinimized] = useState(false);
-  const [position, setPosition] = useState({ x: 20, y: 80 });
-  const [posterUrl, setPosterUrl] = useState(null);
-
-  const [countdownClosed, setCountdownClosed] = useState(() => {
-    return localStorage.getItem("countdownClosed") === "true";
-  });
-
-  const clearCountdown = () => {
-    setCountdownClosed(true); // UI 상태 닫기
-  };
-
-  const countdownRef = useRef(null);
-  const dragging = useRef(false);
-  const offset = useRef({ x: 0, y: 0 });
-
+  // 🔹 경로 및 라우터 관련
   const pathname = usePathname();
   const router = useRouter();
-
   const isRealHome = pathname === "/" || pathname.startsWith("/home");
   const isHome =
     pathname === "/" ||
@@ -46,12 +26,28 @@ export default function Header() {
     pathname.startsWith("/booking") ||
     pathname.startsWith("/search") ||
     pathname.startsWith("/checkout");
-
   const headerBg = isHome ? "#1a1a1a" : "white";
   const headerColor = isHome ? "white" : "black";
   const hoverColor = "gray.500";
 
-  // ✅ userInfo fetch (로그인 상태 확인)
+  // 🔹 사용자 및 상태 관련
+  const [user, setUser] = useState(undefined); // undefined: 로딩, null: 비로그인
+  const [reservationAlert, setReservationAlert] = useState(null);
+  const [showingAlert, setShowingAlert] = useState(null);
+  const [posterUrl, setPosterUrl] = useState(null);
+
+  // 🔹 타이머 관련
+  const [countdown, setCountdown] = useState(null);
+  const [countdownMinimized, setCountdownMinimized] = useState(false);
+  const [position, setPosition] = useState({ x: 20, y: 80 });
+  const [countdownClosed, setCountdownClosed] = useState(false);
+
+  // 🔹 드래그 관련
+  const countdownRef = useRef(null);
+  const dragging = useRef(false);
+  const offset = useRef({ x: 0, y: 0 });
+
+  // 🔸 사용자 로그인 정보 fetch
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -71,20 +67,23 @@ export default function Header() {
     fetchUser();
   }, []);
 
+  // 🔸 타이머 관련 로컬스토리지 로딩/저장
   useEffect(() => {
-    const saved = localStorage.getItem("countdownPosition");
-    if (saved) setPosition(JSON.parse(saved));
+    const savedClosed = localStorage.getItem("countdownClosed") === "true";
+    setCountdownClosed(savedClosed);
+    const savedPosition = localStorage.getItem("countdownPosition");
+    if (savedPosition) setPosition(JSON.parse(savedPosition));
   }, []);
 
   useEffect(() => {
     localStorage.setItem("countdownClosed", countdownClosed);
   }, [countdownClosed]);
 
+  // 🔸 창 크기 변경 시 타이머 위치 조정
   useEffect(() => {
     const handleResize = () => {
       const maxX = window.innerWidth - 150;
       const maxY = window.innerHeight - 100;
-
       setPosition((prev) => {
         const clamped = {
           x: Math.min(prev.x, maxX),
@@ -94,11 +93,11 @@ export default function Header() {
         return clamped;
       });
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // 🔸 다른 탭에서 알림 데이터 반영
   useEffect(() => {
     const handleStorage = () => {
       const alertData = localStorage.getItem("latestReservationShowAlert");
@@ -108,11 +107,11 @@ export default function Header() {
         localStorage.removeItem("latestReservationShowAlert");
       }
     };
-
     window.addEventListener("storage", handleStorage);
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
+  // 🔸 타이머 적용 및 알림 처리
   useEffect(() => {
     const alertData = localStorage.getItem("latestReservationAlert");
     if (alertData) setReservationAlert(JSON.parse(alertData));
@@ -175,11 +174,17 @@ export default function Header() {
     return () => clearInterval(interval);
   }, [user, posterUrl]);
 
+  // 🔸 타이머 드래그 관련 핸들러
   const startDrag = (e) => {
     dragging.current = true;
     const clientX = e.clientX ?? e.touches?.[0]?.clientX;
     const clientY = e.clientY ?? e.touches?.[0]?.clientY;
     offset.current = { x: clientX - position.x, y: clientY - position.y };
+
+    window.addEventListener("mousemove", onDrag);
+    window.addEventListener("mouseup", endDrag);
+    window.addEventListener("touchmove", onDrag);
+    window.addEventListener("touchend", endDrag);
   };
 
   const onDrag = (e) => {
@@ -203,8 +208,13 @@ export default function Header() {
 
   const endDrag = () => {
     dragging.current = false;
+    window.removeEventListener("mousemove", onDrag);
+    window.removeEventListener("mouseup", endDrag);
+    window.removeEventListener("touchmove", onDrag);
+    window.removeEventListener("touchend", endDrag);
   };
 
+  // 🔸 예매 알림 클릭 시 마이페이지 이동
   const clearReservationAlert = () => {
     localStorage.removeItem("latestReservationAlert");
     setReservationAlert(null);
@@ -213,21 +223,21 @@ export default function Header() {
 
   return (
     <>
-      {reservationAlert && (
+      {/* 🔸 예매 완료 알림 */}
+      {user && reservationAlert && (
         <Box
           position="fixed"
           top="0"
           left="0"
           w="100%"
-          bg="#f3e8ff"
           h="40px"
+          bg="#f3e8ff"
           borderBottom="1px solid #a855f7"
           color="#6b21a8"
           fontSize="14px"
-          fontWeight="medium"
           py={2}
-          textAlign="center"
           zIndex="9999"
+          textAlign="center"
           cursor="pointer"
           _hover={{ bg: "#e9d5ff" }}
           onClick={clearReservationAlert}
@@ -236,21 +246,22 @@ export default function Header() {
           (마이페이지로 이동)
         </Box>
       )}
+
+      {/* 🔸 상영 30분 전 알림 */}
       {showingAlert && (
         <Box
           position="fixed"
           top={reservationAlert ? "40px" : "0"}
           left="0"
           w="100%"
-          bg="#dbf4ff"
           h="40px"
+          bg="#dbf4ff"
           borderBottom="1px solid #38bdf8"
           color="#0369a1"
           fontSize="14px"
-          fontWeight="medium"
           py={2}
-          textAlign="center"
           zIndex="9998"
+          textAlign="center"
           cursor="pointer"
           _hover={{ bg: "#bae6fd" }}
           onClick={() => router.push("/mypage")}
@@ -260,6 +271,7 @@ export default function Header() {
         </Box>
       )}
 
+      {/* 🔸 타이머 컴포넌트 */}
       {countdown && user && !countdownClosed && (
         <Flex
           ref={countdownRef}
@@ -268,12 +280,7 @@ export default function Header() {
           top={`${position.y}px`}
           direction={{ base: "column", md: "row" }}
           onMouseDown={startDrag}
-          onMouseMove={onDrag}
-          onMouseUp={endDrag}
-          onMouseLeave={endDrag}
           onTouchStart={startDrag}
-          onTouchMove={onDrag}
-          onTouchEnd={endDrag}
           bg="rgba(255, 255, 255, 0.9)"
           color="black"
           p={3}
@@ -282,10 +289,8 @@ export default function Header() {
           zIndex="9999"
           fontSize="14px"
           cursor="grab"
-          userSelect="none"
           alignItems="center"
           maxW="calc(100vw - 20px)"
-          wordBreak="keep-all"
         >
           {posterUrl && !countdownMinimized && (
             <Image
@@ -294,7 +299,6 @@ export default function Header() {
               boxSize="60px"
               borderRadius="md"
               mr={3}
-              mb={{ base: 2, md: 0 }}
             />
           )}
           {!countdownMinimized ? (
@@ -303,14 +307,14 @@ export default function Header() {
                 <strong>{countdown.title}</strong> 상영까지
               </Text>
               <Text mb={2}>🕙 {countdown.timeLeft}</Text>
-              <Flex justify="flex-end" gap={2} flexWrap="wrap">
+              <Flex justify="flex-end" gap={2}>
                 <Button size="xs" onClick={() => setCountdownMinimized(true)}>
                   작게
                 </Button>
                 <Button
                   size="xs"
-                  onClick={() => setCountdownClosed(true)}
                   colorScheme="red"
+                  onClick={() => setCountdownClosed(true)}
                 >
                   닫기
                 </Button>
@@ -326,8 +330,8 @@ export default function Header() {
               </Button>
               <Button
                 size="xs"
-                onClick={() => setCountdownClosed(true)}
                 colorScheme="red"
+                onClick={() => setCountdownClosed(true)}
               >
                 X
               </Button>
@@ -335,7 +339,9 @@ export default function Header() {
           )}
         </Flex>
       )}
-      {countdownClosed && (
+
+      {/* 🔸 타이머 닫은 후 복원 버튼 */}
+      {user && countdownClosed && (
         <Button
           position="fixed"
           right="20px"
@@ -348,13 +354,15 @@ export default function Header() {
           ⏱ 타이머 다시 열기
         </Button>
       )}
+
+      {/* 🔸 메인 Header 영역 */}
       <Flex
         w="100%"
         minW="300px"
         mt={
-          reservationAlert && showingAlert
+          user && reservationAlert && showingAlert
             ? "80px"
-            : reservationAlert || showingAlert
+            : user && (reservationAlert || showingAlert)
             ? "40px"
             : "0"
         }
@@ -364,11 +372,10 @@ export default function Header() {
         justify="space-between"
         bg={headerBg}
         p="20px"
-        boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
         borderBottom="1px solid rgba(0, 0, 0, 0.1)"
-        gap={{ base: 4, md: 0 }}
-        _focus={{ outline: "none" }}
+        boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
       >
+        {/* 로고 */}
         <Box>
           <Link href="/home">
             <Text
@@ -376,8 +383,6 @@ export default function Header() {
               fontSize={{ base: 20, md: 24 }}
               fontWeight="bold"
               letterSpacing={3}
-              cursor="pointer"
-              lineHeight="1.2"
             >
               FILMORA
             </Text>
@@ -387,6 +392,7 @@ export default function Header() {
           </Text>
         </Box>
 
+        {/* 메뉴 */}
         <Flex
           direction={{ base: "column", md: "row" }}
           gap={{ base: 2, md: 5 }}
@@ -400,7 +406,6 @@ export default function Header() {
             (path) => (
               <Link key={path} href={`/${path}`}>
                 <Box
-                  transition="all 0.2s ease"
                   color={headerColor}
                   cursor="pointer"
                   _hover={{ color: hoverColor }}
@@ -421,6 +426,7 @@ export default function Header() {
           )}
         </Flex>
 
+        {/* 로그인/사용자 정보 */}
         <Flex
           direction={{ base: "column", md: "row" }}
           align={{ base: "flex-start", md: "center" }}
@@ -452,12 +458,7 @@ export default function Header() {
                   로그아웃
                 </Link>
               </Text>
-              <Text
-                color="#ff4d4d"
-                _hover={{
-                  color: "red",
-                }}
-              >
+              <Text color="#ff4d4d" _hover={{ color: "red" }}>
                 <Link href="/booking">빠른예매</Link>
               </Text>
             </>
@@ -469,17 +470,13 @@ export default function Header() {
               <Text color={headerColor} _hover={{ color: hoverColor }}>
                 <Link href="/join">회원가입</Link>
               </Text>
-              <Text
-                color="#ff4d4d"
-                _hover={{
-                  color: "red",
-                }}
-              >
+              <Text color="#ff4d4d" _hover={{ color: "red" }}>
                 <Link href="/booking">빠른예매</Link>
               </Text>
             </>
           )}
 
+          {/* 마이페이지 아이콘 */}
           {user ? (
             <Link href="/mypage">
               <Icon
@@ -494,7 +491,7 @@ export default function Header() {
               />
             </Link>
           ) : (
-            <Box w="24px" h="24.25px" />
+            <Box w="24px" h="24px" />
           )}
         </Flex>
       </Flex>
