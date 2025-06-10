@@ -328,10 +328,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               style={editBtn}
-              onClick={() => {
-                setModifyId(viewid);
-                setTitle(viewcontent.title);
-                setContent(viewcontent.content);
+              onClick={()=>{
                 setWhichPage('write');
               }}
               onMouseOver={(e) =>
