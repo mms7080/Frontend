@@ -72,8 +72,10 @@ export default function mobilePage() {
                 }));
             
                 setMovies(updatedMovieList);
-                
-                if(sentmovieid!==null){
+                // 초기화면 처음 영화 선택
+                if (sentmovieid === null && updatedMovieList.length > 0 && activeMovie === null) {
+                  handlePosterClick(updatedMovieList[0]);}
+                else if(sentmovieid!==null){
                     for(let index=0;index<updatedMovieList.length;index++){
                         if(updatedMovieList[index].id==sentmovieid){
                             handlePosterClick(updatedMovieList[index]);
@@ -120,7 +122,7 @@ export default function mobilePage() {
         } else {
           setAvailableDates([]);
         }
-      }, [activeMovie, selectedTheater]);
+      }, [activeMovie, selectedTheater, theaterList]);
 
       useEffect(() => {
         if (activeMovie && selectedTheater && selectedDate) {
@@ -131,7 +133,7 @@ export default function mobilePage() {
         } else {
           setAvailableTimes([]);
         }
-      }, [activeMovie, selectedTheater, selectedDate]);
+      }, [activeMovie, selectedTheater, selectedDate, theaterList]);
       
 
       const fetchTheatersByRegion = async (region) => {
@@ -185,7 +187,11 @@ export default function mobilePage() {
             router.push("/signin"); // 원하는 로그인 페이지 경로로 수정
             return;
         }
-        if (!selectedDate || !selectedTime) return;
+        // if (!selectedDate || !selectedTime) return;
+        if (!selectedDate || !selectedTime || !selectedShowtime) {
+          alert("날짜와 시간을 모두 선택해주세요.");
+          return;
+      }
         router.push(
             `/booking/seats?movieId=${activeMovie.id}` +
             `&showtimeId=${selectedShowtime.showtimeId}` +
@@ -203,6 +209,17 @@ export default function mobilePage() {
         setSelectedShowtime(null);
         setSelectedRegion(null); 
         setSelectedTheater(null); 
+    };
+
+    const handleDateClick = (date) => {
+      setSelectedDate(date);
+      setSelectedTime(null); // 날짜 변경 시 시간 초기화
+      setSelectedShowtime(null); // 날짜 변경 시 상영 시간 초기화
+    };
+
+    const handleTimeClick = (showtime) => {
+      setSelectedTime(showtime.startTime.split(" ")[1]);
+      setSelectedShowtime(showtime);
     };
       
       return (
@@ -270,7 +287,7 @@ export default function mobilePage() {
             {activeMovie && (
                 <Box bg="#141414" color="white" py={4} px={4}>
                     {/* 지역 선택 */}
-                    <Text fontSize="md" mb={1}>지역 선택</Text>
+                    <Text fontSize="md" mb={1}>REGION</Text>
                     <Box
                     as="select"
                     placeholder="지역을 선택하세요"
@@ -299,7 +316,7 @@ export default function mobilePage() {
                     {/* 극장 선택 */}
                     {selectedRegion && (
                     <>
-                        <Text fontSize="md" mb={1}>극장 선택</Text>
+                        <Text fontSize="md" mb={1}>THEATER</Text>
                         <Box
                         as="select"
                         bg="gray.700"
@@ -320,6 +337,74 @@ export default function mobilePage() {
                         </Box>
                     </>
                     )}
+                    {/* 날짜 선택 */}
+                    {selectedTheater && availableDates.length > 0 && (
+                        <>
+                            <Text fontSize="md" mb={1}>DATE</Text>
+                            <Box overflowX="auto" whiteSpace="nowrap" mb={4}>
+                                <Flex>
+                                    {availableDates.map((date) => (
+                                        <Button
+                                            key={date}
+                                            onClick={() => handleDateClick(date)}
+                                            bg={selectedDate === date ? "#6B46C1" : "gray.700"}
+                                            color="white"
+                                            border="1px solid"
+                                            borderColor={selectedDate === date ? "#6B46C1" : "gray.500"}
+                                            borderRadius="md"
+                                            p={2}
+                                            mr={2}
+                                            minW="70px"
+                                        >
+                                            {new Date(date).getMonth() + 1}/{new Date(date).getDate()}
+                                        </Button>
+                                    ))}
+                                </Flex>
+                            </Box>
+                        </>
+                    )}
+
+                    {/* 시간 선택 */}
+                    {selectedDate && availableTimes.length > 0 && (
+                        <>
+                            <Text fontSize="md" mb={1}>TIME</Text>
+                            <Grid templateColumns="repeat(3, 1fr)" gap={3} mb={6}>
+                                {availableTimes.map((showtime) => {
+                                    const time = showtime.startTime.split(" ")[1];
+                                    const isSelected = selectedShowtime && selectedShowtime.showtimeId === showtime.showtimeId;
+                                    return (
+                                        <GridItem key={showtime.showtimeId}>
+                                            <Button
+                                                width="100%"
+                                                bg={isSelected ? "#6B46C1" : "gray.700"}
+                                                color="white"
+                                                border="1px solid"
+                                                borderColor={isSelected ? "#6B46C1" : "gray.500"}
+                                                borderRadius="md"
+                                                p={2}
+                                                onClick={() => handleTimeClick(showtime)}
+                                            >
+                                                <Text>{time}</Text>
+                                                <Text fontSize="sm" color="gray.400">{showtime.auditoriumName}</Text>
+                                            </Button>
+                                        </GridItem>
+                                    );
+                                })}
+                            </Grid>
+                        </>
+                    )}
+
+                    {/* 예매하기 버튼 */}
+                    <Button
+                        width="100%"
+                        bg={selectedDate && selectedTime ? "#6B46C1" : "gray.600"}
+                        color="white"
+                        size="lg"
+                        isDisabled={!selectedDate || !selectedTime}
+                        onClick={handleBooking}
+                    >
+                        예매하기
+                    </Button>
                 </Box>
             )}
         </>
