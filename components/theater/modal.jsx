@@ -52,15 +52,17 @@ const Modal = ({ isModalOpen, isModalVisible, closeModal, onConfirm, title, cont
             const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
             document.body.style.overflow = 'hidden';
             document.body.style.paddingRight = `${scrollbarWidth}px`;
+            document.documentElement.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'unset';
-            document.body.style.paddingRight = '0px';
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.documentElement.style.overflow = '';
         }
 
-        // 컴포넌트 언마운트 시 스크롤 복원
         return () => {
-            document.body.style.overflow = 'unset';
-            document.body.style.paddingRight = '0px';
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.documentElement.style.overflow = '';
         };
     }, [isModalOpen]);
 
@@ -79,7 +81,7 @@ const Modal = ({ isModalOpen, isModalVisible, closeModal, onConfirm, title, cont
             <Box
                 className={`modal-content ${isModalVisible ? 'show' : ''}`}
                 position="relative" bg="white" borderRadius="xl" shadow="2xl"
-                maxW="md" w="full" mx="4" overflow="hidden" marginTop="-5%"
+                maxW="xl" w="full" mx="4" overflow="hidden" marginTop="-5%"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 헤더 부분 */}

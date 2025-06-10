@@ -60,15 +60,17 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content,isVide
             const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
             document.body.style.overflow = 'hidden';
             document.body.style.paddingRight = `${scrollbarWidth}px`;
+            document.documentElement.style.overflow = 'hidden';
         } else {
-            document.body.style.overflow = 'unset';
-            document.body.style.paddingRight = '0px';
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.documentElement.style.overflow = '';
         }
-    
-        // 컴포넌트 언마운트 시 스크롤 복원
+
         return () => {
-            document.body.style.overflow = 'unset';
-            document.body.style.paddingRight = '0px';
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+            document.documentElement.style.overflow = '';
         };
     }, [isModalOpen]);
     
@@ -77,7 +79,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content,isVide
         <style>{modalStyles}</style>
         <Box      
             className={`modal-overlay ${isModalVisible ? 'show' : ''}`}
-            position="fixed" inset="0" transform="translate(0, -5%)" zIndex="50" 
+            position="fixed" inset="0" zIndex="50" 
             display="flex" alignItems="center" justifyContent="center"
             bg="blackAlpha.500"
             onClick={handleCancel}
@@ -85,7 +87,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content,isVide
             <Flex
                 className={`modal-content ${isModalVisible ? 'show' : ''}`}
                 position="relative" bg={!isVideo?"white":'black'} borderRadius="xl" shadow="2xl" 
-                maxW={isVideo ? "970px" : "md"} w="full" mx="4"
+                maxW={isVideo ? "970px" : "md"} w="full" mx="4" marginTop="-5%"
                 justifyContent='center' alignItems='center'
                 pt='15px' pb={!isVideo?'30px':'0px'}
                 onClick={(e) => e.stopPropagation()}
