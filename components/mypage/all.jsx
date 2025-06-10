@@ -195,10 +195,10 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                     >
                       {formatDate(qna.writetime)}
                     </td>
-                    {!(userInfo?.username === qna.author || userInfo?.auth==='ADMIN') &&
+                    {!((userInfo?.username === qna.author || userInfo?.auth==='ADMIN')&&!qna.deleted) &&
                     (<td style={{width:140.16,height:60.5}}></td>)
                     }
-                    {(userInfo?.username === qna.author || userInfo?.auth==='ADMIN') && (
+                    {((userInfo?.username === qna.author || userInfo?.auth==='ADMIN')&&!qna.deleted) && (
                       <td style={{ padding: "14px", textAlign: "center" }}>
                         <Flex w='100%' justifyContent='center' gap='10px'>
                         <button
