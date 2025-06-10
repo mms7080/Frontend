@@ -79,6 +79,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
     const [viewindex,setViewIndex]=useState(null);
     const [viewcontent,setViewContent]=useState(null);
     const [modifyid,setModifyId]=useState(null);
+    const [replyto,setReplyTo]=useState(null);
+    const [replytoid,setReplyToId]=useState(null);
 
     let count=0;
       
@@ -126,30 +128,71 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
     };
 
     const handleSubmit=async (e)=>{
-      let dataToSend={title:'',content:''};
-      
+      let dataToSend={title,content,replyto,replytoid};
+
       if(content===''){
           e.preventDefault();
           alert('내용을 입력해주세요.');
           return;
       }
 
-      dataToSend.title=title;
-      dataToSend.content=content;
-      dataToSend.replyto=null;
-      dataToSend.replytoid=null;
+      if(modifyid===null){
 
-      const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/write/logic`, {
-          method: 'POST',
-          body: JSON.stringify(dataToSend)
-      });
+        const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/write/logic`, {
+            method: 'POST',
+            body: JSON.stringify(dataToSend)
+        });
 
-      setrawItems([res,...rawItems]);
+        let replyindex;
+
+        if(replytoid!==null){/* 답변을 작성하는 경우 */
+          for(let findindex=0;findindex<rawItems.length;findindex++){
+            if(rawItems[findindex].id===replytoid){
+              replyindex=findindex+1;
+              while(rawItems[(replyindex<rawItems.length)?replyindex:replyindex-1].replytoid!==null && replyindex<rawItems.length)replyindex++;
+              break;
+            }
+          }
+          let arr=[...rawItems];
+          arr.splice(replyindex,0,res);
+          console.log(arr);
+          setrawItems(arr);
+          
+        }else{/* 답변이 아닌 글을 작성하는 경우 */
+          setrawItems([res,...rawItems]);
+          setCurrentPage(1);
+        }
+
+        setReplyTo(null);
+        setReplyToId(null);
+      }
+      else{
+
+        dataToSend.id=modifyid;
+
+        let modifyindex;
+
+        for(let findindex=0;findindex<rawItems.length;findindex++){
+          if(rawItems[findindex].id===modifyid){
+            modifyindex=findindex;
+            break;
+          }
+        }
+
+        const res2=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/modify/logic`, {
+            method: 'POST',
+            body: JSON.stringify(dataToSend)
+        });
+
+        setrawItems([...rawItems].map((item,index)=>(index===modifyindex?res2:item)));
+        setModifyId(null);
+
+      }
     }
 
     if(whichpage==='all'){
      return <>
-      <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage}></All>
+      <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
     else if(whichpage==='write'){
@@ -211,9 +254,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
                _hover={{bg:'#005bb5'}}
               onClick={()=>{
                 handleSubmit();
-                setCurrentPage(1);
                 setWhichPage('all');
-              }}>QnA 등록하기</Button>
+              }}>{!modifyid?'QnA 등록하기':'QnA 수정하기'}</Button>
               <Button bg='#ccc' color='black' py='10px' px='20px' 
               border='none' borderRadius='4px' cursor='pointer' fontWeight='normal'
               _hover={{bg:'#bbb'}}
@@ -221,7 +263,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             </Flex>
           </Flex>
         </Box>
-        <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent}  currentPage={currentPage} setCurrentPage={setCurrentPage}></All>
+        <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent}  currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
     else{
@@ -324,11 +366,32 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
               다음글
             </button>
           </div>
-          {userInfo?.username === viewcontent.author && (
-          <div style={{ display: "flex", gap: "10px" }}>
+          {(userInfo?.username === viewcontent.author||userInfo?.auth==='ADMIN') && (
+          <div style={{ display: "flex", gap: "20px" }}>
             <button
               style={editBtn}
               onClick={()=>{
+                setTitle('');
+                setContent('');
+                setReplyTo(viewcontent.author);
+                setReplyToId(viewcontent.id);
+                setWhichPage('write');
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#ddd")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#eee")
+              }
+            >
+              답변
+            </button>
+            <button
+              style={editBtn}
+              onClick={()=>{
+                setTitle(viewcontent.title);
+                setContent(viewcontent.content);
+                setModifyId(viewcontent.id);
                 setWhichPage('write');
               }}
               onMouseOver={(e) =>
@@ -341,7 +404,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
               수정
             </button>
             <button
-              style={{ ...editBtn, marginLeft: "10px" }}
+              style={editBtn}
               onClick={async () => {
                 if (confirm("글 삭제시 답글까지 전부 삭제됩니다. 정말 삭제하시겠습니까?")) {
                   /* 삭제 로직 작성 */
@@ -376,7 +439,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
           </div>
         </div>
 
-        <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage}></All>
+        <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
 }

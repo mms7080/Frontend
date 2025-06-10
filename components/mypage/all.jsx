@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {Box,Flex,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
 import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
 
-export default function QnaAll({setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage}){
+export default function QnaAll({setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
 
     
     const qnasPerPage = 10;
@@ -211,7 +211,10 @@ export default function QnaAll({setTitle,setContent,setWhichPage,userInfo,rawIte
                             fontSize: "13px",
                           }}
                           onClick={() => {
-                            {/* 수정 */}
+                            setTitle(qna.title);
+                            setContent(qna.content);
+                            setModifyId(qna.id);
+                            setWhichPage('write');
                           }}
                         >
                           수정
