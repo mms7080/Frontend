@@ -14,7 +14,7 @@ export default function NoticeList({
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const highlightKeyword = (text) => {
     if (!confirmedKeyword.trim()) return [text];

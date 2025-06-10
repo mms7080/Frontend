@@ -15,6 +15,11 @@ export default function NoticeIdPage({ userData }) {
   const [prevId, setPrevId] = useState(null);
   const [nextId, setNextId] = useState(null);
 
+    useEffect(() => {
+    document.title = "공지 - FILMORA";
+  }, []);
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {

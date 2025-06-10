@@ -10,7 +10,7 @@ export default function NoticePage({ notices, userData }) {
   const [filtered, setFiltered] = useState([]);
   const [user, setUser] = useState(userData);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   useEffect(() => {
     document.title = "공지 - FILMORA";
