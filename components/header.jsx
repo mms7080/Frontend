@@ -15,9 +15,10 @@ import {
 import { FiUser } from "react-icons/fi";
 
 export default function Header() {
-  // 🔹 경로 및 라우터 관련
+  // ──────────────────────── 🔸 경로 및 스타일 관련 설정 ────────────────────────
   const pathname = usePathname();
   const router = useRouter();
+
   const isRealHome = pathname === "/" || pathname.startsWith("/home");
   const isHome =
     pathname === "/" ||
@@ -26,36 +27,34 @@ export default function Header() {
     pathname.startsWith("/booking") ||
     pathname.startsWith("/search") ||
     pathname.startsWith("/checkout");
+
   const headerBg = isHome ? "#1a1a1a" : "white";
   const headerColor = isHome ? "white" : "black";
   const hoverColor = "gray.500";
 
-  // 🔹 사용자 및 상태 관련
-  const [user, setUser] = useState(undefined); // undefined: 로딩, null: 비로그인
+  //  상태값 정의 
+  const [user, setUser] = useState(undefined);
   const [reservationAlert, setReservationAlert] = useState(null);
   const [showingAlert, setShowingAlert] = useState(null);
   const [posterUrl, setPosterUrl] = useState(null);
 
-  // 🔹 타이머 관련
   const [countdown, setCountdown] = useState(null);
   const [countdownMinimized, setCountdownMinimized] = useState(false);
   const [position, setPosition] = useState({ x: 20, y: 80 });
   const [countdownClosed, setCountdownClosed] = useState(false);
+  const [isCountdownInit, setIsCountdownInit] = useState(false);
 
-  // 🔹 드래그 관련
   const countdownRef = useRef(null);
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
 
-  // 🔸 사용자 로그인 정보 fetch
+  // 유저 정보 불러오기 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
-          }
+          { credentials: "include" }
         );
         if (!res.ok) throw new Error();
         const data = await res.json();
@@ -67,19 +66,22 @@ export default function Header() {
     fetchUser();
   }, []);
 
-  // 🔸 타이머 관련 로컬스토리지 로딩/저장
+  // countdown 상태 초기화 (닫힘 여부 및 위치) 
   useEffect(() => {
     const savedClosed = localStorage.getItem("countdownClosed") === "true";
     setCountdownClosed(savedClosed);
     const savedPosition = localStorage.getItem("countdownPosition");
     if (savedPosition) setPosition(JSON.parse(savedPosition));
+    setIsCountdownInit(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("countdownClosed", countdownClosed);
-  }, [countdownClosed]);
+    if (isCountdownInit) {
+      localStorage.setItem("countdownClosed", countdownClosed.toString());
+    }
+  }, [countdownClosed, isCountdownInit]);
 
-  // 🔸 창 크기 변경 시 타이머 위치 조정
+  // 화면 리사이즈 시 타이머 위치 제한 
   useEffect(() => {
     const handleResize = () => {
       const maxX = window.innerWidth - 150;
@@ -97,7 +99,7 @@ export default function Header() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 🔸 다른 탭에서 알림 데이터 반영
+  // 스토리지에서 예매 알림 감지 (다른 탭 연동용)
   useEffect(() => {
     const handleStorage = () => {
       const alertData = localStorage.getItem("latestReservationShowAlert");
@@ -111,47 +113,47 @@ export default function Header() {
     return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
-  // 🔸 타이머 적용 및 알림 처리
+  // 카운트다운 동작 설정 및 알림 체크 
   useEffect(() => {
+    if (!user || countdownClosed) return;
+
     const alertData = localStorage.getItem("latestReservationAlert");
     if (alertData) setReservationAlert(JSON.parse(alertData));
 
     const applyCountdown = () => {
       const data = localStorage.getItem("latestReservationCountdown");
-      if (data && user) {
-        const { title, showTime, movieId } = JSON.parse(data);
-        const now = Date.now();
-        const target = new Date(showTime).getTime();
-        const diff = target - now;
+      if (!data) return;
 
-        if (diff <= 0) {
-          setCountdown(null);
-          localStorage.removeItem("latestReservationCountdown");
-        } else {
-          const hours = Math.floor(diff / (1000 * 60 * 60));
-          const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-          const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-          setCountdown({
-            title,
-            timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
-          });
+      const { title, showTime, movieId } = JSON.parse(data);
+      const now = Date.now();
+      const target = new Date(showTime).getTime();
+      const diff = target - now;
 
-          if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
+      if (diff <= 0) {
+        setCountdown(null);
+        localStorage.removeItem("latestReservationCountdown");
+      } else {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        setCountdown({
+          title,
+          timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
+        });
 
-          if (!posterUrl) {
-            fetch(
-              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
-            )
-              .then((res) => res.json())
-              .then((data) => {
-                if (data?.poster) {
-                  setPosterUrl(
-                    `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`
-                  );
-                }
-              })
-              .catch(() => {});
-          }
+        if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
+
+        if (!posterUrl) {
+          fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data?.poster) {
+                setPosterUrl(
+                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`
+                );
+              }
+            })
+            .catch(() => {});
         }
       }
     };
@@ -172,9 +174,9 @@ export default function Header() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [user, posterUrl]);
+  }, [user, countdownClosed]);
 
-  // 🔸 타이머 드래그 관련 핸들러
+  // 타이머 드래그 관련 함수 
   const startDrag = (e) => {
     dragging.current = true;
     const clientX = e.clientX ?? e.touches?.[0]?.clientX;
@@ -191,19 +193,10 @@ export default function Header() {
     if (!dragging.current) return;
     const clientX = e.clientX ?? e.touches?.[0]?.clientX;
     const clientY = e.clientY ?? e.touches?.[0]?.clientY;
-    const newX = Math.max(
-      0,
-      Math.min(clientX - offset.current.x, window.innerWidth - 150)
-    );
-    const newY = Math.max(
-      0,
-      Math.min(clientY - offset.current.y, window.innerHeight - 100)
-    );
+    const newX = Math.max(0, Math.min(clientX - offset.current.x, window.innerWidth - 150));
+    const newY = Math.max(0, Math.min(clientY - offset.current.y, window.innerHeight - 100));
     setPosition({ x: newX, y: newY });
-    localStorage.setItem(
-      "countdownPosition",
-      JSON.stringify({ x: newX, y: newY })
-    );
+    localStorage.setItem("countdownPosition", JSON.stringify({ x: newX, y: newY }));
   };
 
   const endDrag = () => {
@@ -214,16 +207,16 @@ export default function Header() {
     window.removeEventListener("touchend", endDrag);
   };
 
-  // 🔸 예매 알림 클릭 시 마이페이지 이동
   const clearReservationAlert = () => {
     localStorage.removeItem("latestReservationAlert");
     setReservationAlert(null);
     router.push("/mypage");
   };
 
+  //  컴포넌트 리턴 
   return (
     <>
-      {/* 🔸 예매 완료 알림 */}
+      {/* ✅ 예매 완료 알림바 */}
       {user && reservationAlert && (
         <Box
           position="fixed"
@@ -242,12 +235,11 @@ export default function Header() {
           _hover={{ bg: "#e9d5ff" }}
           onClick={clearReservationAlert}
         >
-          🔔 <strong>[{reservationAlert.title}]</strong> 예매가 완료되었습니다!
-          (마이페이지로 이동)
+          🔔 <strong>[{reservationAlert.title}]</strong> 예매가 완료되었습니다! (마이페이지로 이동)
         </Box>
       )}
 
-      {/* 🔸 상영 30분 전 알림 */}
+      {/* ✅ 상영 30분 전 알림 */}
       {showingAlert && (
         <Box
           position="fixed"
@@ -266,12 +258,11 @@ export default function Header() {
           _hover={{ bg: "#bae6fd" }}
           onClick={() => router.push("/mypage")}
         >
-          ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 입장
-          부탁드립니다
+          ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 입장 부탁드립니다
         </Box>
       )}
 
-      {/* 🔸 타이머 컴포넌트 */}
+      {/* ✅ 드래그 가능한 타이머 */}
       {countdown && user && !countdownClosed && (
         <Flex
           ref={countdownRef}
@@ -293,13 +284,7 @@ export default function Header() {
           maxW="calc(100vw - 20px)"
         >
           {posterUrl && !countdownMinimized && (
-            <Image
-              src={posterUrl}
-              alt="포스터"
-              boxSize="60px"
-              borderRadius="md"
-              mr={3}
-            />
+            <Image src={posterUrl} alt="포스터" boxSize="60px" borderRadius="md" mr={3} />
           )}
           {!countdownMinimized ? (
             <Box textAlign="left">
@@ -311,11 +296,7 @@ export default function Header() {
                 <Button size="xs" onClick={() => setCountdownMinimized(true)}>
                   작게
                 </Button>
-                <Button
-                  size="xs"
-                  colorScheme="red"
-                  onClick={() => setCountdownClosed(true)}
-                >
+                <Button size="xs" colorScheme="red" onClick={() => setCountdownClosed(true)}>
                   닫기
                 </Button>
               </Flex>
@@ -328,11 +309,7 @@ export default function Header() {
               <Button size="xs" onClick={() => setCountdownMinimized(false)}>
                 펼치기
               </Button>
-              <Button
-                size="xs"
-                colorScheme="red"
-                onClick={() => setCountdownClosed(true)}
-              >
+              <Button size="xs" colorScheme="red" onClick={() => setCountdownClosed(true)}>
                 X
               </Button>
             </Flex>
@@ -340,7 +317,7 @@ export default function Header() {
         </Flex>
       )}
 
-      {/* 🔸 타이머 닫은 후 복원 버튼 */}
+      {/* ✅ 타이머 다시 열기 버튼 */}
       {user && countdownClosed && (
         <Button
           position="fixed"
@@ -355,7 +332,7 @@ export default function Header() {
         </Button>
       )}
 
-      {/* 🔸 메인 Header 영역 */}
+      {/* ✅ 메인 Header 영역 */}
       <Flex
         w="100%"
         minW="300px"
@@ -375,7 +352,7 @@ export default function Header() {
         borderBottom="1px solid rgba(0, 0, 0, 0.1)"
         boxShadow="0 2px 4px rgba(0, 0, 0, 0.05)"
       >
-        {/* 로고 */}
+        {/* 🔹 로고 */}
         <Box>
           <Link href="/home">
             <Text
@@ -392,7 +369,7 @@ export default function Header() {
           </Text>
         </Box>
 
-        {/* 메뉴 */}
+        {/* 🔹 메뉴 */}
         <Flex
           direction={{ base: "column", md: "row" }}
           gap={{ base: 2, md: 5 }}
@@ -402,31 +379,23 @@ export default function Header() {
           left={{ md: "50%" }}
           transform={{ md: "translateX(-50%)" }}
         >
-          {["movie", "booking", "theater", "store", "notice", "event"].map(
-            (path) => (
-              <Link key={path} href={`/${path}`}>
-                <Box
-                  color={headerColor}
-                  cursor="pointer"
-                  _hover={{ color: hoverColor }}
-                >
-                  {
-                    {
-                      movie: "영화",
-                      booking: "예매",
-                      theater: "영화관",
-                      store: "스토어",
-                      notice: "공지",
-                      event: "이벤트",
-                    }[path]
-                  }
-                </Box>
-              </Link>
-            )
-          )}
+          {["movie", "booking", "theater", "store", "notice", "event"].map((path) => (
+            <Link key={path} href={`/${path}`}>
+              <Box color={headerColor} cursor="pointer" _hover={{ color: hoverColor }}>
+                {{
+                  movie: "영화",
+                  booking: "예매",
+                  theater: "영화관",
+                  store: "스토어",
+                  notice: "공지",
+                  event: "이벤트",
+                }[path]}
+              </Box>
+            </Link>
+          ))}
         </Flex>
 
-        {/* 로그인/사용자 정보 */}
+        {/* 🔹 로그인 / 사용자 정보 */}
         <Flex
           direction={{ base: "column", md: "row" }}
           align={{ base: "flex-start", md: "center" }}
@@ -437,9 +406,7 @@ export default function Header() {
             <Spinner size="sm" color={headerColor} />
           ) : user ? (
             <>
-              {isRealHome && (
-                <Text color={headerColor}>{user.name}님 환영합니다</Text>
-              )}
+              {isRealHome && <Text color={headerColor}>{user.name}님 환영합니다</Text>}
               {user.auth === "ADMIN" && (
                 <Text
                   as={Link}
@@ -452,9 +419,7 @@ export default function Header() {
                 </Text>
               )}
               <Text color={headerColor} _hover={{ color: hoverColor }}>
-                <Link
-                  href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}
-                >
+                <Link href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/logout`}>
                   로그아웃
                 </Link>
               </Text>
@@ -476,7 +441,7 @@ export default function Header() {
             </>
           )}
 
-          {/* 마이페이지 아이콘 */}
+          {/* 🔹 마이페이지 아이콘 */}
           {user ? (
             <Link href="/mypage">
               <Icon
