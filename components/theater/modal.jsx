@@ -70,7 +70,7 @@ const Modal = ({ isModalOpen, isModalVisible, closeModal, onConfirm, title, cont
         {/* 모달창 바깥부분 흐려지도록 */}
         <Box
             className={`modal-overlay ${isModalVisible ? 'show' : ''}`}
-            position="fixed" inset="0" transform="translate(0, -5%)" zIndex="105"
+            position="fixed" inset="0" zIndex="105"
             display="flex" alignItems="center" justifyContent="center"
             bg="blackAlpha.500"
             onClick={handleCancel}
@@ -79,7 +79,7 @@ const Modal = ({ isModalOpen, isModalVisible, closeModal, onConfirm, title, cont
             <Box
                 className={`modal-content ${isModalVisible ? 'show' : ''}`}
                 position="relative" bg="white" borderRadius="xl" shadow="2xl"
-                maxW="md" w="full" mx="4" overflow="hidden"
+                maxW="md" w="full" mx="4" overflow="hidden" marginTop="-5%"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 헤더 부분 */}
