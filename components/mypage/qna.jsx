@@ -83,18 +83,21 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
     const [replytoid,setReplyToId]=useState(null);
 
     let count=0;
-      
-    let tempItems=[...qnaInfo,...replyInfo].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)));
     
+    let arrs=[...qnaInfo,...replyInfo];
+    arrs=[...arrs].filter((item, index, self) =>index === self.findIndex(obj => obj.id === item.id));
+
+    let tempItems=arrs.sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)));
     let initialv=[...tempItems].filter((item,index)=>item.replyto===null);
     tempItems=[...tempItems].filter((item,index)=>item.replyto!==null);
     tempItems=[...tempItems].sort((a,b) => (new Date(a.writetime)-new Date(b.writetime)));
     while(tempItems.length>0){
-      count=0;
       for(let i=0;i<initialv.length;i++){
+        count=0;
         let loc=i+count+1;
         for(let j=0;j<tempItems.length;j++){
           if(initialv[i].id===tempItems[j].replytoid){
+            if(tempItems[j].replytoid===20)console.log(i,count);
             initialv.splice(loc,0,tempItems[j]);
             tempItems=[...tempItems].map((item,index)=>(index!=j?item:null));
             count++;
@@ -155,7 +158,6 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
           }
           let arr=[...rawItems];
           arr.splice(replyindex,0,res);
-          console.log(arr);
           setrawItems(arr);
           
         }else{/* 답변이 아닌 글을 작성하는 경우 */
