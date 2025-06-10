@@ -30,7 +30,7 @@ const Movie = (userInfo) => {
     };
 
     useEffect(() => {
-        document.title = '전체 영화 - 필모라';
+        document.title = '영화 - FILMORA';
 
         // Movie Fetch
         (async () => {
