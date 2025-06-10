@@ -1,11 +1,74 @@
 'use client';
 
-import React, {useState} from "react";
-import {Box,Flex,Text,Input,Textarea,VStack,Button,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
-import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
+import React, {useState,useEffect} from "react";
+import {Box,Flex,Text,Input,Textarea,Button} from '@chakra-ui/react';
+import All from './all';
 import {fetch} from '../../lib/client';
 
+const thStyle = {
+  textAlign: "left",
+  padding: "12px 16px",
+  backgroundColor: "#ffffff",
+  width: "20%",
+  fontWeight: 400,
+  borderBottom: "1px solid #ddd",
+  color: "#555",
+  fontSize: "14px"
+};
+
+const tdStyle = {
+  padding: "12px 16px",
+  borderBottom: "1px solid #ddd",
+  color: "#444",
+  fontWeight: 400,
+  fontSize: "14px"
+};
+
+const disabledStyle = {
+  opacity: 0.4,
+  cursor: "not-allowed"
+};
+
+const navBtn = {
+  padding: "8px 16px",
+  border: "1px solid #ccc",
+  borderRadius: "4px",
+  backgroundColor: "#ffffff",
+  cursor: "pointer",
+  fontSize: "14px",
+  fontWeight: 400,
+  color: "#6B46C1",
+  transition: "all 0.3s ease"
+};
+
+const editBtn = {
+  padding: "8px 16px",
+  borderRadius: "4px",
+  border: "none",
+  backgroundColor: "#eeeeee",
+  fontWeight: 400,
+  fontSize: "14px",
+  cursor: "pointer",
+  color: "#333",
+  transition: "all 0.3s ease"
+};
+
+
+const listBtn = {
+  padding: "8px 16px",
+  borderRadius: "4px",
+  border: "none",
+  backgroundColor: "#6B46C1",
+  fontWeight: 400,
+  fontSize: "14px",
+  color: "#fff",
+  cursor: "pointer",
+  transition: "all 0.3s ease"
+};
+
 export default function Qna({userInfo,qnaInfo,replyInfo}){
+
+    const [currentPage, setCurrentPage] = useState(1);
 
     const [whichpage,setWhichPage]=useState('all');//'all'-전체 qna 열람 , 'write'-qna 작성창, 'view'-특정 qna 열람
 
@@ -13,9 +76,12 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
     const [content, setContent] = useState('');
 
     const [viewid,setViewId]=useState(null);
+    const [viewindex,setViewIndex]=useState(null);
+    const [viewcontent,setViewContent]=useState(null);
     const [modifyid,setModifyId]=useState(null);
+
     let count=0;
-  
+      
     let tempItems=[...qnaInfo,...replyInfo].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)));
     
     let initialv=[...tempItems].filter((item,index)=>item.replyto===null);
@@ -39,13 +105,15 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
 
     const [rawItems,setrawItems]=useState(initialv);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const qnasPerPage = 10;
-
-    const indexOfLastReview = currentPage * qnasPerPage;
-    const indexOfFirstReview = indexOfLastReview - qnasPerPage;
-    const currentItems = rawItems.slice(indexOfFirstReview, indexOfLastReview);
-    /*currentItems에 최종 리스트 삽입*/
+    useEffect(()=>{
+      for(let i=0;i<rawItems.length;i++){
+        if(rawItems[i].id===viewid){
+          setViewIndex(i);
+          setViewContent(rawItems[i]);
+          break;
+        }
+      }
+    },[viewid,rawItems,viewindex]);
 
     // 날짜 포맷: YYYY.MM.DD
     const formatDate = (dateStr) => {
@@ -55,14 +123,6 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
         month: "2-digit",
         day: "2-digit",
       });
-    };
-
-    // 작성일 기준으로 NEW 뱃지 표시 여부 확인 (작성일로부터 2일)
-    const isNew = (createdAt) => {
-      const created = new Date(createdAt);
-      const now = new Date();
-      const diff = (now - created) / (1000 * 60 * 60 * 24);
-      return diff <= 2;
     };
 
     const handleSubmit=async (e)=>{
@@ -84,296 +144,12 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
           body: JSON.stringify(dataToSend)
       });
 
-      setrawItems([res,...rawItems])
-      setCurrentPage(1);
-      setWhichPage('all');
+      setrawItems([res,...rawItems]);
     }
 
     if(whichpage==='all'){
      return <>
-      <Box boxShadow="0 4px 10px rgba(0,0,0,0.05)">
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse"
-            }}
-          >
-            <thead style={{ backgroundColor: "white" }}>
-              <tr style={{ color: "black" }}>
-                <th
-                  style={{
-                    padding: "14px",
-                    borderBottom: "1px solid #ddd",
-                    width: "6%",
-                  }}
-                >
-                  번호
-                </th>
-                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>
-                  제목
-                </th>
-                <th
-                  style={{
-                    padding: "14px",
-                    borderBottom: "1px solid #ddd",
-                    width: "20%",
-                  }}
-                >
-                  작성자
-                </th>
-                <th
-                  style={{
-                    padding: "14px",
-                    borderBottom: "1px solid #ddd",
-                    width: "10%",
-                  }}
-                >
-                  작성일
-                </th>
-                <th
-                  style={{
-                    padding: "14px",
-                    borderBottom: "1px solid #ddd",
-                    width: "12%",
-                  }}
-                >
-                  관리
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {rawItems.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan="6"
-                    style={{
-                      textAlign: "center",
-                      padding: "20px",
-                      fontSize: "15px",
-                    }}
-                  >
-                    📭 QnA가 없습니다.
-                  </td>
-                </tr>
-              ) : (
-                currentItems.map((qna,_index) => (
-                  <tr
-                    key={indexOfFirstReview+1+_index}
-                    style={{
-                      borderBottom: "1px solid #eee",
-                      backgroundColor: "#fff",
-                    }}
-                  >
-                    <td
-                      style={{
-                        padding: "14px",
-                        textAlign: "center",
-                        fontSize: "14px",
-                        color: "#666",
-                      }}
-                    >
-                      {indexOfFirstReview+1+_index}
-                    </td>
-                    <td
-                      style={{
-                        padding: "14px",
-                        fontWeight: "600",
-                        fontSize: "16px",
-                        lineHeight: "1.4",
-                        color: "#222",
-                      }}
-                    >
-                      <div
-                          style={{
-                              /* 이걸 a로 바꿔야함 */
-                              /* href={`/notice/${notice.id}`} */
-                          color: "#222",
-                          textDecoration: "none",
-                          textAlign:'left',
-                          display: "block",
-                          transition: "color 0.1s",
-                          fontWeight: 400,
-                          paddingRight:isNew(qna.writetime)?0:'40px'
-                        }}
-                        onMouseOver={(e) =>
-                          (e.currentTarget.style.color = "#6B46C1")
-                        }
-                        onMouseOut={(e) => (e.currentTarget.style.color = "#222")}
-                      >
-                        {qna.replytoid && <span style={{paddingLeft:35}}>↳</span>} {/* reply일 경우 앞에 표시 추가 */}
-                        {qna.title}
-                        {isNew(qna.writetime) && (
-                          <span
-                            style={{
-                              backgroundColor: "#6B46C1",
-                              color: "white",
-                              borderRadius: "6px",
-                              fontSize: "10px",
-                              padding: "2px 10px",
-                              marginLeft: "15px",
-                              animation: "pulse-badge 1.2s ease-in-out infinite",
-                              display: "inline-block",
-                              position: "relative",
-                              top: "4px",
-                            }}
-                          >
-                            NEW
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td
-                      style={{
-                        padding: "14px",
-                        textAlign: "center",
-                        fontSize: "14px",
-                        color: "#555",
-                      }}
-                    >
-                      {qna.author==='root'?'관리자':qna.author}
-                    </td>
-                    <td
-                      style={{
-                        padding: "14px",
-                        textAlign: "center",
-                        fontSize: "13px",
-                        color: "#999",
-                      }}
-                    >
-                      {formatDate(qna.writetime)}
-                    </td>
-                    {!(userInfo?.username === qna.author || userInfo?.auth==='ADMIN') &&
-                    (<td style={{width:140.16,height:60.5}}></td>)
-                    }
-                    {(userInfo?.username === qna.author || userInfo?.auth==='ADMIN') && (
-                      <td style={{ padding: "14px", textAlign: "center" }}>
-                        <Flex w='100%' justifyContent='center' gap='10px'>
-                        <button
-                          style={{
-                            backgroundColor: "#e53e3e",
-                            color: "white",
-                            padding: "6px 12px",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontSize: "13px",
-                          }}
-                          onClick={() => {
-                            {/* 수정 */}
-                          }}
-                        >
-                          수정
-                        </button>
-                        <button
-                          style={{
-                            backgroundColor: "#e53e3e",
-                            color: "white",
-                            padding: "6px 12px",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontSize: "13px",
-                          }}
-                          onClick={() => {
-                              /* 삭제 */
-                          }}
-                        >
-                          삭제
-                        </button>
-                        </Flex>
-                      </td>
-                    )}
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-          {/* NEW 뱃지 애니메이션 */}
-          <style jsx global>{`
-            @keyframes pulse-badge {
-              0% {
-                transform: scale(1);
-                opacity: 1;
-              }
-              50% {
-                transform: scale(1.25);
-                opacity: 0.6;
-              }
-              100% {
-                transform: scale(1);
-                opacity: 1;
-              }
-            }
-          `}</style>
-          </Box>
-          <Flex w='100%' justifyContent='flex-end' pt='10px'>
-            <button
-            style={{
-              backgroundColor: "black",
-              color: "white",
-              padding: "8px 20px",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontSize: "15px",
-              transition: "all 0.3s",
-              width:110
-            }}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = "#6B46C1")
-            }
-            onMouseOut={(e) =>
-              (e.currentTarget.style.backgroundColor = "black")
-            }
-            onClick={() => {
-              setTitle('');
-              setContent('');
-              setWhichPage('write');
-            }}
-          >
-            질문글쓰기
-          </button>
-          </Flex>
-          <VStack pt='15px'>
-                  <Pagination.Root count={rawItems.length} 
-                   pageSize={qnasPerPage} page={currentPage} onPageChange={({page}) =>setCurrentPage(page)}>
-            <ButtonGroup variant="ghost" size="sm">
-              <Pagination.PrevTrigger asChild>
-                <IconButton>
-                  <LuChevronLeft />
-                </IconButton>
-              </Pagination.PrevTrigger>
-          
-          {/* 10개씩 페이지 그룹 렌더링 */}
-                {(() => {
-                  const totalPages = Math.ceil(rawItems.length / qnasPerPage);
-                  const pageGroupSize = 10;
-                  const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
-                  const startPage = currentGroup * pageGroupSize + 1;
-                  const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
-          
-                  return Array.from({ length: endPage - startPage + 1 }, (_, idx) => {
-                    const pageNum = startPage + idx;
-                    return (
-                      <Pagination.Item key={pageNum} value={pageNum} asChild>
-                        <IconButton
-                          variant={{ base: "ghost", _selected: "outline" }}
-                        >
-                          {pageNum}
-                        </IconButton>
-                      </Pagination.Item>
-                    );
-                  });
-                })()}
-          
-              <Pagination.NextTrigger asChild>
-                <IconButton>
-                  <LuChevronRight />
-                </IconButton>
-              </Pagination.NextTrigger>
-            </ButtonGroup>
-          </Pagination.Root>
-              </VStack>
+      <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage}></All>
       </>;
     }
     else if(whichpage==='write'){
@@ -412,7 +188,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
   
             <Text fontSize='15px' mb='4px'>내용</Text>
             <Textarea
-              placeholder="QnA 내용을 입력하세요"
+              placeholder="QnA 내용을 입력하세요(1000글자 제한)"
+              maxLength='999'
               value={content}
               p='12px'
               fontSize='15px'
@@ -432,7 +209,11 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
                border='none' borderRadius='4px' cursor='pointer' 
                transition='all 0.2s' fontWeight='normal'
                _hover={{bg:'#005bb5'}}
-              onClick={handleSubmit}>QnA 등록하기</Button>
+              onClick={()=>{
+                handleSubmit();
+                setCurrentPage(1);
+                setWhichPage('all');
+              }}>QnA 등록하기</Button>
               <Button bg='#ccc' color='black' py='10px' px='20px' 
               border='none' borderRadius='4px' cursor='pointer' fontWeight='normal'
               _hover={{bg:'#bbb'}}
@@ -440,10 +221,165 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             </Flex>
           </Flex>
         </Box>
+        <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent}  currentPage={currentPage} setCurrentPage={setCurrentPage}></All>
       </>;
     }
     else{
       return <>
+      <div
+        style={{
+          maxWidth: "1200px",
+          width: "100%",
+          margin: "0 auto",
+          padding: "80px 16px 40px",
+          boxSizing: "border-box",
+        }}
+      >
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            marginBottom: "24px",
+          }}
+        >
+          <tbody>
+            <tr>
+              <th style={thStyle}>제목</th>
+              <td style={{ ...tdStyle, color: "#000" }}>{viewcontent.title}</td>
+            </tr>
+            <tr>
+              <th style={thStyle}>작성자</th>
+              <td style={{ ...tdStyle, color: "#000" }}>{viewcontent.author}</td>
+            </tr>
+            <tr>
+              <th style={thStyle}>작성일</th>
+              <td style={{ ...tdStyle, color: "#000" }}>
+              {formatDate(viewcontent.writetime)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div
+          style={{
+            whiteSpace: "pre-line",
+            lineHeight: "1.8",
+            padding: "20px",
+            backgroundColor: "#ffffff",
+            border: "1px solid #eee",
+            borderRadius: "6px",
+            fontSize: "17px",
+            color: "#333",
+            marginBottom: "30px",
+            fontWeight: 400,
+          }}
+        >
+          {viewcontent.content}
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "20px",
+          }}
+        >
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button
+              style={{ ...navBtn, ...(viewindex > 0 ? {} : disabledStyle) }}
+              disabled={!(viewindex > 0)}
+              onClick={() =>{
+                if(viewindex>0){
+                  setViewIndex(viewindex-1);
+                  setViewId(rawItems[viewindex-1].id);
+                  setViewContent(rawItems[viewindex-1]);
+                }
+              }}
+              onMouseOver={(e) =>
+                (viewindex > 0) && (e.currentTarget.style.backgroundColor = "#f3e8ff")
+              }
+              onMouseOut={(e) =>
+                (viewindex > 0) && (e.currentTarget.style.backgroundColor = "#fff")
+              }
+            >
+              이전글
+            </button>
+            <button
+              style={{ ...navBtn, ...(viewindex < rawItems.length-1 ? {} : disabledStyle) }}
+              disabled={!(viewindex < rawItems.length-1)}
+              onClick={() => {
+                if(viewindex < rawItems.length-1){
+                  setViewIndex(viewindex+1);
+                  setViewId(rawItems[viewindex+1].id);
+                  setViewContent(rawItems[viewindex+1]);
+                }
+              }}
+              onMouseOver={(e) =>
+                (viewindex < rawItems.length-1) && (e.currentTarget.style.backgroundColor = "#f3e8ff")
+              }
+              onMouseOut={(e) =>
+                (viewindex < rawItems.length-1) && (e.currentTarget.style.backgroundColor = "#fff")
+              }
+            >
+              다음글
+            </button>
+          </div>
+          {userInfo?.username === viewcontent.author && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button
+              style={editBtn}
+              onClick={() => {
+                setModifyId(viewid);
+                setTitle(viewcontent.title);
+                setContent(viewcontent.content);
+                setWhichPage('write');
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#ddd")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#eee")
+              }
+            >
+              수정
+            </button>
+            <button
+              style={{ ...editBtn, marginLeft: "10px" }}
+              onClick={async () => {
+                if (confirm("글 삭제시 답글까지 전부 삭제됩니다. 정말 삭제하시겠습니까?")) {
+                  /* 삭제 로직 작성 */
+                }
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#ddd")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#eee")
+              }
+            >
+              삭제
+            </button>
+          </div>
+          )}
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <button
+              onClick={() => setWhichPage('all')}
+              style={listBtn}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#553C9A")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#6B46C1")
+              }
+            >
+              목록
+            </button>
+          </div>
+        </div>
+
+        <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage}></All>
       </>;
     }
 }
