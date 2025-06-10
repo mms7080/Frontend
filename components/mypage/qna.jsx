@@ -97,7 +97,6 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
         let loc=i+count+1;
         for(let j=0;j<tempItems.length;j++){
           if(initialv[i].id===tempItems[j].replytoid){
-            if(tempItems[j].replytoid===20)console.log(i,count);
             initialv.splice(loc,0,tempItems[j]);
             tempItems=[...tempItems].map((item,index)=>(index!=j?item:null));
             count++;
@@ -176,21 +175,12 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
 
         dataToSend.id=modifyid;
 
-        let modifyindex;
-
-        for(let findindex=0;findindex<rawItems.length;findindex++){
-          if(rawItems[findindex].id===modifyid){
-            modifyindex=findindex;
-            break;
-          }
-        }
-
         const res2=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/modify/logic`, {
             method: 'POST',
             body: JSON.stringify(dataToSend)
         });
 
-        setrawItems([...rawItems].map((item,index)=>(index===modifyindex?res2:item)));
+        setrawItems([...rawItems].map((item,index)=>(item.id===modifyid?res2:item)));
         setModifyId(null);
 
       }
@@ -200,7 +190,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
 
     if(whichpage==='all'){
      return <>
-      <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
+      <All setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
     else if(whichpage==='write'){
@@ -268,7 +258,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             </Flex>
           </Flex>
         </Box>
-        <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent}  currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
+        <All setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent}  currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
     else{
@@ -296,7 +286,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             </tr>
             <tr>
               <th style={thStyle}>작성자</th>
-              <td style={{ ...tdStyle, color: "#000" }}>{viewcontent.author}</td>
+              <td style={{ ...tdStyle, color: "#000" }}>{viewcontent.author==='root'?'관리자':viewcontent.author}</td>
             </tr>
             <tr>
               <th style={thStyle}>작성일</th>
@@ -411,8 +401,10 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             <button
               style={editBtn}
               onClick={async () => {
-                if (confirm("글 삭제시 답글까지 전부 삭제됩니다. 정말 삭제하시겠습니까?")) {
-                  /* 삭제 로직 작성 */
+                if (confirm("정말 삭제하시겠습니까?")) {
+                  const res3=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/delete/logic/${viewcontent.id}`);
+                  setrawItems([...rawItems].map((item,index)=>(item.id===viewcontent.id?res3:item)));
+                  setWhichPage('all');
                 }
               }}
               onMouseOver={(e) =>
@@ -444,7 +436,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
           </div>
         </div>
 
-        <All setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
+        <All setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
 }

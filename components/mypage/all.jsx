@@ -1,10 +1,12 @@
+'use client';
+
 import React, {useState} from "react";
 import {Box,Flex,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
 import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
+import {fetch} from '../../lib/client';
 
-export default function QnaAll({setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
+export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
 
-    
     const qnasPerPage = 10;
 
     const indexOfLastReview = currentPage * qnasPerPage;
@@ -126,16 +128,17 @@ export default function QnaAll({setTitle,setContent,setWhichPage,userInfo,rawIte
                     >
                       <div
                           style={{
-                          color: "#222",
+                          color: (!qna.deleted?"#222":'#bab8b8'),
                           textDecoration: "none",
                           textAlign:'left',
                           display: "block",
                           transition: "color 0.1s",
                           fontWeight: 400,
                           paddingRight:isNew(qna.writetime)?0:'40px',
-                          cursor:'pointer',
+                          cursor:(qna.deleted?'default':'pointer'),
                         }}
-                        onClick={()=>{
+                        onClick={(e)=>{
+                            if(qna.deleted)return;
                             setViewId(qna.id);
                             for(let i=0;i<rawItems.length;i++){
                                 if(rawItems[i].id===qna.id){
@@ -147,14 +150,12 @@ export default function QnaAll({setTitle,setContent,setWhichPage,userInfo,rawIte
                             setWhichPage('view');
                         }
                         }
-                        onMouseOver={(e) =>
-                          (e.currentTarget.style.color = "#6B46C1")
-                        }
-                        onMouseOut={(e) => (e.currentTarget.style.color = "#222")}
+                        onMouseOver={!qna.deleted ? (e) => (e.currentTarget.style.color = "#6B46C1") : undefined}
+                        onMouseOut={!qna.deleted ? (e) => (e.currentTarget.style.color = "#222") : undefined}
                       >
-                        {qna.replytoid && <span style={{paddingLeft:35}}>↳(답변)&nbsp;</span>} {/* reply일 경우 앞에 표시 추가 */}
-                        {qna.title}
-                        {isNew(qna.writetime) && (
+                        {qna.replytoid && <span style={{paddingLeft:35}}>↳&nbsp;</span>} {/* reply일 경우 앞에 표시 추가 */}
+                        {!qna.deleted?qna.title:'(삭제된 QnA입니다)'}
+                        {(isNew(qna.writetime)&&!qna.deleted) && (
                           <span
                             style={{
                               backgroundColor: "#6B46C1",
@@ -229,8 +230,12 @@ export default function QnaAll({setTitle,setContent,setWhichPage,userInfo,rawIte
                             cursor: "pointer",
                             fontSize: "13px",
                           }}
-                          onClick={() => {
-                              /* 삭제 */
+                          onClick={async () => {
+                              if (confirm("정말 삭제하시겠습니까?")) {
+                                const res3=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/delete/logic/${qna.id}`);
+                                setrawItems([...rawItems].map((item,index)=>(item.id===qna.id?res3:item)));
+                                setWhichPage('all');
+                              }
                           }}
                         >
                           삭제
