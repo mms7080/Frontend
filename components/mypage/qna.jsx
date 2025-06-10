@@ -149,18 +149,23 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             body: JSON.stringify(dataToSend)
         });
 
-        let replyindex;
+        let replyindex,targetindex;
 
         if(replytoid!==null){/* 답변을 작성하는 경우 */
           for(let findindex=0;findindex<rawItems.length;findindex++){
             if(rawItems[findindex].id===replytoid){
               replyindex=findindex+1;
-              while(rawItems[(replyindex<rawItems.length)?replyindex:replyindex-1].replytoid!==null && replyindex<rawItems.length)replyindex++;
+              targetindex=replyindex;
+              while(rawItems[(replyindex<rawItems.length)?replyindex:replyindex-1].replytoid!==null && replyindex<rawItems.length){
+                replyindex++;
+                if(targetindex<replyindex && rawItems[replyindex-1].replytoid===rawItems[findindex].id)
+                  targetindex=replyindex;
+              }
               break;
             }
           }
           let arr=[...rawItems];
-          arr.splice(replyindex,0,res);
+          arr.splice(targetindex,0,res);
           setrawItems(arr);
           
         }else{/* 답변이 아닌 글을 작성하는 경우 */
