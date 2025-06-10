@@ -1,10 +1,11 @@
 "use client";
 
-import React,{ useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../header";
+import NoticeList from "../../components/notice/noticeList";
 
-export default function NoticeIdPage({userData}) {
+export default function NoticeIdPage({ userData }) {
   const params = useParams();
   const id = params?.id;
   const router = useRouter();
@@ -44,10 +45,9 @@ export default function NoticeIdPage({userData}) {
 
   if (!notice) return <div>로딩 중...</div>;
 
- return (
-  <>
+  return (
+    <>
       <Header headerColor="black" headerBg="#ffffff" userInfo={user} />
-
 
       <div
         style={{
@@ -216,6 +216,38 @@ export default function NoticeIdPage({userData}) {
           </button>
         </div>
       </div>
+
+<div
+  style={{
+    padding: "60px 0",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    paddingLeft: "16px",
+    paddingRight: "16px",
+    boxSizing: "border-box",
+  }}
+>
+  <h2
+    style={{
+      fontSize: "20px",
+      marginBottom: "16px",
+      textAlign: "center",
+    }}
+  >
+  </h2>
+  <NoticeList
+    items={allNotices.filter((n) => n.id !== Number(id))}
+    user={user}
+    highlightKeyword={(text) => [text]} // 검색 없음 처리
+    isNew={(createdAt) => {
+      const created = new Date(createdAt);
+      const now = new Date();
+      const diff = (now - created) / (1000 * 60 * 60 * 24);
+      return diff <= 2;
+    }}
+  />
+</div>
+
 
       <div style={{ height: "200px" }} />
     </>
