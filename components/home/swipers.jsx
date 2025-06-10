@@ -74,7 +74,7 @@ export default function SimpleSlider() {
       <Slider {...settings}>
         <div>
           <Image
-            src="https://cf2.lottecinema.co.kr/lotte_image/2025/Flip/Flip_1920774.png"
+            src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/homeswipers1.png`}
             w='100%'
             h='700px'
             objectFit='cover'
@@ -88,7 +88,7 @@ export default function SimpleSlider() {
         </div>
         <div>
           <Image
-            src="https://cf2.lottecinema.co.kr/lotte_image/2025/Cat/Cat_1920774.jpg"
+            src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/homeswipers2.jpg`}
             w='100%'
             h='700px'
             objectFit='cover'
@@ -102,7 +102,7 @@ export default function SimpleSlider() {
         </div>
         <div>
           <Image
-            src="https://cf2.lottecinema.co.kr/lotte_image/2025/Secret/Secret_19207745.png"
+            src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/homeswipers3.png`}
             w='100%'
             h='700px'
             objectFit='cover'
