@@ -14,9 +14,9 @@ import { Header } from "..";
 import { useParams, useRouter } from "next/navigation";
 import { useCart } from "../../components/store/CartContext";
 import CartSidebar from "../../components/store/CartSidebar";
+import Link from "next/link";
 
-
-export default function StoreDetailPage({userData}) {
+export default function StoreDetailPage({ userData }) {
   const [user, setUser] = useState(userData);
   const { id } = useParams();
   const router = useRouter();
@@ -40,9 +40,47 @@ export default function StoreDetailPage({userData}) {
   return (
     <>
       <Header headerColor="black" headerBg="white" userInfo={user} />
-      <Box maxW="1100px" mx="auto" pt={12} px={{ base: 4, md: 6 }} pb={20}>
-        <Text fontSize="14px" color="gray.500" mb={4}>
-          스토어 &gt; <b>스토어상세</b>
+
+      <div
+        style={{
+          maxWidth: "1200px",
+          width: "100%",
+          margin: "0 auto",
+          padding: "80px 16px 40px",
+          boxSizing: "border-box",
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "24px",
+            fontWeight: "normal",
+            color: "#222",
+            borderBottom: "2px solid #ccc",
+            paddingBottom: "12px",
+            marginBottom: "40px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "12px",
+          }}
+        >
+          <img
+            src="http://localhost:9999/images/logo.png"
+            alt="logo"
+            style={{ width: "141px", height: "68px", objectFit: "contain" }}
+          />
+        </h1>
+      </div>
+
+      <Box maxW="1200px" mx="auto" pt={0} px={{ base: 4, md: 6 }} pb={20}>
+        <Text fontSize="14px" color="#6B46C1" mb={4}>
+          <Link
+            href="/store"
+            style={{ textDecoration: "none", color: "#6B46C1" }}
+          >
+            스토어
+          </Link >{" "}
+          &gt; <b>상세페이지</b>
         </Text>
 
         <Heading fontSize={{ base: "xl", md: "2xl" }} mb={1} color="black">
@@ -113,45 +151,45 @@ export default function StoreDetailPage({userData}) {
               />
             </Flex>
 
-      <Flex
-        direction={{ base: "column", sm: "row" }}
-        align={{ base: "stretch", sm: "center" }}
-        gap={4}
-        wrap="wrap"
-      >
-        <Spacer display={{ base: "none", sm: "block" }} />
-        <Text fontSize="2xl" fontWeight="bold" color="purple.600">
-          {totalPrice}원
-        </Text>
-        <Button
-          w={{ base: "100%", sm: "120px" }}
-          fontWeight="bold"
-          bg="#6B46C1"
-          color="white"
-          _hover={{ bg: "#5A38A6" }}
-          onClick={() => {
-            router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
-          }}
-        >
-          구매
-        </Button>
-        <Button
-          w={{ base: "100%", sm: "120px" }}
-          fontWeight="bold"
-          bg="gray.200"
-          color="black"
-          _hover={{ bg: "gray.300" }}
-          onClick={() => {
-            addToCart({
-              ...product,
-              price: product.price.replace(/[^0-9]/g, ""),
-              quantity,
-            });
-          }}
-        >
-          장바구니
-        </Button>
-      </Flex>
+            <Flex
+              direction={{ base: "column", sm: "row" }}
+              align={{ base: "stretch", sm: "center" }}
+              gap={4}
+              wrap="wrap"
+            >
+              <Spacer display={{ base: "none", sm: "block" }} />
+              <Text fontSize="2xl" fontWeight="bold" color="purple.600">
+                {totalPrice}원
+              </Text>
+              <Button
+                w={{ base: "100%", sm: "120px" }}
+                fontWeight="bold"
+                bg="#6B46C1"
+                color="white"
+                _hover={{ bg: "#5A38A6" }}
+                onClick={() => {
+                  router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
+                }}
+              >
+                구매
+              </Button>
+              <Button
+                w={{ base: "100%", sm: "120px" }}
+                fontWeight="bold"
+                bg="gray.200"
+                color="black"
+                _hover={{ bg: "gray.300" }}
+                onClick={() => {
+                  addToCart({
+                    ...product,
+                    price: product.price.replace(/[^0-9]/g, ""),
+                    quantity,
+                  });
+                }}
+              >
+                장바구니
+              </Button>
+            </Flex>
           </Box>
         </Flex>
 
