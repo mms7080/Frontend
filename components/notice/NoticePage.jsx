@@ -83,6 +83,15 @@ export default function NoticePage({ notices, userData }) {
     return diff <= 2;
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
@@ -116,7 +125,7 @@ export default function NoticePage({ notices, userData }) {
           />
         </h1>
 
-        {user?.auth === "ADMIN" && (
+        {user?.auth === "ADMIN" && !isMobile && (
           <div style={{ textAlign: "right", marginBottom: "24px" }}>
             <button
               style={{
@@ -263,28 +272,81 @@ export default function NoticePage({ notices, userData }) {
           >
             <thead style={{ backgroundColor: "white" }}>
               <tr style={{ color: "black" }}>
-                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>번호</th>
-                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>제목</th>
-                <th className="responsive-hide" style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>작성자</th>
-                <th className="responsive-hide" style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>작성일</th>
-                <th className="responsive-hide" style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>조회수</th>
+                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>
+                  번호
+                </th>
+                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>
+                  제목
+                </th>
+                <th
+                  className="responsive-hide"
+                  style={{ padding: "14px", borderBottom: "1px solid #ddd" }}
+                >
+                  작성자
+                </th>
+                <th
+                  className="responsive-hide"
+                  style={{ padding: "14px", borderBottom: "1px solid #ddd" }}
+                >
+                  작성일
+                </th>
+                <th
+                  className="responsive-hide"
+                  style={{ padding: "14px", borderBottom: "1px solid #ddd" }}
+                >
+                  조회수
+                </th>
                 {user?.auth === "ADMIN" && (
-                  <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>관리</th>
+                  <th
+                    style={{ padding: "14px", borderBottom: "1px solid #ddd" }}
+                  >
+                    관리
+                  </th>
                 )}
               </tr>
             </thead>
             <tbody>
               {currentItems.length === 0 ? (
                 <tr>
-                  <td colSpan="6" style={{ textAlign: "center", padding: "20px", fontSize: "15px" }}>
+                  <td
+                    colSpan="6"
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      fontSize: "15px",
+                    }}
+                  >
                     📭 공지사항이 없습니다.
                   </td>
                 </tr>
               ) : (
                 currentItems.map((notice) => (
-                  <tr key={notice.id} style={{ borderBottom: "1px solid #eee", backgroundColor: "#fff" }}>
-                    <td style={{ padding: "14px", textAlign: "center", fontSize: "14px", color: "#666" }}>{notice.id}</td>
-                    <td style={{ padding: "14px", fontWeight: "600", fontSize: "16px", lineHeight: "1.4", color: "#222" }}>
+                  <tr
+                    key={notice.id}
+                    style={{
+                      borderBottom: "1px solid #eee",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <td
+                      style={{
+                        padding: "14px",
+                        textAlign: "center",
+                        fontSize: "14px",
+                        color: "#666",
+                      }}
+                    >
+                      {notice.id}
+                    </td>
+                    <td
+                      style={{
+                        padding: "14px",
+                        fontWeight: "600",
+                        fontSize: "16px",
+                        lineHeight: "1.4",
+                        color: "#222",
+                      }}
+                    >
                       <a
                         href={`/notice/${notice.id}`}
                         style={{
@@ -294,8 +356,12 @@ export default function NoticePage({ notices, userData }) {
                           transition: "color 0.1s",
                           fontWeight: 400,
                         }}
-                        onMouseOver={(e) => (e.currentTarget.style.color = "#6B46C1")}
-                        onMouseOut={(e) => (e.currentTarget.style.color = "#222")}
+                        onMouseOver={(e) =>
+                          (e.currentTarget.style.color = "#6B46C1")
+                        }
+                        onMouseOut={(e) =>
+                          (e.currentTarget.style.color = "#222")
+                        }
                       >
                         {highlightKeyword(notice.title)}
                         {isNew(notice.createdAt) && (
@@ -307,7 +373,8 @@ export default function NoticePage({ notices, userData }) {
                               fontSize: "10px",
                               padding: "2px 10px",
                               marginLeft: "15px",
-                              animation: "pulse-badge 1.2s ease-in-out infinite",
+                              animation:
+                                "pulse-badge 1.2s ease-in-out infinite",
                               display: "inline-block",
                               position: "relative",
                               top: "4px",
@@ -318,9 +385,39 @@ export default function NoticePage({ notices, userData }) {
                         )}
                       </a>
                     </td>
-                    <td style={{ padding: "14px", textAlign: "center", fontSize: "14px", color: "#555" }}>{notice.writer}</td>
-                    <td style={{ padding: "14px", textAlign: "center", fontSize: "13px", color: "#999" }}>{formatDate(notice.createdAt)}</td>
-                    <td style={{ padding: "14px", textAlign: "center", fontSize: "13px", color: "#666" }}>{notice.views}</td>
+                    <td
+                      className="responsive-hide"
+                      style={{
+                        padding: "14px",
+                        textAlign: "center",
+                        fontSize: "14px",
+                        color: "#555",
+                      }}
+                    >
+                      {notice.writer}
+                    </td>
+                    <td
+                      className="responsive-hide"
+                      style={{
+                        padding: "14px",
+                        textAlign: "center",
+                        fontSize: "13px",
+                        color: "#999",
+                      }}
+                    >
+                      {formatDate(notice.createdAt)}
+                    </td>
+                    <td
+                      className="responsive-hide"
+                      style={{
+                        padding: "14px",
+                        textAlign: "center",
+                        fontSize: "13px",
+                        color: "#666",
+                      }}
+                    >
+                      {notice.views}
+                    </td>
                     {user?.auth === "ADMIN" && (
                       <td style={{ padding: "14px", textAlign: "center" }}>
                         <button
@@ -335,10 +432,13 @@ export default function NoticePage({ notices, userData }) {
                           }}
                           onClick={async () => {
                             if (confirm("정말 삭제하시겠습니까?")) {
-                              const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${notice.id}`, {
-                                method: "DELETE",
-                                credentials: "include",
-                              });
+                              const res = await fetch(
+                                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${notice.id}`,
+                                {
+                                  method: "DELETE",
+                                  credentials: "include",
+                                }
+                              );
                               if (res.ok) {
                                 alert("삭제 완료");
                                 location.reload();
@@ -361,9 +461,18 @@ export default function NoticePage({ notices, userData }) {
 
         <style jsx global>{`
           @keyframes pulse-badge {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.25); opacity: 0.6; }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+              transform: scale(1);
+              opacity: 1;
+            }
+            50% {
+              transform: scale(1.25);
+              opacity: 0.6;
+            }
+            100% {
+              transform: scale(1);
+              opacity: 1;
+            }
           }
         `}</style>
 
@@ -391,7 +500,10 @@ export default function NoticePage({ notices, userData }) {
             &lt;
           </button>
 
-          {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map((page) => (
+          {Array.from(
+            { length: endPage - startPage + 1 },
+            (_, i) => startPage + i
+          ).map((page) => (
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
@@ -415,7 +527,9 @@ export default function NoticePage({ notices, userData }) {
           ))}
 
           <button
-            onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+            }
             disabled={currentPage === totalPages}
             style={{
               margin: "0 8px",
