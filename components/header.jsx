@@ -411,8 +411,7 @@ useEffect(() => {
                 <Text
                 color="#ff4d4d"
                 _hover={{
-                  color: "#ff6666",
-                  textShadow: "0 0 5px rgba(255, 77, 77, 0.5)",
+                  color: "red",
                 }}
               >
                 <Link href="/booking">빠른예매</Link>
