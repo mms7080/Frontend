@@ -130,11 +130,15 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
       });
     };
 
-    const handleSubmit=async (e)=>{
+    const handleSubmit=async ()=>{
       let dataToSend={title,content,replyto,replytoid};
 
+      if(title===''){
+          alert('제목을 입력해주세요.');
+          return;
+      }
+
       if(content===''){
-          e.preventDefault();
           alert('내용을 입력해주세요.');
           return;
       }
@@ -190,6 +194,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
         setModifyId(null);
 
       }
+
+      setWhichPage('all');
     }
 
     if(whichpage==='all'){
@@ -254,10 +260,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
                border='none' borderRadius='4px' cursor='pointer' 
                transition='all 0.2s' fontWeight='normal'
                _hover={{bg:'#005bb5'}}
-              onClick={()=>{
-                handleSubmit();
-                setWhichPage('all');
-              }}>{!modifyid?'QnA 등록하기':'QnA 수정하기'}</Button>
+              onClick={()=>handleSubmit()}>{!modifyid?'QnA 등록하기':'QnA 수정하기'}</Button>
               <Button bg='#ccc' color='black' py='10px' px='20px' 
               border='none' borderRadius='4px' cursor='pointer' fontWeight='normal'
               _hover={{bg:'#bbb'}}
