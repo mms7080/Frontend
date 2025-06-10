@@ -12,7 +12,7 @@ export const metadata={
 
 export default async function Mypagemain(){
     const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-    let qnares1=[],qnares2=[];
+    let qnares1=[],qnares2=[],reservationres=[],paymentres=[];
 
     if(res?.auth!=='ADMIN'){
         qnares1=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/author/${res?.username}`);
@@ -22,9 +22,12 @@ export default async function Mypagemain(){
         qnares2=[];
     }
 
+    reservationres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reservations`);
+    paymentres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`);
+
     return <>
         <Header userInfo={res}></Header>
         <Notloginalert userInfo={res}/>
-        <Mypage userInfo={res} qnaInfo={qnares1} replyInfo={qnares2}/>
+        <Mypage userInfo={res} qnaInfo={qnares1} replyInfo={qnares2} reservationInfo={reservationres} paymentInfo={paymentres}/>
     </>
 };

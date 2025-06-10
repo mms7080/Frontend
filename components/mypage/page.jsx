@@ -4,7 +4,10 @@ import {FaFilm,FaQuestion} from 'react-icons/fa';
 import {FiUser} from 'react-icons/fi';
 import {Bookingcheck,Modify,Qna} from '.';
 
-export default async function Mypage({userInfo,qnaInfo,replyInfo}){
+export default async function Mypage({userInfo,qnaInfo,replyInfo,reservationInfo,paymentInfo}){
+
+    reservationInfo=[...reservationInfo].filter((item)=>item.userId===userInfo.username);
+    paymentInfo=[...paymentInfo].filter((item)=>item.userId===userInfo.username);
 
      return <>
      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
@@ -43,7 +46,7 @@ export default async function Mypage({userInfo,qnaInfo,replyInfo}){
               </Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content value="booking">
-            <Bookingcheck userInfo={userInfo}></Bookingcheck>
+            <Bookingcheck reservationInfo={reservationInfo} paymentInfo={paymentInfo}></Bookingcheck>
           </Tabs.Content>
           <Tabs.Content value="modify">
             <Modify userInfo={userInfo}></Modify>
