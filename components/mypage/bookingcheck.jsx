@@ -89,7 +89,21 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                 </tr>
               </thead>
               <tbody>
-                {paginatedReservations.map((r, idx) => (
+                {reservations.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="12"
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      fontSize: "15px"
+                    }}
+                  >
+                    🎫 예매내역이 없습니다.
+                  </td>
+                </tr>
+              ) : (
+                paginatedReservations.map((r, idx) => (
                   <tr key={idx}>
                     <td style={tdStyle}>{r.orderId}</td>
                     <td style={tdStyle}>{r.userId}</td>
@@ -171,7 +185,8 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                       )}
                     </td>
                   </tr>
-                ))}
+                ))
+                )}
               </tbody>
             </table>
 
@@ -240,7 +255,21 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                 </tr>
               </thead>
               <tbody>
-                {paginatedPayments.map((p, idx) => (
+                {payments.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="8"
+                    style={{
+                      textAlign: "center",
+                      padding: "20px",
+                      fontSize: "15px"
+                    }}
+                  >
+                    🛒 구매내역이 없습니다.
+                  </td>
+                </tr>
+              ) : (
+                paginatedPayments.map((p, idx) => (
                   <tr key={idx}>
                     <td style={tdStyle}>{p.orderId}</td>
                     <td style={tdStyle}>{p.orderName}</td>
@@ -290,7 +319,7 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                       </button>
                     </td>
                   </tr>
-                ))}
+                )))}
               </tbody>
             </table>
 

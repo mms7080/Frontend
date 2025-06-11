@@ -372,7 +372,6 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
               다음글
             </button>
           </div>
-          {(userInfo?.username === viewcontent.author||userInfo?.auth==='ADMIN') && (
           <div style={{ display: "flex", gap: "20px" }}>
             <button
               style={editBtn}
@@ -392,6 +391,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             >
               답변
             </button>
+            {(userInfo?.username === viewcontent.author||userInfo?.auth==='ADMIN')?(
+              <>
             <button
               style={editBtn}
               onClick={()=>{
@@ -427,8 +428,9 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             >
               삭제
             </button>
+            </>):<></>}
           </div>
-          )}
+          
           </div>
 
           <div style={{ textAlign: "center" }}>
