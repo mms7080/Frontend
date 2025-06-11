@@ -260,7 +260,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                 {payments.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="8"
+                    colSpan="9"
                     style={{
                       textAlign: "center",
                       padding: "20px",
