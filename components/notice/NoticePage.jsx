@@ -122,7 +122,7 @@ export default function NoticePage({ notices, userData }) {
             src="http://localhost:9999/images/logo.png"
             alt="logo"
             style={{ width: "141px", height: "68px", objectFit: "contain" }}
-            loading='lazy'
+            loading="lazy"
           />
         </h1>
 
@@ -370,12 +370,11 @@ export default function NoticePage({ notices, userData }) {
                             style={{
                               backgroundColor: "#6B46C1",
                               color: "white",
-                              borderRadius: "6px",
+                              borderRadius: "2px",
                               fontSize: "10px",
-                              padding: "2px 10px",
-                              marginLeft: "15px",
-                              animation:
-                                "pulse-badge 1.2s ease-in-out infinite",
+                              padding: "2px 6px",
+                              marginLeft: "8px",
+                              animation: "sparkle 1s ease-in-out infinite",
                               display: "inline-block",
                               position: "relative",
                               top: "4px",
@@ -467,10 +466,28 @@ export default function NoticePage({ notices, userData }) {
               opacity: 1;
             }
             50% {
-              transform: scale(1.25);
+              transform: scale(1.01);
               opacity: 0.6;
             }
             100% {
+              transform: scale(1);
+              opacity: 1;
+            }
+          }
+
+          @keyframes sparkle {
+            0% {
+              box-shadow: 0 0 5px #b794f4;
+              transform: scale(1);
+              opacity: 1;
+            }
+            50% {
+              box-shadow: 0 0 15px #e9d8fd;
+              transform: scale(1.1);
+              opacity: 0.8;
+            }
+            100% {
+              box-shadow: 0 0 5px #b794f4;
               transform: scale(1);
               opacity: 1;
             }
