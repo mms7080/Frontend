@@ -4,7 +4,7 @@ import React,{useState,useEffect,useMemo} from "react";
 import {Box,Text,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
 import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
 
-export default function Bookingcheck({reservationInfo,paymentInfo}){
+export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
 
     const [reservations,setReservations]=useState([...reservationInfo].sort((a, b) => {
         const timeA = new Date(a.approvedAt || 0).getTime();
@@ -161,7 +161,8 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                                   { credentials: "include" }
                                 );
                                 const data = await refreshed.json();
-                                setReservations(data);
+                                const dataarr=data.filter((item)=>item.userId===userInfo.username);
+                                setReservations(dataarr);
                               } else {
                                 console.log(res);
                                 alert("환불 실패");
@@ -251,6 +252,7 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                   <th style={thStyle}>결제일</th>
                   <th style={thStyle}>결제수단</th>
                   <th style={thStyle}>카드사</th>
+                  <th style={thStyle}>상태</th>
                   <th style={thStyle}>환불</th>
                 </tr>
               </thead>
@@ -281,6 +283,16 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                     <td style={tdStyle}>{p.method}</td>
                     <td style={tdStyle}>{p.cardCompany || "-"}</td>
                     <td style={tdStyle}>
+                      {p.refundstatus === "CANCELED" ? (
+                        <span style={{ color: "red", fontWeight: "bold" }}>
+                          환불됨
+                        </span>
+                      ) : (
+                        <span style={{ color: "green" }}>정상</span>
+                      )}
+                    </td>
+                    <td style={tdStyle}>
+                      {p.refundstatus !== "CANCELED" && (
                       <button
                         onClick={async () => {
                           if (confirm("환불 및 취소 처리하시겠습니까?")) {
@@ -288,20 +300,22 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                               const res = await fetch(
                                 `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/${p.id}`,
                                 {
-                                  method: "DELETE",
+                                  method: "PATCH",
                                   credentials: "include",
                                 }
                               );
                               if (res.ok) {
-                                alert("환불 완료");
-                                setPayments((prev) =>
-                                  prev.filter((item) => item.id !== p.id)
-                                );
+                                alert("환불 처리 완료");
+                                const refreshed=fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`, {
+                                   credentials: "include",
+                                 })
+                                 .then((res) => res.json())
+                                .then(setPayments);
                               } else {
                                 alert("환불 실패");
                               }
                             } catch (e) {
-                              alert("에러 발생: " + e.message);
+                              alert("환불 요청 중 오류 발생: " + e.message);
                             }
                           }
                         }}
@@ -316,7 +330,7 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                         }}
                       >
                         환불
-                      </button>
+                      </button>)}
                     </td>
                   </tr>
                 )))}

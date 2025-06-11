@@ -46,7 +46,7 @@ export default async function Mypage({userInfo,qnaInfo,replyInfo,reservationInfo
               </Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content value="booking">
-            <Bookingcheck reservationInfo={reservationInfo} paymentInfo={paymentInfo}></Bookingcheck>
+            <Bookingcheck userInfo={userInfo} reservationInfo={reservationInfo} paymentInfo={paymentInfo}></Bookingcheck>
           </Tabs.Content>
           <Tabs.Content value="modify">
             <Modify userInfo={userInfo}></Modify>

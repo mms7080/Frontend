@@ -1758,6 +1758,7 @@ export default function AdminDashboard({ userData }) {
                   <th style={thStyle}>결제일</th>
                   <th style={thStyle}>결제수단</th>
                   <th style={thStyle}>카드사</th>
+                  <th style={thStyle}>상태</th>
                   <th style={thStyle}>환불</th>
                 </tr>
               </thead>
@@ -1774,6 +1775,16 @@ export default function AdminDashboard({ userData }) {
                     <td style={tdStyle}>{p.method}</td>
                     <td style={tdStyle}>{p.cardCompany || "-"}</td>
                     <td style={tdStyle}>
+                      {p.refundstatus === "CANCELED" ? (
+                        <span style={{ color: "red", fontWeight: "bold" }}>
+                          환불됨
+                        </span>
+                      ) : (
+                        <span style={{ color: "green" }}>정상</span>
+                      )}
+                    </td>
+                    <td style={tdStyle}>
+                      {p.refundstatus !== "CANCELED" && (
                       <button
                         onClick={async () => {
                           if (confirm("환불 및 취소 처리하시겠습니까?")) {
@@ -1781,20 +1792,22 @@ export default function AdminDashboard({ userData }) {
                               const res = await fetch(
                                 `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/${p.id}`,
                                 {
-                                  method: "DELETE",
+                                  method: "PATCH",
                                   credentials: "include",
                                 }
                               );
                               if (res.ok) {
-                                alert("환불 완료");
-                                setPayments((prev) =>
-                                  prev.filter((item) => item.id !== p.id)
-                                );
+                                alert("환불 처리 완료");
+                                const refreshed=fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`, {
+                                   credentials: "include",
+                                 })
+                                 .then((res) => res.json())
+                                .then(setPayments);
                               } else {
                                 alert("환불 실패");
                               }
                             } catch (e) {
-                              alert("에러 발생: " + e.message);
+                              alert("환불 요청 중 오류 발생: " + e.message);
                             }
                           }
                         }}
@@ -1809,7 +1822,7 @@ export default function AdminDashboard({ userData }) {
                         }}
                       >
                         환불
-                      </button>
+                      </button>)}
                     </td>
                   </tr>
                 ))}
