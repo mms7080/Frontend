@@ -113,7 +113,7 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                           })
                         : "-"}
                     </td>
-                    <td style={tdStyle}>
+                    <td style={{...tdStyle,width:67.05}}>
                       {r.status === "CANCELED" ? (
                         <span style={{ color: "red", fontWeight: "bold" }}>
                           환불됨
@@ -123,6 +123,9 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                       )}
                     </td>
                     <td style={tdStyle}>
+                      {r.status==="CANCELED" &&(
+                        <Box w='36.09px' h='26px'></Box>
+                      )}
                       {r.status !== "CANCELED" && (
                         <button
                           onClick={async () => {
