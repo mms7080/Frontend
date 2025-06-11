@@ -72,7 +72,63 @@ const Movie = (userInfo) => {
     return searched.sort((a,b) => b.reserveRate - a.reserveRate);
   }, [movies, activeCategory, searchWord]);
     
-    
+    // 카테고리 부분
+    const CategoryPart = () => {
+        return <Box>
+            {categories.map((category) => (
+                <Button
+                    key={category}
+                    variant="ghost"
+                    borderBottom={activeCategory === category ? '2px solid white' : '1px solid transparent'}
+                    borderRadius="0"
+                    fontSize={'2xl'}
+                    fontWeight={'normal'}
+                    color={activeCategory === category ? 'white' : 'gray.500'}
+                    onClick={() => {setActiveCategory(category); setSearchWord(""); clearInputValue();}}
+                    _hover={{ bg: 'transparent', color: 'white' }}
+                >
+                    {category}
+                </Button>
+            ))}
+        </Box>
+    }
+
+    // 검색 부분
+    const SearchPart = () => {
+        return <Box transform="translate(-23px, 0)">
+            <Input
+                placeholder="영화명 검색"
+                w="320px" p="10px" bg="#1e1e1e"
+                border="1px solid gray"
+                fontSize="15px" color="white"
+                _hover={{borderColor : "white"}}
+                ref={inputRef}
+                onKeyDown={(e) => {
+                    if(e.key === 'Enter') handleSearch(getInputValue());
+                }}
+            />
+            <Button
+                marginLeft={4} px={6} bg="#1e1e1e"
+                border="1px solid gray" 
+                _hover={{borderColor : "white"}}
+                onClick={()=>{handleSearch(getInputValue())}}
+                transform="translate(0, 1px)"
+            >
+                검색
+            </Button>
+
+            <Button
+                marginLeft={4} px={6} bg="#1e1e1e"
+                border="1px solid gray" 
+                _hover={{borderColor : "white"}}
+                onClick={()=>setSearchWord('')}
+                transform="translate(0, 1px)"
+            >
+            전체보기
+            </Button>
+        </Box>
+    }
+
     // 더보기 버튼
     const MoreButton = () => {
         if(displayNumber < filteredMovies.length)
@@ -95,79 +151,36 @@ const Movie = (userInfo) => {
                         display='flex' alignItems='center' justifyContent='center'>
                     검색 결과가 없습니다
                     </Box>
-        else return (<Box className="movie-grid">
-                        {filteredMovies.map((movie,index) => {
-                            if(index < displayNumber)
-                                return (<MovieCard 
-                                            key={movie.id}
-                                            movie={movie}
-                                            user={user}
-                                            crit={"예매"}
-                                            rank={index+1}
-                                        />)
-                        })}
+        else return (<Box display="flex" justifyContent="center">
+                        <Box display="flex" justifyContent="left" flexWrap="wrap"
+                             gap="30px" overflow="visible">
+                            {filteredMovies.map((movie,index) => {
+                                if(index < displayNumber)
+                                    return (<MovieCard 
+                                                key={movie.id}
+                                                movie={movie}
+                                                user={user}
+                                                crit={"예매"}
+                                                rank={index+1}
+                                            />)
+                            })}
+                        </Box>
                     </Box>)
     }
     
     return <>(
-    <Box bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto">
+    <Flex bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto"
+            flexDirection="column">
         {/* 카테고리 분류 */}
         <Box pb={6}>
-            <Flex gap={2} justify={'space-between'} >
-                <Box>
-                    {categories.map((category) => (
-                        <Button
-                            key={category}
-                            variant="ghost"
-                            borderBottom={activeCategory === category ? '2px solid white' : '1px solid transparent'}
-                            borderRadius="0"
-                            fontSize={'2xl'}
-                            fontWeight={'normal'}
-                            color={activeCategory === category ? 'white' : 'gray.500'}
-                            onClick={() => {setActiveCategory(category); setSearchWord(""); clearInputValue();}}
-                            _hover={{ bg: 'transparent', color: 'white' }}
-                        >
-                            {category}
-                        </Button>
-                    ))}
-                </Box>
-                <Box transform="translate(-23px, 0)">
-                    <Input
-                        placeholder="영화명 검색"
-                        w="320px" p="10px" bg="#1e1e1e"
-                        border="1px solid gray"
-                        fontSize="15px" color="white"
-                        _hover={{borderColor : "white"}}
-                        ref={inputRef}
-                        onKeyDown={(e) => {
-                            if(e.key === 'Enter') handleSearch(getInputValue());
-                        }}
-                    />
-                    <Button
-                        marginLeft={4} px={6} bg="#1e1e1e"
-                        border="1px solid gray" 
-                        _hover={{borderColor : "white"}}
-                        onClick={(e)=>{handleSearch(getInputValue())}}
-                        transform="translate(0, 1px)"
-                    >
-                        검색
-                    </Button>
-
-                    <Button
-                        marginLeft={4} px={6} bg="#1e1e1e"
-                        border="1px solid gray" 
-                        _hover={{borderColor : "white"}}
-                        onClick={()=>setSearchWord('')}
-                        transform="translate(0, 1px)"
-                    >
-                    전체보기
-                    </Button>
-                </Box>
+            <Flex justify={'space-between'} >
+                <CategoryPart/>
+                <SearchPart/>
             </Flex>
         </Box>
         <MovieCards/>
         <MoreButton/>
-    </Box>
+    </Flex>
                     
     );</>
 }

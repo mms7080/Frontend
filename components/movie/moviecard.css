@@ -15,14 +15,6 @@
     --main_color_hover : #553c9a;
   }
   
-  .movie-grid {
-    display: flex;
-    justify-content: left;
-    flex-wrap: wrap;
-    gap: 30px;
-    overflow: visible;
-  }
-  
   .movie-card {
     width: 280px;
     position: relative;
