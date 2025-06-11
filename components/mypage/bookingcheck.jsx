@@ -2,7 +2,7 @@
 
 import React,{useState,useEffect,useMemo} from "react";
 import {Box,Text,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
-import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
+import {LuChevronLeft,LuChevronRight} from "react-icons/lu";
 
 export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
 
