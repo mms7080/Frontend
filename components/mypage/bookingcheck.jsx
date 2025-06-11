@@ -136,7 +136,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                         <span style={{ color: "green" }}>정상</span>
                       )}
                     </td>
-                    <td style={tdStyle}>
+                    <td style={{...tdStyle,width:60}}>
                       {r.status==="CANCELED" &&(
                         <Box w='36.09px' h='26px'></Box>
                       )}
