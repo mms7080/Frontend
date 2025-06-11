@@ -131,8 +131,8 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                     initialContent={review.content} initialScore={review.score}></Reviewwrite>;
                     else return <Detailreview userInfo={userInfo} key={indexOfFirstReview+index}
                       id={review.id} author={review.author} score={review.score} content={review.content}
-                      likenum={review.likenumber} likeusers={review.likeusers}
-                      setReviewList={setReviewList} setModifyId={setModifyId} movieInfo={movieInfo} isHome={false}></Detailreview>;
+                      likenum={review.likenumber} likeusers={review.likeusers} currentPage={currentPage} setCurrentPage={setCurrentPage}
+                      reviewList={reviewList} setReviewList={setReviewList} setModifyId={setModifyId} movieInfo={movieInfo} isHome={false}></Detailreview>;
                 }
                 )}
             </Flex>

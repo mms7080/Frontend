@@ -1,12 +1,33 @@
 'use client';
 
-import React,{useState} from "react";
+import React,{useState,useEffect,useMemo} from "react";
 import {Text} from "@chakra-ui/react";
+import {fetch} from '../../lib/client';
 
 export default function Bookingcheck({reservationInfo,paymentInfo}){
 
     const [reservations, setReservations] = useState(reservationInfo);
     const [payments, setPayments] = useState(paymentInfo);
+    const [movies,setMovies]=useState([]);
+
+    useEffect(()=>{
+
+      async function fetchmovies(){
+        const res=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/movies`);
+        setMovies(res);
+      }
+
+      fetchmovies();
+    },[]);
+
+    // 📌 영화 ID → 영화 제목으로 매핑 (그래프나 표에 표시할 때 사용)
+    const movieMap = useMemo(() => {
+      const map = {};
+      movies.forEach((m) => {
+        map[m.id] = m.title;
+      });
+      return map;
+    }, [movies]);
 
     const thStyle = {
       padding: "10px",
@@ -54,7 +75,7 @@ export default function Bookingcheck({reservationInfo,paymentInfo}){
                 {paginatedReservations.map((r, idx) => (
                   <tr key={idx}>
                     <td style={tdStyle}>{r.orderId}</td>
-                    <td style={tdStyle}>{userMap[r.userId] || r.userId}</td>
+                    <td style={tdStyle}>{r.userId}</td>
                     <td style={tdStyle}>{movieMap[r.movieId] || r.movieId}</td>
                     <td style={tdStyle}>{r.region}</td>
                     <td style={tdStyle}>{r.theater}</td>

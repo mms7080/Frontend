@@ -196,13 +196,14 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
 
     if(whichpage==='all'){
      return <>
+      <Box w='100%' h='30px'></Box>
       <All setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
     else if(whichpage==='write'){
       return <>
         <Box maxWidth='800px' my='40px' mx='auto' py='0' px='20px' fontFamily='Segoe UI, sans-serif'>
-          <Text textAlign='center' fontSize='30px' mb='40px' borderBottom='2px solid #ccc' pb='10px'>📝 1:1 QnA 작성</Text>
+          <Text textAlign='center' fontSize='30px' mb='40px' borderBottom='2px solid #ccc' pb='10px'>📝 {!modifyid?'1:1 QnA 작성':'1:1 QnA 수정'}</Text>
   
           <Flex flexDirection='column' gap='12px'>
             <Text fontSize='15px' mb='4px'>제목</Text>
@@ -249,7 +250,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
               onChange={(e) => setContent(e.target.value)}
               rows={10}
             />
-  
+
+            
             <Flex gap='10px' justifyContent='flex-end' mt='20px'>
               <Button 
               bg='#0070f3' color='white' py='10px' px='20px'
@@ -260,7 +262,10 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
               <Button bg='#ccc' color='black' py='10px' px='20px' 
               border='none' borderRadius='4px' cursor='pointer' fontWeight='normal'
               _hover={{bg:'#bbb'}}
-              onClick={() => setWhichPage('all')}>취소</Button>
+              onClick={() => {
+                setWhichPage('all');
+                setModifyId(null);
+              }}>목록으로 돌아가기</Button>
             </Flex>
           </Flex>
         </Box>
@@ -428,7 +433,10 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
 
           <div style={{ textAlign: "center" }}>
             <button
-              onClick={() => setWhichPage('all')}
+              onClick={() => {
+                setWhichPage('all');
+                setModifyId(null);
+              }}
               style={listBtn}
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#553C9A")
@@ -437,7 +445,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
                 (e.currentTarget.style.backgroundColor = "#6B46C1")
               }
             >
-              목록
+              목록으로 돌아가기
             </button>
           </div>
         </div>

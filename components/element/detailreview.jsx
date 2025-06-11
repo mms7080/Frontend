@@ -6,7 +6,7 @@ import {Flex,Text,Box,Button,Image,Menu,Portal} from '@chakra-ui/react';
 import {keyframes} from '@emotion/react';
 import {fetch} from '../../lib/client';
 
-export default function Detailreview({id,userInfo,author,score,content,likenum,likeusers,setReviewList,setModifyId,movieInfo,isHome=false,authorColor='black',bgColor='#F8F8FA',contentColor='#666691',titleColor='gray',likeColor='#666691'}){
+export default function Detailreview({id,userInfo,author,score,content,likenum,likeusers,reviewList,setReviewList,setModifyId,movieInfo,isHome=false,authorColor='black',bgColor='#F8F8FA',contentColor='#666691',titleColor='gray',likeColor='#666691',currentPage,setCurrentPage}){
 
     let username=userInfo?userInfo.username:'';
     
@@ -37,12 +37,15 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
 
     const deletereview=async ()=>{
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`, {
-          method: "POST",
-          credentials: "include"  // 쿠키 세션 등 필요하면
-        });
+        if(confirm('리뷰를 삭제하시겠습니까?')){
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`, {
+            method: "POST",
+            credentials: "include"  // 쿠키 세션 등 필요하면
+          });
 
-        setReviewList(prevList => prevList.filter(review => review.id!==id));
+          if(reviewList.filter(review => review.id!==id).length % 10===0 && currentPage>1)setCurrentPage(currentPage-1);
+          setReviewList(prevList => prevList.filter(review => review.id!==id));
+        }
     }
 
     const bounce = keyframes`

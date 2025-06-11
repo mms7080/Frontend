@@ -288,6 +288,7 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
             onClick={() => {
               setTitle('');
               setContent('');
+              setModifyId(null);
               setWhichPage('write');
             }}
           >
