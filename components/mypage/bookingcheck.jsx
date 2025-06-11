@@ -306,11 +306,16 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                               );
                               if (res.ok) {
                                 alert("환불 처리 완료");
-                                const refreshed=fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`, {
-                                   credentials: "include",
-                                 })
-                                 .then((res) => res.json())
-                                .then(setPayments);
+
+                                const refreshed2 = await fetch(
+                                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`,{
+                                     credentials: "include" 
+                                });
+                                
+                                const data2 = await refreshed2.json();
+                                const dataarr2=data2.filter((item)=>item.userId===userInfo.username);
+                                setPayments(dataarr2);
+
                               } else {
                                 alert("환불 실패");
                               }
