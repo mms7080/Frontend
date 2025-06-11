@@ -178,6 +178,7 @@ export default function MoviePaymentSuccessPage() {
               <img src={reservationInfo.movie.poster} alt={reservationInfo.movie.title} className="poster"  loading='lazy'/>
               <div className="details">
                 <h2>{reservationInfo.movie.title}</h2>
+                <p><strong>주문번호:</strong> {reservationInfo.orderId}</p>
                 <p><strong>상영 지역:</strong> {reservationInfo.region}</p>
                 <p><strong>극장:</strong> {reservationInfo.theater}</p>
                 <p><strong>날짜:</strong> {reservationInfo.date}</p>
