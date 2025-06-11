@@ -86,6 +86,7 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                     loading='lazy'
                 />
             </h1>
+            {/* 중앙의 [지도 | 정보 버튼] 부분 */}
             <Flex justifyContent="space-between">
                 <Box w="50%">
                     <NaverMap
@@ -130,12 +131,12 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                 ))}
             </Flex>
             {/* 영화관 목록 */}
-            <Flex gap={6} pb={16}>
+            <Flex gap={6} pb={16} flexWrap="wrap">
                 {filteredTheaters.map((theater, index) => {
                     return <Button
                         key={index} textAlign="center" alignContent="center"
                         fontSize="md" color="black"
-                        width="17%" height="60px"
+                        width="200px" height="60px"
                         backgroundColor={(activeTheater && activeTheater.name === theater.name) ? "#e2e8f0" : "white"}
                         border="1px solid #e2e8f0" borderRadius="md"
                         _hover={{ backgroundColor: "#e2e8f0" }}
