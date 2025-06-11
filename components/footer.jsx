@@ -62,8 +62,8 @@ export default function Footer() {
       <Flex w='100px' flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxDwidth(20);}} onMouseLeave={()=>{setBoxDwidth(10);}}>
         <h5 style={{ fontSize: 14, color: footerColor }}>회사 정보</h5>
         <Box w={BoxDwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
-        <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>이용약관</Text></Link>
-        <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>개인정보처리방침</Text></Link>
+        <Link href='/agreement/terms'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>이용약관</Text></Link>
+        <Link href='/agreement/personalinfo'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>개인정보처리방침</Text></Link>
         <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>사이트 이용가이드</Text></Link>
         <HStack spacing={2} mt="8px">
           <Link href="https://instagram.com" target="_blank">
