@@ -9,9 +9,9 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
 
     const qnasPerPage = 10;
 
-    const indexOfLastReview = currentPage * qnasPerPage;
-    const indexOfFirstReview = indexOfLastReview - qnasPerPage;
-    const currentItems = rawItems.slice(indexOfFirstReview, indexOfLastReview);
+    const indexOfLastQna = currentPage * qnasPerPage;
+    const indexOfFirstQna = indexOfLastQna - qnasPerPage;
+    const currentItems = rawItems.slice(indexOfFirstQna, indexOfLastQna);
 
     /*currentItems에 최종 리스트 삽입*/
 
@@ -101,7 +101,7 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
               ) : (
                 currentItems.map((qna,_index) => (
                   <tr
-                    key={indexOfFirstReview+1+_index}
+                    key={indexOfFirstQna+1+_index}
                     style={{
                       borderBottom: "1px solid #eee",
                       backgroundColor: "#fff",
@@ -115,7 +115,7 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                         color: "#666",
                       }}
                     >
-                      {indexOfFirstReview+1+_index}
+                      {indexOfFirstQna+1+_index}
                     </td>
                     <td
                       style={{
