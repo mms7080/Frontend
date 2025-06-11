@@ -5,6 +5,11 @@ import Link from "next/link";
 import {Header} from '../../../components';
 import {fetch} from '../../../lib/server';
 
+export const metadata = {
+    title: "이용약관 - FILMORA",
+    description: "영화 예매 사이트 이용약관"
+};
+
 export default async function Terms(){
     const userres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);/* 로그인 중인 유저 정보 fetch */
     const agreementres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/agreement`);

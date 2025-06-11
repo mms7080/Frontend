@@ -313,7 +313,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                                 });
                                 
                                 const data2 = await refreshed2.json();
-                                const dataarr2=data2.filter((item)=>item.userId===userInfo.username);
+                                const dataarr2=data2.filter((item)=>(item.userId===userInfo.username&&item.orderName!=="Movie Ticket"));
                                 setPayments(dataarr2);
 
                               } else {
