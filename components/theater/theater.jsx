@@ -42,7 +42,7 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
         const getInfoType = (text) => {
             if (text.includes('교통안내')) return '교통안내';
             if (text.includes('주차안내')) return '주차안내';
-            if (text.includes('상영시간표')) return '상영시간표';
+            // if (text.includes('상영시간표')) return '상영시간표';
             return '';
         };
     
@@ -100,7 +100,7 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                         <Text fontSize="md" color="gray.800">{activeTheater.address}</Text>
                         <InfoButton text="🚌 교통안내" />
                         <InfoButton text="🚗 주차안내" />
-                        <InfoButton text="🎥 상영시간표" />
+                        {/* <InfoButton text="🎥 상영시간표" /> */}
                     </Flex>
                 )}
             </Flex>
@@ -225,9 +225,9 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                             </>
                         )}
                     </Flex>
-                    : activeInfo === "상영시간표" ? <Box>
-                        <Text>관련 정보가 없습니다</Text>
-                    </Box>
+                    // : activeInfo === "상영시간표" ? <Box>
+                    //     <Text>관련 정보가 없습니다</Text>
+                    // </Box>
                     : <Text>activeInfo error : {activeInfo}</Text>
                 } />)}
 
