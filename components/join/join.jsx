@@ -1,7 +1,7 @@
 'use client';
 
 import React,{useState,useEffect} from 'react';
-import {Flex,Box,VStack,Input,HStack,Button,Text,Textarea,RadioGroup} from '@chakra-ui/react';
+import {Flex,Box,VStack,Input,Button,Text,Textarea,RadioGroup} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
 
 export default function Joindetail(){
@@ -179,11 +179,22 @@ export default function Joindetail(){
         }
     }
 
-    return <Box w='100vw' minW='1000px'>
+    return <Box w='100vw' minW={{ base: "auto", md: "1000px" }}>
+            <style jsx>{`
+              .responsive-form {
+                width: 100%;
+              }
+
+              @media (min-width: 768px) {
+                .responsive-form {
+                  width: auto;
+                }
+              }
+            `}</style>
             <VStack w='100%'>
-                <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white'>
-                        <Flex w='840px' flexDirection='column' gap='30px' py='50px'>
+                <form className="responsive-form" action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>
+                    <Box w={{base: "100%", md: "900px"}} px={{base:0,md:'30px'}} m={{base:0,md:'40px'}} borderRadius='10px' bg='white'>
+                        <Flex w={{ base: "100%", md: "840px" }} flexDirection='column' gap='30px' py='50px'>
                             <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>회원가입</span>
                             <span style={{fontSize:20}}>기본 정보</span>
                             <table>
