@@ -32,6 +32,7 @@ export default function Header() {
   const headerColor = isHome ? "white" : "black";
   const hoverColor = "gray.500";
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [posterFetched, setPosterFetched] = useState(false);
 
   //  상태값 정의
   const [user, setUser] = useState(undefined);
@@ -48,6 +49,31 @@ export default function Header() {
   const countdownRef = useRef(null);
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const data = localStorage.getItem("latestReservationCountdown");
+    if (!data || posterFetched || posterUrl) return;
+
+    const { movieId } = JSON.parse(data);
+    if (!movieId) {
+      setPosterFetched(true);
+      return;
+    }
+
+    fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.poster) {
+          setPosterUrl(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`
+          );
+        }
+        setPosterFetched(true);
+      })
+      .catch(() => {
+        setPosterFetched(true);
+      });
+  }, [posterFetched, posterUrl]);
 
   // 유저 정보 불러오기
   useEffect(() => {
@@ -144,7 +170,12 @@ export default function Header() {
 
         if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
 
-        if (!posterUrl) {
+        if (!posterUrl && !posterFetched) {
+          if (!movieId) {
+            setPosterFetched(true); // movieId 없으면 더 이상 fetch하지 않게 처리
+            return;
+          }
+
           fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
             .then((res) => res.json())
             .then((data) => {
@@ -153,8 +184,11 @@ export default function Header() {
                   `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`
                 );
               }
+              setPosterFetched(true); // ✅ 성공해도 true
             })
-            .catch(() => {});
+            .catch(() => {
+              setPosterFetched(true); // ✅ 실패해도 true
+            });
         }
       }
     };
