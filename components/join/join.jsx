@@ -383,7 +383,7 @@ export default function Joindetail(){
                                     <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
                                         <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="birthdate">생년월일</label></td>
                                         <td style={{width:605,height:50,paddingLeft:15}}>
-                                            <Input id="birthdate" name="birthdate" defaultValue="연도-월-일" type="date"/>
+                                            <Input id="birthdate" name="birthdate" defaultValue="연도-월-일" type="date" max={new Date().toISOString().split("T")[0]}/>
                                         </td>
                                     </tr>
                                     <tr style={{borderBottom:'1px solid #D1D5DD'}}>
