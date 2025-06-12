@@ -116,7 +116,7 @@ export default function CheckoutPage() {
         orderId,
         orderName: "Movie Ticket",
         customerName: user?.name || "비회원",
-        // successUrl: `${window.location.origin}/movie/payment/success?${queryString}`,
+        successUrl: `${window.location.origin}/movie/payment/success?${queryString}`,
         failUrl: `${window.location.origin}/movie/payment/fail`,
       }).then(()=>{
         
