@@ -146,7 +146,7 @@ const Movie = (userInfo) => {
     },[activeCategory,searchWord]);
     
     // 영화카드들
-    const MovieCards = () => {
+    const MovieCards = ({isMobile}) => {
         if(searchWord != "" && filteredMovies.length < 1)
             return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
                         display='flex' alignItems='center' justifyContent='center'>
@@ -154,7 +154,7 @@ const Movie = (userInfo) => {
                     </Box>
         else return (   <Grid 
                             w='100%' 
-                            justifyContent="center"
+                            justifyContent={isMobile ? "center" : "start"}
                             templateColumns="repeat(auto-fit, minmax(280px, auto))"
                             gap="30px"
                             overflow="visible"
@@ -182,7 +182,7 @@ const Movie = (userInfo) => {
             <CategoryPart isMobile = {isMobile}/>
             <SearchPart isMobile = {isMobile}/>
         </Flex>
-        <MovieCards/>
+        <MovieCards isMobile = {isMobile}/>
         <MoreButton/>
     </Flex>
                     
@@ -194,7 +194,7 @@ const Movie = (userInfo) => {
             <SearchPart isMobile = {isMobile}/>
             <CategoryPart isMobile = {isMobile}/>
         </Flex>
-        <MovieCards/>
+        <MovieCards isMobile = {isMobile}/>
         <MoreButton/>
         </Flex>
     )</>
