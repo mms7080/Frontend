@@ -1,7 +1,8 @@
 "use client"
 
 import React,{useEffect,useState, useMemo, useRef} from 'react';
-import {Button, Flex, Box, Input} from '@chakra-ui/react';
+import {Button, Flex, HStack, Grid, Box, Input} from '@chakra-ui/react';
+import { useMediaQuery } from '@chakra-ui/react';
 
 import MovieCard from '../../components/movie/moviecard';
 import {fetch} from '../../lib/client';
@@ -10,7 +11,8 @@ const categories = ['전체영화', '개봉작', '상영예정작'];
 
 
 const Movie = (userInfo) => {
-
+    
+    const [isMobile] = useMediaQuery('(max-width: 768px)')
     const [activeCategory, setActiveCategory] = useState('전체영화');
     const [movies, setMovies] = useState([]);
     const [user, setUser] = useState(userInfo.userInfo);
@@ -73,16 +75,16 @@ const Movie = (userInfo) => {
   }, [movies, activeCategory, searchWord]);
     
     // 카테고리 부분
-    const CategoryPart = () => {
-        return <Box>
+    const CategoryPart = ({isMobile}) => {
+        return <HStack w={isMobile ? "80%" : "30%"} minW="338.51px" gap={0} overflow="visible">
             {categories.map((category) => (
                 <Button
                     key={category}
+                    w={Math.floor(100 * category.length / 12) + "%"}
                     variant="ghost"
                     borderBottom={activeCategory === category ? '2px solid white' : '1px solid transparent'}
                     borderRadius="0"
                     fontSize={'2xl'}
-                    fontWeight={'normal'}
                     color={activeCategory === category ? 'white' : 'gray.500'}
                     onClick={() => {setActiveCategory(category); setSearchWord(""); clearInputValue();}}
                     _hover={{ bg: 'transparent', color: 'white' }}
@@ -90,15 +92,16 @@ const Movie = (userInfo) => {
                     {category}
                 </Button>
             ))}
-        </Box>
+        </HStack>
     }
 
     // 검색 부분
-    const SearchPart = () => {
-        return <Box transform="translate(-23px, 0)">
+    const SearchPart = ({isMobile}) => {
+        return <HStack w={isMobile ? "80%" : "40%"} minWidth="282px" gap="16px" 
+                       overflow="visible">
             <Input
                 placeholder="영화명 검색"
-                w="320px" p="10px" bg="#1e1e1e"
+                w="80%" minW="150px" p="10px" bg="#1e1e1e"
                 border="1px solid gray"
                 fontSize="15px" color="white"
                 _hover={{borderColor : "white"}}
@@ -108,25 +111,23 @@ const Movie = (userInfo) => {
                 }}
             />
             <Button
-                marginLeft={4} px={6} bg="#1e1e1e"
+                w="10%" px={6} bg="#1e1e1e"
                 border="1px solid gray" 
                 _hover={{borderColor : "white"}}
                 onClick={()=>{handleSearch(getInputValue())}}
-                transform="translate(0, 1px)"
             >
                 검색
             </Button>
 
             <Button
-                marginLeft={4} px={6} bg="#1e1e1e"
+                w="10%" px={6} bg="#1e1e1e"
                 border="1px solid gray" 
                 _hover={{borderColor : "white"}}
                 onClick={()=>setSearchWord('')}
-                transform="translate(0, 1px)"
             >
-            전체보기
+            전체
             </Button>
-        </Box>
+        </HStack>
     }
 
     // 더보기 버튼
@@ -151,38 +152,52 @@ const Movie = (userInfo) => {
                         display='flex' alignItems='center' justifyContent='center'>
                     검색 결과가 없습니다
                     </Box>
-        else return (<Box display="flex" justifyContent="center">
-                        <Box display="flex" justifyContent="left" flexWrap="wrap"
-                             gap="30px" overflow="visible">
-                            {filteredMovies.map((movie,index) => {
+        else return (   <Grid 
+                            w='100%' 
+                            justifyContent="center"
+                            templateColumns="repeat(auto-fit, minmax(280px, auto))"
+                            gap="30px"
+                            overflow="visible"
+                        >
+                            {filteredMovies.map((movie, index) => {
                                 if(index < displayNumber)
-                                    return (<MovieCard 
-                                                key={movie.id}
-                                                movie={movie}
-                                                user={user}
-                                                crit={"예매"}
-                                                rank={index+1}
-                                            />)
+                                    return (
+                                        <MovieCard
+                                            key={movie.id}
+                                            movie={movie}
+                                            user={user}
+                                            crit={"예매"}
+                                            rank={index+1}
+                                        />
+                                    )
                             })}
-                        </Box>
-                    </Box>)
+                        </Grid>)
     }
     
-    return <>(
+    return !isMobile ? <>(
     <Flex bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto"
             flexDirection="column">
         {/* 카테고리 분류 */}
-        <Box pb={6}>
-            <Flex justify={'space-between'} >
-                <CategoryPart/>
-                <SearchPart/>
-            </Flex>
-        </Box>
+        <Flex flexWrap="wrap" justify={'space-between'} pb={6}>
+            <CategoryPart isMobile = {isMobile}/>
+            <SearchPart isMobile = {isMobile}/>
+        </Flex>
         <MovieCards/>
         <MoreButton/>
     </Flex>
                     
-    );</>
+    );</> : <>(
+        <Flex bg="#141414" pt={20} pb={10} px={6} maxW="1280px" mx="auto"
+            flexDirection="column">
+        {/* 카테고리 분류 */}
+        <Flex flexDirection={'column'} align={'center'} gap={6} pb={6}>
+            <SearchPart isMobile = {isMobile}/>
+            <CategoryPart isMobile = {isMobile}/>
+        </Flex>
+        <MovieCards/>
+        <MoreButton/>
+        </Flex>
+    )</>
 }
 
 export default Movie;
