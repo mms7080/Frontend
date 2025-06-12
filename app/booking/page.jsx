@@ -35,6 +35,7 @@
 //     const [selectedRegion, setSelectedRegion] = useState(null);
 //     const [selectedTheater, setSelectedTheater] = useState(null);
 //     const [activeIndex, setActiveIndex] = useState(0);
+//     const [moviescore,setMovieScore]=useState('0.0');
 //     const router = useRouter();
 
 //     const searchParams = useSearchParams();
@@ -255,8 +256,16 @@
 //                         pauseOnMouseEnter: true
 //                     }}
 //                     style={{ paddingBottom: '60px' }}
-//                     onSlideChange={(swiper) => {
+//                     onSlideChange={async (swiper) => {
 //                         setActiveIndex(swiper.realIndex);
+//                         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${swiper.realIndex+1}`);
+//                         const result = await res.json();
+//                         let sum=0;
+//                         for(let i=0;i<result.length;i++)sum+=result[i].score;
+//                         if(result.length>0)sum/=result.length;
+//                         if(Number.isInteger(sum))sum+='.0';
+//                         else sum=Math.round(sum*10)/10;
+//                         setMovieScore(sum);
 //                     }}
 //                 >
 //                     {movies.map(movie => (
@@ -321,7 +330,7 @@
 //                             {/* 각 항목 */}
 //                             <GridItem>
 //                                 <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">실관람 평점</Text>
-//                                 <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">🎬 {movies[activeIndex]?.score || '-'}</Text>
+//                                 <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">🎬 {moviescore || '-'}</Text>
 //                             </GridItem>
 //                             <GridItem>
 //                                 <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">예매율</Text>
