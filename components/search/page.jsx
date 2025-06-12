@@ -1,7 +1,7 @@
 'use client';
 
 import React,{useEffect,useState} from 'react';
-import {Button,Flex,Box,Input,Text} from '@chakra-ui/react';
+import {Button,Flex,Grid,Box,Input,Text} from '@chakra-ui/react';
 import {useRouter} from 'next/navigation';
 import Link from "next/link";
 
@@ -48,7 +48,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                             w='100%' bg="#1e1e1e" border="1px solid gray" 
                             _hover={{borderColor : "white"}}
                             onClick={()=>{setDisplayNumber(displayNumber+8)}}
-                        >더보기</Button>
+                        >영화 더보기</Button>
                     </Box>);
     };
 
@@ -65,7 +65,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
-        else return (<Box className="movie-grid">
+        else return (<Grid templateColumns="repeat(4, 1fr)" gap={4}>
                         {searchedMovies.map((movie,index) => {
                             if(index < displayNumber)
                                 return (<MovieCard 
@@ -74,7 +74,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                                             movie={movie}
                                         />)
                         })}
-                    </Box>);
+                    </Grid>);
     }
 
     const categoryOrder = ["Pick", "영화", "극장", "제휴/할인", "시사회/무대인사"];
@@ -99,7 +99,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                             w='100%' bg="#1e1e1e" border="1px solid gray" 
                             _hover={{borderColor : "white"}}
                             onClick={()=>{setDisplayNumber2(displayNumber2+8)}}
-                        >더보기</Button>
+                        >이벤트 더보기</Button>
                     </Box>);
     };        
 
@@ -109,14 +109,14 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
-        else return (<Box className="movie-grid" overflow='visible'>
+        else return (<Grid templateColumns="repeat(4, 1fr)" gap={4} overflow='visible'>
                     {searchedEvents.flat().filter((_,index)=>index%2=== 1).flat().map((items,index) =>{
                         if(index<displayNumber2)
                             return <Box overflow='visible' key={items.id} scroll={true} passHref>
                                     <Event content={items.title} src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${items.image}`} url={`/event/view/${items.id}`}></Event>
                                 </Box>;
                     })}
-                </Box>);
+                </Grid>);
     }
 
     const searchedReviews = searchWord === "" ? reviewInfo:reviewInfo/* 검색 키워드를 포함하는 리뷰 추려내기 */
@@ -146,7 +146,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                             w='100%' bg="#1e1e1e" border="1px solid gray" 
                             _hover={{borderColor : "white"}}
                             onClick={()=>{setDisplayNumber3(displayNumber3+5)}}
-                        >더보기</Button>
+                        >리뷰 더보기</Button>
                     </Box>);
     };        
 

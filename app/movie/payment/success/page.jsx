@@ -3,6 +3,8 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { Header } from "../../../../components";
+import Link from "next/link";
+import {VStack,Text,Button} from '@chakra-ui/react';
 import { QRCodeCanvas } from "qrcode.react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -183,6 +185,7 @@ export default function MoviePaymentSuccessPage() {
         <div className="container">
           <h1 className="status">{status}</h1>
           {reservationInfo && reservationInfo.movie && (
+            <>
             <div className="card" ref={ticketRef}>
               <img src={reservationInfo.movie.poster} alt={reservationInfo.movie.title} className="poster" loading="lazy" />
               <div className="details">
@@ -200,12 +203,21 @@ export default function MoviePaymentSuccessPage() {
                 </div>
               </div>
             </div>
+            <div className="button-group">
+              <button onClick={() => router.push("/")} className="home-button">홈으로 돌아가기</button>
+              <button onClick={handleDownloadPDF} className="home-button">PDF 저장</button>
+              <button onClick={handlePrint} className="home-button">프린트</button>
+            </div>
+           <VStack pt='20px'>
+             <Text>팝콘,콜라 주문도 필요하세요?</Text>
+             <Button>
+               <Link href="/store">
+                 스토어로 이동
+               </Link>
+             </Button>
+           </VStack>
+           </>
           )}
-          <div className="button-group">
-            <button onClick={() => router.push("/")} className="home-button">홈으로 돌아가기</button>
-            <button onClick={handleDownloadPDF} className="home-button">PDF 저장</button>
-            <button onClick={handlePrint} className="home-button">프린트</button>
-          </div>
         </div>
       </div>
       <style jsx>{`

@@ -161,8 +161,13 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                                   { credentials: "include" }
                                 );
                                 const data = await refreshed.json();
-                                const dataarr=data.filter((item)=>item.userId===userInfo.username);
+                                const dataarr=data.filter((item)=>item.userId===userInfo.username).sort((a, b) => {
+                                  const timeA = new Date(a.approvedAt || 0).getTime();
+                                  const timeB = new Date(b.approvedAt || 0).getTime();
+                                  return timeB - timeA; // 결제 시각 최신순
+                                });
                                 setReservations(dataarr);
+                                setCurrentPage1(1);
                               } else {
                                 console.log(res);
                                 alert("환불 실패");
@@ -313,9 +318,13 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                                 });
                                 
                                 const data2 = await refreshed2.json();
-                                const dataarr2=data2.filter((item)=>(item.userId===userInfo.username&&item.orderName!=="Movie Ticket"));
+                                const dataarr2=data2.filter((item)=>(item.userId===userInfo.username&&item.orderName!=="Movie Ticket")).sort((a, b) => {
+                                  const dateA = new Date(a.approvedAt);
+                                  const dateB = new Date(b.approvedAt);
+                                  return dateB - dateA;
+                                });
                                 setPayments(dataarr2);
-
+                                setCurrentPage2(1);
                               } else {
                                 alert("환불 실패");
                               }
