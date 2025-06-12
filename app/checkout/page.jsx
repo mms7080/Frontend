@@ -22,6 +22,7 @@ export default function CheckoutPage() {
   const date = params.get("date");
   const time = params.get("time");
   const seats = params.get("seats")?.split(",") || [];
+  const showtimeId = params.get("showtimeId");
 
   const adult = parseInt(params.get("adult") || "0");
   const teen = parseInt(params.get("teen") || "0");
@@ -107,13 +108,18 @@ export default function CheckoutPage() {
         `&adult=${adult}&teen=${teen}&senior=${senior}&special=${special}` +
         (selectedCouponId ? `&couponId=${selectedCouponId}` : "");
 
+      for(let seat of seats) {
+        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
+      }
       await toss.requestPayment("카드", {
         amount: finalAmount,
         orderId,
         orderName: "Movie Ticket",
         customerName: user?.name || "비회원",
-        successUrl: `${window.location.origin}/movie/payment/success?${queryString}`,
+        // successUrl: `${window.location.origin}/movie/payment/success?${queryString}`,
         failUrl: `${window.location.origin}/movie/payment/fail`,
+      }).then(()=>{
+        
       });
     } catch (error) {
       alert("Toss 결제 실패: " + error.message);

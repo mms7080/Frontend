@@ -142,7 +142,8 @@ export default function SeatsPage() {
           `&teen=${personCounts.teen}` +
           `&senior=${personCounts.senior}` +
           `&special=${personCounts.special}` + 
-          `&seats=${selectedSeats.join(",")}`
+          `&seats=${selectedSeats.join(",")}` + 
+          `&showtimeId=${showtimeId}`
         );
     };
 
@@ -491,3 +492,4 @@ export default function SeatsPage() {
         </>
     );
   }
+
