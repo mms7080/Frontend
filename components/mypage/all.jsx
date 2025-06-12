@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState} from "react";
-import {Box,Flex,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
+import {Box,Flex,VStack,Button,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
 import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
 import {fetch} from '../../lib/client';
 
@@ -201,16 +201,16 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                     {((userInfo?.username === qna.author || userInfo?.auth==='ADMIN')&&!qna.deleted) && (
                       <td style={{ padding: "14px", textAlign: "center" }}>
                         <Flex w='100%' justifyContent='center' gap='10px'>
-                        <button
-                          style={{
-                            backgroundColor: "#e53e3e",
-                            color: "white",
-                            padding: "6px 12px",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontSize: "13px",
-                          }}
+                        <Button
+                          bg='gray.100'
+                          _hover={{ bg: "gray.200" }}
+                          h='30px'
+                          color='black'
+                          px='12px'
+                          border='none'
+                          borderRadius='4px'
+                          cursor='pointer'
+                          fontSize='13px'
                           onClick={() => {
                             setTitle(qna.title);
                             setContent(qna.content);
@@ -219,17 +219,17 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                           }}
                         >
                           수정
-                        </button>
-                        <button
-                          style={{
-                            backgroundColor: "#e53e3e",
-                            color: "white",
-                            padding: "6px 12px",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontSize: "13px",
-                          }}
+                        </Button>
+                        <Button
+                          bg='gray.100'
+                          _hover={{ bg: "gray.200" }}
+                          h='30px'  
+                          color='black'
+                          px='12px'
+                          border='none'
+                          borderRadius='4px'
+                          cursor='pointer'
+                          fontSize='13px'
                           onClick={async () => {
                               if (confirm("정말 삭제하시겠습니까?")) {
                                 const res3=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/delete/logic/${qna.id}`);
@@ -239,7 +239,7 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                           }}
                         >
                           삭제
-                        </button>
+                        </Button>
                         </Flex>
                       </td>
                     )}
@@ -271,13 +271,15 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
             style={{
               backgroundColor: "black",
               color: "white",
-              padding: "8px 20px",
+              padding: "8px 0px",
               border: "none",
               borderRadius: "5px",
               cursor: "pointer",
               fontSize: "15px",
               transition: "all 0.3s",
-              width:110
+              position:'relative',
+              right:20,
+              width:100
             }}
             onMouseOver={(e) =>
               (e.currentTarget.style.backgroundColor = "#6B46C1")
