@@ -22,6 +22,13 @@ export default function PaymentSuccessPage({ userData }) {
   useEffect(() => {
     const confirmPayment = async () => {
       try {
+        // 이미 처리한 결제인지 확인
+        const paidFlag = sessionStorage.getItem(`paid_${orderId}`);
+        if (paidFlag) {
+          setMessage("✅ 결제가 이미 처리되었습니다.");
+          return;
+        }
+
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/store`,
           {
@@ -40,7 +47,7 @@ export default function PaymentSuccessPage({ userData }) {
 
         const result = await res.json();
         setPayment(result);
-        // 쿠폰 사용 처리
+
         const couponId = searchParams.get("couponId");
         if (couponId) {
           await fetch(
@@ -52,8 +59,7 @@ export default function PaymentSuccessPage({ userData }) {
             }
           );
         }
-        setMessage("✅ 결제가 완료되었습니다!");
-        //쿠폰발급
+
         await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/purchase/success`,
           {
@@ -65,7 +71,13 @@ export default function PaymentSuccessPage({ userData }) {
             }),
           }
         );
+
+        // 중복 방지를 위해 저장
+        sessionStorage.setItem(`paid_${orderId}`, "true");
+
+        setMessage("✅ 결제가 완료되었습니다!");
       } catch (e) {
+        console.error("결제 승인 오류:", e);
         setMessage("❌ 결제 승인 중 오류가 발생했습니다.");
       }
     };
@@ -77,12 +89,9 @@ export default function PaymentSuccessPage({ userData }) {
 
   useEffect(() => {
     if (!productId) return;
-    fetch(
-      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/detail/${productId}`,
-      {
-        credentials: "include",
-      }
-    )
+    fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/detail/${productId}`, {
+      credentials: "include",
+    })
       .then((res) => (res.ok ? res.json() : null))
       .then(setProduct);
   }, [productId]);
@@ -132,12 +141,10 @@ export default function PaymentSuccessPage({ userData }) {
                   objectFit: "cover",
                   border: "1px solid #ccc",
                 }}
-                loading='lazy'
+                loading="lazy"
               />
               <div>
-                <p
-                  style={{ margin: "0", fontWeight: "bold", fontSize: "18px" }}
-                >
+                <p style={{ margin: "0", fontWeight: "bold", fontSize: "18px" }}>
                   {payment.orderName}
                 </p>
                 <p style={{ margin: "5px 0", color: "#888" }}>

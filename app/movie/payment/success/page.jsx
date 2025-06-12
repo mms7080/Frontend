@@ -39,7 +39,9 @@ export default function MoviePaymentSuccessPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, { credentials: "include" });
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+          credentials: "include",
+        });
         if (!res.ok) throw new Error();
         const data = await res.json();
         setUser(data);
@@ -50,106 +52,113 @@ export default function MoviePaymentSuccessPage() {
     fetchUser();
   }, []);
 
- useEffect(() => {
-  if (!user) return; // 유저 정보가 로드될 때까지 기다림
+  useEffect(() => {
+    if (!user) return;
 
-  const confirmAndReserve = async () => {
-    const paymentKey = params.get("paymentKey");
-    const orderId = params.get("orderId");
-    const amount = parseInt(params.get("amount"));
-    const userId = user.username;
-    const movieId = parseInt(params.get("movieId"));
-    const region = params.get("region");
-    const theater = params.get("theater");
-    const date = params.get("date");
-    const time = params.get("time");
-    const seats = params.get("seats")?.split(",") || [];
-    const adult = parseInt(params.get("adult") || "0");
-    const teen = parseInt(params.get("teen") || "0");
-    const senior = parseInt(params.get("senior") || "0");
-    const special = parseInt(params.get("special") || "0");
+    const confirmAndReserve = async () => {
+      const paymentKey = params.get("paymentKey");
+      const orderId = params.get("orderId");
+      const amount = parseInt(params.get("amount"));
+      const userId = user.username;
+      const movieId = parseInt(params.get("movieId"));
+      const region = params.get("region");
+      const theater = params.get("theater");
+      const date = params.get("date");
+      const time = params.get("time");
+      const seats = params.get("seats")?.split(",") || [];
+      const adult = parseInt(params.get("adult") || "0");
+      const teen = parseInt(params.get("teen") || "0");
+      const senior = parseInt(params.get("senior") || "0");
+      const special = parseInt(params.get("special") || "0");
 
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/reservation`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ paymentKey, orderId, amount, userId }),
-      });
+      try {
+        // ✅ 중복 방지: 이미 결제 완료된 orderId는 건너뜀
+        const paidKey = `paid_${orderId}`;
+        if (sessionStorage.getItem(paidKey)) {
+          setStatus("✅ 이미 예매가 완료된 주문입니다.");
+          return;
+        }
 
-      await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          userId,
+        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/reservation`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ paymentKey, orderId, amount, userId }),
+        });
+
+        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            userId,
+            movieId,
+            region,
+            theater,
+            date,
+            time,
+            seats: seats.join(","),
+            adultCount: adult,
+            teenCount: teen,
+            seniorCount: senior,
+            specialCount: special,
+            totalPrice: amount,
+            orderId,
+          }),
+        });
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
+        const data = await res.json();
+        const base = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
+        const fullMovie = {
+          ...data,
+          poster: base + data.poster,
+          wideImage: data.wideImage ? base + data.wideImage : null,
+        };
+        setMovie(fullMovie);
+
+        const showKST = new Date(`${date}T${time}:00`);
+        const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000);
+
+        localStorage.setItem("latestReservationAlert", JSON.stringify({
+          title: data.title,
           movieId,
+          notifyTime: notifyTime.toISOString(),
+        }));
+
+        localStorage.setItem("latestReservationCountdown", JSON.stringify({
+          title: data.title,
+          movieId,
+          showTime: showKST.toISOString(),
+        }));
+
+        const permissionGranted = await requestNotificationPermission();
+        if (permissionGranted) {
+          scheduleNotification(data.title, notifyTime);
+        }
+
+        setReservationInfo({
+          movie: fullMovie,
           region,
           theater,
           date,
           time,
-          seats: seats.join(","),
-          adultCount: adult,
-          teenCount: teen,
-          seniorCount: senior,
-          specialCount: special,
-          totalPrice: amount,
+          seats: seats.join(", "),
+          people: `성인 ${adult}, 청소년 ${teen}, 경로 ${senior}, 우대 ${special}`,
+          amount,
           orderId,
-        }),
-      });
+        });
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
-      const data = await res.json();
-      const base = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
-      const fullMovie = {
-        ...data,
-        poster: base + data.poster,
-        wideImage: data.wideImage ? base + data.wideImage : null,
-      };
-      setMovie(fullMovie);
-
-      const showKST = new Date(`${date}T${time}:00`);
-      const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000);
-
-      localStorage.setItem("latestReservationAlert", JSON.stringify({
-        title: data.title,
-        movieId,
-        notifyTime: notifyTime.toISOString()
-      }));
-
-      localStorage.setItem("latestReservationCountdown", JSON.stringify({
-        title: data.title,
-        movieId,
-        showTime: showKST.toISOString()
-      }));
-
-      const permissionGranted = await requestNotificationPermission();
-      if (permissionGranted) {
-        scheduleNotification(data.title, notifyTime);
+        sessionStorage.setItem(paidKey, "true"); // ✅ 중복 요청 방지 저장
+        setStatus("✅ 예매가 완료되었습니다.");
+      } catch (err) {
+        console.error("❌ 처리 중 오류 발생:", err);
+        setStatus("❌ 오류가 발생했습니다. 관리자에게 문의하세요.");
       }
+    };
 
-      setReservationInfo({
-        movie: fullMovie,
-        region,
-        theater,
-        date,
-        time,
-        seats: seats.join(", "),
-        people: `성인 ${adult}, 청소년 ${teen}, 경로 ${senior}, 우대 ${special}`,
-        amount,
-        orderId,
-      });
-
-      setStatus("✅ 예매가 완료되었습니다.");
-    } catch (err) {
-      console.error("❌ 처리 중 오류 발생:", err);
-      setStatus("❌ 오류가 발생했습니다. 관리자에게 문의하세요.");
-    }
-  };
-
-  confirmAndReserve();
-}, [params, user]);
-
+    confirmAndReserve();
+  }, [params, user]);
 
   const handleDownloadPDF = async () => {
     const canvas = await html2canvas(ticketRef.current);
@@ -175,7 +184,7 @@ export default function MoviePaymentSuccessPage() {
           <h1 className="status">{status}</h1>
           {reservationInfo && reservationInfo.movie && (
             <div className="card" ref={ticketRef}>
-              <img src={reservationInfo.movie.poster} alt={reservationInfo.movie.title} className="poster"  loading='lazy'/>
+              <img src={reservationInfo.movie.poster} alt={reservationInfo.movie.title} className="poster" loading="lazy" />
               <div className="details">
                 <h2>{reservationInfo.movie.title}</h2>
                 <p><strong>주문번호:</strong> {reservationInfo.orderId}</p>
