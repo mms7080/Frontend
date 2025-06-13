@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 import { Header } from "../../../../components";
 import Link from "next/link";
-import {VStack,Text,Button} from '@chakra-ui/react';
+import { VStack, Text, Button } from "@chakra-ui/react";
 import { QRCodeCanvas } from "qrcode.react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -17,6 +17,8 @@ export default function MoviePaymentSuccessPage() {
   const router = useRouter();
   const params = useSearchParams();
   const ticketRef = useRef();
+  const executedRef = useRef(false); // ✅ 중복 실행 방지용
+  const couponId = params.get("couponId");
 
   const requestNotificationPermission = async () => {
     if (!("Notification" in window)) return false;
@@ -41,9 +43,10 @@ export default function MoviePaymentSuccessPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+          { credentials: "include" }
+        );
         if (!res.ok) throw new Error();
         const data = await res.json();
         setUser(data);
@@ -55,7 +58,8 @@ export default function MoviePaymentSuccessPage() {
   }, []);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || executedRef.current) return;
+    executedRef.current = true;
 
     const confirmAndReserve = async () => {
       const paymentKey = params.get("paymentKey");
@@ -73,43 +77,50 @@ export default function MoviePaymentSuccessPage() {
       const senior = parseInt(params.get("senior") || "0");
       const special = parseInt(params.get("special") || "0");
 
+      const paidKey = `paid_${orderId}`;
+      if (sessionStorage.getItem(paidKey)) {
+        setStatus("✅ 이미 예매가 완료된 주문입니다.");
+        return;
+      }
+
       try {
-        // ✅ 중복 방지: 이미 결제 완료된 orderId는 건너뜀
-        const paidKey = `paid_${orderId}`;
-        if (sessionStorage.getItem(paidKey)) {
-          setStatus("✅ 이미 예매가 완료된 주문입니다.");
-          return;
-        }
+        await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/reservation`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ paymentKey, orderId, amount, userId }),
+          }
+        );
 
-        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/reservation`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ paymentKey, orderId, amount, userId }),
-        });
+        await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              userId,
+              movieId,
+              region,
+              theater,
+              date,
+              time,
+              seats: seats.join(","),
+              adultCount: adult,
+              teenCount: teen,
+              seniorCount: senior,
+              specialCount: special,
+              totalPrice: amount,
+              orderId,
+            }),
+          }
+        );
 
-        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            userId,
-            movieId,
-            region,
-            theater,
-            date,
-            time,
-            seats: seats.join(","),
-            adultCount: adult,
-            teenCount: teen,
-            seniorCount: senior,
-            specialCount: special,
-            totalPrice: amount,
-            orderId,
-          }),
-        });
-
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
+        );
         const data = await res.json();
         const base = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
         const fullMovie = {
@@ -122,17 +133,23 @@ export default function MoviePaymentSuccessPage() {
         const showKST = new Date(`${date}T${time}:00`);
         const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000);
 
-        localStorage.setItem("latestReservationAlert", JSON.stringify({
-          title: data.title,
-          movieId,
-          notifyTime: notifyTime.toISOString(),
-        }));
+        localStorage.setItem(
+          "latestReservationAlert",
+          JSON.stringify({
+            title: data.title,
+            movieId,
+            notifyTime: notifyTime.toISOString(),
+          })
+        );
 
-        localStorage.setItem("latestReservationCountdown", JSON.stringify({
-          title: data.title,
-          movieId,
-          showTime: showKST.toISOString(),
-        }));
+        localStorage.setItem(
+          "latestReservationCountdown",
+          JSON.stringify({
+            title: data.title,
+            movieId,
+            showTime: showKST.toISOString(),
+          })
+        );
 
         const permissionGranted = await requestNotificationPermission();
         if (permissionGranted) {
@@ -151,7 +168,19 @@ export default function MoviePaymentSuccessPage() {
           orderId,
         });
 
-        sessionStorage.setItem(paidKey, "true"); // ✅ 중복 요청 방지 저장
+        if (couponId) {
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ couponId }),
+            }
+          );
+        }
+
+        sessionStorage.setItem(paidKey, "true");
         setStatus("✅ 예매가 완료되었습니다.");
       } catch (err) {
         console.error("❌ 처리 중 오류 발생:", err);
@@ -160,7 +189,7 @@ export default function MoviePaymentSuccessPage() {
     };
 
     confirmAndReserve();
-  }, [params, user]);
+  }, [user]);
 
   const handleDownloadPDF = async () => {
     const canvas = await html2canvas(ticketRef.current);
@@ -173,7 +202,9 @@ export default function MoviePaymentSuccessPage() {
   const handlePrint = () => {
     const content = ticketRef.current;
     const win = window.open();
-    win.document.write(`<html><head><title>Print</title></head><body>${content.innerHTML}</body></html>`);
+    win.document.write(
+      `<html><head><title>Print</title></head><body>${content.innerHTML}</body></html>`
+    );
     win.document.close();
     win.print();
   };
@@ -186,37 +217,40 @@ export default function MoviePaymentSuccessPage() {
           <h1 className="status">{status}</h1>
           {reservationInfo && reservationInfo.movie && (
             <>
-            <div className="card" ref={ticketRef}>
-              <img src={reservationInfo.movie.poster} alt={reservationInfo.movie.title} className="poster" loading="lazy" />
-              <div className="details">
-                <h2>{reservationInfo.movie.title}</h2>
-                <p><strong>주문번호:</strong> {reservationInfo.orderId}</p>
-                <p><strong>상영 지역:</strong> {reservationInfo.region}</p>
-                <p><strong>극장:</strong> {reservationInfo.theater}</p>
-                <p><strong>날짜:</strong> {reservationInfo.date}</p>
-                <p><strong>시간:</strong> {reservationInfo.time}</p>
-                <p><strong>좌석:</strong> {reservationInfo.seats}</p>
-                <p><strong>인원:</strong> {reservationInfo.people}</p>
-                <p><strong>결제 금액:</strong> {reservationInfo.amount.toLocaleString()}원</p>
-                <div className="qr-code">
-                  <QRCodeCanvas value={reservationInfo.orderId} size={100} />
+              <div className="card" ref={ticketRef}>
+                <img
+                  src={reservationInfo.movie.poster}
+                  alt={reservationInfo.movie.title}
+                  className="poster"
+                  loading="lazy"
+                />
+                <div className="details">
+                  <h2>{reservationInfo.movie.title}</h2>
+                  <p><strong>주문번호:</strong> {reservationInfo.orderId}</p>
+                  <p><strong>상영 지역:</strong> {reservationInfo.region}</p>
+                  <p><strong>극장:</strong> {reservationInfo.theater}</p>
+                  <p><strong>날짜:</strong> {reservationInfo.date}</p>
+                  <p><strong>시간:</strong> {reservationInfo.time}</p>
+                  <p><strong>좌석:</strong> {reservationInfo.seats}</p>
+                  <p><strong>인원:</strong> {reservationInfo.people}</p>
+                  <p><strong>결제 금액:</strong> {reservationInfo.amount.toLocaleString()}원</p>
+                  <div className="qr-code">
+                    <QRCodeCanvas value={reservationInfo.orderId} size={100} />
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="button-group">
-              <button onClick={() => router.push("/")} className="home-button">홈으로 돌아가기</button>
-              <button onClick={handleDownloadPDF} className="home-button">PDF 저장</button>
-              <button onClick={handlePrint} className="home-button">프린트</button>
-            </div>
-           <VStack pt='20px'>
-             <Text>팝콘,콜라 주문도 필요하세요?</Text>
-             <Button>
-               <Link href="/store">
-                 스토어로 이동
-               </Link>
-             </Button>
-           </VStack>
-           </>
+              <div className="button-group">
+                <button onClick={() => router.push("/")} className="home-button">홈으로 돌아가기</button>
+                <button onClick={handleDownloadPDF} className="home-button">PDF 저장</button>
+                <button onClick={handlePrint} className="home-button">프린트</button>
+              </div>
+              <VStack pt="20px">
+                <Text>팝콘,콜라 주문도 필요하세요?</Text>
+                <Button>
+                  <Link href="/store">스토어로 이동</Link>
+                </Button>
+              </VStack>
+            </>
           )}
         </div>
       </div>

@@ -29,9 +29,7 @@ export default function CheckoutPage() {
   const senior = parseInt(params.get("senior") || "0");
   const special = parseInt(params.get("special") || "0");
 
-  const totalPrice =
-    adult * 15000 + teen * 12000 + senior * 10000 + special * 8000;
-
+  const totalPrice = adult * 15000 + teen * 12000 + senior * 10000 + special * 8000;
   const finalAmount = Math.max(0, totalPrice - discountAmount);
 
   const priceDetails = [
@@ -41,13 +39,15 @@ export default function CheckoutPage() {
     { label: "우대", count: special, price: 8000 },
   ].filter((item) => item.count > 0);
 
+
+
+
+
   useEffect(() => {
     document.title = "예매 - 결제";
     (async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: "include",
-        });
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, { credentials: "include" });
         const data = await res.json();
         setUser(data);
       } catch {
@@ -91,41 +91,58 @@ export default function CheckoutPage() {
 
   const handlePayment = async () => {
     setLoading(true);
-    try {
-      const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
-      const orderId = `movie-${Date.now()}`;
+    const orderId = `movie-${Date.now()}`;
+    const queryString =
+      `orderId=${orderId}` +
+      `&amount=${finalAmount}` +
+      `&userId=${encodeURIComponent(user?.username || "guest")}` +
+      `&movieId=${movieId}` +
+      `&region=${encodeURIComponent(region)}` +
+      `&theater=${encodeURIComponent(theater)}` +
+      `&date=${encodeURIComponent(date)}` +
+      `&time=${encodeURIComponent(time)}` +
+      `&seats=${encodeURIComponent(seats.join(","))}` +
+      `&adult=${adult}&teen=${teen}&senior=${senior}&special=${special}` +
+      (selectedCouponId ? `&couponId=${selectedCouponId}` : "");
 
-      const queryString =
-        `orderId=${orderId}` +
-        `&amount=${finalAmount}` +
-        `&userId=${encodeURIComponent(user?.username || "guest")}` +
-        `&movieId=${movieId}` +
-        `&region=${encodeURIComponent(region)}` +
-        `&theater=${encodeURIComponent(theater)}` +
-        `&date=${encodeURIComponent(date)}` +
-        `&time=${encodeURIComponent(time)}` +
-        `&seats=${encodeURIComponent(seats.join(","))}` +
-        `&adult=${adult}&teen=${teen}&senior=${senior}&special=${special}` +
-        (selectedCouponId ? `&couponId=${selectedCouponId}` : "");
-        
-        await toss.requestPayment("카드", {
-          amount: finalAmount,
-          orderId,
-          orderName: "Movie Ticket",
-          customerName: user?.name || "비회원",
-          // successUrl: `${window.location.origin}/movie/payment/success?${queryString}`,
-          // failUrl: `${window.location.origin}/movie/payment/fail`,
-        }).then(async ()=>{
-          for(let seat of seats) {
-            await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
-          }
-          for(let coupon of coupons) {
-            await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`, {method:'post', headers: { 'Content-Type': 'application/json' },body:JSON.stringify({couponId:coupon.id})});
-          }
-          router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
-      }).catch(async ()=>{
+    try {
+      if (finalAmount === 0) {
+        for (let seat of seats) {
+          await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
+        }
+        if (selectedCouponId) {
+          await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ couponId: selectedCouponId }),
+          });
+        }
+        router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
+        return;
+      }
+
+      const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
+      await toss.requestPayment("카드", {
+        amount: finalAmount,
+        orderId,
+        orderName: "Movie Ticket",
+        customerName: user?.name || "비회원",
+      }).then(async () => {
+        for (let seat of seats) {
+          await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
+        }
+        if (selectedCouponId) {
+          await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ couponId: selectedCouponId }),
+          });
+        }
+        router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
+      }).catch(() => {
         router.push(`${window.location.origin}/movie/payment/fail`);
       });
+
     } catch (error) {
       alert("Toss 결제 실패: " + error.message);
     } finally {
@@ -149,7 +166,6 @@ export default function CheckoutPage() {
       <Header headerColor="black" headerBg="white" userInfo={user} />
       <div className="payment-container">
         <h2>결제하기</h2>
-
         <div className="purchase-info">
           <div className="product">
             <img src={movie.poster} alt={movie.title} loading='lazy' />
@@ -183,12 +199,12 @@ export default function CheckoutPage() {
               border: "1px solid #ccc",
               width: "100%",
               fontSize: "16px",
-              color:'white'
+              color: 'white'
             }}
           >
-            <option style={{color:'black'}} value="none">선택 안함</option>
+            <option style={{ color: 'black' }} value="none">선택 안함</option>
             {coupons.map((c) => (
-              <option key={c.id} style={{color:'black'}} value={c.id}>
+              <option key={c.id} style={{ color: 'black' }} value={c.id}>
                 {c.description} ({c.discountAmount.toLocaleString()}원 할인)
               </option>
             ))}
@@ -216,7 +232,7 @@ export default function CheckoutPage() {
             </button>
           </div>
         </div>
-           </div>
+      </div>
 
       <style jsx>{`
         .payment-container {
