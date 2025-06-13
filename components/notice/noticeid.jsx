@@ -15,10 +15,9 @@ export default function NoticeIdPage({ userData }) {
   const [prevId, setPrevId] = useState(null);
   const [nextId, setNextId] = useState(null);
 
-    useEffect(() => {
+  useEffect(() => {
     document.title = "공지 - FILMORA";
   }, []);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,7 +80,7 @@ export default function NoticeIdPage({ userData }) {
             src="http://localhost:9999/images/logo.png"
             alt="logo"
             style={{ width: "141px", height: "68px", objectFit: "contain" }}
-            loading='lazy'
+            loading="lazy"
           />
         </h1>
 
@@ -127,164 +126,165 @@ export default function NoticeIdPage({ userData }) {
           {notice.content}
         </div>
 
-<div
-  style={{
-    borderTop: "1px solid #ddd",
-    borderBottom: "1px solid #ddd",
-    margin: "40px 0",
-  }}
->
-  <div
-    style={{
-      display: "flex",
-      padding: "12px 0",
-      borderTop: "1px solid #eee",
-       fontSize: "15px",
-    }}
-  >
-    <span style={{ width: "80px", fontWeight: "normal", color: "#333" }}>
-      이전글
-    </span>
-    {prevId ? (
-      <span
-        style={{
-          color: "#333",
-          cursor: "pointer",
-          textDecoration: "none",
-        }}
-        onClick={() => router.push(`/notice/${prevId}`)}
-      >
-        {allNotices.find((n) => n.id === prevId)?.title}
-      </span>
-    ) : (
-      <span style={{ color: "#aaa" }}>이전 게시글이 없습니다.</span>
-    )}
-  </div>
-  <div
-    style={{
-      display: "flex",
-      padding: "12px 0",
-      borderTop: "1px solid #eee",
-      fontSize: "15px",
-    }}
-  >
-    <span style={{ width: "80px", fontWeight: "normal", color: "#333" }}>
-      다음글
-    </span>
-    {nextId ? (
-      <span
-        style={{
-          color: "#333",
-          cursor: "pointer",
-          textDecoration: "none",
-          
-        }}
-        onClick={() => router.push(`/notice/${nextId}`)}
-      >
-        {allNotices.find((n) => n.id === nextId)?.title}
-      </span>
-    ) : (
-      <span style={{ color: "#aaa" }}>다음 게시글이 없습니다.</span>
-    )}
-  </div>
-</div>
-
-          {user?.name === notice.writer && (
-            <div style={{ display: "flex", gap: "10px" }}>
-              <button
-                style={editBtn}
-                onClick={() => router.push(`/notice/edit/${id}`)}
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#ddd")
-                }
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#eee")
-                }
-              >
-                수정
-              </button>
-              <button
-                style={{ ...editBtn, marginLeft: "10px" }}
-                onClick={async () => {
-                  if (confirm("정말 삭제하시겠습니까?")) {
-                    try {
-                      const res = await fetch(
-                        `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`,
-                        {
-                          method: "DELETE",
-                          credentials: "include",
-                        }
-                      );
-                      if (res.ok) {
-                        alert("삭제 완료");
-                        router.push("/notice");
-                      } else {
-                        alert("삭제 실패");
-                      }
-                    } catch (err) {
-                      console.error(err);
-                      alert("삭제 중 오류 발생");
-                    }
-                  }
-                }}
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#ddd")
-                }
-                onMouseOut={(e) =>
-                  (e.currentTarget.style.backgroundColor = "#eee")
-                }
-              >
-                삭제
-              </button>
-            </div>
-          )}
-        </div>
-
-        <div style={{ textAlign: "center" }}>
-          <button
-            onClick={() => router.push("/notice")}
-            style={listBtn}
-            onMouseOver={(e) =>
-              (e.currentTarget.style.backgroundColor = "#553C9A")
-            }
-            onMouseOut={(e) =>
-              (e.currentTarget.style.backgroundColor = "#6B46C1")
-            }
+        <div
+          style={{
+            borderTop: "1px solid #ddd",
+            borderBottom: "1px solid #ddd",
+            margin: "40px 0",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              padding: "12px 0",
+              borderTop: "1px solid #eee",
+              fontSize: "15px",
+            }}
           >
-            목록
-          </button>
+            <span
+              style={{ width: "80px", fontWeight: "normal", color: "#333" }}
+            >
+              이전글
+            </span>
+            {prevId ? (
+              <span
+                style={{
+                  color: "#333",
+                  cursor: "pointer",
+                  textDecoration: "none",
+                }}
+                onClick={() => router.push(`/notice/${prevId}`)}
+              >
+                {allNotices.find((n) => n.id === prevId)?.title}
+              </span>
+            ) : (
+              <span style={{ color: "#aaa" }}>이전 게시글이 없습니다.</span>
+            )}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              padding: "12px 0",
+              borderTop: "1px solid #eee",
+              fontSize: "15px",
+            }}
+          >
+            <span
+              style={{ width: "80px", fontWeight: "normal", color: "#333" }}
+            >
+              다음글
+            </span>
+            {nextId ? (
+              <span
+                style={{
+                  color: "#333",
+                  cursor: "pointer",
+                  textDecoration: "none",
+                }}
+                onClick={() => router.push(`/notice/${nextId}`)}
+              >
+                {allNotices.find((n) => n.id === nextId)?.title}
+              </span>
+            ) : (
+              <span style={{ color: "#aaa" }}>다음 게시글이 없습니다.</span>
+            )}
+          </div>
         </div>
-<div
-  style={{
-    padding: "60px 0",
-    maxWidth: "1200px",
-    margin: "0 auto",
-    paddingLeft: "16px",
-    paddingRight: "16px",
-    boxSizing: "border-box",
-  }}
->
-  <h2
-    style={{
-      fontSize: "20px",
-      marginBottom: "16px",
-      textAlign: "center",
-    }}
-  >
-  </h2>
-  <NoticeList
-    items={allNotices.filter((n) => n.id !== Number(id))}
-    user={user}
-    highlightKeyword={(text) => [text]} // 검색 없음 처리
-    isNew={(createdAt) => {
-      const created = new Date(createdAt);
-      const now = new Date();
-      const diff = (now - created) / (1000 * 60 * 60 * 24);
-      return diff <= 2;
-    }}
-  />
-</div>
 
+        {user?.name === notice.writer && (
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button
+              style={editBtn}
+              onClick={() => router.push(`/notice/edit/${id}`)}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#ddd")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#eee")
+              }
+            >
+              수정
+            </button>
+            <button
+              style={{ ...editBtn, marginLeft: "10px" }}
+              onClick={async () => {
+                if (confirm("정말 삭제하시겠습니까?")) {
+                  try {
+                    const res = await fetch(
+                      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`,
+                      {
+                        method: "DELETE",
+                        credentials: "include",
+                      }
+                    );
+                    if (res.ok) {
+                      alert("삭제 완료");
+                      router.push("/notice");
+                    } else {
+                      alert("삭제 실패");
+                    }
+                  } catch (err) {
+                    console.error(err);
+                    alert("삭제 중 오류 발생");
+                  }
+                }
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#ddd")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#eee")
+              }
+            >
+              삭제
+            </button>
+          </div>
+        )}
+      </div>
+
+      <div style={{ textAlign: "center" }}>
+        <button
+          onClick={() => router.push("/notice")}
+          style={listBtn}
+          onMouseOver={(e) =>
+            (e.currentTarget.style.backgroundColor = "#553C9A")
+          }
+          onMouseOut={(e) =>
+            (e.currentTarget.style.backgroundColor = "#6B46C1")
+          }
+        >
+          목록
+        </button>
+      </div>
+      <div
+        style={{
+          padding: "60px 0",
+          maxWidth: "1200px",
+          margin: "0 auto",
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          boxSizing: "border-box",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "20px",
+            marginBottom: "16px",
+            textAlign: "center",
+          }}
+        ></h2>
+        <NoticeList
+          items={allNotices.filter((n) => n.id !== Number(id))}
+          user={user}
+          highlightKeyword={(text) => [text]} // 검색 없음 처리
+          isNew={(createdAt) => {
+            const created = new Date(createdAt);
+            const now = new Date();
+            const diff = (now - created) / (1000 * 60 * 60 * 24);
+            return diff <= 2;
+          }}
+        />
+      </div>
 
       <div style={{ height: "200px" }} />
     </>
