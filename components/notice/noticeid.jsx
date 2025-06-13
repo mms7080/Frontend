@@ -127,41 +127,68 @@ export default function NoticeIdPage({ userData }) {
           {notice.content}
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "20px",
-          }}
-        >
-          <div style={{ display: "flex", gap: "10px" }}>
-            <button
-              style={{ ...navBtn, ...(prevId ? {} : disabledStyle) }}
-              disabled={!prevId}
-              onClick={() => prevId && router.push(`/notice/${prevId}`)}
-              onMouseOver={(e) =>
-                prevId && (e.currentTarget.style.backgroundColor = "#f3e8ff")
-              }
-              onMouseOut={(e) =>
-                prevId && (e.currentTarget.style.backgroundColor = "#fff")
-              }
-            >
-              이전글
-            </button>
-            <button
-              style={{ ...navBtn, ...(nextId ? {} : disabledStyle) }}
-              disabled={!nextId}
-              onClick={() => nextId && router.push(`/notice/${nextId}`)}
-              onMouseOver={(e) =>
-                nextId && (e.currentTarget.style.backgroundColor = "#f3e8ff")
-              }
-              onMouseOut={(e) =>
-                nextId && (e.currentTarget.style.backgroundColor = "#fff")
-              }
-            >
-              다음글
-            </button>
-          </div>
+<div
+  style={{
+    borderTop: "1px solid #ddd",
+    borderBottom: "1px solid #ddd",
+    margin: "40px 0",
+  }}
+>
+  <div
+    style={{
+      display: "flex",
+      padding: "12px 0",
+      borderTop: "1px solid #eee",
+       fontSize: "15px",
+    }}
+  >
+    <span style={{ width: "80px", fontWeight: "normal", color: "#333" }}>
+      이전글
+    </span>
+    {prevId ? (
+      <span
+        style={{
+          color: "#333",
+          cursor: "pointer",
+          textDecoration: "none",
+        }}
+        onClick={() => router.push(`/notice/${prevId}`)}
+      >
+        {allNotices.find((n) => n.id === prevId)?.title}
+      </span>
+    ) : (
+      <span style={{ color: "#aaa" }}>이전 게시글이 없습니다.</span>
+    )}
+  </div>
+  <div
+    style={{
+      display: "flex",
+      padding: "12px 0",
+      borderTop: "1px solid #eee",
+      fontSize: "15px",
+    }}
+  >
+    <span style={{ width: "80px", fontWeight: "normal", color: "#333" }}>
+      다음글
+    </span>
+    {nextId ? (
+      <span
+        style={{
+          color: "#333",
+          cursor: "pointer",
+          textDecoration: "none",
+          
+        }}
+        onClick={() => router.push(`/notice/${nextId}`)}
+      >
+        {allNotices.find((n) => n.id === nextId)?.title}
+      </span>
+    ) : (
+      <span style={{ color: "#aaa" }}>다음 게시글이 없습니다.</span>
+    )}
+  </div>
+</div>
+
           {user?.name === notice.writer && (
             <div style={{ display: "flex", gap: "10px" }}>
               <button
@@ -227,8 +254,6 @@ export default function NoticeIdPage({ userData }) {
             목록
           </button>
         </div>
-      </div>
-
 <div
   style={{
     padding: "60px 0",

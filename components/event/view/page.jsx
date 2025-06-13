@@ -138,48 +138,71 @@ export default function EventDetailPage({ userData }) {
               ))}
             </Flex>
 
-            <Box h={{ base: 12, md: 20 }} />
+ <Box
+  mt={10}
+  borderTop="1px solid #ddd"
+  borderBottom="1px solid #ddd"
+  fontSize="13px"
+  color="gray.700"
+>
+  {/* 이전글 */}
+  <Flex
+    py={3}
+    px={2}
+    borderBottom="1px solid #eee"
+    align="center"
+    gap={2}
+  >
+    <Text w="80px" fontWeight="bold">
+      이전글
+    </Text>
+    {prev ? (
+      <Text
+        as="button"
+        textAlign="left"
+        onClick={() => router.push(`/event/view/${prev.id}`)}
+        _hover={{ textDecoration: "underline", color: "purple.600" }}
+      >
+        {prev.title}
+      </Text>
+    ) : (
+      <Text color="gray.400">이전 게시글이 없습니다.</Text>
+    )}
+  </Flex>
 
-            {/* 버튼들 */}
-            <Flex
-              direction={buttonDirection}
-              justify="center"
-              gap={3}
-              mt={10}
-              wrap="wrap"
-            >
-              <Button
-                onClick={() => prev && router.push(`/event/view/${prev.id}`)}
-                isDisabled={!prev}
-                variant="outline"
-                colorScheme="gray"
-                w={["100%", "auto"]}
-                _hover={{ bg: "gray.100" }}
-              >
-                ← 이전글
-              </Button>
+  {/* 다음글 */}
+  <Flex py={3} px={2} align="center" gap={2}>
+    <Text w="80px" fontWeight="bold">
+      다음글
+    </Text>
+    {next ? (
+      <Text
+        as="button"
+        textAlign="left"
+        onClick={() => router.push(`/event/view/${next.id}`)}
+        _hover={{ textDecoration: "underline", color: "purple.600" }}
+      >
+        {next.title}
+      </Text>
+    ) : (
+      <Text color="gray.400">다음 게시글이 없습니다.</Text>
+    )}
+  </Flex>
+</Box>
 
-              <Button
-                onClick={() => router.push("/event")}
-                colorScheme="purple"
-                w={["100%", "auto"]}
-                fontWeight="normal"
-                _hover={{ transform: "scale(1.05)" }}
-              >
-                목록으로
-              </Button>
+{/* 목록으로 버튼만 유지 */}
+<Flex justify="center" mt={6}>
+  <Button
+    onClick={() => router.push("/event")}
+    colorScheme="purple"
+    w={["100%", "auto"]}
+    fontWeight="normal"
+    _hover={{ transform: "scale(1.05)" }}
+  >
+    목록으로
+  </Button>
+</Flex>
 
-              <Button
-                onClick={() => next && router.push(`/event/view/${next.id}`)}
-                isDisabled={!next}
-                variant="outline"
-                colorScheme="gray"
-                w={["100%", "auto"]}
-                _hover={{ bg: "gray.100" }}
-              >
-                다음글 →
-              </Button>
-            </Flex>
 
             {/* 삭제 버튼 (ADMIN) */}
             {user?.auth === "ADMIN" && (
