@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Text, Box, Button} from '@chakra-ui/react'
 
-// 모달 애니메이션 CSS
+// 모달 애니메이션 CSS + 스크롤바 CSS
 const modalStyles = `
     .modal-overlay {
         opacity: 0;
@@ -18,6 +18,25 @@ const modalStyles = `
     }
     .modal-content.show {
         transform: scale(1);
+    }
+
+    .modal-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 #f1f1f1;
+    }
+    .modal-scroll::-webkit-scrollbar {
+        width: 8px;
+    }
+    .modal-scroll::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
     }
 `;
 
@@ -76,12 +95,15 @@ const Modal = ({ isModalOpen, isModalVisible, closeModal, onConfirm, title, cont
             display="flex" alignItems="center" justifyContent="center"
             bg="blackAlpha.500"
             onClick={handleCancel}
+            p="4"
         >
             {/* 모달창 */}
             <Box
                 className={`modal-content ${isModalVisible ? 'show' : ''}`}
-                position="relative" bg="white" borderRadius="xl" shadow="2xl"
-                maxW="xl" w="full" mx="4" overflow="hidden" marginTop="-5%"
+                position="relative" overflow="hidden"
+                bg="white" borderRadius="xl" 
+                shadow="2xl" marginTop="-5%"
+                maxW="xl" w="full" mx="4" maxH="80vh"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 헤더 부분 */}
@@ -94,6 +116,7 @@ const Modal = ({ isModalOpen, isModalVisible, closeModal, onConfirm, title, cont
                     borderBottom="1px solid"
                     borderColor="gray.200"
                     backgroundColor="#6b46c1"
+                    flexShrink="0"
                 >
                     <Text fontSize="xl" fontWeight="md" color="white">
                         {title}
@@ -108,7 +131,30 @@ const Modal = ({ isModalOpen, isModalVisible, closeModal, onConfirm, title, cont
                     >X</Button>
                 </Box>
                 {/* 메인 부분 */}
-                <Box p={6}>
+                <Box
+                    className="modal-scroll"
+                    p={6}
+                    overflowY="auto"
+                    flex="1"
+                    minH="0"
+                    maxH="calc(80vh - 80px)"
+                    sx={{
+                        '&::-webkit-scrollbar': {
+                            width: '8px',
+                        },
+                        '&::-webkit-scrollbar-track': {
+                            background: '#f1f1f1',
+                            borderRadius: '4px',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            background: '#c1c1c1',
+                            borderRadius: '4px',
+                        },
+                        '&::-webkit-scrollbar-thumb:hover': {
+                            background: '#a8a8a8',
+                        },
+                    }}
+                >
                     {content}
                 </Box>
             </Box>

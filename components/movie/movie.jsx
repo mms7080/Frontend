@@ -1,8 +1,7 @@
 "use client"
 
 import React,{useEffect,useState, useMemo, useRef} from 'react';
-import {Button, Flex, HStack, Grid, Box, Input} from '@chakra-ui/react';
-import { useMediaQuery } from '@chakra-ui/react';
+import {Button, Flex, HStack, Grid, Box, Input, useMediaQuery } from '@chakra-ui/react';
 
 import MovieCard from '../../components/movie/moviecard';
 import {fetch} from '../../lib/client';
