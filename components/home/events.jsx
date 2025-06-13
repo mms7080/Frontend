@@ -20,7 +20,7 @@ export default function Events({Fetchedevents}){
         <h1 style={{color:'black',fontSize:25,paddingBottom:15}}>진행 중인 이벤트</h1>
         <Flex w='1050px' justifyContent='flex-end' color='black' _hover={{color:'gray.500'}}><Link href='/event'>더 보기</Link></Flex>
         <Grid templateColumns='repeat(4,240px)' gap='30px' overflow='visible'>
-            {(Fetchedevents["Pick"]).map((event,index) =>{
+            {(Fetchedevents["Pick"]).filter(event=>getEventStatus(event.date)!=='종료됨').map((event,index) =>{
                 if(index<4)
                     return <Box overflow='visible' key={event.id}>
                             <Event content={event.title} src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${event.image}`} url={`/event/view/${event.id}`}></Event>
