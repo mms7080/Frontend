@@ -180,11 +180,12 @@ export default function CheckoutPage() {
               border: "1px solid #ccc",
               width: "100%",
               fontSize: "16px",
+              color:'white'
             }}
           >
-            <option value="none">선택 안함</option>
+            <option style={{color:'black'}} value="none">선택 안함</option>
             {coupons.map((c) => (
-              <option key={c.id} value={c.id}>
+              <option key={c.id} style={{color:'black'}} value={c.id}>
                 {c.description} ({c.discountAmount.toLocaleString()}원 할인)
               </option>
             ))}
