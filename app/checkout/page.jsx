@@ -119,6 +119,9 @@ export default function CheckoutPage() {
           for(let seat of seats) {
             await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
           }
+          for(let coupon of coupons) {
+            await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`, {method:'post', headers: { 'Content-Type': 'application/json' },body:JSON.stringify({couponId:coupon.id})});
+          }
           router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
       }).catch(async ()=>{
         router.push(`${window.location.origin}/movie/payment/fail`);
