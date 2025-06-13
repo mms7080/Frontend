@@ -6,13 +6,9 @@ import { useRouter } from "next/navigation";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 
 export default function CartSidebar() {
-  const {
-    cartItems,
-    removeFromCart,
-    clearCart,
-    updateQuantity,
-  } = useCart();
+  const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
 
+  const [isUserLoaded, setIsUserLoaded] = useState(false);
   const router = useRouter();
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + parseInt(item.price) * item.quantity,
@@ -20,39 +16,26 @@ export default function CartSidebar() {
   );
 
   const [user, setUser] = useState(null);
- const [position, setPosition] = useState(() => {
-  if (typeof window !== "undefined") {
-    const saved = localStorage.getItem("cartSidebarPosition");
-    const defaultX = Math.min(window.innerWidth - 320, window.innerWidth - 340);
-    return saved
-      ? JSON.parse(saved)
-      : { x: defaultX < 0 ? 10 : defaultX, y: 450 };
-  }
-  return { x: 1000, y: 450 };
-});
-
+  const [position, setPosition] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("cartSidebarPosition");
+      const defaultX = Math.min(
+        window.innerWidth - 320,
+        window.innerWidth - 340
+      );
+      return saved
+        ? JSON.parse(saved)
+        : { x: defaultX < 0 ? 10 : defaultX, y: 450 };
+    }
+    return { x: 1000, y: 450 };
+  });
 
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-  const maxX = window.innerWidth - 320;
-  const maxY = window.innerHeight - 100;
-  setPosition((prev) => {
-    const newX = Math.min(prev.x, maxX);
-    const newY = Math.min(prev.y, maxY);
-    const clamped = { x: newX, y: newY };
-    localStorage.setItem("cartSidebarPosition", JSON.stringify(clamped));
-    return clamped;
-  });
-}, []);
-
-
-  useEffect(() => {
-  const handleResize = () => {
-    const maxX = window.innerWidth - 320; // 사이드바 너비 고려
+    const maxX = window.innerWidth - 320;
     const maxY = window.innerHeight - 100;
-
     setPosition((prev) => {
       const newX = Math.min(prev.x, maxX);
       const newY = Math.min(prev.y, maxY);
@@ -60,36 +43,54 @@ export default function CartSidebar() {
       localStorage.setItem("cartSidebarPosition", JSON.stringify(clamped));
       return clamped;
     });
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const maxX = window.innerWidth - 320; // 사이드바 너비 고려
+      const maxY = window.innerHeight - 100;
+
+      setPosition((prev) => {
+        const newX = Math.min(prev.x, maxX);
+        const newY = Math.min(prev.y, maxY);
+        const clamped = { x: newX, y: newY };
+        localStorage.setItem("cartSidebarPosition", JSON.stringify(clamped));
+        return clamped;
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const startDrag = (e) => {
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY;
+    dragging.current = true;
+    offset.current = {
+      x: clientX - position.x,
+      y: clientY - position.y,
+    };
   };
 
-  window.addEventListener("resize", handleResize);
-  return () => window.removeEventListener("resize", handleResize);
-}, []);
+  const onDrag = (e) => {
+    if (!dragging.current) return;
+    const clientX = e.clientX ?? e.touches?.[0]?.clientX;
+    const clientY = e.clientY ?? e.touches?.[0]?.clientY;
 
+    const newX = Math.max(
+      0,
+      Math.min(clientX - offset.current.x, window.innerWidth - 320)
+    );
+    const newY = Math.max(
+      0,
+      Math.min(clientY - offset.current.y, window.innerHeight - 100)
+    );
 
- const startDrag = (e) => {
-  const clientX = e.clientX ?? e.touches?.[0]?.clientX;
-  const clientY = e.clientY ?? e.touches?.[0]?.clientY;
-  dragging.current = true;
-  offset.current = {
-    x: clientX - position.x,
-    y: clientY - position.y,
+    const newPos = { x: newX, y: newY };
+    setPosition(newPos);
+    localStorage.setItem("cartSidebarPosition", JSON.stringify(newPos));
   };
-};
-
-const onDrag = (e) => {
-  if (!dragging.current) return;
-  const clientX = e.clientX ?? e.touches?.[0]?.clientX;
-  const clientY = e.clientY ?? e.touches?.[0]?.clientY;
-
-  const newX = Math.max(0, Math.min(clientX - offset.current.x, window.innerWidth - 320));
-  const newY = Math.max(0, Math.min(clientY - offset.current.y, window.innerHeight - 100));
-
-  const newPos = { x: newX, y: newY };
-  setPosition(newPos);
-  localStorage.setItem("cartSidebarPosition", JSON.stringify(newPos));
-};
-
 
   const endDrag = () => {
     dragging.current = false;
@@ -106,6 +107,8 @@ const onDrag = (e) => {
         setUser(data);
       } catch {
         setUser(null);
+      } finally {
+        setIsUserLoaded(true);
       }
     };
 
@@ -126,6 +129,8 @@ const onDrag = (e) => {
       cartItems.length === 1
         ? cartItems[0].title
         : `${cartItems[0].title} 외 ${cartItems.length - 1}건`;
+    //장바구니에 항목으로 저장
+    sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
 
     try {
       await toss.requestPayment("카드", {
@@ -133,7 +138,7 @@ const onDrag = (e) => {
         orderId,
         orderName,
         customerName: user.name || "회원",
-        successUrl: `http://localhost:3000/store/payment-success?orderId=${orderId}&amount=${totalPrice}&userId=${user.username}&orderName=${encodeURIComponent(orderName)}`,
+        successUrl: `http://localhost:3000/store/payment-success?userId=${user.username}&orderId=${orderId}&amount=${totalPrice}`,
         failUrl: `http://localhost:3000/store/payment-fail`,
       });
     } catch (error) {
@@ -163,7 +168,9 @@ const onDrag = (e) => {
                 <p style={{ margin: "0 0 4px 0" }}>{item.title}</p>
                 <div>
                   <button
-                    onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                    onClick={() =>
+                      updateQuantity(item.id, Math.max(1, item.quantity - 1))
+                    }
                     style={qtyButtonStyle}
                   >
                     -
@@ -173,7 +180,10 @@ const onDrag = (e) => {
                     value={item.quantity}
                     min={1}
                     onChange={(e) =>
-                      updateQuantity(item.id, Math.max(1, parseInt(e.target.value)))
+                      updateQuantity(
+                        item.id,
+                        Math.max(1, parseInt(e.target.value))
+                      )
                     }
                     style={qtyInputStyle}
                   />
@@ -185,7 +195,10 @@ const onDrag = (e) => {
                   </button>
                 </div>
               </div>
-              <button onClick={() => removeFromCart(item.id)} style={removeBtnStyle}>
+              <button
+                onClick={() => removeFromCart(item.id)}
+                style={removeBtnStyle}
+              >
                 삭제
               </button>
             </div>
@@ -196,8 +209,12 @@ const onDrag = (e) => {
       {cartItems.length > 0 && (
         <>
           <p style={totalStyle}>총 합계: {totalPrice.toLocaleString()}원</p>
-          <button onClick={handleCheckout} style={checkoutBtnStyle}>결제하기</button>
-          <button onClick={clearCart} style={clearBtnStyle}>장바구니 비우기</button>
+          <button onClick={handleCheckout} style={checkoutBtnStyle}>
+            결제하기
+          </button>
+          <button onClick={clearCart} style={clearBtnStyle}>
+            장바구니 비우기
+          </button>
         </>
       )}
     </div>
@@ -217,7 +234,6 @@ const sidebarStyle = {
   cursor: "move",
   overflowWrap: "break-word",
 };
-
 
 const titleStyle = {
   fontWeight: "normal",
