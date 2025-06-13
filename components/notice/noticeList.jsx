@@ -76,6 +76,25 @@ export default function NoticeList({
 
   return (
     <div>
+      <style jsx global>{`
+        @keyframes sparkle {
+          0% {
+            box-shadow: 0 0 5px #b794f4;
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% {
+            box-shadow: 0 0 15px #e9d8fd;
+            transform: scale(1.1);
+            opacity: 0.8;
+          }
+          100% {
+            box-shadow: 0 0 5px #b794f4;
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+      `}</style>
       <div style={{ overflowX: "auto" }}>
         <table
           style={{
@@ -127,9 +146,9 @@ export default function NoticeList({
                       style={{
                         color: "#222",
                         textDecoration: "none",
-                        display: "flex", // ✅ 변경
-                        alignItems: "center", // ✅ 추가
-                        gap: "10px", // NEW 뱃지랑 간격 유지
+                        display: "block", // ✅ 원래대로
+                        transition: "color 0.1s",
+                        fontWeight: 400,
                       }}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.color = "#6B46C1")
@@ -146,14 +165,14 @@ export default function NoticeList({
                           style={{
                             backgroundColor: "#6B46C1",
                             color: "white",
-                            borderRadius: "6px",
+                            borderRadius: "2px",
                             fontSize: "10px",
-                            padding: "2px 10px",
-                            marginLeft: "15px",
+                            padding: "2px 6px",
+                            marginLeft: "8px",
+                            animation: "sparkle 1s ease-in-out infinite",
+                            display: "inline-block",
                             position: "relative",
-
-                            animation: "pulse-badge 1.2s ease-in-out infinite",
-                            lineHeight: "1",
+                            top: "6px",
                           }}
                         >
                           NEW
