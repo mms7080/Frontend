@@ -185,26 +185,100 @@ export default function Joindetail(){
                 width: 100%;
               }
 
+              .id1{
+                width:235px;
+              }
+
+              .id2{
+                width:605px;
+              }
+              .name1{
+                width:235px;
+              }
+              .name2{
+                width:605px;
+              }
+
+              .phone1{
+              width:235px;
+            }
+            .phone2{
+                width:605px;
+            }
+            .phone3{
+                width:180px;
+            }
+            .email1{
+            width:235px;
+            }
+            .email2{
+            width:605px;
+            }
+            .email3{
+            width:280px;
+            }
               @media (min-width: 768px) {
                 .responsive-form {
                   width: auto;
                 }
+
+                .id1{
+                    width:100px;
+                }
+
+                .id2{
+                    width:50%;
+                }
+                .name1{
+                    width:100px;
+                }
+                .name2{
+                    width:30%;
+                }
+
+            .phone1{
+              width:30%;
+            }
+            .phone2{
+                width:70%;
+            }
+            .phone3{
+                width:30%;
+            }
+            .email1{
+            width:30%;
+            }
+            .email2{
+            width:70%;
+            }
+            .email3{
+            width:calc(100% - 140px);
+            }
+            .name0{
+            width:335px;
+            }
+            .phone0{
+            width:335px;
+            }
+            .email0{
+            width:335px;
+            }
               }
             `}</style>
-            <VStack w='100%'>
+            <VStack w='100%' fontSize={{base:'14px',md:'16px'}}>
                 <form className="responsive-form" action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>
-                    <Box w={{base: "100%", md: "900px"}} px={{base:0,md:'30px'}} m={{base:0,md:'40px'}} borderRadius='10px' bg='white'>
+                    <Box w={{base: "calc(100% - 40px)", md: "900px"}} px={{base:0,md:'30px'}} m={{base:'20px',md:'40px'}} borderRadius='10px' bg='white'>
                         <Flex w={{ base: "100%", md: "840px" }} flexDirection='column' gap='30px' py='50px'>
                             <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>회원가입</span>
                             <span style={{fontSize:20}}>기본 정보</span>
                             <table>
                                 <tbody>
                                     <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
-                                        <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='id'>아이디<span style={{color:'#FF0000'}}>*</span></label></td>
-                                        <td style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
-                                            <Flex w='590px' gap='15px'>
+                                        <td className="id1" style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='id'>아이디<span style={{color:'#FF0000'}}>*</span></label></td>
+                                        <td className="id2" style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
+                                            <Flex w={{base:'100%',md:'590px'}} gap='15px'>
                                                 <Input
-                                                    w='425px'
+                                                    w={{base:'60%',md:'425px'}}
                                                     id="id"
                                                     name="id"
                                                     minLength="4"
@@ -222,7 +296,7 @@ export default function Joindetail(){
                                                     onCompositionEnd={handleCompositionEnd}
                                                     required
                                                 />
-                                                <Button w='150px' onClick={handleIdCheck} type="button" bg='#6B46C1' _hover={{bg:'#553C9A'}}>
+                                                <Button w={{base:'40%',md:'150px'}} onClick={handleIdCheck} type="button" bg='#6B46C1' _hover={{bg:'#553C9A'}}>
                                                     아이디 중복 확인
                                                 </Button>
                                             </Flex>
@@ -345,17 +419,17 @@ export default function Joindetail(){
                             
                             <table>
                                 <tbody>
-                                    <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
-                                        <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름<span style={{color:'#FF0000'}}>*</span></label></td>
-                                        <td style={{width:605,height:50,paddingLeft:15}}>
+                                    <tr className='name0' style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
+                                        <td className='name1' style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름<span style={{color:'#FF0000'}}>*</span></label></td>
+                                        <td className='name2' style={{width:605,height:50,paddingLeft:15}}>
                                             <Input id="name" name="name" placeholder='이름을 입력하세요' required/>
                                         </td>
                                     </tr>
-                                    <tr style={{borderBottom:'1px solid #D1D5DD'}}>
-                                        <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='area_code'>전화번호<span style={{color:'#FF0000'}}>*</span></label></td>
-                                        <td style={{width:605,height:50,paddingLeft:15}}>
+                                    <tr className='phone0' style={{borderBottom:'1px solid #D1D5DD'}}>
+                                        <td className='phone1' style={{height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='area_code'>전화번호<span style={{color:'#FF0000'}}>*</span></label></td>
+                                        <td className='phone2' style={{height:50,paddingLeft:15}}>
                                             <Flex justifyContent='space-between'>
-                                                <select id='area_code' name='area_code' style={{width:180,border:'1px solid #E4E4E7', borderRadius:5,fontSize:14}} defaultValue='010' required>
+                                                <select className='phone3' id='area_code' name='area_code' style={{width:180,border:'1px solid #E4E4E7', borderRadius:5,fontSize:14}} defaultValue='010' required>
                                                     <option value="010">&nbsp;&nbsp;010</option>
                                                     <option value="011">&nbsp;&nbsp;011</option>
                                                     <option value="016">&nbsp;&nbsp;016</option>
@@ -363,18 +437,18 @@ export default function Joindetail(){
                                                     <option value="018">&nbsp;&nbsp;018</option>
                                                     <option value="019">&nbsp;&nbsp;019</option>
                                                 </select>
-                                                <Input w='180px' id="phone_first" name="phone_first" maxLength="4" placeholder="1234" required/>
-                                                <Input w='180px' id="phone_second" name="phone_second" maxLength="4" placeholder="5678" required/>
+                                                <Input w={{base:'30%',md:'180px'}} id="phone_first" name="phone_first" maxLength="4" placeholder="1234" required/>
+                                                <Input w={{base:'30%',md:'180px'}} id="phone_second" name="phone_second" maxLength="4" placeholder="5678" required/>
                                             </Flex>
                                         </td>
                                     </tr>
-                                    <tr style={{borderBottom:'1px solid #D1D5DD'}}>
-                                        <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="email_id">이메일<span style={{color:'#FF0000'}}>*</span></label></td>
-                                        <td style={{width:605,height:50,paddingLeft:15}}>
+                                    <tr className='email0' style={{borderBottom:'1px solid #D1D5DD'}}>
+                                        <td className="email1" style={{height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="email_id">이메일<span style={{color:'#FF0000'}}>*</span></label></td>
+                                        <td className="email2" style={{height:50,paddingLeft:15}}>
                                             <Flex justifyContent='space-between'>
-                                                <Input w='280px' id="email_id" name="email_id" placeholder="example" required/>
+                                                <Input w={{base:"100px",md:'280px'}} id="email_id" name="email_id" placeholder="example" required/>
                                                 <span style={{lineHeight:'40px'}}>@</span>
-                                                <select id="email_address" name="email_address" style={{width:280,border:'1px solid #E4E4E7',borderRadius:5,fontSize:14}} defaultValue='naver.com' required>
+                                                <select className="email3" id="email_address" name="email_address" style={{width:280,border:'1px solid #E4E4E7',borderRadius:5,fontSize:14}} defaultValue='naver.com' required>
                                                     <option value="naver.com">&nbsp;&nbsp;naver.com</option>
                                                     <option value="gmail.com">&nbsp;&nbsp;gmail.com</option>
                                                     <option value="daum.net">&nbsp;&nbsp;daum.net</option>
