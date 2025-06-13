@@ -60,6 +60,23 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
       borderBottom: "1px solid #eee",
     };
 
+    const isBeforeThreshold = (r) => {
+      const dateStr = r.date; // "2025-06-07"
+      const timeStr = r.time; // "15:00"
+    
+      // 기준 시간: date + time
+      const targetDate = new Date(`${dateStr}T${timeStr}:00`);
+    
+      // 기준 시간에서 20분 뺀 시각 계산
+      const thresholdDate = new Date(targetDate.getTime() - 20 * 60 * 1000);
+    
+      // 현재 시간
+      const now = new Date();
+    
+      // 현재 시간이 threshold보다 전이면 true, 아니면 false
+      return now < thresholdDate;
+    };
+
     return <>
           <Box w='100%' h='30px'></Box>
            <Text
@@ -137,10 +154,10 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                       )}
                     </td>
                     <td style={{...tdStyle,width:60}}>
-                      {r.status==="CANCELED" &&(
+                      {!(r.status !== "CANCELED"&&isBeforeThreshold(r)) &&(
                         <Box w='36.09px' h='26px'></Box>
                       )}
-                      {r.status !== "CANCELED" && (
+                      {(r.status !== "CANCELED"&&isBeforeThreshold(r)) && (
                         <button
                           onClick={async () => {
                             if (!confirm("이 예매를 환불 처리하시겠습니까?"))
