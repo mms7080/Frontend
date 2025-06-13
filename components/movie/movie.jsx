@@ -192,7 +192,7 @@ const Movie = (userInfo) => {
   };
 
   // 더보기 누를 시 이동 안하도록
-  const moreButtonRef = useRef(null);
+  const scrollRef = useRef(0);
 
   // 더보기 버튼
   const MoreButton = () => {
@@ -205,6 +205,7 @@ const Movie = (userInfo) => {
             border="1px solid gray"
             _hover={{ borderColor: "white" }}
             onClick={() => {
+              scrollRef.current = window.scrollY;
               setDisplayNumber((prev) => prev + 8);
             }}
           >
@@ -213,6 +214,15 @@ const Movie = (userInfo) => {
         </Box>
       );
   };
+
+  // 렌더 후 위치 복원
+  useEffect(() => {
+    if (displayNumber > 8) {
+      setTimeout(() => {
+        window.scrollTo({ top: scrollRef.current, behavior: "auto" });
+      }, 0);
+    }
+  }, [displayNumber]);
 
   useEffect(() => {
     setDisplayNumber(8);
