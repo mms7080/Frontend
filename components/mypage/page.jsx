@@ -4,7 +4,7 @@ import {FaFilm,FaQuestion} from 'react-icons/fa';
 import {FiUser} from 'react-icons/fi';
 import {Bookingcheck,Modify,Qna} from '.';
 
-export default async function Mypage({userInfo,qnaInfo,replyInfo,reservationInfo,paymentInfo}){
+export default function Mypage({userInfo,qnaInfo,replyInfo,reservationInfo,paymentInfo}){
 
     reservationInfo=[...reservationInfo].filter((item)=>item.userId===userInfo.username);
     paymentInfo=[...paymentInfo].filter((item)=>(item.userId===userInfo.username&&item.orderName!=="영화 예매"));
@@ -35,13 +35,13 @@ export default async function Mypage({userInfo,qnaInfo,replyInfo,reservationInfo
 
         <Tabs.Root key='outline' defaultValue="booking" variant='outline' fitted overflow='visible'>
           <Tabs.List>
-              <Tabs.Trigger value="booking">
+              <Tabs.Trigger value="booking" fontSize={{base:11,md:16}}>
                  <FaFilm/> 예매/구매내역
               </Tabs.Trigger>
-              <Tabs.Trigger value="modify">
+              <Tabs.Trigger value="modify" fontSize={{base:11,md:16}}>
                  <FiUser/> 개인정보 수정
               </Tabs.Trigger>
-              <Tabs.Trigger value="qna">
+              <Tabs.Trigger value="qna" fontSize={{base:11,md:16}}>
                  <FaQuestion/> 1:1 QnA
               </Tabs.Trigger>
           </Tabs.List>

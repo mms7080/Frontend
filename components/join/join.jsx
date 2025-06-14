@@ -521,11 +521,11 @@ export default function Joindetail(){
                             </table>
 
                             <Textarea resize="none" id='term1' name='term1' rows='10' fontSize={fontsize1} readOnly></Textarea>
-                            <Flex justifyContent='space-between'><Button onClick={adjustsize1}>{buttonlabel1}</Button><Flex><input id="agreement1" name="agreement1" type="checkbox" style={{position:'relative',bottom:'10px'}} required/><label htmlFor="agreement1">&nbsp;&nbsp;[필수] 이용약관에 동의합니다.</label></Flex></Flex>
+                            <Flex justifyContent='space-between'><Button onClick={adjustsize1}>{buttonlabel1}</Button><Flex>&nbsp;&nbsp;&nbsp;&nbsp;<input id="agreement1" name="agreement1" type="checkbox" style={{position:'relative',bottom:'10px'}} required/><label htmlFor="agreement1">&nbsp;&nbsp;[필수] 이용약관에 동의합니다.</label></Flex></Flex>
                             <Textarea resize="none" id='term2' name='term2' rows='10' fontSize={fontsize2} readOnly></Textarea>
-                            <Flex justifyContent='space-between'><Button onClick={adjustsize2}>{buttonlabel2}</Button><Flex><input id="agreement2" name="agreement2" type="checkbox" style={{position:'relative',bottom:'10px'}} required/><label htmlFor="agreement2">&nbsp;&nbsp;[필수] 개인정보 수집 및 이용에 동의합니다.</label></Flex></Flex>
+                            <Flex justifyContent='space-between'><Button onClick={adjustsize2}>{buttonlabel2}</Button><Flex>&nbsp;&nbsp;&nbsp;&nbsp;<input id="agreement2" name="agreement2" type="checkbox" style={{position:'relative',bottom:'10px'}} required/><label htmlFor="agreement2">&nbsp;&nbsp;[필수] 개인정보 수집 및 이용에 동의합니다.</label></Flex></Flex>
                             <Textarea resize="none" id='term3' name='term3' rows='10' fontSize={fontsize3} readOnly></Textarea>
-                            <Flex justifyContent='space-between'><Button onClick={adjustsize3}>{buttonlabel3}</Button><Flex><input id="agreement3" name="agreement3" type="checkbox" style={{position:'relative',bottom:'10px'}}/><label htmlFor="agreement3">&nbsp;&nbsp;[선택] 위치기반 서비스 이용약관에 동의합니다.</label></Flex></Flex>
+                            <Flex justifyContent='space-between'><Button onClick={adjustsize3}>{buttonlabel3}</Button><Flex>&nbsp;&nbsp;&nbsp;&nbsp;<input id="agreement3" name="agreement3" type="checkbox" style={{position:'relative',bottom:'10px'}}/><label htmlFor="agreement3">&nbsp;&nbsp;[선택] 위치기반 서비스 이용약관에 동의합니다.</label></Flex></Flex>
 
                             <Button type="submit" bg='#6B46C1' _hover={{bg:'#553C9A'}}>회원가입</Button>
                         </Flex>

@@ -1,10 +1,12 @@
 'use client';
 
 import React,{useState,useEffect,useMemo} from "react";
-import {Box,Text,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
+import {Box,Text,VStack,ButtonGroup,IconButton,Pagination,useMediaQuery} from '@chakra-ui/react';
 import {LuChevronLeft,LuChevronRight} from "react-icons/lu";
 
 export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
+
+    const [isMobile] = useMediaQuery("(max-width: 768px)");
 
     const [reservations,setReservations]=useState([...reservationInfo].sort((a, b) => {
         const timeA = new Date(a.approvedAt || 0).getTime();
@@ -18,7 +20,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
       }));
     const [movies,setMovies]=useState([]);
 
-    const contentsPerPage = 10;
+    const contentsPerPage = !isMobile?10:5;
 
     const [currentPage1, setCurrentPage1] = useState(1);
     const [currentPage2, setCurrentPage2] = useState(1);
@@ -92,24 +94,24 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
               <thead>
                 <tr style={{ background: "#f1f1f1" }}>
                   <th style={thStyle}>주문번호</th>
-                  <th style={thStyle}>유저</th>
+                  {!isMobile && <th style={thStyle}>유저</th>}
                   <th style={thStyle}>영화</th>
-                  <th style={thStyle}>지역</th>
-                  <th style={thStyle}>극장</th>
-                  <th style={thStyle}>날짜</th>
+                  {!isMobile && <th style={thStyle}>지역</th>}
+                  {!isMobile && <th style={thStyle}>극장</th>}
+                  {!isMobile && <th style={thStyle}>날짜</th>}
                   <th style={thStyle}>시간</th>
-                  <th style={thStyle}>좌석</th>
-                  <th style={thStyle}>총액</th>
-                  <th style={thStyle}>결제 시각</th>
-                  <th style={thStyle}>상태</th>
-                  <th style={thStyle}>환불</th>
+                  {!isMobile && <th style={thStyle}>좌석</th>}
+                  {!isMobile && <th style={thStyle}>총액</th>}
+                  {!isMobile && <th style={thStyle}>결제 시각</th>}
+                  {!isMobile && <th style={thStyle}>상태</th>}
+                  {!isMobile && <th style={thStyle}>환불</th>}
                 </tr>
               </thead>
               <tbody>
                 {reservations.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="12"
+                    colSpan={!isMobile?"12":"3"}
                     style={{
                       textAlign: "center",
                       padding: "20px",
@@ -123,17 +125,17 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                 paginatedReservations.map((r, idx) => (
                   <tr key={idx}>
                     <td style={tdStyle}>{r.orderId}</td>
-                    <td style={tdStyle}>{r.userId}</td>
+                    {!isMobile && <td style={tdStyle}>{r.userId}</td>}
                     <td style={tdStyle}>{movieMap[r.movieId] || r.movieId}</td>
-                    <td style={tdStyle}>{r.region}</td>
-                    <td style={tdStyle}>{r.theater}</td>
-                    <td style={tdStyle}>{r.date}</td>
+                    {!isMobile && <td style={tdStyle}>{r.region}</td>}
+                    {!isMobile && <td style={tdStyle}>{r.theater}</td>}
+                    {!isMobile && <td style={tdStyle}>{r.date}</td>}
                     <td style={tdStyle}>{r.time}</td>
-                    <td style={tdStyle}>{r.seats}</td>
-                    <td style={tdStyle}>
+                    {!isMobile && <td style={tdStyle}>{r.seats}</td>}
+                    {!isMobile && <td style={tdStyle}>
                       {Number(r.totalPrice).toLocaleString()}원
-                    </td>
-                    <td style={tdStyle}>
+                    </td>}
+                    {!isMobile && <td style={tdStyle}>
                       {r.approvedAt
                         ? new Date(r.approvedAt).toLocaleString("ko-KR", {
                             year: "numeric",
@@ -143,8 +145,8 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                             minute: "2-digit",
                           })
                         : "-"}
-                    </td>
-                    <td style={{...tdStyle,width:67.05}}>
+                    </td>}
+                    {!isMobile && <td style={{...tdStyle,width:67.05}}>
                       {r.status === "CANCELED" ? (
                         <span style={{ color: "red", fontWeight: "bold" }}>
                           환불됨
@@ -152,8 +154,8 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                       ) : (
                         <span style={{ color: "green" }}>정상</span>
                       )}
-                    </td>
-                    <td style={{...tdStyle,width:60}}>
+                    </td>}
+                    {!isMobile && <td style={{...tdStyle,width:60}}>
                       {!(r.status !== "CANCELED"&&isBeforeThreshold(r)) &&(
                         <Box w='36.09px' h='26px'></Box>
                       )}
@@ -206,7 +208,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                           환불
                         </button>
                       )}
-                    </td>
+                    </td>}
                   </tr>
                 ))
                 )}
@@ -226,7 +228,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
       {/* 10개씩 페이지 그룹 렌더링 */}
             {(() => {
               const totalPages = Math.ceil(reservations.length / contentsPerPage);
-              const pageGroupSize = 10;
+              const pageGroupSize = !isMobile?10:5;
               const currentGroup = Math.floor((currentPage1 - 1) / pageGroupSize);
               const startPage = currentGroup * pageGroupSize + 1;
               const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
@@ -269,20 +271,20 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                 <tr style={{ background: "#f1f1f1" }}>
                   <th style={thStyle}>주문번호</th>
                   <th style={thStyle}>상품명</th>
-                  <th style={thStyle}>유저ID</th>
+                  {!isMobile && <th style={thStyle}>유저ID</th>}
                   <th style={thStyle}>결제금액</th>
-                  <th style={thStyle}>결제일</th>
-                  <th style={thStyle}>결제수단</th>
-                  <th style={thStyle}>카드사</th>
-                  <th style={thStyle}>상태</th>
-                  <th style={thStyle}>환불</th>
+                  {!isMobile && <th style={thStyle}>결제일</th>}
+                  {!isMobile && <th style={thStyle}>결제수단</th>}
+                  {!isMobile && <th style={thStyle}>카드사</th>}
+                  {!isMobile && <th style={thStyle}>상태</th>}
+                  {!isMobile && <th style={thStyle}>환불</th>}
                 </tr>
               </thead>
               <tbody>
                 {payments.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="9"
+                    colSpan={!isMobile?"9":"3"}
                     style={{
                       textAlign: "center",
                       padding: "20px",
@@ -297,14 +299,14 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                   <tr key={idx}>
                     <td style={tdStyle}>{p.orderId}</td>
                     <td style={tdStyle}>{p.orderName}</td>
-                    <td style={tdStyle}>{p.userId}</td>
+                    {!isMobile && <td style={tdStyle}>{p.userId}</td>}
                     <td style={tdStyle}>{p.amount.toLocaleString()}원</td>
-                    <td style={tdStyle}>
+                    {!isMobile && <td style={tdStyle}>
                       {new Date(p.approvedAt).toLocaleString()}
-                    </td>
-                    <td style={tdStyle}>{p.method}</td>
-                    <td style={tdStyle}>{p.cardCompany || "-"}</td>
-                    <td style={{...tdStyle,width:67.05}}>
+                    </td>}
+                    {!isMobile && <td style={tdStyle}>{p.method}</td>}
+                    {!isMobile && <td style={tdStyle}>{p.cardCompany || "-"}</td>}
+                    {!isMobile && <td style={{...tdStyle,width:67.05}}>
                       {p.refundstatus === "CANCELED" ? (
                         <span style={{ color: "red", fontWeight: "bold"}}>
                           환불됨
@@ -312,8 +314,8 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                       ) : (
                         <span style={{ color: "green" }}>정상</span>
                       )}
-                    </td>
-                    <td style={{...tdStyle,width:60}}>
+                    </td>}
+                    {!isMobile && <td style={{...tdStyle,width:60}}>
                       {p.refundstatus !== "CANCELED" && (
                       <button
                         onClick={async () => {
@@ -362,7 +364,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                       >
                         환불
                       </button>)}
-                    </td>
+                    </td>}
                   </tr>
                 )))}
               </tbody>
@@ -381,7 +383,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
       {/* 10개씩 페이지 그룹 렌더링 */}
             {(() => {
               const totalPages = Math.ceil(payments.length / contentsPerPage);
-              const pageGroupSize = 10;
+              const pageGroupSize = !isMobile?10:5;
               const currentGroup = Math.floor((currentPage2 - 1) / pageGroupSize);
               const startPage = currentGroup * pageGroupSize + 1;
               const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);

@@ -1,10 +1,11 @@
 "use client";
 
 import React,{useState,useEffect} from 'react';
-import {Flex,Box,Input,Button,Text,RadioGroup} from '@chakra-ui/react';
+import {Flex,Box,Input,Button,Text,RadioGroup,useMediaQuery} from '@chakra-ui/react';
 import Link from "next/link";
 
 export default function Modify({userInfo}) {/* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
+    const [isMobile] = useMediaQuery("(max-width: 768px)");
 
     const [form, setForm] = useState({
         zipcode:userInfo?.zipcode ?? '',
@@ -198,9 +199,11 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         </tr>
                                     </tbody>
                                 </table>
-                                
                                 <span style={{fontSize:20}}>선택 정보</span>
-                                
+                                <Box textAlign='center' display={{base:'block',md:'none'}}>
+                                    PC버전 사이트에서만 입력 가능합니다.
+                                </Box>
+                                {!isMobile &&
                                 <table>
                                     <tbody>
                                         <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
@@ -246,7 +249,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>
+                                </table>}
                                 <Link style={{textAlign:'right',color:'#352461',textDecoration:'underline'}}
                                 href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`}
                                 onClick={(e) => {
