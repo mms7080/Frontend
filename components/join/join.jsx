@@ -181,9 +181,53 @@ export default function Joindetail(){
 
     return <Box w='100vw' minW={{ base: "auto", md: "1000px" }}>
             <style jsx>{`
-              .responsive-form {
-                width: 100%;
-              }
+              
+                .responsive-form {
+                  width: auto;
+                }
+
+                .id1{
+                    width:75px;
+                }
+
+                .id2{
+                    width:calc(100% - 60px);
+                }
+                .name1{
+                    width:50px;
+                }
+                .name2{
+                    width:100px;
+                }
+
+            .phone1{
+              width:50px;
+            }
+            .phone2{
+                width:calc(100% - 50px);
+            }
+            .phone3{
+                width:60px;
+            }
+            .email1{
+            width:110px;
+            }
+            .email2{
+            width:100px;
+            }
+            .email3{
+            width:100px;
+            }
+            .name0{
+            width:335px;
+            }
+            .phone0{
+            width:335px;
+            }
+            .email0{
+            width:335px;
+            }
+              @media (min-width: 768px) {
 
               .id1{
                 width:235px;
@@ -217,65 +261,19 @@ export default function Joindetail(){
             .email3{
             width:280px;
             }
-              @media (min-width: 768px) {
-                .responsive-form {
-                  width: auto;
-                }
-
-                .id1{
-                    width:100px;
-                }
-
-                .id2{
-                    width:50%;
-                }
-                .name1{
-                    width:100px;
-                }
-                .name2{
-                    width:30%;
-                }
-
-            .phone1{
-              width:30%;
-            }
-            .phone2{
-                width:70%;
-            }
-            .phone3{
-                width:30%;
-            }
-            .email1{
-            width:30%;
-            }
-            .email2{
-            width:70%;
-            }
-            .email3{
-            width:calc(100% - 140px);
-            }
-            .name0{
-            width:335px;
-            }
-            .phone0{
-            width:335px;
-            }
-            .email0{
-            width:335px;
-            }
               }
             `}</style>
             <VStack w='100%' fontSize={{base:'14px',md:'16px'}}>
                 <form className="responsive-form" action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/join/logic`} method='post' onSubmit={handleSubmit}>
-                    <Box w={{base: "calc(100% - 40px)", md: "900px"}} px={{base:0,md:'30px'}} m={{base:'20px',md:'40px'}} borderRadius='10px' bg='white'>
+                    <Box w={{base: "335px", md: "900px"}} px={{base:0,md:'30px'}} m={{base:'20px',md:'40px'}} borderRadius='10px' bg='white'>
                         <Flex w={{ base: "100%", md: "840px" }} flexDirection='column' gap='30px' py='50px'>
                             <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>회원가입</span>
                             <span style={{fontSize:20}}>기본 정보</span>
                             <table>
                                 <tbody>
-                                    <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
-                                        <td className="id1" style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='id'>아이디<span style={{color:'#FF0000'}}>*</span></label></td>
-                                        <td className="id2" style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
+                                    <tr style={{width:'100vw',borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
+                                        <td className="id1" style={{height:90,backgroundColor:'#F7F8F9',paddingLeft:15,paddingRight:15}}><label htmlFor='id'>아이디<span style={{color:'#FF0000'}}>*</span></label></td>
+                                        <td className="id2" style={{height:90,paddingLeft:15,position:'relative'}}>
                                             <Flex w={{base:'100%',md:'590px'}} gap='15px'>
                                                 <Input
                                                     w={{base:'60%',md:'425px'}}
@@ -319,7 +317,7 @@ export default function Joindetail(){
                             <table>
                                 <tbody>
                                     <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
-                                        <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pw'>비밀번호<span style={{color:'#FF0000'}}>*</span></label></td>
+                                        <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15,paddingRight:15}}><label htmlFor='pw'>비밀번호<span style={{color:'#FF0000'}}>*</span></label></td>
                                         <td style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
                                             <Input
                                             id="pw"
@@ -420,8 +418,8 @@ export default function Joindetail(){
                             <table>
                                 <tbody>
                                     <tr className='name0' style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
-                                        <td className='name1' style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름<span style={{color:'#FF0000'}}>*</span></label></td>
-                                        <td className='name2' style={{width:605,height:50,paddingLeft:15}}>
+                                        <td className='name1' style={{height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름<span style={{color:'#FF0000'}}>*</span></label></td>
+                                        <td className='name2' style={{height:50,paddingLeft:15}}>
                                             <Input id="name" name="name" placeholder='이름을 입력하세요' required/>
                                         </td>
                                     </tr>
@@ -429,7 +427,7 @@ export default function Joindetail(){
                                         <td className='phone1' style={{height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='area_code'>전화번호<span style={{color:'#FF0000'}}>*</span></label></td>
                                         <td className='phone2' style={{height:50,paddingLeft:15}}>
                                             <Flex justifyContent='space-between'>
-                                                <select className='phone3' id='area_code' name='area_code' style={{width:180,border:'1px solid #E4E4E7', borderRadius:5,fontSize:14}} defaultValue='010' required>
+                                                <select className='phone3' id='area_code' name='area_code' style={{border:'1px solid #E4E4E7', borderRadius:5,fontSize:14}} defaultValue='010' required>
                                                     <option value="010">&nbsp;&nbsp;010</option>
                                                     <option value="011">&nbsp;&nbsp;011</option>
                                                     <option value="016">&nbsp;&nbsp;016</option>
@@ -442,7 +440,7 @@ export default function Joindetail(){
                                             </Flex>
                                         </td>
                                     </tr>
-                                    <tr className='email0' style={{borderBottom:'1px solid #D1D5DD'}}>
+                                    {/* <tr className='email0' style={{borderBottom:'1px solid #D1D5DD'}}>
                                         <td className="email1" style={{height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="email_id">이메일<span style={{color:'#FF0000'}}>*</span></label></td>
                                         <td className="email2" style={{height:50,paddingLeft:15}}>
                                             <Flex justifyContent='space-between'>
@@ -457,7 +455,7 @@ export default function Joindetail(){
                                                 </select>
                                             </Flex>
                                         </td>
-                                    </tr>
+                                    </tr> */}
                                 </tbody>
                             </table>
 
