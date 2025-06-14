@@ -8,7 +8,7 @@ export default function TimeSelector({ selectedShowtime, onSelectShowtime, movie
       {availableTimes.filter((item) => {
           const now = new Date(); // 현재 시간
           const movieTime = new Date(item.startTime.replace(" ", "T")); // ISO 형식으로 변환
-          return movieTime > now; // 현재보다 전이면 true
+          return movieTime > now; // 현재보다 후이면 true
         }).map((item) => {
         const time = item.startTime.split(" ")[1]; // "2025-06-04 10:00" → "10:00"
         const screen = item.auditoriumName || "-관";
