@@ -45,10 +45,10 @@ export default function LikePart({id,res,movieinfo}){
     };    
 
     return <>
-        <Button fontSize='15px' boxShadow='4px 4px 6px black' onClick={likeChange}>{liked?<AiFillHeart style={{width:25,height:25}} color='red'/>:<AiOutlineHeart style={{width:25,height:25}} color='red'/>}{
+        <Button transition="all 0.3s" _hover={{bg:"#6B46C1"}} fontSize='15px' boxShadow='4px 4px 6px black' onClick={likeChange}>{liked?<AiFillHeart style={{width:25,height:25}} color='red'/>:<AiOutlineHeart style={{width:25,height:25}} color='red'/>}{
             likeNumber                             
         }</Button>
-        <Button fontSize='15px' boxShadow='4px 4px 6px black' onClick={handleCopy}>공유하기</Button>
+        <Button transition="all 0.3s" _hover={{bg:"#6B46C1"}} fontSize='15px' boxShadow='4px 4px 6px black' onClick={handleCopy}>공유하기</Button>
         {isModalOpen && (<Modal
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}
