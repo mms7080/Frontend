@@ -272,6 +272,7 @@ export default function AdminDashboard({ userData }) {
     const stats = {};
     reservations.forEach((r) => {
       stats[r.movieId] = (stats[r.movieId] || 0) + 1;
+      if(r.status==='CANCELED')stats[r.movieId]--;
     });
 
     return Object.entries(stats)
@@ -1631,6 +1632,7 @@ export default function AdminDashboard({ userData }) {
 
       const salesByProduct = filteredPayments.reduce((acc, cur) => {
         acc[cur.orderName] = (acc[cur.orderName] || 0) + cur.amount;
+        if(cur.refundstatus==='CANCELED')acc[cur.orderName]-=cur.amount;
         return acc;
       }, {});
 
