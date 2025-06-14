@@ -69,7 +69,7 @@ export default function Detailreview({isMobile=false,id,userInfo,author,score,co
             <Flex w='100%' h='100px' flex='1' bg='#F8F8FA' borderRadius='5px' alignItems='center' bg={bgColor}>
                 <Flex w='100%' gap='15px' alignItems='center'>
                     <span style={{color:'#352461',paddingLeft:20,width:!isMobile?100:70}}>관람평</span>
-                    <span style={{color:'#352461',fontSize:40,width:!isMobile?50:25}}>{score}</span>
+                    <span style={{color:'#352461',fontSize:!isMobile?40:24,width:!isMobile?50:25}}>{score}</span>
                     <Box bg='#DFDFE1' w='1px' h='50px'></Box>
                     <Text pl='20px' flex='1' color={contentColor}>{content}</Text>
                     {!isHome?

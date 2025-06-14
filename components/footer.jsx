@@ -3,7 +3,7 @@
 import React,{useState} from 'react';
 
 import Link from "next/link";
-import { Flex, Button, HStack, Image, Box,Text } from '@chakra-ui/react';
+import { Flex, Button, HStack, Image, Box, Text, useMediaQuery } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
 
 export default function Footer() {
@@ -17,6 +17,7 @@ export default function Footer() {
   const [BoxBwidth,setBoxBwidth]=useState(10);
   const [BoxCwidth,setBoxCwidth]=useState(10);
   const [BoxDwidth,setBoxDwidth]=useState(10);
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   return (
     <Flex
@@ -30,19 +31,19 @@ export default function Footer() {
       borderTop={`1px solid ${footerBorder}`}
       flexWrap="wrap"
     >
-      <Flex flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxAwidth(20);}} onMouseLeave={()=>{setBoxAwidth(10);}}>
+      {!isMobile && <Flex flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxAwidth(20);}} onMouseLeave={()=>{setBoxAwidth(10);}}>
         <h5 style={{ fontSize: 14, color: footerColor }}>고객센터</h5>
         <Box w={BoxAwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
         <span style={{fontSize:12}}>1544-1234</span>
         <span style={{fontSize:12}}>운영시간 | 오전 10:00 ~ 오후 6:00</span>
         <span style={{fontSize:12}}>점심시간 | 오후 12:00 ~ 오후 1:30</span>
         <span style={{fontSize:12}}>토/일/공휴일 휴무</span>
-      </Flex>
-      <Flex flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxBwidth(20);}} onMouseLeave={()=>{setBoxBwidth(10);}}>
+      </Flex>}
+      {!isMobile && <Flex flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxBwidth(20);}} onMouseLeave={()=>{setBoxBwidth(10);}}>
         <h5 style={{ fontSize: 14, color: footerColor }}>주소 안내</h5>
         <Box w={BoxBwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
         <span style={{fontSize:12}}>서울특별시 강남구 테헤란로 87길 22 도심공항터미널 건물 408호</span>
-      </Flex>
+      </Flex>}
       <Flex flexDirection="column" lineHeight="18px" mb="20px" onMouseEnter={()=>{setBoxCwidth(20);}} onMouseLeave={()=>{setBoxCwidth(10);}}>
         <h5 style={{ fontSize: 14, color: footerColor }}>빠른 메뉴</h5>
         <Box w={BoxCwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
