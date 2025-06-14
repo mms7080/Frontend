@@ -5,16 +5,17 @@ import { HStack, Button, Flex, Text, Box } from '@chakra-ui/react';
 export default function TimeSelector({ selectedShowtime, onSelectShowtime, movieTitle, availableTimes }) {
   return (
     <HStack spacing={3} wrap="wrap" width="100%">
-      {availableTimes.filter((item) => {
-          const now = new Date(); // 현재 시간
-          const movieTime = new Date(item.startTime.replace(" ", "T")); // ISO 형식으로 변환
-          return movieTime > now; // 현재보다 후이면 true
-        }).map((item) => {
+      {availableTimes.map((item) => {
         const time = item.startTime.split(" ")[1]; // "2025-06-04 10:00" → "10:00"
         const screen = item.auditoriumName || "-관";
 
         // const isSelected = selectedTime === time;
         const isSelected = selectedShowtime?.showtimeId === item.showtimeId;
+
+        
+        const now = new Date(); // 현재 시간
+        const movieTime = new Date(item.startTime.replace(" ", "T")); // ISO 형식으로 변환
+        let enabled=movieTime > now; // 현재보다 후이면 true
 
         return (
           <Button
@@ -30,6 +31,7 @@ export default function TimeSelector({ selectedShowtime, onSelectShowtime, movie
             h="80px"
             fontSize="lg"
             px={6}
+            disabled={!enabled}
           >
             <Flex w="100%" align="center" justify="space-between">
               <Box minW="80px">
