@@ -45,7 +45,7 @@ export default function SigninClientAlert() {
     };
 
     return <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/signin/logic`} method='post' onSubmit={handleSubmit}>
-            <Flex w='400px' flexDirection='column' gap='15px'>
+            <Flex w={{base:'330px',md:'400px'}} flexDirection='column' gap='15px'>
                 <Input id="id" name="id" placeholder='아이디' value={id} onChange={(e) => setId(e.target.value)} required/>
                 <Input id="pw" name="pw" type="password" placeholder='비밀번호' required/>
                 <Flex w='100%' justifyContent='flex-start' fontSize='15px' color='#555'>

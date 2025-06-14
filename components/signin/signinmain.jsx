@@ -8,12 +8,12 @@ export default function Signin(){
 
     return <>
         <Header/>
-        <Box w='100vw' minW='1000px' h='540px'>
+        <Box w='100vw' minW={{base:0,md:'1000px'}} h='540px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%'>
-                    <Flex w='400px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
+                    <Flex w={{base:'100%',md:'400px'}} flexDirection='column' alignItems='center' gap='15px' py='50px'>
                         <span style={{fontSize:15,letterSpacing:1,alignSelf:'flex-start'}}>
-                            <span style={{color:'#551A8B'}}><Link href="/home" style={{textDecoration:'underline'}}>홈</Link></span>
+                            <Text color='#551A8B' display='inline' pl={{base:'25px',md:'0px'}}><Link href="/home" style={{textDecoration:'underline'}}>홈</Link></Text>
                             <span style={{color:'#555'}}>&gt;로그인</span>
                         </span>
                         <span style={{fontSize:28,marginBottom:10}}>로그인</span>
