@@ -93,10 +93,10 @@ export default function Findpwdetail({userData}){
     if(!found){/* 비밀번호 재설정 이전에 보이는 부분 */
         return <>
             <Header userInfo={userData}></Header>
-            <Box w='100vw' minW='1000px' h='540px'>
+            <Box w='100vw' minW={{base:'0px',md:'1000px'}} h='540px'>
                 <VStack w='100%' h='540px'>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white'>
-                        <Flex w='840px' flexDirection='column' gap='15px' py='50px'>
+                    <Box w={{base:'100%',md:'900px'}} px='30px' m='40px' borderRadius='10px' bg='white'>
+                        <Flex w={{base:'100%',md:'840px'}} flexDirection='column' gap='15px' py='50px'>
                             <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>비밀번호 재설정</span>
                             <label htmlFor="method_email">비밀번호 재설정 방법</label>{/* 비밀번호 재설정 방법을 선택하는 단계 */}
                             <RadioGroup.Root defaultValue="email" onChange={(e) => {
@@ -143,11 +143,27 @@ export default function Findpwdetail({userData}){
     }else{/* 본격적으로 비밀번호를 재설정하는 과정 */
         return <>
             <Header userInfo={userData}></Header>
-            <Box w='100vw' minW='1000px' h='540px'>
+            <style jsx>{`
+                .pw,.pwr{
+                    width:35%
+                }
+                .pw2,.pwr2{
+                    width:65%
+                }
+                @media (min-width: 768px) {
+                    .pw,.pwr{
+                        width:235px
+                    }
+                    .pw2,.pwr2{
+                        width:605px
+                    }
+                }
+            `}</style>
+            <Box w='100vw' minW={{base:'0px',md:'1000px'}} h='540px'>
                 <VStack w='100%' h='540px'>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white'>
+                    <Box w={{base:'100%',md:'900px'}} px='30px' m='40px' borderRadius='10px' bg='white'>
                         <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/set_pw/logic`} method='post' onSubmit={changePassword}>
-                            <Flex w='840px' flexDirection='column' gap='15px' py='50px'>
+                            <Flex w={{base:'100%',md:'840px'}} flexDirection='column' gap='15px' py='50px'>
 
                                 <Input name='id' type='hidden' value={foundID}/>
 
@@ -160,8 +176,8 @@ export default function Findpwdetail({userData}){
                                             </td>
                                         </tr>
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
-                                            <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pw'>새 비밀번호</label></td>
-                                            <td style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
+                                            <td className='pw' style={{height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pw'>새 비밀번호</label></td>
+                                            <td className='pw2' style={{height:90,paddingLeft:15,position:'relative'}}>
                                                 <Input
                                                 id="pw"
                                                 name="pw"
@@ -214,8 +230,8 @@ export default function Findpwdetail({userData}){
                                             </td>
                                         </tr>
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
-                                            <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="pwr">비밀번호 확인</label></td>
-                                            <td style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
+                                            <td className='pwr' style={{height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="pwr">비밀번호 확인</label></td>
+                                            <td className='pwr2' style={{height:90,paddingLeft:15,position:'relative'}}>
                                                 <Input 
                                                  id="pwr"
                                                  name="pwr"

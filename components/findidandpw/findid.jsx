@@ -67,10 +67,10 @@ export default function Findiddetail({userData}){
     if(foundID===''){/* 아이디 찾기 이전에 보이는 부분 */
         return <>
             <Header userInfo={userData}></Header>
-            <Box w='100vw' minW='1000px' h='540px'>
+            <Box w='100vw' minW={{base:'0px',md:'1000px'}} h='540px'>
                 <VStack w='100%' h='540px'>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white'>
-                        <Flex w='840px' flexDirection='column' gap='15px' py='50px'>
+                    <Box w={{base:'100%',md:'900px'}} px='30px' m='40px' borderRadius='10px' bg='white'>
+                        <Flex w={{base:'100%',md:'840px'}} flexDirection='column' gap='15px' py='50px'>
                             <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>아이디 찾기</span>
                             <label htmlFor="method_email">찾기 방법</label>{/* ID 찾기 방법을 선택하는 단계 */}
                             <RadioGroup.Root defaultValue="email" onChange={(e) => {
@@ -113,10 +113,10 @@ export default function Findiddetail({userData}){
     }else{/* 찾은 아이디를 보여주는 부분 */
         return <>
             <Header userInfo={userData}></Header>
-            <Box w='100vw' minW='1000px' h='540px'>
+            <Box w='100vw' minW={{base:'0px',md:'1000px'}} h='540px'>
                 <VStack w='100%' h='540px'>
-                    <Box w='900px' px='30px' m='40px' borderRadius='10px' bg='white'>
-                        <Flex w='840px' flexDirection='column' alignItems='center' gap='15px' py='50px'>
+                    <Box w={{base:'100%',md:'900px'}} px='30px' m='40px' borderRadius='10px' bg='white'>
+                        <Flex w={{base:'100%',md:'840px'}} flexDirection='column' alignItems='center' gap='15px' py='50px'>
                             <Button bg='#6B46C1' _hover={{bg:'#553C9A'}} onClick={()=>setFoundID('')}>
                                 <Link href='/find_id'>
                                     아이디 다시 찾기
