@@ -337,6 +337,17 @@ export default function SeatsPage() {
             </Box>
             {/* 선택 좌석 */}
             <Box>
+              <Flex justifyContent='space-between'>
+                <Text fontSize="2xl" fontWeight="normal" mb={2}>
+                  최종결제금액 :
+                </Text>
+                <Text fontSize="2xl" fontWeight="normal" mb={2}>
+                  {personCounts.adult*15000 +
+                  personCounts.teen*12000 +
+                  personCounts.senior*10000 +
+                  personCounts.special*8000}원
+                </Text>
+              </Flex>
               <Text fontSize="2xl" fontWeight="normal" mb={2}>
                 SEATS
               </Text>
