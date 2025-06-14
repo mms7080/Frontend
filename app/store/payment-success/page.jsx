@@ -42,6 +42,12 @@ export default function CartPaymentSuccessPage() {
   useEffect(() => {
     const confirmPayment = async () => {
       try {
+
+        const paidFlag = sessionStorage.getItem(`paid_${orderId}`);
+        if (paidFlag) {
+          setMessage("✅ 결제가 이미 처리되었습니다.");
+          return;
+        }
         const items = JSON.parse(sessionStorage.getItem("cartItems") || "[]");
 
         const res = await fetch(
@@ -66,6 +72,8 @@ export default function CartPaymentSuccessPage() {
 
         const result = await res.json();
         setPayment(result);
+        // 중복 방지를 위해 저장
+        sessionStorage.setItem(`paid_${orderId}`, "true");
         setMessage("✅ 결제가 완료되었습니다!");
 
         sessionStorage.removeItem("cartItems");
@@ -78,7 +86,7 @@ export default function CartPaymentSuccessPage() {
 
     // ✅ 모든 값이 준비되고 유저 정보 로딩이 끝난 후 실행
     if (paymentKey && orderId && amount && isUserLoaded) {
-      confirmPayment();
+      confirmPayment()
     }
   }, [paymentKey, orderId, amount, user, isUserLoaded]);
 
@@ -94,8 +102,8 @@ export default function CartPaymentSuccessPage() {
         }}
       >
         <h2 style={{ fontSize: "24px", marginBottom: "20px" }}>{message}</h2>
-
-        {payment && (
+        
+        {(payment&&Object.keys(payment).length>0) && (
           <div
             style={{
               display: "inline-block",
