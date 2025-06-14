@@ -1,7 +1,7 @@
 'use client';
 
 import React,{useEffect,useState} from 'react';
-import {Button,Flex,Grid,Box,Input,Text} from '@chakra-ui/react';
+import {Button,Flex,Grid,Box,Input,Text,useMediaQuery} from '@chakra-ui/react';
 import {useRouter} from 'next/navigation';
 import Link from "next/link";
 
@@ -18,6 +18,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     const [displayNumber2, setDisplayNumber2] = useState(8);/* 검색된 이벤트 더보기 버튼 */
     const [displayNumber3, setDisplayNumber3] = useState(5);/* 검색된 리뷰 더보기 버튼 */
     const [events] = useState(serverEvents || {});
+    const [isMobile] = useMediaQuery("(max-width: 768px)");
 
     const handleSearch = () => {
         if(document.querySelector('#keyword').value.replace(/\s+/g, '')===''){
@@ -65,7 +66,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
-        else return (<Grid templateColumns="repeat(4, 1fr)" gap={4}>
+        else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap={4}>
                         {searchedMovies.map((movie,index) => {
                             if(index < displayNumber)
                                 return (<MovieCard 
@@ -183,14 +184,14 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     return <>
         <Header userInfo={userData}></Header>
         <div style={{width:'100%'}} className="bg-[#141414]">
-            <Box w='70%' bg="#141414" pt={20} pb={10} px={6} mx="auto">
+            <Box w='70%' bg="#141414" pt={20} pb={10} px={!isMobile?'6px':0} mx="auto">
                 <Box pb={6}>
-                    <Flex gap={2} justify={'space-between'} >
+                    <Flex gap={2} justify={'space-between'}>
                         <Box transform="translate(-23px, 0)">
                             <Input
                                 id='keyword'
                                 placeholder="키워드 입력"
-                                w="320px" p="10px" bg="#1e1e1e"
+                                w={!isMobile?"320px":'100px'} p="10px" bg="#1e1e1e"
                                 border="1px solid gray"
                                 fontSize="15px" color="white"
                                 _hover={{borderColor : "white"}}
@@ -206,6 +207,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                                 _hover={{borderColor : "white"}}
                                 onClick={handleSearch}
                                 transform="translate(0, 1px)"
+                                w={!isMobile?'72.55px':'30px'}
                             >
                             검색
                             </Button>
@@ -215,6 +217,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                                 _hover={{borderColor : "white"}}
                                 onClick={()=>setSearchWord('')}
                                 transform="translate(0, 1px)"
+                                w={!isMobile?'95.78px':'50px'}
                             >
                             전체보기
                             </Button>
@@ -223,6 +226,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                                 border="1px solid gray" 
                                 _hover={{borderColor : "white"}}
                                 transform="translate(0, 1px)"
+                                w={!isMobile?'83.28px':'50px'}
                             >
                                 <Link href='/home'>
                                     홈으로
