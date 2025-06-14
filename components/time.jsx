@@ -6,7 +6,6 @@ export default function TimeSelector({ selectedShowtime, onSelectShowtime, movie
   return (
     <HStack spacing={3} wrap="wrap" width="100%">
       {availableTimes.filter((item) => {
-          console.log(item);
           const now = new Date(); // 현재 시간
           const movieTime = new Date(item.startTime.replace(" ", "T")); // ISO 형식으로 변환
           return movieTime > now; // 현재보다 전이면 true
