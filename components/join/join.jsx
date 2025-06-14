@@ -227,6 +227,9 @@ export default function Joindetail(){
             .email0{
             width:335px;
             }
+            .optionalinfo{
+                display:none;
+            }
               @media (min-width: 768px) {
 
               .id1{
@@ -260,6 +263,10 @@ export default function Joindetail(){
             }
             .email3{
             width:280px;
+            }
+
+            .optionalinfo{
+                display:block;
             }
               }
             `}</style>
@@ -440,13 +447,13 @@ export default function Joindetail(){
                                             </Flex>
                                         </td>
                                     </tr>
-                                    {/* <tr className='email0' style={{borderBottom:'1px solid #D1D5DD'}}>
+                                    <tr className='email0' style={{borderBottom:'1px solid #D1D5DD'}}>
                                         <td className="email1" style={{height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="email_id">이메일<span style={{color:'#FF0000'}}>*</span></label></td>
                                         <td className="email2" style={{height:50,paddingLeft:15}}>
                                             <Flex justifyContent='space-between'>
                                                 <Input w={{base:"100px",md:'280px'}} id="email_id" name="email_id" placeholder="example" required/>
                                                 <span style={{lineHeight:'40px'}}>@</span>
-                                                <select className="email3" id="email_address" name="email_address" style={{width:280,border:'1px solid #E4E4E7',borderRadius:5,fontSize:14}} defaultValue='naver.com' required>
+                                                <select className="email3" id="email_address" name="email_address" style={{border:'1px solid #E4E4E7',borderRadius:5,fontSize:14}} defaultValue='naver.com' required>
                                                     <option value="naver.com">&nbsp;&nbsp;naver.com</option>
                                                     <option value="gmail.com">&nbsp;&nbsp;gmail.com</option>
                                                     <option value="daum.net">&nbsp;&nbsp;daum.net</option>
@@ -455,13 +462,16 @@ export default function Joindetail(){
                                                 </select>
                                             </Flex>
                                         </td>
-                                    </tr> */}
+                                    </tr>
                                 </tbody>
                             </table>
 
                             <span style={{fontSize:20}}>선택 정보</span>
+                            <Box textAlign='center' display={{base:'block',md:'none'}}>
+                                PC버전 사이트에서만 입력 가능합니다.
+                            </Box>
                             
-                            <table>
+                            <table className='optionalinfo'>
                                 <tbody>
                                     <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
                                         <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="birthdate">생년월일</label></td>
