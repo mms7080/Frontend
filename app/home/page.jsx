@@ -12,7 +12,7 @@ export const metadata = {
 };
 
 export default async function Homepage(){
-
+    
     const userres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);/* 로그인 중인 유저 정보 fetch */
     const movieres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);/* 영화 fetch */
     const eventres = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event`);/* 이벤트 fetch */
@@ -20,7 +20,7 @@ export default async function Homepage(){
 
     return <>
         <Header userInfo={userres} />
-        <Box w='100vw' minW='1000px'>
+        <Box w='100vw' minW={{base:'0px',md:'1000px'}}>
             <Flex w='100%' flexDirection='column'>
                 <Swipers></Swipers>
                 <Movies userInfo={userres} movieInfo={movieres}></Movies>

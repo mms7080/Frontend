@@ -472,15 +472,15 @@ export default function Header() {
         >
           {/* 사용자 메뉴 */}
           <Flex
-            direction={{ base: "column", md: "row" }}
+            direction="row"
             align={{ base: "flex-end", md: "center" }}
-            gap={{ base: 1, md: 3 }}
+            gap={{ base:'10px', md:'15px' }}
             fontSize="15px"
           >
             {user === undefined ? (
               <Spinner size="sm" color={headerColor} />
             ) : user ? (
-              <>
+              <Flex direction="row" align={{ base: "flex-end", md: "center" }} gap={{ base:'10px', md:'15px' }}>
                 {user.auth === "ADMIN" && (
                   <Text
                     as={Link}
@@ -502,7 +502,7 @@ export default function Header() {
                 <Text color="#ff4d4d" _hover={{ color: "red" }}>
                   <Link href="/booking">빠른예매</Link>
                 </Text>
-              </>
+              </Flex>
             ) : (
               <>
                 <Text color={headerColor} _hover={{ color: hoverColor }}>
@@ -533,12 +533,12 @@ export default function Header() {
               />
             </Link>
           ) : (
-            <Box w="24px" h="24px" />
+            <Box w={{base:"0px",md:"24px"}} h={{base:"0px",md:"24px"}} />
           )}
 
           {/* 햄버거 버튼 (모바일 전용) */}
           <Box
-            display={{ base: "block", md: "none" }}
+            display={{ base: "inline", md: "none" }}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             cursor="pointer"
           >
