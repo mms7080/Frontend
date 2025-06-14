@@ -2,7 +2,7 @@
 
 import React,{useState} from "react";
 import Slider from "react-slick";
-import {IconButton,Image,Box} from "@chakra-ui/react";
+import {IconButton,Image,Box,useMediaQuery} from "@chakra-ui/react";
 import {FaChevronLeft,FaChevronRight} from "react-icons/fa";
 import Modal,{useModal} from '../movie/modal';
 
@@ -49,10 +49,18 @@ function PrevArrow(props) {
 
 export default function SimpleSlider() {
 
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
+
   const trailer=[
     '<iframe width="920" height="517.5" src="https://www.youtube.com/embed/o8j70yHzTJs?si=jFYHzDscX0JHpvnk&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
     '<iframe width="920" height="517.5" src="https://www.youtube.com/embed/IHrSrP_9Afw?si=t9isfICIT6DtDmzH&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
     '<iframe width="920" height="517.5" src="https://www.youtube.com/embed/6c3I-gNUUJw?si=nDGKZIeK_2Un04kM&autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>'
+  ]
+
+  const mobiletrailer=[
+    "https://www.youtube.com/embed/o8j70yHzTJs?si=jFYHzDscX0JHpvnk&autoplay=1&mute=1",
+    "https://www.youtube.com/embed/IHrSrP_9Afw?si=t9isfICIT6DtDmzH&autoplay=1&mute=1",
+    "https://www.youtube.com/embed/6c3I-gNUUJw?si=nDGKZIeK_2Un04kM&autoplay=1&mute=1"
   ]
 
   const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
@@ -82,7 +90,8 @@ export default function SimpleSlider() {
             _hover={{cursor:'pointer'}}
             onClick={()=>{
               setTrailerContent(trailer[0]);
-              openModal();
+              if(!isMobile)openModal();
+              else window.open(mobiletrailer[0], "_blank");
             }}
           />
         </div>
@@ -96,7 +105,8 @@ export default function SimpleSlider() {
             _hover={{cursor:'pointer'}}
             onClick={()=>{
               setTrailerContent(trailer[1]);
-              openModal();
+              if(!isMobile)openModal();
+              else window.open(mobiletrailer[1], "_blank");
             }}
           />
         </div>
@@ -110,7 +120,8 @@ export default function SimpleSlider() {
             _hover={{cursor:'pointer'}}
             onClick={()=>{
               setTrailerContent(trailer[2]);
-              openModal();
+              if(!isMobile)openModal();
+              else window.open(mobiletrailer[2], "_blank");
             }}
           />
         </div>
