@@ -302,10 +302,13 @@ export default function SeatsPage() {
                         size="sm"
                         _hover={{ bg: "#6B46C1" }}
                         onClick={() =>
-                          setPersonCounts((prev) => ({
-                            ...prev,
-                            [type]: Math.max(0, prev[type] - 1),
-                          }))
+                          {
+                            setPersonCounts((prev) => ({
+                              ...prev,
+                              [type]: Math.max(0, prev[type] - 1),
+                            }))
+                            setSelectedSeats([]);
+                          }
                         }
                       >
                         -
@@ -319,6 +322,7 @@ export default function SeatsPage() {
                             alert("최대 8매까지 예매가능합니다.");
                             return;
                           }
+                          setSelectedSeats([]);
                           setPersonCounts((prev) => ({
                             ...prev,
                             [type]: prev[type] + 1,
