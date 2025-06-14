@@ -4,22 +4,24 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Flex,
+  Flex, 
   Box,
   Icon,
   Text,
   Button,
   Image,
   Spinner,
+  useMediaQuery
 } from "@chakra-ui/react";
+import { FaHome } from "react-icons/fa";
 import { FiUser } from "react-icons/fi";
 
 export default function Header() {
   // ──────────────────────── 🔸 경로 및 스타일 관련 설정 ────────────────────────
   const pathname = usePathname();
   const router = useRouter();
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
 
-  const isRealHome = pathname === "/" || pathname.startsWith("/home");
   const isHome =
     pathname === "/" ||
     pathname.startsWith("/home") ||
@@ -588,6 +590,52 @@ export default function Header() {
           )
         )}
       </Flex>
+
+      {isMobile && 
+      <Box
+      position="fixed"
+      bottom="0"
+      left="0"
+      right="0"
+      borderTop="1px gray"
+      boxShadow="0 -2px 4px rgba(0, 0, 0, 0.05)"
+      zIndex="1000"
+      h='50px'
+      bg='white'
+      // Safe area 지원 (iOS 등)
+      paddingBottom="env(safe-area-inset-bottom)"
+      overflow='visible'
+      >
+      <Flex justify="space-around" align="center" overflow='visible'>
+        <Link href="/home">
+          <Flex flexDirection='column' alignItems='center' justifyContent='center'>
+          <Icon
+            as={FaHome}
+            boxSize={6}
+          />
+          <Text>홈</Text>
+          </Flex>
+        </Link>
+        <Link href="/booking" style={{overflow:'visible'}}>
+          <Flex bg='black' w='50px' h='50px' borderRadius='50%' position='relative' bottom='25px' justifyContent='center' alignItems='center' overflow='visible'>
+            <Text color='white' whiteSpace="pre-line" fontSize='13px'>
+              빠른<br/>
+              예매
+            </Text>
+          </Flex>
+        </Link>
+        <Link href="/mypage">
+          <Flex flexDirection='column' alignItems='center' justifyContent='center'>
+          <Icon
+            as={FiUser}
+            boxSize={6}
+          />
+          <Text>마이</Text>
+          </Flex>
+        </Link>
+        
+      </Flex>
+      </Box>}
     </>
   );
 }
