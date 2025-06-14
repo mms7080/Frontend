@@ -2,7 +2,7 @@
 
 import React,{useState} from "react";
 import Slider from "react-slick";
-import {IconButton,Image} from "@chakra-ui/react";
+import {IconButton,Image,Box} from "@chakra-ui/react";
 import {FaChevronLeft,FaChevronRight} from "react-icons/fa";
 import Modal,{useModal} from '../movie/modal';
 
@@ -70,13 +70,13 @@ export default function SimpleSlider() {
   };
 
   return (
-    <div style={{ width: "100%", height: "700px", position: "relative",overflow:'visible' }}>
+    <Box w="100%" h={{base:"200px",md:"700px"}} position="relative" overflow='visible'>
       <Slider {...settings}>
         <div>
           <Image
             src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/homeswipers1.png`}
             w='100%'
-            h='700px'
+            h={{base:"200px",md:"700px"}}
             objectFit='cover'
             loading="lazy"
             _hover={{cursor:'pointer'}}
@@ -90,7 +90,7 @@ export default function SimpleSlider() {
           <Image
             src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/homeswipers2.jpg`}
             w='100%'
-            h='700px'
+            h={{base:"200px",md:"700px"}}
             objectFit='cover'
             loading="lazy"
             _hover={{cursor:'pointer'}}
@@ -104,7 +104,7 @@ export default function SimpleSlider() {
           <Image
             src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/homeswipers3.png`}
             w='100%'
-            h='700px'
+            h={{base:"200px",md:"700px"}}
             objectFit='cover'
             loading="lazy"
             _hover={{cursor:'pointer'}}
@@ -122,6 +122,6 @@ export default function SimpleSlider() {
       isVideo={true}
       content={trailerContent}/>)}
 
-    </div>
+    </Box>
   );
 }
