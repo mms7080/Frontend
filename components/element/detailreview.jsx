@@ -6,7 +6,7 @@ import {Flex,Text,Box,Button,Image,Menu,Portal} from '@chakra-ui/react';
 import {keyframes} from '@emotion/react';
 import {fetch} from '../../lib/client';
 
-export default function Detailreview({id,userInfo,author,score,content,likenum,likeusers,reviewList,setReviewList,setModifyId,movieInfo,isHome=false,authorColor='black',bgColor='#F8F8FA',contentColor='#666691',titleColor='gray',likeColor='#666691',currentPage,setCurrentPage}){
+export default function Detailreview({isMobile=false,id,userInfo,author,score,content,likenum,likeusers,reviewList,setReviewList,setModifyId,movieInfo,isHome=false,authorColor='black',bgColor='#F8F8FA',contentColor='#666691',titleColor='gray',likeColor='#666691',currentPage,setCurrentPage}){
 
     let username=userInfo?userInfo.username:'';
     
@@ -64,12 +64,12 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
     };
 
     return <>
-        <Flex w='100%' gap='15px' transition='all 0.2s ease' {...(isHome && {_hover:{transform:'translateY(-5px)'}})}>
-            <Flex w='125px' h='100px' justifyContent='center' alignItems='center' mr='5px' color={authorColor} whiteSpace="normal" wordBreak="break-word">{author.substring(0,2)+'**'+author.substring(4)}</Flex>
+        <Flex w={!isMobile?'100%':'95%'} m={!isMobile?'0':'auto'} gap='15px' transition='all 0.2s ease' {...(isHome && {_hover:{transform:'translateY(-5px)'}})}>
+            {!isMobile && <Flex w='125px' h='100px' justifyContent='center' alignItems='center' mr='5px' color={authorColor} whiteSpace="normal" wordBreak="break-word">{author.substring(0,2)+'**'+author.substring(4)}</Flex>}
             <Flex w='100%' h='100px' flex='1' bg='#F8F8FA' borderRadius='5px' alignItems='center' bg={bgColor}>
                 <Flex w='100%' gap='15px' alignItems='center'>
-                    <span style={{color:'#352461',paddingLeft:20,width:100}}>관람평</span>
-                    <span style={{color:'#352461',fontSize:40,width:50}}>{score}</span>
+                    <span style={{color:'#352461',paddingLeft:20,width:!isMobile?100:70}}>관람평</span>
+                    <span style={{color:'#352461',fontSize:40,width:!isMobile?50:25}}>{score}</span>
                     <Box bg='#DFDFE1' w='1px' h='50px'></Box>
                     <Text pl='20px' flex='1' color={contentColor}>{content}</Text>
                     {!isHome?
@@ -116,7 +116,7 @@ export default function Detailreview({id,userInfo,author,score,content,likenum,l
                     </>
                    :
                    <>
-                    <Text pr='50px' color={titleColor}>-  {movieInfo.title}</Text>
+                    {!isMobile && <Text pr='50px' color={titleColor}>-  {movieInfo.title}</Text>}
                     <Flex flexDirection='column' justifyContent='center' alignItems='center' w='60px' h='60px'>
                         <Image loading='lazy' src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/unliked.png`} w='20px' h='20px' opacity='0.5'></Image>
                         <Text textAlign='center' overflow='visible' ml='2px' w='50px'h='13px' fontSize='13px' border='none' outline='none' color={likeColor}>{likenum}</Text>

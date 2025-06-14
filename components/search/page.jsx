@@ -1,7 +1,7 @@
 'use client';
 
 import React,{useEffect,useState} from 'react';
-import {Button,Flex,Grid,Box,Input,Text,useMediaQuery} from '@chakra-ui/react';
+import {VStack,Button,Flex,Grid,Box,Input,Text,useMediaQuery} from '@chakra-ui/react';
 import {useRouter} from 'next/navigation';
 import Link from "next/link";
 
@@ -44,13 +44,13 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     // 영화 더보기 버튼
     const MoreButton = () => {
         if(displayNumber < searchedMovies.length)
-            return (<Box pt={10} >
+            return (<VStack pt={10} >
                         <Button
-                            w='100%' bg="#1e1e1e" border="1px solid gray" 
+                            w={!isMobile?'100%':'95%'} bg="#1e1e1e" border="1px solid gray" 
                             _hover={{borderColor : "white"}}
                             onClick={()=>{setDisplayNumber(displayNumber+8)}}
                         >영화 더보기</Button>
-                    </Box>);
+                    </VStack>);
     };
 
     useEffect(()=>{
@@ -66,7 +66,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
-        else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap={4}>
+        else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap={!isMobile?'4px':'25px'} placeItems={isMobile ? "center" : "stretch"}>
                         {searchedMovies.map((movie,index) => {
                             if(index < displayNumber)
                                 return (<MovieCard 
@@ -95,13 +95,13 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     // 이벤트 더보기 버튼
     const MoreButton2 = () => {
         if(displayNumber2 < searchedEvents.flat().filter((_,index)=>index%2=== 1).flat().length)
-            return (<Box pt={10} >
+            return (<VStack pt={10} >
                         <Button
-                            w='100%' bg="#1e1e1e" border="1px solid gray" 
+                            w={!isMobile?'100%':'95%'} bg="#1e1e1e" border="1px solid gray" 
                             _hover={{borderColor : "white"}}
                             onClick={()=>{setDisplayNumber2(displayNumber2+8)}}
                         >이벤트 더보기</Button>
-                    </Box>);
+                    </VStack>);
     };        
 
     const EventCards = () => {/* 이벤트 카드들 */
@@ -110,7 +110,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
-        else return (<Grid templateColumns="repeat(4, 1fr)" gap={4} overflow='visible'>
+        else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap={!isMobile?'4px':'25px'}  placeItems={isMobile ? "center" : "stretch"} overflow='visible'>
                     {searchedEvents.flat().filter((_,index)=>index%2=== 1).flat().map((items,index) =>{
                         if(index<displayNumber2)
                             return <Box overflow='visible' key={items.id} scroll={true} passHref>
@@ -142,13 +142,13 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     // 리뷰 더보기 버튼
     const MoreButton3 = () => {
         if(displayNumber3 < searchedReviews.length)
-            return (<Box pt={10} >
+            return (<VStack pt={10} >
                         <Button
-                            w='100%' bg="#1e1e1e" border="1px solid gray" 
+                            w={!isMobile?'100%':'95%'} bg="#1e1e1e" border="1px solid gray" 
                             _hover={{borderColor : "white"}}
                             onClick={()=>{setDisplayNumber3(displayNumber3+5)}}
                         >리뷰 더보기</Button>
-                    </Box>);
+                    </VStack>);
     };        
 
     const ReviewCards = () => {/* 리뷰 카드들 */
@@ -172,7 +172,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                         id={review.id} author={review.author} score={review.score} content={review.content}
                         likenum={review.likenumber} likeusers={review.likeusers}
                         movieInfo={movieinfo} isHome={true} authorColor='white' bgColor='gray.400' contentColor='black'
-                        titleColor='black.300' likeColor='black.100'
+                        titleColor='black.300' likeColor='black.100' isMobile={isMobile}
                         ></Detailreview></Link>;
                     }
                 }
@@ -184,7 +184,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     return <>
         <Header userInfo={userData}></Header>
         <div style={{width:'100%'}} className="bg-[#141414]">
-            <Box w='70%' bg="#141414" pt={20} pb={10} px={!isMobile?'6px':0} mx="auto">
+            <Box w={!isMobile?'70%':'100%'} bg="#141414" pt={20} pb={10} px={!isMobile?'6px':0} mx="auto">
                 <Box pb={6}>
                     <Flex gap={2} justify={'space-between'}>
                         <Box transform="translate(-23px, 0)">
@@ -195,7 +195,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                                 border="1px solid gray"
                                 fontSize="15px" color="white"
                                 _hover={{borderColor : "white"}}
-                                ml='25px'
+                                ml={!isMobile?'25px':'35px'}
                                 defaultValue={keywordData}
                                 onKeyDown={(e) => {
                                     if(e.key === 'Enter') handleSearch();
@@ -217,16 +217,16 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                                 _hover={{borderColor : "white"}}
                                 onClick={()=>setSearchWord('')}
                                 transform="translate(0, 1px)"
-                                w={!isMobile?'95.78px':'50px'}
+                                w={!isMobile?'95.78px':'70px'}
                             >
                             전체보기
                             </Button>
                             <Button
-                                marginLeft={4} px={6} bg="#1e1e1e"
+                                marginLeft={4} px={0} bg="#1e1e1e"
                                 border="1px solid gray" 
                                 _hover={{borderColor : "white"}}
                                 transform="translate(0, 1px)"
-                                w={!isMobile?'83.28px':'50px'}
+                                w={!isMobile?'83.28px':'55px'}
                             >
                                 <Link href='/home'>
                                     홈으로
@@ -240,6 +240,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     pl='10px'
                     py='10px'
                     mt='30px'
+                    ml={isMobile?'10px':'0px'}
                     borderLeft="4px solid #6B46C1"
                     color='white'
                     >
@@ -254,6 +255,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                 py='10px'
                 mt='30px'
                 mb='30px'
+                ml={isMobile?'10px':'0px'}
                 borderLeft="4px solid #6B46C1"
                 color='white'
                 >
@@ -268,6 +270,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                 py='10px'
                 mt='30px'
                 mb='30px'
+                ml={isMobile?'10px':'0px'}
                 borderLeft="4px solid #6B46C1"
                 color='white'
                 >
