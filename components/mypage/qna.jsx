@@ -1,7 +1,7 @@
 'use client';
 
 import React, {useState,useEffect} from "react";
-import {Box,Flex,Text,Input,Textarea,Button} from '@chakra-ui/react';
+import {Box,Flex,Text,Input,Textarea,Button,useMediaQuery} from '@chakra-ui/react';
 import All from './all';
 import {fetch} from '../../lib/client';
 
@@ -67,6 +67,8 @@ const listBtn = {
 };
 
 export default function Qna({userInfo,qnaInfo,replyInfo}){
+
+    const [isMobile] = useMediaQuery("(max-width: 768px)");
 
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -197,7 +199,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
     if(whichpage==='all'){
      return <>
       <Box w='100%' h='30px'></Box>
-      <All setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
+      <All isMobile={isMobile} setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
     else if(whichpage==='write'){
@@ -269,7 +271,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             </Flex>
           </Flex>
         </Box>
-        <All setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent}  currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
+        <All isMobile={isMobile} setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent}  currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
     else{
@@ -288,19 +290,20 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             width: "100%",
             borderCollapse: "collapse",
             marginBottom: "24px",
+            tableLayout: "fixed" // 추가
           }}
         >
           <tbody>
             <tr>
-              <th style={thStyle}>제목</th>
-              <td style={{ ...tdStyle, color: "#000" }}>{viewcontent.title}</td>
+              <th style={{...thStyle,width:!isMobile?211.8:67}}>제목</th>
+              <td style={{ ...tdStyle, color: "#000"}}>{viewcontent.title}</td>
             </tr>
             <tr>
-              <th style={thStyle}>작성자</th>
+              <th style={{...thStyle,width:!isMobile?211.8:67}}>작성자</th>
               <td style={{ ...tdStyle, color: "#000" }}>{viewcontent.author==='root'?'관리자':viewcontent.author}</td>
             </tr>
             <tr>
-              <th style={thStyle}>작성일</th>
+              <th style={{...thStyle,width:!isMobile?211.8:67}}>작성일</th>
               <td style={{ ...tdStyle, color: "#000" }}>
               {formatDate(viewcontent.writetime)}
               </td>
@@ -332,6 +335,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             marginBottom: "20px",
           }}
         >
+          {!isMobile?
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               style={{ ...navBtn, ...(viewindex > 0 ? {} : disabledStyle) }}
@@ -371,8 +375,8 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
             >
               다음글
             </button>
-          </div>
-          <div style={{ display: "flex", gap: "20px" }}>
+          </div>:<></>}
+          <div style={{ display: "flex", gap: "20px",justifyContent:!isMobile?'flex-start':'flex-end',width:!isMobile?204.73:'100%'}}>
             <button
               style={editBtn}
               onClick={()=>{
@@ -433,7 +437,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
           
           </div>
 
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: !isMobile?"center":"right" }}>
             <button
               onClick={() => {
                 setWhichPage('all');
@@ -452,7 +456,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
           </div>
         </div>
 
-        <All setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
+        <All isMobile={isMobile} setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
       </>;
     }
 }

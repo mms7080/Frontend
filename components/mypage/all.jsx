@@ -5,9 +5,9 @@ import {Box,Flex,VStack,Button,ButtonGroup,IconButton,Pagination} from '@chakra-
 import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
 import {fetch} from '../../lib/client';
 
-export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
+export default function QnaAll({isMobile,setrawItems,setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
 
-    const qnasPerPage = 10;
+    const qnasPerPage = !isMobile?10:5;
 
     const indexOfLastQna = currentPage * qnasPerPage;
     const indexOfFirstQna = indexOfLastQna - qnasPerPage;
@@ -38,12 +38,13 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
           <table
             style={{
               width: "100%",
-              borderCollapse: "collapse"
+              borderCollapse: "collapse",
+              tableLayout: "fixed" // 추가
             }}
           >
             <thead style={{ backgroundColor: "white" }}>
               <tr style={{ color: "black" }}>
-                <th
+                {!isMobile && <th
                   style={{
                     padding: "14px",
                     borderBottom: "1px solid #ddd",
@@ -51,20 +52,20 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                   }}
                 >
                   번호
-                </th>
-                <th style={{ padding: "14px", borderBottom: "1px solid #ddd" }}>
+                </th>}
+                <th style={{ padding: "14px", borderBottom: "1px solid #ddd",width:!isMobile?567.36:'70%'}}>
                   제목
                 </th>
                 <th
                   style={{
                     padding: "14px",
                     borderBottom: "1px solid #ddd",
-                    width: "20%",
+                    width: "30%",
                   }}
                 >
                   작성자
                 </th>
-                <th
+                {!isMobile && <th
                   style={{
                     padding: "14px",
                     borderBottom: "1px solid #ddd",
@@ -72,8 +73,8 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                   }}
                 >
                   작성일
-                </th>
-                <th
+                </th>}
+                {!isMobile && <th
                   style={{
                     padding: "14px",
                     borderBottom: "1px solid #ddd",
@@ -81,14 +82,14 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                   }}
                 >
                   관리
-                </th>
+                </th>}
               </tr>
             </thead>
             <tbody>
               {rawItems.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="6"
+                    colSpan={!isMobile?"5":"2"}
                     style={{
                       textAlign: "center",
                       padding: "20px",
@@ -107,7 +108,7 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                       backgroundColor: "#fff",
                     }}
                   >
-                    <td
+                    {!isMobile && <td
                       style={{
                         padding: "14px",
                         textAlign: "center",
@@ -116,9 +117,10 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                       }}
                     >
                       {indexOfFirstQna+1+_index}
-                    </td>
+                    </td>}
                     <td
                       style={{
+                        width:!isMobile?567.36:'70%',
                         padding: "14px",
                         fontWeight: "600",
                         fontSize: "16px",
@@ -136,6 +138,7 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                           fontWeight: 400,
                           paddingRight:isNew(qna.writetime)?0:'40px',
                           cursor:(qna.deleted?'default':'pointer'),
+                          width:'100%'
                         }}
                         onClick={(e)=>{
                             if(qna.deleted)return;
@@ -153,7 +156,7 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                         onMouseOver={!qna.deleted ? (e) => (e.currentTarget.style.color = "#6B46C1") : undefined}
                         onMouseOut={!qna.deleted ? (e) => (e.currentTarget.style.color = "#222") : undefined}
                       >
-                        {qna.replytoid && <span style={{paddingLeft:35}}>↳&nbsp;</span>} {/* reply일 경우 앞에 표시 추가 */}
+                        {qna.replytoid && <span style={{paddingLeft:!isMobile?35:0}}>↳&nbsp;</span>} {/* reply일 경우 앞에 표시 추가 */}
                         {!qna.deleted?qna.title:'(삭제된 QnA입니다)'}
                         {(isNew(qna.writetime)&&!qna.deleted) && (
                           <span
@@ -181,11 +184,12 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                         textAlign: "center",
                         fontSize: "14px",
                         color: "#555",
+                        width:!isMobile?218.19:'30%'
                       }}
                     >
                       {qna.author==='root'?'관리자':qna.author}
                     </td>
-                    <td
+                    {!isMobile && <td
                       style={{
                         padding: "14px",
                         textAlign: "center",
@@ -194,12 +198,12 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
                       }}
                     >
                       {formatDate(qna.writetime)}
-                    </td>
+                    </td>}
                     {!((userInfo?.username === qna.author || userInfo?.auth==='ADMIN')&&!qna.deleted) &&
-                    (<td style={{width:140.16,height:60.5}}></td>)
+                    (!isMobile && <td style={{width:140.16,height:60.5}}></td>)
                     }
                     {((userInfo?.username === qna.author || userInfo?.auth==='ADMIN')&&!qna.deleted) && (
-                      <td style={{ padding: "14px", textAlign: "center" }}>
+                      !isMobile && <td style={{ padding: "14px", textAlign: "center" }}>
                         <Flex w='100%' justifyContent='center' gap='10px'>
                         <Button
                           bg='gray.100'
@@ -310,7 +314,7 @@ export default function QnaAll({setrawItems,setTitle,setContent,setWhichPage,use
           {/* 10개씩 페이지 그룹 렌더링 */}
                 {(() => {
                   const totalPages = Math.ceil(rawItems.length / qnasPerPage);
-                  const pageGroupSize = 10;
+                  const pageGroupSize = !isMobile?10:5;
                   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
                   const startPage = currentGroup * pageGroupSize + 1;
                   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
