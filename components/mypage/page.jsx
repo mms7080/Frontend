@@ -7,7 +7,7 @@ import {Bookingcheck,Modify,Qna} from '.';
 export default async function Mypage({userInfo,qnaInfo,replyInfo,reservationInfo,paymentInfo}){
 
     reservationInfo=[...reservationInfo].filter((item)=>item.userId===userInfo.username);
-    paymentInfo=[...paymentInfo].filter((item)=>(item.userId===userInfo.username&&item.orderName!=="Movie Ticket"));
+    paymentInfo=[...paymentInfo].filter((item)=>(item.userId===userInfo.username&&item.orderName!=="영화 예매"));
 
      return <>
      <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>

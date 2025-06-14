@@ -335,7 +335,7 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                                 });
                                 
                                 const data2 = await refreshed2.json();
-                                const dataarr2=data2.filter((item)=>(item.userId===userInfo.username&&item.orderName!=="Movie Ticket")).sort((a, b) => {
+                                const dataarr2=data2.filter((item)=>(item.userId===userInfo.username&&item.orderName!=="영화 예매")).sort((a, b) => {
                                   const dateA = new Date(a.approvedAt);
                                   const dateB = new Date(b.approvedAt);
                                   return dateB - dateA;
