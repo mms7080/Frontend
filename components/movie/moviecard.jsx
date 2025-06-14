@@ -26,6 +26,8 @@ const MovieCard = ({ movie, user, rank, crit }) => {
 
   const [liked, likedController] = useState(false);
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
+  const [score, setScore] = useState("N/A");
+  const [scoreLoaded, setScoreLoaded] = useState(false);
   const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
 
   useEffect(() => {
@@ -34,14 +36,38 @@ const MovieCard = ({ movie, user, rank, crit }) => {
   }
   ,[user])
 
+  useEffect(() => {
+    (async() => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${movie.id}`);
+        if(res.ok) {
+          const data = await res.json();
+          if(data.length > 0) {
+            let sum = 0;
+            for(let review of data)
+              sum += review.score;
+            let avg = (sum / data.length).toFixed(1);
+            setScore(avg);
+          } else {
+            setScore("없음");
+          }
+          setScoreLoaded(true);
+        }
+      } catch(err) {
+        console.log("avgScore ERROR! " + err.message);
+        setScore("N/A");
+      }
+    })();
+  }, [movie])
+
   const likeChange = async () => {
     if(!user)
       openModal();
     else
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/update/like?id=${movie.id}&updown=${liked ? "down" : "up"}`);
-        const data = await res.json();
         if(res.ok) {
+          const data = await res.json();
           likedController(!liked);
           setLikeNumber(data > 999 ? Math.floor(data / 100) / 10 + 'k' : data);
           const res2 = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${movie.id}`, {
@@ -60,29 +86,33 @@ const MovieCard = ({ movie, user, rank, crit }) => {
 
   return (<>
     <div className="movie-card">
-      { rank && (<div className='rank-box'><span className="rank">
-                  {(crit ? `${crit} : ${rank}위` : `${rank}위`)}
-                </span></div>)}
-        <Link href={"/detail/" + movie.id}>
-          <div className="poster">
-            <img src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movie.poster}`} alt={movie.title} loading='lazy' />
+      { rank && (
+        <div className='rank-box'>
+          <span className="rank">
+            {(crit ? `${crit} : ${rank}위` : `${rank}위`)}
+          </span>
+        </div>
+      )}
+      <Link href={"/detail/" + movie.id}>
+        <div className="poster">
+          <img src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movie.poster}`} alt={movie.title} loading='lazy' />
             <div className="overlay">
               <p>
                 {movie.title} <br /> <br />
                 <span className='description'>{movie.description}</span><br /> <br />
-                관람평 <span className="score">{movie.score}</span>
+                관람평 <span className="score">{scoreLoaded ? score : "N/A"}</span>
                 <br /> <br />예매율 <span>{movie.reserveRate}%</span>
                 <br/>개봉일 <span>{movie.releaseDate}</span>
               </p>
             </div>
-              <div className='label-container'>
+            <div className='label-container'>
               {movie.label && (
               <>
                 {movie.label.includes("IMAX") && (<span className={`label gray`}>IMAX</span>)}
                 {movie.label.includes("4DX") && (<span className={`label gray`}>4DX</span>)}
               </>
               )}
-              </div>
+            </div>
             {movie.rate && (
               <span className={`rate ${
                 movie.rate == "ALL" ? "green" :
@@ -91,8 +121,8 @@ const MovieCard = ({ movie, user, rank, crit }) => {
                 movie.rate == "19" ? "red" : "none"
               }`}>{movie.rate}</span>
             )}
-          </div>
-        </Link>
+        </div>
+      </Link>
       <div className="info">
         <button 
           className="like-button"
@@ -104,7 +134,7 @@ const MovieCard = ({ movie, user, rank, crit }) => {
           </div>
         </button>
         <Link style={{width:'30%'}} href={`/booking?id=${movie.id}`}>
-          <button className="reserve-button" style={{width:'100%'}} onClick={() => {}}>예매</button>
+          <button className="reserve-button" style={{width:'100%'}}>예매</button>
         </Link>
       </div>
     </div>
