@@ -199,7 +199,8 @@ export default function CheckoutPage() {
               border: "1px solid #ccc",
               width: "100%",
               fontSize: "16px",
-              color: 'white'
+              color: 'white',
+              outline: "none" // 기본 outline 제거
             }}
           >
             <option style={{ color: 'black' }} value="none">선택 안함</option>
