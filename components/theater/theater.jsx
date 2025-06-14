@@ -139,9 +139,10 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
         </Flex>
     }
 
+    // 영화관 변경 (모바일)
     const MobileChangeTheater = () => {
         return <Flex justify="space-between">
-        <Flex w="40%" gap={2} flexDirection="column" borderRight="1px solid #6B46C1" flexWrap="wrap">
+        <Flex w="40%" gap={3} py={3} flexDirection="column" borderRight="1px solid #6B46C1">
             {regions.map((region) => (
                 <Button
                     key={region}
@@ -154,30 +155,29 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                     borderRadius="0"
                     fontWeight="normal"
                     color={activeRegion === region ? "#6B46C1" : "black"}
-                    onClick={() => setActiveRegion(region)}
+                    onClick={() => {setActiveRegion(region);}}
                     _hover={{ bg: "transparent", color: "#6B46C1" }}
-                    fontSize="lg"
-                    py={4}
-                    px={6}
-                    minW="120px"
-                    h="50px"
+                    fontSize="md"    
+                    w="100%"
+                    h="40px"
                 >
                     {region}
                 </Button>
             ))}
         </Flex>
-        <Flex w="60%" gap={6} flexWrap="wrap" paddingLeft={3}>
+        <Flex w="60%" flexDirection="column" gap={3} py={3} px={1}>
             {filteredTheaters.map((theater, index) => {
                 return <Button
                     key={index} textAlign="center" alignContent="center"
                     fontSize="md" color="black"
-                    width="120px" height="80px"
-                    backgroundColor={(activeTheater && activeTheater.name === theater.name) ? "#e2e8f0" : "white"}
+                    width="100%" height="40px"
+                    backgroundColor={(activeTheater && activeTheater.name === theater.name) 
+                        ? "#e2e8f0" : "white"}
                     border="1px solid #e2e8f0" borderRadius="md"
                     _hover={{ backgroundColor: "#e2e8f0" }}
-                    onClick={() => { setActiveTheater(theater); }}
+                    onClick={() => { setActiveTheater(theater); closeModal(); }}
                 >
-                    <Text wordBreak="keep-all">{theater.name}</Text>
+                    <Text>{theater.name}</Text>
                 </Button>
             })}
         </Flex>
@@ -202,7 +202,7 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                         textAlign="center" alignItems='center' 
                     >
                         <Text fontSize="3xl">{activeTheater.name}</Text>
-                        <Text fontSize="md" color="gray.800">{activeTheater.address}</Text>
+                        <Text fontSize="md" wordBreak="keep-all" color="gray.800">{activeTheater.address}</Text>
                         <InfoButton text="🚌 교통안내" />
                         <InfoButton text="🚗 주차안내" />
                         {isMobile && (<InfoButton text="🗺️ 지도보기"/>)}
@@ -220,7 +220,8 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                 closeModal={closeModal}
                 title={activeInfo}
                 content={
-                    activeInfo === "교통안내" ? <Flex flexDirection="column" gap={6} style={{ whiteSpace: 'pre-wrap' }}>
+                    activeInfo === "교통안내" ? 
+                    <Flex flexDirection="column" gap={6} p={6} style={{ whiteSpace: 'pre-wrap' }}>
                         {(!activeTheater.subway && !activeTheater.bus) 
                             && (<Text>관련 정보가 없습니다</Text>)}
                         {activeTheater.subway && (
@@ -250,7 +251,8 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                             </>
                         )}
                     </Flex>
-                    : activeInfo === "주차안내" ? <Flex flexDirection="column" gap={6} style={{ whiteSpace: 'pre-wrap' }}>
+                    : activeInfo === "주차안내" ? 
+                    <Flex flexDirection="column" p={6} gap={6} style={{ whiteSpace: 'pre-wrap' }}>
                         {(!activeTheater.parkGuide && !activeTheater.parkCheck && !activeTheater.parkFee) 
                             && (<Text>관련 정보가 없습니다</Text>)}
                         {activeTheater.parkGuide && (
@@ -293,7 +295,7 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                             </>
                         )}
                     </Flex>
-                    : activeInfo === "지도보기" ? <Box w="100%">
+                    : activeInfo === "지도보기" ? <Box w="100%" p={6}>
                         <NaverMap
                             myAddress={myAddress}
                             activeAddress={activeTheater ? activeTheater.address : null}

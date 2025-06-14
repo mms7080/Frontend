@@ -133,7 +133,6 @@ const Modal = ({ isModalOpen, isModalVisible, closeModal, onConfirm, title, cont
                 {/* 메인 부분 */}
                 <Box
                     className="modal-scroll"
-                    p={6}
                     overflowY="auto"
                     flex="1"
                     minH="0"
