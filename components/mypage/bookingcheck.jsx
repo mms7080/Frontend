@@ -304,16 +304,16 @@ export default function Bookingcheck({userInfo,reservationInfo,paymentInfo}){
                     </td>
                     <td style={tdStyle}>{p.method}</td>
                     <td style={tdStyle}>{p.cardCompany || "-"}</td>
-                    <td style={tdStyle}>
+                    <td style={{...tdStyle,width:67.05}}>
                       {p.refundstatus === "CANCELED" ? (
-                        <span style={{ color: "red", fontWeight: "bold" }}>
+                        <span style={{ color: "red", fontWeight: "bold"}}>
                           환불됨
                         </span>
                       ) : (
                         <span style={{ color: "green" }}>정상</span>
                       )}
                     </td>
-                    <td style={tdStyle}>
+                    <td style={{...tdStyle,width:60}}>
                       {p.refundstatus !== "CANCELED" && (
                       <button
                         onClick={async () => {
