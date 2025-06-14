@@ -16,9 +16,9 @@ export default async function Personalinfo(){
 
     return <>
         <Header userInfo={userres} />
-        <Box w='100vw' minW='1000px'>
+        <Box w='100vw' minW={{base:'0px',md:'1000px'}}>
             <VStack w='100%'>
-                <Box w='900px' px='30px' m='40px' bg='white'>
+                <Box w={{base:'90%',md:'900px'}} px={{base:'0px',md:'30px'}} m={{base:'0px',md:'40px'}} bg='white'>
                     <Text pt='50px' whiteSpace="pre-line">{agreementres[1]}</Text>
                 </Box>
                 <Button mb='50px'>

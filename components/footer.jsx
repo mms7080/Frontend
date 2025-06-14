@@ -64,7 +64,6 @@ export default function Footer() {
         <Box w={BoxDwidth} h="2px" bg="#6B46C1" mb="5px" transition='all 0.3s ease-in-out'></Box>
         <Link href='/agreement/terms'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>이용약관</Text></Link>
         <Link href='/agreement/personalinfo'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>개인정보처리방침</Text></Link>
-        <Link href='/home'><Text fontSize='14px' lineHeight='22px' _hover={{textDecoration:'underline'}}>사이트 이용가이드</Text></Link>
         <HStack spacing={2} mt="8px">
           <Link href="https://instagram.com" target="_blank">
             <Flex w='25px' h='25px' justifyContent='center' alignItems='center'>
