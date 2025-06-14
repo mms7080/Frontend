@@ -128,21 +128,6 @@ export default function PaymentPage({ userData }) {
           <strong>{totalPrice.toLocaleString()}원</strong>
         </div>
 
-        {/* 🎟️ 쿠폰 선택 */}
-        {coupons.length > 0 && (
-          <div style={{ marginTop: 20 }}>
-            <label>쿠폰 선택: </label>
-            <select onChange={handleCouponChange} value={selectedCouponId || ""}>
-              <option value="">-- 사용 안 함 --</option>
-              {coupons.map((coupon) => (
-                <option key={coupon.id} value={coupon.id}>
-                  [{coupon.type === "GENERAL_TICKET" ? "일반 관람권" : "할인"}] {coupon.description}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-
         <div className="payment-summary">
           <div className="summary-row">
             <span>상품금액</span>
