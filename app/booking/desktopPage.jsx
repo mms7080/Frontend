@@ -40,6 +40,15 @@ export default function Booking2Page() {
 
     const searchParams = useSearchParams();
     const sentmovieid = searchParams.get('id');
+    const getRateColor = (rate) => {
+        switch (rate) {
+            case "ALL": return "green";
+            case "12": return "yellow";
+            case "15": return "orange";
+            case "19": return "red";
+            default: return "gray.400";
+        }
+    };
 
     let headerColor='white';
     let headerBg='#1a1a1a';
@@ -370,7 +379,15 @@ export default function Booking2Page() {
                     </Box>
                     <Box>
                         <Text fontWeight="normal" fontSize="lg" mb={1} textShadow="6px 6px 6px rgba(0,0,0,0.6)">관람등급</Text>
-                        <Text fontSize="md" color="gray.400">{movies[activeIndex]?.rate || '-'}</Text>
+                        <Box
+                            display="inline-block"
+                            px={2}
+                            py={1}
+                            borderRadius="md"
+                            bg={getRateColor(movies[activeIndex]?.rate)}
+                        >
+                            <Text fontSize="md" color="black" >{movies[activeIndex]?.rate || '-'}</Text>
+                        </Box>
                     </Box>
                 </Box>
             </Flex>
