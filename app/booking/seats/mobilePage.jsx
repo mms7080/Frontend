@@ -38,12 +38,30 @@ export default function SeatsPageMobile() {
   const disabledSeats = seatData.filter(seat => seat.status === "UNAVAILABLE").map(seat => seat.fullSeatName);
 
   const toggleSeat = (seatId) => {
-    if (bookedSeats.includes(seatId)) return;
-    setSelectedSeats((prev) =>
-      prev.includes(seatId)
-        ? prev.filter((s) => s !== seatId)
-        : [...prev, seatId]
-    );
+    if (bookedSeats.includes(seatId)) return; // 예약 완료 좌석 클릭 막기
+    const isDisabledSeat = disabledSeats.includes(seatId);
+    if (selectedSeats.includes(seatId)) {
+      setSelectedSeats((prev) => prev.filter((s) => s !== seatId));
+    } else {
+      const normalSeats = selectedSeats.filter(
+        (s) => !disabledSeats.includes(s)
+      );
+      const selectedDisabledSeats = selectedSeats.filter((s) =>
+        disabledSeats.includes(s)
+      );
+      if (isDisabledSeat) {
+        if (selectedDisabledSeats.length >= personCounts.special) {
+          alert("선택한 우대 좌석이 우대 인원 수를 초과했습니다.");
+          return;
+        }
+      } else {
+        if (normalSeats.length >= totalPeople - personCounts.special) {
+          alert("선택한 일반 좌석이 인원 수를 초과했습니다.");
+          return;
+        }
+      }
+      setSelectedSeats((prev) => [...prev, seatId]);
+    }
   };
 
   const getSeatColor = (seatId) => {
@@ -54,6 +72,9 @@ export default function SeatsPageMobile() {
   };
 
   const totalPeople = personCounts.adult + personCounts.teen + personCounts.senior + personCounts.special;
+
+  const isButtonDisabled =
+    selectedSeats.length === 0 || selectedSeats.length < totalPeople;
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -177,14 +198,7 @@ export default function SeatsPageMobile() {
               ※ 최대 8매까지 예매가능
             </Text>
           </Box>
-        </Flex>
-
-        {loading ? (
-          <Flex justify="center" align="center" h="200px">
-            <Spinner size="lg" color="purple.500" />
-          </Flex>
-        ) : (
-          <Box mt={6} overflowX="auto">
+        </Flex>  
             <Box
                 width="100%"
                 height="30px"
@@ -207,6 +221,12 @@ export default function SeatsPageMobile() {
             >
                 SCREEN
             </Text>
+        {loading ? (
+          <Flex justify="center" align="center" h="200px">
+            <Spinner size="lg" color="purple.500" />
+          </Flex>
+        ) : (
+          <Box mt={6} overflowX="auto">
             <Grid
               templateColumns="repeat(3, 40px) 40px repeat(8, 40px) 40px repeat(2, 40px)"
               gapX="5px"
@@ -266,7 +286,9 @@ export default function SeatsPageMobile() {
                 </React.Fragment>
               ))}
             </Grid>
-            <Flex justify="center" mt={8} gap={6} wrap="wrap">
+          </Box>
+        )}
+        <Flex justify="center" mt={8} gap={6} wrap="wrap">
                 <Flex align="center">
                     <Box w="20px" h="20px" bg="gray.500" borderRadius="md" mr={2} />
                     <Text fontSize="md" color="gray.300">예약 가능</Text>
@@ -295,18 +317,35 @@ export default function SeatsPageMobile() {
                 초기화
                 </Button>
             </Flex>
-          </Box>
-        )}
 
         <Box mt={6}>
-          <Text fontSize="md">선택한 좌석: {selectedSeats.length ? selectedSeats.join(", ") : "없음"}</Text>
+            <Text fontSize="md">
+                선택한 좌석: {
+                    selectedSeats.length
+                    ? [...selectedSeats].sort((a, b) => {
+                        const rowA = a.charAt(0);
+                        const rowB = b.charAt(0);
+                        const numA = parseInt(a.slice(1));
+                        const numB = parseInt(b.slice(1));
+                        return rowA === rowB ? numA - numB : rowA.localeCompare(rowB);
+                        }).join(", ")
+                    : "없음"
+                }
+            </Text>
+
           <Button
             mt={4}
-            colorScheme="purple"
+            bg={isButtonDisabled ? "gray.600" : "#6B46C1"}
+            color="white"
             size="lg"
             w="full"
-            isDisabled={selectedSeats.length === 0}
-            onClick={handlePayment}
+            isDisabled={isButtonDisabled}
+            onClick={() => {
+                if (!isButtonDisabled) {
+                  handlePayment();
+                  // alert(`결제 진행: 좌석 ${selectedSeats.join(", ")}`);
+                }
+            }}
           >
             결제하기
           </Button>
