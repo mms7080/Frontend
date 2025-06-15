@@ -285,7 +285,7 @@ export default function mobilePage() {
             </Box>
             </Box>
             {activeMovie && (
-                <Box bg="#141414" color="white" py={4} px={4}>
+                <Box bg="#141414" color="white" py={4} px={4} minH="400px">
                     {/* 지역 선택 */}
                     <Text fontSize="md" mb={1}>REGION</Text>
                     <Box
