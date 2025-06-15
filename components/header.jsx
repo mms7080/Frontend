@@ -385,7 +385,7 @@ export default function Header() {
         <Button
           position="fixed"
           right="20px"
-          bottom="20px"
+          bottom={{base:"80px",md:"20px"}}
           zIndex="9999"
           size="sm"
           colorScheme="purple"
@@ -606,33 +606,38 @@ export default function Header() {
       paddingBottom="env(safe-area-inset-bottom)"
       overflow='visible'
       >
-      <Flex justify="space-around" align="center" overflow='visible'>
-        <Link href="/home">
-          <Flex flexDirection='column' alignItems='center' justifyContent='center'>
-          <Icon
-            as={FaHome}
-            boxSize={6}
-          />
-          <Text>홈</Text>
-          </Flex>
-        </Link>
+      <Flex justifyContent="space-around" align="center" overflow='visible'>
+
+        <Flex w='50%' justifyContent='center'>
+          <Link href="/home">
+            <Flex flexDirection='column' alignItems='center' justifyContent='center'>
+            <Icon
+              as={FaHome}
+              boxSize={6}
+            />
+            <Text>홈</Text>
+            </Flex>
+          </Link>
+        </Flex>
         <Link href="/booking" style={{overflow:'visible'}}>
-          <Flex bg='black' w='50px' h='50px' borderRadius='50%' position='relative' bottom='25px' justifyContent='center' alignItems='center' overflow='visible'>
+          <Flex style={{background: "linear-gradient(to bottom, #6b46c1, black)"}} w='50px' h='50px' borderRadius='50%' position='relative' bottom='25px' justifyContent='center' alignItems='center' overflow='visible'>
             <Text color='white' whiteSpace="pre-line" fontSize='13px'>
               빠른<br/>
               예매
             </Text>
           </Flex>
         </Link>
-        <Link href="/mypage">
-          <Flex flexDirection='column' alignItems='center' justifyContent='center'>
-          <Icon
-            as={FiUser}
-            boxSize={6}
-          />
-          <Text>마이</Text>
-          </Flex>
-        </Link>
+        <Flex w='50%' justifyContent='center'>
+          <Link href="/mypage">
+            <Flex flexDirection='column' alignItems='center' justifyContent='center'>
+            <Icon
+              as={FiUser}
+              boxSize={6}
+            />
+            <Text>마이</Text>
+            </Flex>
+          </Link>
+        </Flex>
         
       </Flex>
       </Box>}

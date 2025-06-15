@@ -4,8 +4,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { useCart } from "./CartContext";
 import { useRouter } from "next/navigation";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
+import { useMediaQuery } from "@chakra-ui/react";
 
 export default function CartSidebar() {
+
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
   const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
 
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -148,7 +151,7 @@ export default function CartSidebar() {
 
   return (
     <div
-      style={{ ...sidebarStyle, left: position.x, top: position.y }}
+      style={{ ...sidebarStyle, left: position.x, top: position.y,...(isMobile ? { bottom: '120px' } : {}) }}
       onMouseDown={startDrag}
       onMouseMove={onDrag}
       onMouseUp={endDrag}

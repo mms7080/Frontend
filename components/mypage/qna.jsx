@@ -224,7 +224,7 @@ export default function Qna({userInfo,qnaInfo,replyInfo}){
   
             <Text fontSize='15px' mb='4px'>작성자</Text>
             <Input
-              value={userInfo.username==='root'?'관리자':userInfo.username}
+              value={userInfo?.username==='root'?'관리자':userInfo?.username}
               readOnly
               p='12px'
               fontSize='15px'
