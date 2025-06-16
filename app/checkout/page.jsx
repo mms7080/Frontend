@@ -91,24 +91,70 @@ export default function CheckoutPage() {
     })();
   }, [user]);
 
-  const handlePayment = async () => {
-    setLoading(true);
-    const orderId = `movie-${Date.now()}`;
-    const queryString =
-    `orderId=${orderId}` +
-    `&amount=${finalAmount}` +
-    `&userId=${encodeURIComponent(user?.username || "guest")}` +
-    `&movieId=${movieId}` +
-    `&region=${encodeURIComponent(region)}` +
-    `&theater=${encodeURIComponent(theater)}` +
-    `&date=${encodeURIComponent(date)}` +
-    `&time=${encodeURIComponent(time)}` +
-    `&seats=${encodeURIComponent(seats.join(","))}` +
-    `&adult=${adult}&teen=${teen}&senior=${senior}&special=${special}` +
-    (selectedCouponId ? `&couponId=${selectedCouponId}` : "");
-    
-    try {
-      if (finalAmount === 0) {
+const handlePayment = async () => {
+  setLoading(true);
+  const orderId = `movie-${Date.now()}`;
+
+  const params = new URLSearchParams({
+    orderId,
+    amount: finalAmount.toString(),
+    userId: user?.username || "guest",
+    movieId: movieId.toString(),
+    region,
+    theater,
+    date,
+    time,
+    seats: seats.join(","),
+    adult: adult.toString(),
+    teen: teen.toString(),
+    senior: senior.toString(),
+    special: special.toString(),
+    showtimeId: showtimeId?.toString() || "",
+  });
+
+  if (selectedCouponId) {
+    params.append("couponId", selectedCouponId);
+  }
+
+  const queryString = params.toString();
+
+  try {
+    // 무료 결제 처리
+    if (finalAmount === 0) {
+      for (let seat of seats) {
+        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
+      }
+      if (selectedCouponId) {
+        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ couponId: selectedCouponId }),
+        });
+      }
+      router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
+      return;
+    }
+
+    const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
+
+    // 모바일과 PC 분기
+    if (navigator.userAgent.includes("Mobile")) {
+      console.log("모바일");
+      await toss.requestPayment("카드", {
+        amount: finalAmount,
+        orderId,
+        orderName: "Movie Ticket",
+        customerName: user?.name || "비회원",
+        successUrl: `${window.location.origin}/movie/payment/success?${queryString}`,
+        failUrl: `${window.location.origin}/movie/payment/fail`,
+      });
+    } else {
+      await toss.requestPayment("카드", {
+        amount: finalAmount,
+        orderId,
+        orderName: "Movie Ticket",
+        customerName: user?.name || "비회원",
+      }).then(async () => {
         for (let seat of seats) {
           await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
         }
@@ -120,52 +166,18 @@ export default function CheckoutPage() {
           });
         }
         router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
-        return;
-      }
-      
-      if(navigator.userAgent.includes('Mobile')) {
-        console.log('모바일')
-        const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
-        let result = toss.requestPayment("카드", {
-          amount: finalAmount,
-          orderId,
-          orderName: "Movie Ticket",
-          customerName: user?.name || "비회원",
-          successUrl: `${window.location.origin}/movie/payment/success?${queryString}`,
-          failUrl: `${window.location.origin}/movie/payment/fail`,
-        })
-        console.log(result)
-      }
-      else {
-        const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
-        await toss.requestPayment("카드", {
-          amount: finalAmount,
-          orderId,
-          orderName: "Movie Ticket",
-          customerName: user?.name || "비회원",
-        }).then(async () => {
-          for (let seat of seats) {
-            await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
-          }
-          if (selectedCouponId) {
-            await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ couponId: selectedCouponId }),
-            });
-          }
-           router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
-        }).catch((e) => {
-           router.push(`${window.location.origin}/movie/payment/fail`);
-        });
-      }
-
-    } catch (error) {
-      openModal("Toss 결제 실패: " + error.message);
-    } finally {
-      setLoading(false);
+      }).catch(() => {
+        router.push(`${window.location.origin}/movie/payment/fail`);
+      });
     }
-  };
+
+  } catch (error) {
+    openModal("Toss 결제 실패: " + error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   if (!movie) {
     return (

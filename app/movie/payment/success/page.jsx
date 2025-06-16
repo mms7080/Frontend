@@ -76,6 +76,7 @@ export default function MoviePaymentSuccessPage() {
       const teen = parseInt(params.get("teen") || "0");
       const senior = parseInt(params.get("senior") || "0");
       const special = parseInt(params.get("special") || "0");
+      const showtimeId = params.get("showtimeId");
 
       const paidKey = `paid_${orderId}`;
       if (sessionStorage.getItem(paidKey)) {
@@ -117,6 +118,10 @@ export default function MoviePaymentSuccessPage() {
             }),
           }
         );
+
+        for (let seat of seats) {
+  await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
+}
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
