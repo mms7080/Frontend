@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Spinner from '../../../components/Spinner';
 import {
   Box,
   Text,
@@ -8,7 +9,7 @@ import {
   Flex,
   Image,
   Button,
-  Spinner,
+  // Spinner,
 } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
 import { Header, Footer } from "../../../components";

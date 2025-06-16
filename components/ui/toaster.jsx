@@ -21,10 +21,11 @@ function _optionalChain(ops) {
 }
 ;('use client')
 
+import Spinner from '../Spinner';
 import {
   Toaster as ChakraToaster,
   Portal,
-  Spinner,
+  // Spinner,
   Stack,
   Toast,
   createToaster,

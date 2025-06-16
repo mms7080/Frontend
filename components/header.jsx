@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import Spinner from './Spinner';
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -10,7 +11,7 @@ import {
   Text,
   Button,
   Image,
-  Spinner,
+  // Spinner,
   useMediaQuery
 } from "@chakra-ui/react";
 import { FaHome } from "react-icons/fa";

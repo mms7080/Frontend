@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import '../styles/globals.css';
 import { Provider } from '../components/ui/provider';
 import { Footer } from '../components';
@@ -18,7 +18,11 @@ export default function Layout({ children }) {
               minHeight: '100vh',
             }}
           >
-            <main style={{ flex: 1 }}>{children}</main>
+            <main style={{ flex: 1 }}>
+              <Suspense fallback={<div></div>}>
+                {children}
+              </Suspense>
+            </main>
             <Footer />
           </div>
         </Provider>

@@ -2,9 +2,11 @@
   "name": "filmora(mpa)",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "npx next dev -p 3000 --turbo",
     "build": "npx next build",
+    "server": "npx next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,7 +15,7 @@
   "description": "",
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
-    "@chakra-ui/react": "^3.19.2",
+    "@chakra-ui/react": "^3.21.0",
     "@chakra-ui/select": "^2.1.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",

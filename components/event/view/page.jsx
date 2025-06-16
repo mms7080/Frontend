@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Spinner from '../../Spinner';
 import { useParams, useRouter } from "next/navigation";
 import {
   Box,
   Text,
   Heading,
-  Spinner,
+  // Spinner,
   Button,
   Flex,
   useBreakpointValue,
