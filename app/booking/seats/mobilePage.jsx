@@ -121,7 +121,8 @@ export default function SeatsPageMobile() {
         `&adult=${personCounts.adult}` +
         `&teen=${personCounts.teen}` +
         `&senior=${personCounts.senior}` +
-        `&special=${personCounts.special}`
+        `&special=${personCounts.special}`+
+        `&showtimeId=${showtimeId}`
     );
   };
 
