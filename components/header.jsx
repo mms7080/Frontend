@@ -52,6 +52,8 @@ export default function Header() {
   const dragging = useRef(false);
   const offset = useRef({ x: 0, y: 0 });
 
+  const userId = user?.id ?? "guest";
+
   useEffect(() => {
     const data = localStorage.getItem("latestReservationCountdown");
     if (!data || posterFetched || posterUrl) return;
@@ -96,19 +98,20 @@ export default function Header() {
   }, []);
 
   // countdown 상태 초기화 (닫힘 여부 및 위치)
-  useEffect(() => {
-    const savedClosed = localStorage.getItem("countdownClosed") === "true";
-    setCountdownClosed(savedClosed);
-    const savedPosition = localStorage.getItem("countdownPosition");
-    if (savedPosition) setPosition(JSON.parse(savedPosition));
-    setIsCountdownInit(true);
-  }, []);
+useEffect(() => {
+  if (!userId) return;
+  const savedClosed = localStorage.getItem(`countdownClosed_${userId}`) === "true";
+  setCountdownClosed(savedClosed);
+  const savedPosition = localStorage.getItem(`countdownPosition_${userId}`);
+  if (savedPosition) setPosition(JSON.parse(savedPosition));
+  setIsCountdownInit(true);
+}, [userId]);
 
-  useEffect(() => {
-    if (isCountdownInit) {
-      localStorage.setItem("countdownClosed", countdownClosed.toString());
-    }
-  }, [countdownClosed, isCountdownInit]);
+useEffect(() => {
+  if (isCountdownInit && userId) {
+    localStorage.setItem(`countdownClosed_${userId}`, countdownClosed.toString());
+  }
+}, [countdownClosed, isCountdownInit, userId]);
 
   // 화면 리사이즈 시 타이머 위치 제한
   useEffect(() => {
@@ -120,7 +123,7 @@ export default function Header() {
           x: Math.min(prev.x, maxX),
           y: Math.min(prev.y, maxY),
         };
-        localStorage.setItem("countdownPosition", JSON.stringify(clamped));
+        localStorage.setItem(`latestReservationCountdown_${userId}`, JSON.stringify(clamped));
         return clamped;
       });
     };
@@ -129,89 +132,85 @@ export default function Header() {
   }, []);
 
   // 스토리지에서 예매 알림 감지 (다른 탭 연동용)
-  useEffect(() => {
-    const handleStorage = () => {
-      const alertData = localStorage.getItem("latestReservationShowAlert");
-      if (alertData) {
-        const { title } = JSON.parse(alertData);
-        setShowingAlert({ title });
-        localStorage.removeItem("latestReservationShowAlert");
-      }
-    };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+useEffect(() => {
+  const handleStorage = () => {
+    const alertData = localStorage.getItem(`latestReservationShowAlert_${userId}`);
+    if (alertData) {
+      const { title } = JSON.parse(alertData);
+      setShowingAlert({ title });
+      localStorage.removeItem(`latestReservationShowAlert_${userId}`);
+    }
+  };
+  window.addEventListener("storage", handleStorage);
+  return () => window.removeEventListener("storage", handleStorage);
+}, [userId]);
 
   // 카운트다운 동작 설정 및 알림 체크
-  useEffect(() => {
-    if (!user || countdownClosed) return;
+ useEffect(() => {
+  if (!user || countdownClosed) return;
 
-    const alertData = localStorage.getItem("latestReservationAlert");
-    if (alertData) setReservationAlert(JSON.parse(alertData));
+  const alertData = localStorage.getItem(`latestReservationAlert_${userId}`);
+  if (alertData) setReservationAlert(JSON.parse(alertData));
 
-    const applyCountdown = () => {
-      const data = localStorage.getItem("latestReservationCountdown");
-      if (!data) return;
+  const applyCountdown = () => {
+    const data = localStorage.getItem(`latestReservationCountdown_${userId}`);
+    if (!data) return;
 
-      const { title, showTime, movieId } = JSON.parse(data);
-      const now = Date.now();
-      const target = new Date(showTime).getTime();
-      const diff = target - now;
+    const { title, showTime, movieId } = JSON.parse(data);
+    const now = Date.now();
+    const target = new Date(showTime).getTime();
+    const diff = target - now;
 
-      if (diff <= 0) {
-        setCountdown(null);
-        localStorage.removeItem("latestReservationCountdown");
-      } else {
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        setCountdown({
-          title,
-          timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
-        });
+    if (diff <= 0) {
+      setCountdown(null);
+      localStorage.removeItem(`latestReservationCountdown_${userId}`);
+    } else {
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      setCountdown({
+        title,
+        timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
+      });
 
-        if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
+      if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
 
-        if (!posterUrl && !posterFetched) {
-          if (!movieId) {
-            setPosterFetched(true); // movieId 없으면 더 이상 fetch하지 않게 처리
-            return;
-          }
-
-          fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
-            .then((res) => res.json())
-            .then((data) => {
-              if (data?.poster) {
-                setPosterUrl(
-                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`
-                );
-              }
-              setPosterFetched(true); // ✅ 성공해도 true
-            })
-            .catch(() => {
-              setPosterFetched(true); // ✅ 실패해도 true
-            });
+      if (!posterUrl && !posterFetched) {
+        if (!movieId) {
+          setPosterFetched(true);
+          return;
         }
-      }
-    };
 
+        fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data?.poster) {
+              setPosterUrl(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`);
+            }
+            setPosterFetched(true);
+          })
+          .catch(() => setPosterFetched(true));
+      }
+    }
+  };
+
+  applyCountdown();
+
+  const interval = setInterval(() => {
+    const alertData = localStorage.getItem(`latestReservationAlert_${userId}`);
+    if (alertData) {
+      const { title, notifyTime } = JSON.parse(alertData);
+      if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
+        setShowingAlert({ title });
+        localStorage.removeItem(`latestReservationAlert_${userId}`);
+        setReservationAlert(null);
+      }
+    }
     applyCountdown();
+  }, 1000);
 
-    const interval = setInterval(() => {
-      const alertData = localStorage.getItem("latestReservationAlert");
-      if (alertData) {
-        const { title, notifyTime } = JSON.parse(alertData);
-        if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
-          setShowingAlert({ title });
-          localStorage.removeItem("latestReservationAlert");
-          setReservationAlert(null);
-        }
-      }
-      applyCountdown();
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [user, countdownClosed]);
+  return () => clearInterval(interval);
+}, [user, countdownClosed, userId, posterFetched, posterUrl]);
 
   // 타이머 드래그 관련 함수
   const startDrag = (e) => {
@@ -253,11 +252,11 @@ export default function Header() {
     window.removeEventListener("touchend", endDrag);
   };
 
-  const clearReservationAlert = () => {
-    localStorage.removeItem("latestReservationAlert");
-    setReservationAlert(null);
-    router.push("/mypage");
-  };
+const clearReservationAlert = () => {
+  localStorage.removeItem(`latestReservationAlert_${userId}`);
+  setReservationAlert(null);
+  router.push("/mypage");
+};
 
   //  컴포넌트 리턴
   return (

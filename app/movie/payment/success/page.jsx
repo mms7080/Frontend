@@ -19,6 +19,7 @@ export default function MoviePaymentSuccessPage() {
   const ticketRef = useRef();
   const executedRef = useRef(false); // ✅ 중복 실행 방지용
   const couponId = params.get("couponId");
+  const userLocalKey = user?.id ?? "guest";
 
   const requestNotificationPermission = async () => {
     if (!("Notification" in window)) return false;
@@ -141,7 +142,7 @@ export default function MoviePaymentSuccessPage() {
         const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000);
 
         localStorage.setItem(
-          "latestReservationAlert",
+          `latestReservationAlert_${userLocalKey}`,
           JSON.stringify({
             title: data.title,
             movieId,
@@ -150,7 +151,7 @@ export default function MoviePaymentSuccessPage() {
         );
 
         localStorage.setItem(
-          "latestReservationCountdown",
+          `latestReservationCountdown_${userLocalKey}`,
           JSON.stringify({
             title: data.title,
             movieId,
