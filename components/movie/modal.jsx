@@ -1,8 +1,7 @@
 'use client';
 
 import React, {useState, useEffect} from 'react'
-import {Box, Button, Flex} from '@chakra-ui/react'
-// import { CloseIcon } from '@chakra-ui/icons';
+import {Box, Button, Flex, CloseButton} from '@chakra-ui/react'
 
 // 모달 애니메이션 CSS
 const modalStyles = `
@@ -101,7 +100,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal,onConfirm,content,isVide
                         bg='transparent'
                         onClick={handleConfirm}
                     >
-                        {/* <CloseIcon color='white' width='15px' height='15px' _hover={{color:'gray.500'}}></CloseIcon> */}
+                        <CloseButton color='white' width='15px' height='15px' position='relative' left='12px' _hover={{bg:'transparent'}}></CloseButton>
                     </Button>}
                     <Box mb="6" fontSize="xl" color="black" pt='10px' pb='0px'>
                         <div dangerouslySetInnerHTML={{ __html: content }}/>
