@@ -1,13 +1,9 @@
 'use client';
 
-<<<<<<< HEAD
 import React, {useState, useEffect} from 'react'
 import {Box, Button, Flex, CloseButton} from '@chakra-ui/react'
-=======
 import React, {useState, useEffect, useRef} from 'react'
 import {Box, Button, Flex} from '@chakra-ui/react'
-import { CloseIcon } from '@chakra-ui/icons';
->>>>>>> 99020d1 (alert(), confirm()을 모달창으로 변경)
 
 // 모달 애니메이션 CSS
 const modalStyles = `
