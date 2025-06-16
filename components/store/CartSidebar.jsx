@@ -10,6 +10,10 @@ import Modal, { useModal } from '../movie/modal';
 export default function CartSidebar() {
 
   const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const toggleCollapse = () => setIsCollapsed((prev) => !prev);
+
+
   const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
 
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -150,9 +154,28 @@ export default function CartSidebar() {
     }
   };
 
+  const mobileSidebarStyle = {
+  position: "fixed",
+  bottom: isCollapsed ? "-999px" : "80px",
+  bottom: "80px",
+  left: "50%",
+  transform: "translateX(-50%)",
+  width: "90vw",
+  background: "rgba(255, 255, 255, 0.95)",
+  boxShadow: "0 4px 8px rgba(0,0,0,0.15)",
+  padding: "16px",
+  borderRadius: "12px",
+  zIndex: 1000,
+  fontFamily: "sans-serif",
+  overflowWrap: "break-word",
+};
+  
+
   return (
+    
     <div
-      style={{ ...sidebarStyle, left: position.x, top: position.y,...(isMobile ? { bottom: '120px' } : {}) }}
+      style={isMobile ? mobileSidebarStyle : { ...sidebarStyle, left: position.x, top: position.y }}
+      
       onMouseDown={startDrag}
       onMouseMove={onDrag}
       onMouseUp={endDrag}
@@ -161,6 +184,7 @@ export default function CartSidebar() {
       onTouchMove={onDrag}
       onTouchEnd={endDrag}
     >
+
       <h3 style={titleStyle}>장바구니 🛒</h3>
       <div style={{ maxHeight: "240px", overflowY: "auto" }}>
         {cartItems.length === 0 ? (
