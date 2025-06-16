@@ -120,8 +120,10 @@ export default function MoviePaymentSuccessPage() {
         );
 
         for (let seat of seats) {
-  await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
-}
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`
+          );
+        }
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
@@ -231,23 +233,49 @@ export default function MoviePaymentSuccessPage() {
                 />
                 <div className="details">
                   <h2>{reservationInfo.movie.title}</h2>
-                  <p><strong>주문번호:</strong> {reservationInfo.orderId}</p>
-                  <p><strong>상영 지역:</strong> {reservationInfo.region}</p>
-                  <p><strong>극장:</strong> {reservationInfo.theater}</p>
-                  <p><strong>날짜:</strong> {reservationInfo.date}</p>
-                  <p><strong>시간:</strong> {reservationInfo.time}</p>
-                  <p><strong>좌석:</strong> {reservationInfo.seats}</p>
-                  <p><strong>인원:</strong> {reservationInfo.people}</p>
-                  <p><strong>결제 금액:</strong> {reservationInfo.amount.toLocaleString()}원</p>
+                  <p>
+                    <strong>주문번호:</strong> {reservationInfo.orderId}
+                  </p>
+                  <p>
+                    <strong>상영 지역:</strong> {reservationInfo.region}
+                  </p>
+                  <p>
+                    <strong>극장:</strong> {reservationInfo.theater}
+                  </p>
+                  <p>
+                    <strong>날짜:</strong> {reservationInfo.date}
+                  </p>
+                  <p>
+                    <strong>시간:</strong> {reservationInfo.time}
+                  </p>
+                  <p>
+                    <strong>좌석:</strong> {reservationInfo.seats}
+                  </p>
+                  <p>
+                    <strong>인원:</strong> {reservationInfo.people}
+                  </p>
+                  <p>
+                    <strong>결제 금액:</strong>{" "}
+                    {reservationInfo.amount.toLocaleString()}원
+                  </p>
                   <div className="qr-code">
                     <QRCodeCanvas value={reservationInfo.orderId} size={100} />
                   </div>
                 </div>
               </div>
               <div className="button-group">
-                <button onClick={() => router.push("/")} className="home-button">홈으로 돌아가기</button>
-                <button onClick={handleDownloadPDF} className="home-button">PDF 저장</button>
-                <button onClick={handlePrint} className="home-button">프린트</button>
+                <button
+                  onClick={() => router.push("/")}
+                  className="home-button"
+                >
+                  홈으로 돌아가기
+                </button>
+                <button onClick={handleDownloadPDF} className="home-button">
+                  PDF 저장
+                </button>
+                <button onClick={handlePrint} className="home-button">
+                  프린트
+                </button>
               </div>
               <VStack pt="20px">
                 <Text>팝콘,콜라 주문도 필요하세요?</Text>
@@ -276,54 +304,73 @@ export default function MoviePaymentSuccessPage() {
           text-align: center;
         }
         .status {
-          font-size: 24px;
-          margin-bottom: 30px;
+          font-size: 20px;
+          margin-bottom: 20px;
         }
         .card {
           display: flex;
-          flex-direction: row;
-          align-items: flex-start;
-          gap: 30px;
-          padding: 30px;
+          flex-direction: column;
+          gap: 20px;
+          padding: 20px;
           border-radius: 16px;
           background: #ffffff;
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
           width: 100%;
         }
+        @media (min-width: 768px) {
+          .card {
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 30px;
+            padding: 30px;
+          }
+        }
+        @media (max-width: 767px) {
+          .qr-code {
+            position: static;
+            margin-top: 20px;
+            text-align: center;
+          }
+        }
         .poster {
-          width: 180px;
+          width: 100%;
+          max-width: 200px;
           border-radius: 12px;
           object-fit: cover;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          margin: 0 auto;
         }
         .details {
           flex: 1;
           text-align: left;
-          font-size: 16px;
+          font-size: 14px;
           position: relative;
         }
         .details h2 {
-          font-size: 24px;
-          margin-bottom: 12px;
+          font-size: 20px;
+          margin-bottom: 10px;
         }
         .details p {
-          margin: 6px 0;
+          margin: 4px 0;
+          font-size: 14px;
         }
         .qr-code {
           position: absolute;
           bottom: 0;
           right: 0;
+          text-align: right;
         }
+
         .button-group {
-          margin-top: 30px;
+          margin-top: 20px;
           display: flex;
           gap: 10px;
           flex-wrap: wrap;
           justify-content: center;
         }
         .home-button {
-          padding: 12px 20px;
-          font-size: 16px;
+          padding: 10px 16px;
+          font-size: 14px;
           background-color: #6b46c1;
           color: white;
           border: none;
