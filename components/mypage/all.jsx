@@ -6,15 +6,16 @@ import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
 import {fetch} from '../../lib/client';
 import Modal, { useModal } from '../../components/movie/modal';
 
-const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm} = useModal();
 
 export default function QnaAll({isMobile,setrawItems,setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
-
-    const qnasPerPage = !isMobile?10:5;
-
-    const indexOfLastQna = currentPage * qnasPerPage;
-    const indexOfFirstQna = indexOfLastQna - qnasPerPage;
-    const currentItems = rawItems.slice(indexOfFirstQna, indexOfLastQna);
+  
+  const qnasPerPage = !isMobile?10:5;
+  
+  const indexOfLastQna = currentPage * qnasPerPage;
+  const indexOfFirstQna = indexOfLastQna - qnasPerPage;
+  const currentItems = rawItems.slice(indexOfFirstQna, indexOfLastQna);
+  
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm} = useModal();
 
     /*currentItems에 최종 리스트 삽입*/
 
