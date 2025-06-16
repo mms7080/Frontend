@@ -236,7 +236,7 @@ const Movie = (userInfo) => {
           w="100%"
           h="50vh"
           bg="#141414"
-          fontSize="4xl"
+          fontSize={{base:"18px",md:"4xl"}}
           color="white"
           display="flex"
           alignItems="center"

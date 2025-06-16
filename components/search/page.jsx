@@ -62,7 +62,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     {/* 영화카드들 */}
     const MovieCards = () => {
         if(searchWord != "" && searchedMovies.length < 1)
-            return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
+            return <Box w='100%' h='50vh' bg='#141414' fontSize={{base:"18px",md:"4xl"}} color='white'
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
@@ -106,7 +106,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
 
     const EventCards = () => {/* 이벤트 카드들 */
         if(searchWord != "" && searchedEvents.length < 1)
-            return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
+            return <Box w='100%' h='50vh' bg='#141414' fontSize={{base:"18px",md:"4xl"}} color='white'
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
@@ -153,7 +153,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
 
     const ReviewCards = () => {/* 리뷰 카드들 */
         if(searchWord != "" && searchedReviews.length < 1)
-            return <Box w='100%' h='50vh' bg='#141414' fontSize='4xl' color='white'
+            return <Box w='100%' h='50vh' bg='#141414' fontSize={{base:"18px",md:"4xl"}} color='white'
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
