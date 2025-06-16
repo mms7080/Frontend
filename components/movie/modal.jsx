@@ -1,9 +1,7 @@
 'use client';
 
-import React, {useState, useEffect} from 'react'
 import {Box, Button, Flex, CloseButton} from '@chakra-ui/react'
 import React, {useState, useEffect, useRef} from 'react'
-import {Box, Button, Flex} from '@chakra-ui/react'
 
 // 모달 애니메이션 CSS
 const modalStyles = `
