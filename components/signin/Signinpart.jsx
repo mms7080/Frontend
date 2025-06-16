@@ -55,7 +55,7 @@ export default function SigninClientAlert() {
                 </Flex>
                 <Button type='submit' fontSize='17px' w='100%' bg='#6B46C1' _hover={{bg:'#553C9A'}} mt='10px'>로그인</Button>
             </Flex>
-        </form>;
+        </form>
         {isModalOpen && (<Modal
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}
