@@ -3,6 +3,7 @@
 import React,{useState,useEffect} from 'react';
 import {Flex,Box,VStack,Input,Button,Text,Textarea,RadioGroup} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
+import Modal, { useModal } from '../movie/modal';
 
 export default function Joindetail(){
 
@@ -15,7 +16,7 @@ export default function Joindetail(){
 
     if (forbiddenRegex.test(inputChar)) {
       e.preventDefault();
-      alert('한글 및 특수문자는 입력할 수 없습니다!');
+      openModal('한글 및 특수문자는 입력할 수 없습니다!');
     }
   };
 
@@ -81,6 +82,8 @@ export default function Joindetail(){
     const [fontsize2,setFontSize2]=useState(14);
     const [fontsize3,setFontSize3]=useState(14);
 
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+
     const handleCompositionStart = () => {
       setIsComposing(true);
     };
@@ -110,7 +113,7 @@ export default function Joindetail(){
     const handleIdCheck=async ()=>{
         try{
             if(id.length==0){
-                alert('아이디를 입력해주세요.');
+                openModal('아이디를 입력해주세요.');
                 return;
             }
             const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/idexist?id=${id}`);/* 아이디 중복 확인을 위한 fetch */
@@ -134,16 +137,16 @@ export default function Joindetail(){
     const handleSubmit = async (e) => {
         if(!idCheck){
             e.preventDefault();/* 아이디 중복 확인이 안되었으면 폼 제출 막기 */
-            alert('아이디 중복 확인을 완료해 주세요.');
+            openModal('아이디 중복 확인을 완료해 주세요.');
             return;
         }
         if(!isPwrAvailable){
             e.preventDefault();/* 비밀번호 확인과 비밀번호가 일치되지 않았으면 폼 제출 막기 */
-            alert('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
+            openModal('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
             return;
         }
 
-        alert('회원가입이 완료되었습니다!');
+        openModal('회원가입이 완료되었습니다!');
     };
 
     const adjustsize1=()=>{
@@ -179,7 +182,7 @@ export default function Joindetail(){
         }
     }
 
-    return <Box w='100vw' minW={{ base: "auto", md: "1000px" }}>
+    return <><Box w='100vw' minW={{ base: "auto", md: "1000px" }}>
             <style jsx>{`
               
                 .responsive-form {
@@ -533,4 +536,10 @@ export default function Joindetail(){
                 </form>
             </VStack>
         </Box>;
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        content={modalContent}/>)}
+        </>
 }

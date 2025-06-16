@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
+import Modal, { useModal } from '../movie/modal';
 
 export default function NoticeList({
   items,
@@ -14,6 +15,7 @@ export default function NoticeList({
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
   const itemsPerPage = 10;
 
   const highlightKeyword = (text) => {
@@ -74,7 +76,7 @@ export default function NoticeList({
       )
     : filteredItems;
 
-  return (
+  return (<>
     <div>
       <style jsx global>{`
         @keyframes sparkle {
@@ -237,7 +239,7 @@ export default function NoticeList({
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (searchKeyword.trim() === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setConfirmedKeyword(searchKeyword);
@@ -248,7 +250,7 @@ export default function NoticeList({
             <button
               onClick={() => {
                 if (searchKeyword.trim() === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setConfirmedKeyword(searchKeyword);
@@ -334,6 +336,12 @@ export default function NoticeList({
         }
       `}</style>
     </div>
+    {isModalOpen && (<Modal
+    isModalOpen={isModalOpen}
+    isModalVisible={isModalVisible}
+    closeModal={closeModal}
+    content={modalContent}/>)}
+    </>
   );
 }
 

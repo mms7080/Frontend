@@ -1,8 +1,10 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import Modal, { useModal } from '../movie/modal';
 
 const CartContext = createContext();
+const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
@@ -22,7 +24,7 @@ export const CartProvider = ({ children }) => {
   const addToCart = (item) => {
     const exists = cartItems.find((i) => i.id === item.id);
     if (exists) {
-      alert("이미 장바구니에 담긴 상품입니다.");
+      openModal("이미 장바구니에 담긴 상품입니다.");
       return;
     }
     setCartItems((prev) => [...prev, { ...item, quantity: 1 }]);
@@ -44,7 +46,7 @@ export const CartProvider = ({ children }) => {
     );
   };
 
-  return (
+  return (<>
     <CartContext.Provider
       value={{
         cartItems,
@@ -57,7 +59,12 @@ export const CartProvider = ({ children }) => {
     >
       {children}
     </CartContext.Provider>
-  );
+    {isModalOpen && (<Modal
+    isModalOpen={isModalOpen}
+    isModalVisible={isModalVisible}
+    closeModal={closeModal}
+    content={modalContent}/>)}
+  </>);
 };
 
 export const useCart = () => useContext(CartContext);

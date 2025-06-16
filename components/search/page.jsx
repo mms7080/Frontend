@@ -9,6 +9,7 @@ import {Header} from '..';
 import MovieCard from '../movie/moviecard';
 import Event from '../element/event';
 import Detailreview from '../element/detailreview';
+import Modal, { useModal } from '../movie/modal';
 
 export default function Searchdetail({userData,movieData,serverEvents,reviewInfo,keywordData}){
     const router = useRouter();
@@ -19,10 +20,11 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     const [displayNumber3, setDisplayNumber3] = useState(5);/* 검색된 리뷰 더보기 버튼 */
     const [events] = useState(serverEvents || {});
     const [isMobile] = useMediaQuery("(max-width: 768px)");
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
     const handleSearch = () => {
         if(document.querySelector('#keyword').value.replace(/\s+/g, '')===''){
-            alert('유효한 검색어를 입력해주세요!');
+            openModal('유효한 검색어를 입력해주세요!');
             return;
         }
         router.push(`/search/${document.querySelector('#keyword').value}`);
@@ -281,5 +283,10 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                 <MoreButton3/>
             </Box>
         </div>
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        content={modalContent}/>)}
         </>;
 }

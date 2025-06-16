@@ -4,6 +4,7 @@ import React,{useState} from 'react';
 import {RadioGroup,Input,Box,VStack,Flex,Button,Text} from '@chakra-ui/react';
 import {Header} from '../../components';
 import {fetch} from '../../lib/client';
+import Modal, { useModal } from '../movie/modal';
 
 export default function Findpwdetail({userData}){
     const [found,setFound]=useState(false);
@@ -17,6 +18,7 @@ export default function Findpwdetail({userData}){
     const [pwrMessage,setPwrMessage]=useState('');/* 비밀번호 확인 입력창 밑의 메세지 */
     const [isPwrAvailable,setIsPwrAvailable]=useState(null);/* 비밀번호 확인이 비밀번호와 같은지 여부 */
     const [foundID,setFoundID]=useState('');
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm} = useModal();
 
     const handleFindPW=async ()=>{
 
@@ -36,30 +38,30 @@ export default function Findpwdetail({userData}){
         });
         
         if(document.querySelector('#id').value===''){
-            alert('아이디를 입력하세요.');
+            openModal('아이디를 입력하세요.');
             setFound(false);
             return;
         }
 
         if(document.querySelector('#name').value===''){
-            alert('이름을 입력하세요.');
+            openModal('이름을 입력하세요.');
             setFound(false);
             return;
         }
 
         if(formData.method==='email'&&document.querySelector('#email').value===''){
-            alert('이메일을 입력하세요.');
+            openModal('이메일을 입력하세요.');
             setFound(false);
             return;
         }
         if(formData.method==='phone_number'&&document.querySelector('#phone_number').value===''){
-            alert('휴대폰 번호를 입력하세요.');
+            openModal('휴대폰 번호를 입력하세요.');
             setFound(false);
             return;
         }
 
         if(!res) {
-            alert('해당하는 사용자 정보가 없습니다.');
+            openModal('해당하는 사용자 정보가 없습니다.');
             setFound(false);
             return;
         }
@@ -71,11 +73,11 @@ export default function Findpwdetail({userData}){
     const changePassword=async (e)=>{
         if(!isPwrAvailable){
             e.preventDefault();/* 비밀번호 확인과 비밀번호가 일치되지 않았으면 폼 제출 막기 */
-            alert('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
+            openModal('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
             return;
         }
 
-        alert('비밀번호가 성공적으로 변경되었습니다!');
+        openModal('비밀번호가 성공적으로 변경되었습니다!');
     }
 
     const EmailLayout=()=>{
@@ -280,6 +282,12 @@ export default function Findpwdetail({userData}){
                     </Box>
                 </VStack>
             </Box>
+            {isModalOpen && (<Modal
+            isModalOpen={isModalOpen}
+            isModalVisible={isModalVisible}
+            closeModal={closeModal}
+            onConfirm={onConfirm}
+            content={modalContent}/>)}
         </>;
     }
 }

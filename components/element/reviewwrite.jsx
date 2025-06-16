@@ -1,11 +1,13 @@
 import React,{useState} from 'react';
 import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
+import Modal, { useModal } from '../movie/modal';
 
 export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
 
     const [content, setContent] = useState(initialContent);
     const [score, setScore] = useState(initialScore);
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
     const reviewExist=()=>{
         if(modifyid!=-1)return false;
@@ -30,7 +32,7 @@ export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,re
 
         if(content===''){
             e.preventDefault();
-            alert('내용을 입력해주세요.');
+            openModal('내용을 입력해주세요.');
             return;
         }
 
@@ -71,7 +73,7 @@ export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,re
 
         if(content===''){
             e.preventDefault();
-            alert('내용을 입력해주세요.');
+            openModal('내용을 입력해주세요.');
             return;
         }
 
@@ -168,5 +170,10 @@ export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,re
             {reviewOK() && (<Button bg='white' color='#666666' h='60px' fontSize='16px' onClick={modifyid===-1?handleSubmit:handleModify}>✏️ {modifyid===-1?'관람평쓰기':'리뷰 수정하기'}</Button>)}
         </Flex>
         </Flex>
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        content={modalContent}/>)}
     </>;
 }

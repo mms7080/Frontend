@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
 import {FaHeart} from 'react-icons/fa';
+import Modal, { useModal } from '../../components/movie/modal';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -36,6 +37,7 @@ export default function Booking2Page() {
     const [selectedTheater, setSelectedTheater] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [moviescore,setMovieScore]=useState('0.0');
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
     const router = useRouter();
 
     const searchParams = useSearchParams();
@@ -194,8 +196,8 @@ export default function Booking2Page() {
 
     const handleBooking = () => {
         if (!user) {
-            alert("로그인 후 이용해주세요.");
-            router.push("/signin"); // 원하는 로그인 페이지 경로로 수정
+                                                    // 원하는 로그인 페이지 경로로 수정
+            openModal("로그인 후 이용해주세요.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
             return;
         }
         if (!selectedDate || !selectedTime) return;
@@ -626,6 +628,14 @@ export default function Booking2Page() {
                 </Box>
             </Box>
         )}
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}/>)}
     </>
+    
   );
 }

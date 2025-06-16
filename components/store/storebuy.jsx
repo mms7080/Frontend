@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "..";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
+import Modal, { useModal } from '../movie/modal';
 
 export default function PaymentPage({ userData }) {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function PaymentPage({ userData }) {
   const [coupons, setCoupons] = useState([]);
   const [selectedCouponId, setSelectedCouponId] = useState(null);
   const [discountAmount, setDiscountAmount] = useState(0);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
   useEffect(() => {
     let didCancel = false;
@@ -58,8 +60,7 @@ export default function PaymentPage({ userData }) {
         }
       } catch (e) {
         if (!didCancel) {
-          alert("로그인이 필요합니다.");
-          router.replace("/signin");
+          openModal("로그인이 필요합니다.", ()=>{router.replace("/signin");}, ()=>{router.replace("/signin");});
         }
       }
     })();
@@ -100,7 +101,7 @@ export default function PaymentPage({ userData }) {
         failUrl: `${window.location.origin}/store/payment/fail`,
       });
     } catch (error) {
-      alert("Toss 결제 실패: " + error.message);
+      openModal("Toss 결제 실패: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -235,6 +236,13 @@ export default function PaymentPage({ userData }) {
           cursor: not-allowed;
         }
       `}</style>
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      content={modalContent}/>)}
     </>
   );
 }

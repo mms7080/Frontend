@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { Header } from "..";
+import Modal, { useModal } from '../movie/modal';
 
 export default function NoticePage({ notices, userData }) {
   const [searchOption, setSearchOption] = useState("title");
@@ -10,6 +11,7 @@ export default function NoticePage({ notices, userData }) {
   const [filtered, setFiltered] = useState([]);
   const [user, setUser] = useState(userData);
   const [currentPage, setCurrentPage] = useState(1);
+  const { isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm } = useModal();
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -23,12 +25,12 @@ export default function NoticePage({ notices, userData }) {
         searchOption === "title"
           ? n.title
           : searchOption === "content"
-          ? n.content
-          : searchOption === "author"
-          ? n.writer
-          : searchOption === "title_content"
-          ? `${n.title} ${n.content}`
-          : "";
+            ? n.content
+            : searchOption === "author"
+              ? n.writer
+              : searchOption === "title_content"
+                ? `${n.title} ${n.content}`
+                : "";
       return target
         ?.replace(/\s+/g, "")
         .toLowerCase()
@@ -212,7 +214,7 @@ export default function NoticePage({ notices, userData }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (searchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setConfirmedKeyword(searchKeyword);
@@ -228,7 +230,7 @@ export default function NoticePage({ notices, userData }) {
             <button
               onClick={() => {
                 if (searchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setConfirmedKeyword(searchKeyword);
@@ -431,21 +433,22 @@ export default function NoticePage({ notices, userData }) {
                             fontSize: "13px",
                           }}
                           onClick={async () => {
-                            if (confirm("정말 삭제하시겠습니까?")) {
-                              const res = await fetch(
-                                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${notice.id}`,
-                                {
-                                  method: "DELETE",
-                                  credentials: "include",
+                            openModal("정말 삭제하시겠습니까?",
+                              async () => {
+                                const res = await fetch(
+                                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${notice.id}`,
+                                  {
+                                    method: "DELETE",
+                                    credentials: "include",
+                                  }
+                                );
+                                if (res.ok) {
+                                  openModal("삭제 완료", () => { location.reload(); }, () => { location.reload(); });
+                                } else {
+                                  openModal("삭제 실패");
                                 }
-                              );
-                              if (res.ok) {
-                                alert("삭제 완료");
-                                location.reload();
-                              } else {
-                                alert("삭제 실패");
-                              }
-                            }
+                              }, ()=>{}, true
+                            )
                           }}
                         >
                           삭제
@@ -570,6 +573,14 @@ export default function NoticePage({ notices, userData }) {
           </button>
         </div>
       </div>
+      {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        isConfirm={isConfirm}
+        content={modalContent} />)}
     </>
   );
 }

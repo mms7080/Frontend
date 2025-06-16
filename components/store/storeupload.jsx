@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Header } from "..";
+import Modal, { useModal } from '../movie/modal';
 
 export default function StoreUploadPage({userData}) {
   const [category, setCategory] = useState("");
@@ -15,28 +16,28 @@ export default function StoreUploadPage({userData}) {
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [user, setUser] = useState(userData);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   const router = useRouter();
 
   try {
     if (!user) throw new Error();
     // 🔐 관리자 체크
     if (user.auth !== "ADMIN") {
-      alert("관리자만 접근 가능한 페이지입니다.");
-      return router.push("/store");
+      openModal("관리자만 접근 가능한 페이지입니다.", ()=>{router.push("/store");}, ()=>{router.push("/store");});
+      return;
     }
   } catch {
-    alert("로그인이 필요합니다.");
-    router.push("/signin");
+    openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
   }
 
   const handleSubmit = async () => {
     if (!category) {
-      alert("카테고리를 선택해주세요.");
+      openModal("카테고리를 선택해주세요.");
       return;
     }
 
     if (!imageFile) {
-      alert("이미지를 선택해주세요.");
+      openModal("이미지를 선택해주세요.");
       return;
     }
 
@@ -60,10 +61,9 @@ export default function StoreUploadPage({userData}) {
         }
       );
       if (!res.ok) throw new Error("업로드 실패");
-      alert("상품이 성공적으로 등록되었습니다!");
-      router.push("/store");
+      openModal("상품이 성공적으로 등록되었습니다!", ()=>{router.push("/store");}, ()=>{router.push("/store");});
     } catch (e) {
-      alert("에러 발생: " + e.message);
+      openModal("에러 발생: " + e.message);
     }
   };
 
@@ -225,6 +225,13 @@ export default function StoreUploadPage({userData}) {
           </div>
         </div>
       </div>
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      content={modalContent}/>)}
     </>
   );
 }

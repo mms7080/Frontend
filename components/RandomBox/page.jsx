@@ -3,16 +3,18 @@
 import React, { useState } from "react";
 import confetti from "canvas-confetti";
 import { Header } from "../../components";
+import Modal, { useModal } from '../movie/modal';
 
 export default function RandomBoxPage({ userData }) {
   const [user] = useState(userData);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [showBox, setShowBox] = useState(false);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
   const openBox = async () => {
     if (!user) {
-      alert("로그인이 필요합니다.");
+      openModal("로그인이 필요합니다.");
       return;
     }
 
@@ -58,7 +60,7 @@ setTimeout(() => {
         // ✅ 실제 사용 시 주석 해제
         // localStorage.setItem("lastOpenedDate", today);
       } catch (err) {
-        alert("에러 발생: " + err.message);
+        openModal("에러 발생: " + err.message);
       } finally {
         setLoading(false);
         setShowBox(false);
@@ -248,6 +250,13 @@ setTimeout(() => {
           }
         }
       `}</style>
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      content={modalContent}/>)}
     </>
   );
 }

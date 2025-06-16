@@ -14,6 +14,7 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { Header } from "../..";
+import Modal, { useModal } from '../../movie/modal';
 
 export default function EventDetailPage({ userData }) {
   const { id } = useParams();
@@ -22,6 +23,7 @@ export default function EventDetailPage({ userData }) {
   const [allEvents, setAllEvents] = useState([]);
   const [user, setUser] = useState(userData);
   const [loading, setLoading] = useState(true);
+  const { isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm } = useModal();
 
   useEffect(() => {
     (async () => {
@@ -209,20 +211,22 @@ export default function EventDetailPage({ userData }) {
               <Flex justify="flex-end" mt={6}>
                 <Button
                   onClick={async () => {
-                    if (!window.confirm("정말로 삭제하시겠습니까?")) return;
-                    const res = await fetch(
-                      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${event.id}`,
-                      {
-                        method: "DELETE",
-                        credentials: "include",
-                      }
-                    );
-                    if (res.ok) {
-                      alert("이벤트가 삭제되었습니다.");
-                      router.push("/event");
-                    } else {
-                      alert("삭제에 실패했습니다.");
-                    }
+                    openModal("정말로 삭제하시겠습니까?",
+                      async () => {
+                        const res = await fetch(
+                          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${event.id}`,
+                          {
+                            method: "DELETE",
+                            credentials: "include",
+                          }
+                        );
+                        if (res.ok) {
+                          openModal("이벤트가 삭제되었습니다.", () => { router.push("/event"); }, () => { router.push("/event"); });
+                        } else {
+                          openModal("삭제에 실패했습니다.");
+                        }
+                      }, ()=>{}, true
+                    )
                   }}
                   variant="outline"
                   colorScheme="red"
@@ -242,6 +246,14 @@ export default function EventDetailPage({ userData }) {
           </Flex>
         )}
       </Box>
+      {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        isConfirm={isConfirm}
+        content={modalContent} />)}
     </>
   );
 }

@@ -5,14 +5,16 @@ import {VStack,Flex,Button,Input,Image,Box,useMediaQuery} from '@chakra-ui/react
 import { FiSearch } from 'react-icons/fi'
 import {useRouter} from 'next/navigation';
 import Link from "next/link";
+import Modal, { useModal } from '../movie/modal';
 
 export default function Bookmark(){
 
     const router = useRouter();
     const [inputValue,setInputValue]=useState('');
     const [isMobile] = useMediaQuery("(max-width: 768px)");
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
-    return <VStack w='100%' bg='#0f0f0f' p='30px'>
+    return <><VStack w='100%' bg='#0f0f0f' p='30px'>
         <Flex gap={{base:'6px',md:'30px'}} alignItems='center'>
             <Flex h='40px' justifyContent='space-between' alignContent='center' py='8px' bg='#1e1e1e' borderRadius='4px' border='1px solid gray' _focusWithin={{borderColor:'white'}}>
                 <Input w={{base:'155px',md:'300px'}} h='24px' color='white' border='none' outline='none' fontSize='14px'
@@ -21,7 +23,7 @@ export default function Bookmark(){
                  onKeyDown={(e)=>{
                     if(e.key==='Enter'){
                         if(e.target.value.replace(/\s+/g, '')===''){
-                            alert('유효한 검색어를 입력해주세요!');
+                            openModal('유효한 검색어를 입력해주세요!');
                             return;
                         }
                         router.push(`/search/${e.target.value}`);
@@ -32,7 +34,7 @@ export default function Bookmark(){
                 
                 <Button h='24px' bg='none' onClick={()=>{
                     if(inputValue.replace(/\s+/g, '')===''){
-                        alert('유효한 검색어를 입력해주세요!');
+                        openModal('유효한 검색어를 입력해주세요!');
                         return;
                     }
                     router.push(`/search/${inputValue}`);
@@ -64,4 +66,11 @@ export default function Bookmark(){
             </Link>
         </Flex>
     </VStack>;
+    {isModalOpen && (<Modal
+    isModalOpen={isModalOpen}
+    isModalVisible={isModalVisible}
+    closeModal={closeModal}
+    onConfirm={onConfirm}
+    content={modalContent}/>)}
+    </>
 }

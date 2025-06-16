@@ -3,6 +3,7 @@
 import React,{useState,useEffect} from 'react';
 import {Flex,Box,Input,Button,Text,RadioGroup,useMediaQuery} from '@chakra-ui/react';
 import Link from "next/link";
+import Modal, { useModal } from '../movie/modal';
 
 export default function Modify({userInfo}) {/* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
     const [isMobile] = useMediaQuery("(max-width: 768px)");
@@ -49,22 +50,24 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
     const [pwrMessage,setPwrMessage]=useState('');/* 비밀번호 확인 입력창 밑의 메세지 */
     const [isPwrAvailable,setIsPwrAvailable]=useState(true);/* 비밀번호 확인이 비밀번호와 같은지 여부 */
 
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm} = useModal();
+
     const handleSubmit = async (e) => {
         if(!isPwAvailable){
             e.preventDefault();/* 비밀번호 확인과 비밀번호가 일치되지 않았으면 폼 제출 막기 */
-            alert('비밀번호는 10자 이상 입력해주세요.');
+            openModal('비밀번호는 10자 이상 입력해주세요.');
             return;
         }
         if(!isPwrAvailable){
             e.preventDefault();/* 비밀번호 확인과 비밀번호가 일치되지 않았으면 폼 제출 막기 */
-            alert('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
+            openModal('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
             return;
         }
 
-        alert('개인정보가 수정되었습니다!');
+        openModal('개인정보가 수정되었습니다!');
     };
 
-    return <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/modify/logic`} method='post' onSubmit={handleSubmit}>
+    return <><form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/modify/logic`} method='post' onSubmit={handleSubmit}>
                         <Box w='100%' px='30px' borderRadius='10px' bg='white'>
                             <Flex w='100%' flexDirection='column' gap='30px' py='50px'>
                                 <span style={{fontSize:28,marginBottom:10,textAlign:'center'}}>개인정보 수정</span>
@@ -254,10 +257,11 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                 href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`}
                                 onClick={(e) => {
                                       e.preventDefault(); // 기본 이동 막기
-                                      const confirmDelete = window.confirm("정말로 회원탈퇴하시겠습니까?");
-                                      if (confirmDelete) {
-                                        window.location.href = `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`;
-                                      }
+                                      openModal("정말로 회원탈퇴하시겠습니까?",
+                                        () => {
+                                            window.location.href = `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`;
+                                        }, ()=>{}, true
+                                      )
                                     }}
                                  >회원탈퇴</Link>
 
@@ -265,4 +269,13 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                             </Flex>
                         </Box>
                     </form>;
+                    {isModalOpen && (<Modal
+                    isModalOpen={isModalOpen}
+                    isModalVisible={isModalVisible}
+                    closeModal={closeModal}
+                    onConfirm={onConfirm}
+                    onCancel={onCancel}
+                    isConfirm={isConfirm}
+                    content={modalContent}/>)}
+                    </>
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../header";
 import NoticeList from "../../components/notice/noticeList";
+import Modal, { useModal } from '../movie/modal';
 
 export default function NoticeIdPage({ userData }) {
   const params = useParams();
@@ -14,6 +15,8 @@ export default function NoticeIdPage({ userData }) {
   const [allNotices, setAllNotices] = useState([]);
   const [prevId, setPrevId] = useState(null);
   const [nextId, setNextId] = useState(null);
+  const { isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm } = useModal();
+
 
   useEffect(() => {
     document.title = "공지 - FILMORA";
@@ -41,7 +44,7 @@ export default function NoticeIdPage({ userData }) {
         }
       } catch (err) {
         console.error(err);
-        alert("공지사항을 불러오는 데 실패했습니다.");
+        openModal("공지사항을 불러오는 데 실패했습니다.");
       }
     };
     fetchData();
@@ -208,26 +211,28 @@ export default function NoticeIdPage({ userData }) {
             <button
               style={{ ...editBtn, marginLeft: "10px" }}
               onClick={async () => {
-                if (confirm("정말 삭제하시겠습니까?")) {
-                  try {
-                    const res = await fetch(
-                      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`,
-                      {
-                        method: "DELETE",
-                        credentials: "include",
+                openModal("정말 삭제하시겠습니까?",
+                  async () => {
+                    try {
+                      const res = await fetch(
+                        `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/notice/${id}`,
+                        {
+                          method: "DELETE",
+                          credentials: "include",
+                        }
+                      );
+                      if (res.ok) {
+                        openModal("삭제 완료", () => { router.push("/notice"); }, () => { router.push("/notice"); });
+                      } else {
+                        openModal("삭제 실패");
                       }
-                    );
-                    if (res.ok) {
-                      alert("삭제 완료");
-                      router.push("/notice");
-                    } else {
-                      alert("삭제 실패");
+                    } catch (err) {
+                      console.error(err);
+                      openModal("삭제 중 오류 발생");
                     }
-                  } catch (err) {
-                    console.error(err);
-                    alert("삭제 중 오류 발생");
-                  }
-                }
+                  }, ()=>{}, true
+                )
+
               }}
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#ddd")
@@ -287,6 +292,14 @@ export default function NoticeIdPage({ userData }) {
       </div>
 
       <div style={{ height: "200px" }} />
+      {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        isConfirm={isConfirm}
+        content={modalContent} />)}
     </>
   );
 }

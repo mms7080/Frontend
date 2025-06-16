@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import Modal, { useModal } from '../../components/movie/modal';
 
 export default function AdminDashboard({ userData }) {
   const router = useRouter();
@@ -72,6 +73,8 @@ export default function AdminDashboard({ userData }) {
   const [currentPaymentPage, setCurrentPaymentPage] = useState(1);
   const [selectedSection, setSelectedSection] = useState(null);
 
+  const { isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm } = useModal();
+
   useEffect(() => {
     document.title = "관리자 - FILMORA";
   }, []);
@@ -80,11 +83,9 @@ export default function AdminDashboard({ userData }) {
   useEffect(() => {
     if (!redirected.current) {
       if (!user) {
-        alert("로그인 후 이용해주세요.");
-        router.push("/signin");
+        openModal("로그인 후 이용해주세요.", () => { router.push("/signin"); }, () => { router.push("/signin"); });
       } else if (user.auth !== "ADMIN") {
-        alert("접근 권한이 없습니다.");
-        router.push("/home");
+        openModal("접근 권한이 없습니다.", () => { router.push("/home"); }, () => { router.push("/home"); });
       }
       redirected.current = true;
     }
@@ -272,7 +273,7 @@ export default function AdminDashboard({ userData }) {
     const stats = {};
     reservations.forEach((r) => {
       stats[r.movieId] = (stats[r.movieId] || 0) + 1;
-      if(r.status==='CANCELED')stats[r.movieId]--;
+      if (r.status === 'CANCELED') stats[r.movieId]--;
     });
 
     return Object.entries(stats)
@@ -324,7 +325,7 @@ export default function AdminDashboard({ userData }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (searchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setConfirmedKeyword(searchKeyword);
@@ -343,7 +344,7 @@ export default function AdminDashboard({ userData }) {
             <button
               onClick={() => {
                 if (searchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setConfirmedKeyword(searchKeyword);
@@ -496,7 +497,7 @@ export default function AdminDashboard({ userData }) {
                   borderRadius: 4,
                   cursor:
                     currentUserPage ===
-                    Math.ceil(filteredUsers.length / usersPerPage)
+                      Math.ceil(filteredUsers.length / usersPerPage)
                       ? "not-allowed"
                       : "pointer",
                   width: "36px",
@@ -549,23 +550,27 @@ export default function AdminDashboard({ userData }) {
       );
 
       const handleDelete = async (id) => {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${id}`,
-            {
-              method: "DELETE",
-              credentials: "include",
+        openModal("정말 삭제하시겠습니까?",
+          async () => {
+            try {
+              const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${id}`,
+                {
+                  method: "DELETE",
+                  credentials: "include",
+                }
+              );
+              if (res.ok) {
+                setProducts((prev) => prev.filter((p) => p.id !== id));
+              } else {
+                openModal("삭제에 실패했습니다.");
+              }
+            } catch {
+              openModal("삭제 중 오류 발생");
             }
-          );
-          if (res.ok) {
-            setProducts((prev) => prev.filter((p) => p.id !== id));
-          } else {
-            alert("삭제에 실패했습니다.");
           }
-        } catch {
-          alert("삭제 중 오류 발생");
-        }
+          , () => { }, true)
+
       };
 
       return (
@@ -580,7 +585,7 @@ export default function AdminDashboard({ userData }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (storeSearchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setStoreConfirmedKeyword(storeSearchKeyword);
@@ -598,7 +603,7 @@ export default function AdminDashboard({ userData }) {
             <button
               onClick={() => {
                 if (storeSearchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setStoreConfirmedKeyword(storeSearchKeyword);
@@ -816,29 +821,32 @@ export default function AdminDashboard({ userData }) {
       );
 
       const handleDelete = async (id) => {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${id}`,
-            {
-              method: "DELETE",
-              credentials: "include",
+        openModal("정말 삭제하시겠습니까?",
+          async () => {
+            try {
+              const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${id}`,
+                {
+                  method: "DELETE",
+                  credentials: "include",
+                }
+              );
+              if (res.ok) {
+                for (u of users) {
+                  if (u && u.likemovies.includes(id))
+                    await fetch(
+                      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${id}`
+                    );
+                }
+                setMovies((prev) => prev.filter((m) => m.id !== id));
+              } else {
+                openModal("삭제에 실패했습니다.");
+              }
+            } catch {
+              openModal("삭제 중 오류 발생");
             }
-          );
-          if (res.ok) {
-            for (u of users) {
-              if (u && u.likemovies.includes(id))
-                await fetch(
-                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${id}`
-                );
-            }
-            setMovies((prev) => prev.filter((m) => m.id !== id));
-          } else {
-            alert("삭제에 실패했습니다.");
-          }
-        } catch {
-          alert("삭제 중 오류 발생");
-        }
+          }, () => { }, true
+        )
       };
 
       return (
@@ -853,7 +861,7 @@ export default function AdminDashboard({ userData }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (movieSearchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setMovieConfirmedKeyword(movieSearchKeyword);
@@ -871,7 +879,7 @@ export default function AdminDashboard({ userData }) {
             <button
               onClick={() => {
                 if (movieSearchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setMovieConfirmedKeyword(movieSearchKeyword);
@@ -1031,23 +1039,27 @@ export default function AdminDashboard({ userData }) {
       );
 
       const handleDelete = async (id) => {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${id}`,
-            {
-              method: "DELETE",
-              credentials: "include",
+        openModal("정말 삭제하시겠습니까?",
+          async () => {
+            try {
+              const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event/${id}`,
+                {
+                  method: "DELETE",
+                  credentials: "include",
+                }
+              );
+              if (res.ok) {
+                setEvents((prev) => prev.filter((e) => e.id !== id));
+              } else {
+                openModal("삭제에 실패했습니다.");
+              }
+            } catch {
+              openModal("삭제 중 오류 발생");
             }
-          );
-          if (res.ok) {
-            setEvents((prev) => prev.filter((e) => e.id !== id));
-          } else {
-            alert("삭제에 실패했습니다.");
-          }
-        } catch {
-          alert("삭제 중 오류 발생");
-        }
+          }, () => {}, true
+        )
+
       };
 
       return (
@@ -1062,7 +1074,7 @@ export default function AdminDashboard({ userData }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (eventSearchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setEventConfirmedKeyword(eventSearchKeyword);
@@ -1080,7 +1092,7 @@ export default function AdminDashboard({ userData }) {
             <button
               onClick={() => {
                 if (eventSearchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setEventConfirmedKeyword(eventSearchKeyword);
@@ -1302,7 +1314,7 @@ export default function AdminDashboard({ userData }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (reservationSearchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setReservationConfirmedKeyword(reservationSearchKeyword);
@@ -1321,7 +1333,7 @@ export default function AdminDashboard({ userData }) {
             <button
               onClick={() => {
                 if (reservationSearchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setReservationConfirmedKeyword(reservationSearchKeyword);
@@ -1432,12 +1444,12 @@ export default function AdminDashboard({ userData }) {
                     <td style={tdStyle}>
                       {r.approvedAt
                         ? new Date(r.approvedAt).toLocaleString("ko-KR", {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
                         : "-"}
                     </td>
                     <td style={tdStyle}>
@@ -1453,31 +1465,33 @@ export default function AdminDashboard({ userData }) {
                       {r.status !== "CANCELED" && (
                         <button
                           onClick={async () => {
-                            if (!confirm("이 예매를 환불 처리하시겠습니까?"))
-                              return;
-                            try {
-                              const res = await fetch(
-                                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations/${r.id}/cancel`,
-                                {
-                                  method: "PATCH",
-                                  credentials: "include",
+                            openModal("이 예매를 환불 처리하시겠습니까?",
+                              async () => {
+                                try {
+                                  const res = await fetch(
+                                    `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations/${r.id}/cancel`,
+                                    {
+                                      method: "PATCH",
+                                      credentials: "include",
+                                    }
+                                  );
+                                  if (res.ok) {
+                                    openModal("환불 처리 완료");
+                                    // 상태값 업데이트를 위해 목록 재요청
+                                    const refreshed = await fetch(
+                                      `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reservations`,
+                                      { credentials: "include" }
+                                    );
+                                    const data = await refreshed.json();
+                                    setReservations(data);
+                                  } else {
+                                    openModal("환불 실패");
+                                  }
+                                } catch (e) {
+                                  openModal("환불 요청 중 오류 발생: " + e.message);
                                 }
-                              );
-                              if (res.ok) {
-                                alert("환불 처리 완료");
-                                // 상태값 업데이트를 위해 목록 재요청
-                                const refreshed = await fetch(
-                                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reservations`,
-                                  { credentials: "include" }
-                                );
-                                const data = await refreshed.json();
-                                setReservations(data);
-                              } else {
-                                alert("환불 실패");
-                              }
-                            } catch (e) {
-                              alert("환불 요청 중 오류 발생: " + e.message);
-                            }
+                              }, () => { }, true
+                            )
                           }}
                           style={{
                             background: "#e53e3e",
@@ -1582,7 +1596,7 @@ export default function AdminDashboard({ userData }) {
                   borderRadius: 4,
                   cursor:
                     currentReservationPage ===
-                    Math.ceil(filteredReservations.length / reservationsPerPage)
+                      Math.ceil(filteredReservations.length / reservationsPerPage)
                       ? "not-allowed"
                       : "pointer",
                   width: "36px",
@@ -1632,7 +1646,7 @@ export default function AdminDashboard({ userData }) {
 
       const salesByProduct = filteredPayments.reduce((acc, cur) => {
         acc[cur.orderName] = (acc[cur.orderName] || 0) + cur.amount;
-        if(cur.refundstatus==='CANCELED')acc[cur.orderName]-=cur.amount;
+        if (cur.refundstatus === 'CANCELED') acc[cur.orderName] -= cur.amount;
         return acc;
       }, {});
 
@@ -1655,7 +1669,7 @@ export default function AdminDashboard({ userData }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (paymentSearchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setPaymentConfirmedKeyword(paymentSearchKeyword);
@@ -1674,7 +1688,7 @@ export default function AdminDashboard({ userData }) {
             <button
               onClick={() => {
                 if (paymentSearchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setPaymentConfirmedKeyword(paymentSearchKeyword);
@@ -1787,44 +1801,46 @@ export default function AdminDashboard({ userData }) {
                     </td>
                     <td style={tdStyle}>
                       {p.refundstatus !== "CANCELED" && (
-                      <button
-                        onClick={async () => {
-                          if (confirm("환불 및 취소 처리하시겠습니까?")) {
-                            try {
-                              const res = await fetch(
-                                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/${p.id}`,
-                                {
-                                  method: "PATCH",
-                                  credentials: "include",
+                        <button
+                          onClick={async () => {
+                            openModal("환불 및 취소 처리하시겠습니까?",
+                              async () => {
+                                try {
+                                  const res = await fetch(
+                                    `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/${p.id}`,
+                                    {
+                                      method: "PATCH",
+                                      credentials: "include",
+                                    }
+                                  );
+                                  if (res.ok) {
+                                    openModal("환불 처리 완료");
+                                    const refreshed = fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`, {
+                                      credentials: "include",
+                                    })
+                                      .then((res) => res.json())
+                                      .then(setPayments);
+                                  } else {
+                                    openModal("환불 실패");
+                                  }
+                                } catch (e) {
+                                  openModal("환불 요청 중 오류 발생: " + e.message);
                                 }
-                              );
-                              if (res.ok) {
-                                alert("환불 처리 완료");
-                                const refreshed=fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`, {
-                                   credentials: "include",
-                                 })
-                                 .then((res) => res.json())
-                                .then(setPayments);
-                              } else {
-                                alert("환불 실패");
-                              }
-                            } catch (e) {
-                              alert("환불 요청 중 오류 발생: " + e.message);
-                            }
-                          }
-                        }}
-                        style={{
-                          background: "#e53e3e",
-                          color: "#fff",
-                          border: "none",
-                          borderRadius: 4,
-                          padding: "4px 8px",
-                          fontSize: 12,
-                          cursor: "pointer",
-                        }}
-                      >
-                        환불
-                      </button>)}
+                              }, () => { }, true
+                            )
+                          }}
+                          style={{
+                            background: "#e53e3e",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: 4,
+                            padding: "4px 8px",
+                            fontSize: 12,
+                            cursor: "pointer",
+                          }}
+                        >
+                          환불
+                        </button>)}
                     </td>
                   </tr>
                 ))}
@@ -1912,7 +1928,7 @@ export default function AdminDashboard({ userData }) {
                   borderRadius: 4,
                   cursor:
                     currentPaymentPage ===
-                    Math.ceil(filteredPayments.length / paymentsPerPage)
+                      Math.ceil(filteredPayments.length / paymentsPerPage)
                       ? "not-allowed"
                       : "pointer",
                   width: "36px",
@@ -1966,23 +1982,26 @@ export default function AdminDashboard({ userData }) {
       );
 
       const handleReviewDelete = async (id) => {
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`,
-            {
-              method: "POST",
-              credentials: "include",
+        openModal("정말 삭제하시겠습니까?",
+          async () => {
+            try {
+              const res = await fetch(
+                `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/delete/logic/${id}`,
+                {
+                  method: "POST",
+                  credentials: "include",
+                }
+              );
+              if (res.ok) {
+                setReviews((prev) => prev.filter((r) => r.id !== id));
+              } else {
+                openModal("삭제에 실패했습니다.");
+              }
+            } catch {
+              openModal("삭제 중 오류 발생");
             }
-          );
-          if (res.ok) {
-            setReviews((prev) => prev.filter((r) => r.id !== id));
-          } else {
-            alert("삭제에 실패했습니다.");
-          }
-        } catch {
-          alert("삭제 중 오류 발생");
-        }
+          }, ()=>{}, null
+        )
       };
 
       const handleSort = (key) => {
@@ -2006,7 +2025,7 @@ export default function AdminDashboard({ userData }) {
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   if (reviewSearchKeyword.replace(/\s+/g, "") === "") {
-                    alert("유효한 검색어를 입력해주세요!");
+                    openModal("유효한 검색어를 입력해주세요!");
                     return;
                   }
                   setReviewConfirmedKeyword(reviewSearchKeyword);
@@ -2025,7 +2044,7 @@ export default function AdminDashboard({ userData }) {
             <button
               onClick={() => {
                 if (reviewSearchKeyword.replace(/\s+/g, "") === "") {
-                  alert("유효한 검색어를 입력해주세요!");
+                  openModal("유효한 검색어를 입력해주세요!");
                   return;
                 }
                 setReviewConfirmedKeyword(reviewSearchKeyword);
@@ -2210,7 +2229,7 @@ export default function AdminDashboard({ userData }) {
                   borderRadius: 4,
                   cursor:
                     currentReviewPage ===
-                    Math.ceil(filteredReviews.length / reviewsPerPage)
+                      Math.ceil(filteredReviews.length / reviewsPerPage)
                       ? "not-allowed"
                       : "pointer",
                   width: "36px",
@@ -2239,7 +2258,7 @@ export default function AdminDashboard({ userData }) {
     return null;
   };
 
-  return (
+  return (<>
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
       <Header headerColor="black" headerBg="white" userInfo={user} />
       <div style={{ display: "flex" }}>
@@ -2326,7 +2345,15 @@ export default function AdminDashboard({ userData }) {
         </main>
       </div>
     </div>
-  );
+    {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      isConfirm={isConfirm}
+      content={modalContent} />)}
+  </>);
 }
 
 const SummaryCard = ({ title, value, icon, onClick }) => (

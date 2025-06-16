@@ -6,6 +6,8 @@ import {useSearchParams,useRouter} from 'next/navigation';
 
 import {Flex,Input,Button} from '@chakra-ui/react';
 
+import Modal, { useModal } from '../movie/modal';
+
 export default function SigninClientAlert() {
     const searchParams = useSearchParams();
     const hasRun = useRef(false);
@@ -14,6 +16,7 @@ export default function SigninClientAlert() {
 
     const [id, setId] = useState('');
     const [rememberId, setRememberId] = useState(false);
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
     // 페이지 처음 렌더링 시 remember-me-id 쿠키가 있다면 상태 반영
     useEffect(() => {
@@ -28,9 +31,8 @@ export default function SigninClientAlert() {
 
     useEffect(() => {
       if (fail==='true' && !hasRun.current) {
-        alert("로그인에 실패했습니다.\n아이디 또는 비밀번호를 확인해주세요.");
-        router.push('/signin');
         hasRun.current=true;
+        openModal("로그인에 실패했습니다.\n아이디 또는 비밀번호를 확인해주세요.", ()=>{router.push('/signin');}, ()=>{router.push('/signin');});
       }
     }, [fail]);
 
@@ -44,7 +46,7 @@ export default function SigninClientAlert() {
         }
     };
 
-    return <form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/signin/logic`} method='post' onSubmit={handleSubmit}>
+    return <><form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/signin/logic`} method='post' onSubmit={handleSubmit}>
             <Flex w={{base:'330px',md:'400px'}} flexDirection='column' gap='15px'>
                 <Input id="id" name="id" placeholder='아이디' value={id} onChange={(e) => setId(e.target.value)} required/>
                 <Input id="pw" name="pw" type="password" placeholder='비밀번호' required/>
@@ -54,4 +56,12 @@ export default function SigninClientAlert() {
                 <Button type='submit' fontSize='17px' w='100%' bg='#6B46C1' _hover={{bg:'#553C9A'}} mt='10px'>로그인</Button>
             </Flex>
         </form>;
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}/>)}
+        </>
 }

@@ -5,6 +5,7 @@ import { Header } from '../../components';
 import { Flex, Box, Text, Button, Image, Wrap, Grid, GridItem, Select } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import Modal, { useModal } from '../../components/movie/modal';
 
 export default function mobilePage() {
     const [movies, setMovies] = useState([]);
@@ -23,6 +24,8 @@ export default function mobilePage() {
     const [selectedRegion, setSelectedRegion] = useState(null);
     const [selectedTheater, setSelectedTheater] = useState(null);
     const [activeIndex, setActiveIndex] = useState(0);
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
+    
     const router = useRouter();
 
     const searchParams = useSearchParams();
@@ -183,13 +186,13 @@ export default function mobilePage() {
 
     const handleBooking = () => {
         if (!user) {
-            alert("로그인 후 이용해주세요.");
-            router.push("/signin"); // 원하는 로그인 페이지 경로로 수정
+                                            // 원하는 로그인 페이지 경로로 수정
+            openModal("로그인 후 이용해주세요.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");})
             return;
         }
         // if (!selectedDate || !selectedTime) return;
         if (!selectedDate || !selectedTime || !selectedShowtime) {
-          alert("날짜와 시간을 모두 선택해주세요.");
+          openModal("날짜와 시간을 모두 선택해주세요.");
           return;
       }
         router.push(
@@ -407,6 +410,13 @@ export default function mobilePage() {
                     </Button>
                 </Box>
             )}
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}/>)}
         </>
     );
 }

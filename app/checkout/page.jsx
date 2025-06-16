@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "../../components";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
+import Modal, { useModal } from '../../components/movie/modal';
 
 export default function CheckoutPage() {
   const [user, setUser] = useState(null);
@@ -15,6 +16,7 @@ export default function CheckoutPage() {
 
   const router = useRouter();
   const params = useSearchParams();
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
   const movieId = parseInt(params.get("movieId"));
   const region = params.get("region");
@@ -159,7 +161,7 @@ export default function CheckoutPage() {
       }
 
     } catch (error) {
-      alert("Toss 결제 실패: " + error.message);
+      openModal("Toss 결제 실패: " + error.message);
     } finally {
       setLoading(false);
     }
@@ -327,6 +329,11 @@ export default function CheckoutPage() {
           cursor: not-allowed;
         }
       `}</style>
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      content={modalContent}/>)}
     </>
   );
 }

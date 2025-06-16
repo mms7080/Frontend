@@ -5,6 +5,7 @@ import { useCart } from "./CartContext";
 import { useRouter } from "next/navigation";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import { useMediaQuery } from "@chakra-ui/react";
+import Modal, { useModal } from '../movie/modal';
 
 export default function CartSidebar() {
 
@@ -12,6 +13,7 @@ export default function CartSidebar() {
   const { cartItems, removeFromCart, clearCart, updateQuantity } = useCart();
 
   const [isUserLoaded, setIsUserLoaded] = useState(false);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   const router = useRouter();
   const totalPrice = cartItems.reduce(
     (sum, item) => sum + parseInt(item.price) * item.quantity,
@@ -120,8 +122,7 @@ export default function CartSidebar() {
 
   const handleCheckout = async () => {
     if (!user || !user.username) {
-      alert("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.");
-      router.push("/signin");
+      openModal("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
       return;
     }
 
@@ -145,7 +146,7 @@ export default function CartSidebar() {
         failUrl: `http://localhost:3000/store/payment-fail`,
       });
     } catch (error) {
-      alert("결제 실패: " + error.message);
+      openModal("결제 실패: " + error.message);
     }
   };
 
@@ -220,6 +221,13 @@ export default function CartSidebar() {
           </button>
         </>
       )}
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      content={modalContent}/>)}
     </div>
   );
 }

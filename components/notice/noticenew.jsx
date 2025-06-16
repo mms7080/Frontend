@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {Box,Flex,Text,Input,Textarea,Button} from '@chakra-ui/react';
+import Modal, { useModal } from '../movie/modal';
 
 import Header from '../header';
 
@@ -12,23 +13,22 @@ export default function NoticeCreatePage({userData}) {
   const [writer, setWriter] = useState(userData.name||'');
   const [content, setContent] = useState('');
   const [user, setUser] = useState(userData);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
   try {
     if (!user) throw new Error();
 
     // 🔐 관리자 외에는 접근 불가
     if (user.auth !== 'ADMIN') {
-      alert('관리자만 접근 가능한 페이지입니다.');
-      return router.push('/notice'); // 홈 또는 접근 허용된 경로
+      openModal('관리자만 접근 가능한 페이지입니다.', ()=>{router.push('/notice');}, ()=>{router.push('/notice');});
     }
   } catch (e) {
-    alert('로그인이 필요합니다.');
-    router.push('/signin');
+    openModal('로그인이 필요합니다.', ()=>{router.push('/signin');}, ()=>{router.push('/signin');});
   }
 
   const handleSubmit = async () => {
     if (!title || !writer || !content) {
-      alert('모든 항목을 입력해주세요.');
+      openModal('모든 항목을 입력해주세요.');
       return;
     }
 
@@ -40,10 +40,10 @@ export default function NoticeCreatePage({userData}) {
     });
 
     if (res.ok) {
-      alert('공지사항이 등록되었습니다.');
-      router.push('/notice');
+      openModal('공지사항이 등록되었습니다.', ()=>{router.push('/notice');}, ()=>{router.push('/notice');});
+      
     } else {
-      alert('등록 실패');
+      openModal('등록 실패');
     }
   };
 
@@ -113,6 +113,13 @@ export default function NoticeCreatePage({userData}) {
           </Flex>
         </Flex>
       </Box>
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}/>)}
     </>
   );
 }

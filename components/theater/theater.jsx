@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Box, Flex, Button, Text, useMediaQuery } from "@chakra-ui/react";
 import NaverMap from "./navermap";
-import Modal, { useModal } from '../../components/theater/modal';
+import Modal, { useModal } from './modal';
 
 const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
 

@@ -6,11 +6,13 @@ import {RadioGroup,Input,Box,VStack,Flex,Button} from '@chakra-ui/react';
 import {Header} from '../../components';
 import Link from 'next/link';
 import {fetch} from '../../lib/client';
+import Modal, { useModal } from '../movie/modal';
 
 export default function Findiddetail({userData}){
     const [foundID,setFoundID]=useState('');
     const [layout,setLayout]=useState('email');
     const [formData,setFormData]=useState({method:'email',name:'',email:'',phone_number:''});
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm} = useModal();
 
     const handleFindID=async ()=>{
         let dataToSend={...formData};/* 기존 formData 복사 */
@@ -27,28 +29,28 @@ export default function Findiddetail({userData}){
         });
 
         if(document.querySelector('#name').value===''){
-            alert('이름을 입력하세요.');
+            openModal('이름을 입력하세요.');
             setFoundID('');
             return;
         }
         if(formData.method==='email'&&document.querySelector('#email').value===''){
-            alert('이메일을 입력하세요.');
+            openModal('이메일을 입력하세요.');
             setFoundID('');
             return;
         }
         if(formData.method==='phone_number'&&document.querySelector('#phone_number').value===''){
-            alert('휴대폰 번호를 입력하세요.');
+            openModal('휴대폰 번호를 입력하세요.');
             setFoundID('');
             return;
         }
 
         if(!res||!res.foundID) {
-            alert('해당하는 사용자 정보가 없습니다.');
+            openModal('해당하는 사용자 정보가 없습니다.');
             setFoundID('');
             return;
         }
 
-        alert(`회원님의 아이디는 [${res.foundID}]입니다.]`)
+        openModal(`회원님의 아이디는 [${res.foundID}]입니다.]`)
         setFoundID(res.foundID);/* 객체에서 문자열만 꺼내서 저장 */
     }
 
@@ -136,6 +138,12 @@ export default function Findiddetail({userData}){
                     </Box>
                 </VStack>
             </Box>
+            {isModalOpen && (<Modal
+            isModalOpen={isModalOpen}
+            isModalVisible={isModalVisible}
+            closeModal={closeModal}
+            onConfirm={onConfirm}
+            content={modalContent}/>)}
         </>;
     }
 }

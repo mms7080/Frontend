@@ -15,6 +15,7 @@ import { Header } from "../../";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Modal, { useModal } from '../../movie/modal';
 
 export default function EventUploader({userData}) {
   const [form, setForm] = useState({
@@ -26,18 +27,17 @@ export default function EventUploader({userData}) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [user, setUser] = useState(userData);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   const router = useRouter();
 
   try {
     if (!user) throw new Error();
     // 🔐 관리자 체크
     if (user.auth !== "ADMIN") {
-      alert("관리자만 접근 가능한 페이지입니다.");
-      return router.push("/event");
+      openModal("관리자만 접근 가능한 페이지입니다.", ()=>{router.push("/event");}, ()=>{router.push("/event");});
     }
   } catch {
-    alert("로그인이 필요합니다.");
-    router.push("/signin");
+    openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
   }
 
   const handleChange = (e) => {
@@ -66,7 +66,7 @@ export default function EventUploader({userData}) {
     const { title, category, images } = form;
 
     if (!title || !startDate || !endDate || !category || images.length === 0) {
-      alert("모든 항목을 입력해주세요.");
+      openModal("모든 항목을 입력해주세요.");
       return;
     }
 
@@ -87,11 +87,10 @@ export default function EventUploader({userData}) {
     );
 
     if (res.ok) {
-      alert("이벤트 업로드 성공!");
-      router.push("/event");
+      openModal("이벤트 업로드 성공!", ()=>{router.push("/event");}, ()=>{router.push("/event");});
     } else {
       const error = await res.text();
-      alert("업로드 실패: " + error);
+      openModal("업로드 실패: " + error);
     }
   };
 
@@ -237,6 +236,13 @@ export default function EventUploader({userData}) {
       </Box>
 
       <Box h="100px" />
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      content={modalContent}/>)}
     </>
   );
 }

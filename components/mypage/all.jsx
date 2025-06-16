@@ -4,6 +4,9 @@ import React, {useState} from "react";
 import {Box,Flex,VStack,Button,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
 import {LuChevronLeft,LuChevronRight} from "react-icons/lu"
 import {fetch} from '../../lib/client';
+import Modal, { useModal } from '../../components/movie/modal';
+
+const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm} = useModal();
 
 export default function QnaAll({isMobile,setrawItems,setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
 
@@ -235,11 +238,13 @@ export default function QnaAll({isMobile,setrawItems,setTitle,setContent,setWhic
                           cursor='pointer'
                           fontSize='13px'
                           onClick={async () => {
-                              if (confirm("정말 삭제하시겠습니까?")) {
-                                const res3=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/delete/logic/${qna.id}`);
-                                setrawItems([...rawItems].map((item,index)=>(item.id===qna.id?res3:item)));
-                                setWhichPage('all');
-                              }
+                              openModal("정말 삭제하시겠습니까?", 
+                                async () => {
+                                  const res3=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/qna/delete/logic/${qna.id}`);
+                                  setrawItems([...rawItems].map((item,index)=>(item.id===qna.id?res3:item)));
+                                  setWhichPage('all');
+                                }, ()=>{}, true
+                              )
                           }}
                         >
                           삭제
@@ -341,5 +346,13 @@ export default function QnaAll({isMobile,setrawItems,setTitle,setContent,setWhic
             </ButtonGroup>
           </Pagination.Root>
               </VStack>
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        isConfirm={isConfirm}
+        content={modalContent}/>)}
     </>;
 }

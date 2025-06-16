@@ -3,23 +3,24 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../header";
+import Modal, { useModal } from '../movie/modal';
 
 export default function NoticeEditIdPage({userData}) {
   const { id } = useParams();
   const router = useRouter();
   const [user, setUser] = useState(userData);
   const [notice, setNotice] = useState({ title: "", content: "", writer: "" });
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
   try {
       if (!user) throw new Error();
       // ✅ 관리자 권한이 아닌 경우 접근 제한
        if (user.auth !== "ADMIN") {
-            alert("접근 권한이 없습니다.");
-            router.push("/notice");
+            openModal("접근 권한이 없습니다.", ()=>{router.push("/notice");}, ()=>{router.push("/notice");});
+            
         }
   } catch (e) {
-    alert("로그인 후 이용해주세요.");
-    router.push("/signin");
+    openModal("로그인 후 이용해주세요.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
   }
 
   useEffect(() => {
@@ -43,10 +44,9 @@ export default function NoticeEditIdPage({userData}) {
       }
     );
     if (res.ok) {
-      alert("수정 완료");
-      router.push(`/notice/${id}`);
+      openModal("수정 완료", ()=>{router.push(`/notice/${id}`);}, ()=>{router.push(`/notice/${id}`);});
     } else {
-      alert("수정 실패");
+      openModal("수정 실패");
     }
   };
 
@@ -175,6 +175,13 @@ export default function NoticeEditIdPage({userData}) {
           background-color: #bbb;
         }
       `}</style>
+            {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+	    onCancel={onCancel}
+      content={modalContent}/>)}
     </>
   );
 }

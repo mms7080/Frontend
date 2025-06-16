@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import Link from 'next/link';
 import { createIcon } from '@chakra-ui/react';
-import Modal, { useModal } from '../../components/movie/modal';
 import './moviecard.css';
+import Modal, { useModal } from './modal';
 
 const HeartIcon = createIcon({
   displayName: "HeartIcon",
@@ -20,15 +20,13 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-
-
-const MovieCard = ({ movie, user, rank, crit }) => {
+const MovieCard = ({ movie, user, rank, crit}) => {
 
   const [liked, likedController] = useState(false);
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
   const [score, setScore] = useState("N/A");
   const [scoreLoaded, setScoreLoaded] = useState(false);
-  const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
   useEffect(() => {
     if(user && user.likemovies.includes(movie.id))
@@ -62,7 +60,7 @@ const MovieCard = ({ movie, user, rank, crit }) => {
 
   const likeChange = async () => {
     if(!user)
-      openModal();
+      openModal('로그인 후 이용해주세요.');
     else
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/update/like?id=${movie.id}&updown=${liked ? "down" : "up"}`);
@@ -138,11 +136,11 @@ const MovieCard = ({ movie, user, rank, crit }) => {
         </Link>
       </div>
     </div>
-    {isModalOpen && (<Modal
-    isModalOpen={isModalOpen}
-    isModalVisible={isModalVisible}
-    closeModal={closeModal}
-    content='로그인 후 이용해주세요.'/>)}
+  {isModalOpen && (<Modal
+  isModalOpen={isModalOpen}
+  isModalVisible={isModalVisible}
+  closeModal={closeModal}
+  content={modalContent}/>)}
     </>
   );
 };

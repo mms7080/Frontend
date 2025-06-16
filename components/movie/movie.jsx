@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from "@chakra-ui/react";
 
-import MovieCard from "../../components/movie/moviecard";
+import MovieCard from "./moviecard";
 import { fetch } from "../../lib/client";
 
 const categories = ["전체영화", "개봉작", "상영예정작"];
@@ -23,6 +23,7 @@ const Movie = (userInfo) => {
   const [user, setUser] = useState(userInfo.userInfo);
   const [searchWord, setSearchWord] = useState("");
   const [displayNumber, setDisplayNumber] = useState(8);
+
   const inputRef = useRef("");
   const clearInputValue = () => {
     if (inputRef.current) {
@@ -54,7 +55,7 @@ const Movie = (userInfo) => {
 
   const handleSearch = (inputValue) => {
     if (inputValue.replace(/\s+/g, "") === "") {
-      alert("유효한 검색어를 입력해주세요!");
+      openModal("유효한 검색어를 입력해주세요!");
       return;
     }
     setSearchWord(inputValue);
@@ -249,6 +250,7 @@ const Movie = (userInfo) => {
       return (
         <Grid
           w="100%"
+          bg="#141414"
           justifyContent={isMobile ? "center" : "start"}
           templateColumns="repeat(auto-fit, minmax(280px, auto))"
           gap="30px"
@@ -275,6 +277,7 @@ const Movie = (userInfo) => {
       (
       <Flex
         bg="#141414"
+        minH="100vh"
         pt={20}
         pb={10}
         px={6}
@@ -297,6 +300,7 @@ const Movie = (userInfo) => {
       (
       <Flex
         bg="#141414"
+        minH="100vh"
         pt={20}
         pb={10}
         px={6}

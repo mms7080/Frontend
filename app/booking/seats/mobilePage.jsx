@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "../../../components";
+import Modal, { useModal } from '../../../components/movie/modal';
 
 export default function SeatsPageMobile() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function SeatsPageMobile() {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [personCounts, setPersonCounts] = useState({ adult: 0, teen: 0, senior: 0, special: 0 });
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
   const searchParams = useSearchParams();
   const movieId = parseInt(searchParams.get("movieId"));
@@ -52,12 +54,12 @@ export default function SeatsPageMobile() {
       );
       if (isDisabledSeat) {
         if (selectedDisabledSeats.length >= personCounts.special) {
-          alert("선택한 우대 좌석이 우대 인원 수를 초과했습니다.");
+          openModal("선택한 우대 좌석이 우대 인원 수를 초과했습니다.");
           return;
         }
       } else {
         if (normalSeats.length >= totalPeople - personCounts.special) {
-          alert("선택한 일반 좌석이 인원 수를 초과했습니다.");
+          openModal("선택한 일반 좌석이 인원 수를 초과했습니다.");
           return;
         }
       }
@@ -133,7 +135,7 @@ export default function SeatsPageMobile() {
         // });
     };
 
-  return (
+  return (<>
     <Box bg="#141414" color="white" minH="100vh" pb={12}>
       <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
 
@@ -182,7 +184,7 @@ export default function SeatsPageMobile() {
                     bg={clickedButton === key + "-" + "plus" ? "#6B46C1" : undefined}
                     onClick={() => {
                         if (totalPeople >= 8) {
-                        alert("최대 8매까지 예매가능합니다.");
+                        openModal("최대 8매까지 예매가능합니다.");
                         return;
                         }
                         setPersonCounts(prev => ({ ...prev, [key]: prev[key] + 1 }));
@@ -353,5 +355,10 @@ export default function SeatsPageMobile() {
         </Box>
       </Box>
     </Box>
-  );
+    {isModalOpen && (<Modal
+    isModalOpen={isModalOpen}
+    isModalVisible={isModalVisible}
+    closeModal={closeModal}
+    content={modalContent}/>)}
+  </>);
 }

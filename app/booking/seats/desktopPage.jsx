@@ -15,6 +15,7 @@ import { useSearchParams } from "next/navigation";
 import { Header, Footer } from "../../../components";
 import { movies } from "../../../components/moviePoster";
 import { useRouter } from "next/navigation";
+import Modal, { useModal } from '../../../components/movie/modal';
 
 export default function SeatsPage() {
   let headerColor = "white";
@@ -51,6 +52,7 @@ export default function SeatsPage() {
 
   const [seatData, setSeatData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
   const bookedSeats = seatData
     .filter((seat) => seat.status === "RESERVED")
@@ -134,12 +136,12 @@ export default function SeatsPage() {
       );
       if (isDisabledSeat) {
         if (selectedDisabledSeats.length >= personCounts.special) {
-          alert("선택한 우대 좌석이 우대 인원 수를 초과했습니다.");
+          openModal("선택한 우대 좌석이 우대 인원 수를 초과했습니다.");
           return;
         }
       } else {
         if (normalSeats.length >= totalPeople - personCounts.special) {
-          alert("선택한 일반 좌석이 인원 수를 초과했습니다.");
+          openModal("선택한 일반 좌석이 인원 수를 초과했습니다.");
           return;
         }
       }
@@ -320,7 +322,7 @@ export default function SeatsPage() {
                         _hover={{ bg: "#6B46C1" }}
                         onClick={() => {
                           if (totalPeople >= 8) {
-                            alert("최대 8매까지 예매가능합니다.");
+                            openModal("최대 8매까지 예매가능합니다.");
                             return;
                           }
                           setSelectedSeats([]);
@@ -576,6 +578,11 @@ export default function SeatsPage() {
           </Box>
         </Flex>
       </Box>
+        {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        content={modalContent}/>)}
     </>
   );
 }

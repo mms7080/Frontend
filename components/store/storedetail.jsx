@@ -15,6 +15,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useCart } from "../../components/store/CartContext";
 import CartSidebar from "../../components/store/CartSidebar";
 import Link from "next/link";
+import Modal, { useModal } from '../movie/modal';
 
 export default function StoreDetailPage({ userData }) {
   const [user, setUser] = useState(userData);
@@ -23,6 +24,7 @@ export default function StoreDetailPage({ userData }) {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
+  const { isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm } = useModal();
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/detail/${id}`, {
@@ -239,23 +241,23 @@ export default function StoreDetailPage({ userData }) {
               _hover={{ bg: "#c53030" }}
               w="fit-content"
               onClick={async () => {
-                const confirmDelete = confirm("정말 삭제하시겠습니까?");
-                if (!confirmDelete) return;
-
-                try {
-                  const res = await fetch(
-                    `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${product.id}`,
-                    {
-                      method: "DELETE",
-                      credentials: "include",
+                openModal("정말 삭제하시겠습니까?",
+                  async () => {
+                    try {
+                      const res = await fetch(
+                        `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/${product.id}`,
+                        {
+                          method: "DELETE",
+                          credentials: "include",
+                        }
+                      );
+                      if (!res.ok) throw new Error("삭제 실패");
+                      openModal("삭제가 완료되었습니다!", () => { router.push("/store"); }, () => { router.push("/store"); });
+                    } catch (e) {
+                      openModal("삭제 중 오류 발생: " + e.message);
                     }
-                  );
-                  if (!res.ok) throw new Error("삭제 실패");
-                  alert("삭제가 완료되었습니다!");
-                  router.push("/store");
-                } catch (e) {
-                  alert("삭제 중 오류 발생: " + e.message);
-                }
+                  }, ()=>{}, true
+                )
               }}
             >
               삭제
@@ -264,6 +266,14 @@ export default function StoreDetailPage({ userData }) {
         </Flex>
       </Box>
       <CartSidebar />
+      {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        isConfirm={isConfirm}
+        content={modalContent} />)}
     </>
   );
 }

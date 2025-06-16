@@ -8,32 +8,25 @@ import {fetch} from '../../lib/client';
 import {AiOutlineHeart,AiFillHeart} from 'react-icons/ai';
 
 export default function LikePart({id,res,movieinfo}){
-
-
-    // 🔹 모달 내용 상태 추가 
-    const [modalContent, setModalContent] = useState('로그인 후 이용해주세요.');
   
     const address = `http://localhost:3000/detail/${id}`; // 복사할 주소
 
     const handleCopy = async () => {
       try {
         await navigator.clipboard.writeText(address);
-        setModalContent('현재 페이지의 주소가 클립보드에 복사되었습니다!');
-        openModal();
+        openModal('현재 페이지의 주소가 클립보드에 복사되었습니다!');
       } catch (err) {
-        setModalContent('클립보드 접근이 차단되었습니다.');
-        openModal();
+        openModal('클립보드 접근이 차단되었습니다.');
       }
     };
 
     const [liked, likedController] = useState(res?(res.likemovies.includes(Number(id))):false);
     const [likeNumber, setLikeNumber] = useState(movieinfo.likeNumber > 999 ? Math.floor(movieinfo.likeNumber / 100) / 10 + 'k' : movieinfo.likeNumber);
-    const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
     
     const likeChange = async () => {
         if(!res){
-            setModalContent('로그인 후 이용해주세요.');
-            openModal();
+            openModal('로그인 후 이용해주세요.');
             return;
         }
         else{

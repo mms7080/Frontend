@@ -8,11 +8,11 @@ import Modal, { useModal } from '../movie/modal';
 
 export default function Notloginalert({userInfo}){
     const router=useRouter();
-    const {isModalOpen, isModalVisible, openModal, closeModal} = useModal();
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
     useEffect(() => {
         if (!userInfo)
-            openModal();
+            openModal('로그인 후 이용해주세요.');
     }, []);
 
     const handleConfirm = () => {
@@ -25,6 +25,6 @@ export default function Notloginalert({userInfo}){
         isModalVisible={isModalVisible}
         closeModal={closeModal}
         onConfirm={handleConfirm}
-        content='로그인 후 이용해주세요.'/>)}
+        content={modalContent}/>)}
     </>;    
 }

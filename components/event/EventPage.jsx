@@ -8,6 +8,7 @@ import { Header } from "..";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import Modal, { useModal } from '../movie/modal';
 
 const categories = [
   "전체",
@@ -63,6 +64,7 @@ export default function EventPage({ serverEvents, userData }) {
   const [activeCategory, setActiveCategory] = useState("전체");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
   const router = useRouter();
 
   useEffect(() => {
@@ -337,7 +339,7 @@ export default function EventPage({ serverEvents, userData }) {
             onKeyDown={(e) =>{
               if(e.key === "Enter"){
                 if(searchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                  openModal('유효한 검색어를 입력해주세요!');
                   return;
                 }
                 setConfirmedKeyword(searchKeyword);
@@ -356,7 +358,7 @@ export default function EventPage({ serverEvents, userData }) {
             colorScheme="purple"
             onClick={() => {
               if(searchKeyword.replace(/\s+/g, '')===''){
-                  alert('유효한 검색어를 입력해주세요!');
+                  openModal('유효한 검색어를 입력해주세요!');
                   return;
               }
               setConfirmedKeyword(searchKeyword);
@@ -490,6 +492,11 @@ export default function EventPage({ serverEvents, userData }) {
           </Box>
         ))}
       </Box>
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      content={modalContent}/>)}
     </>
   );
 }

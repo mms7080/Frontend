@@ -17,6 +17,7 @@ import {
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Modal, { useModal } from '../modal';
 
 const MovieUploader = ({ userInfo }) => {
     const [form, setForm] = useState({
@@ -37,6 +38,7 @@ const MovieUploader = ({ userInfo }) => {
 
     const [user, setUser] = useState(userInfo);
     const [releaseDate, setReleaseDate] = useState(null);
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
     const router = useRouter()
     const alerted = useRef(false);
 
@@ -44,14 +46,12 @@ const MovieUploader = ({ userInfo }) => {
         try {
             if(!alerted.current) {
                 if (!user) {
-                    alert("로그인이 필요합니다.");
                     alerted.current = true;
-                    router.push("/signin");
+                    openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
                 }
                 else if (user.auth !== "ADMIN") {
-                    alert("관리자만 접근 가능한 페이지입니다.");
                     alerted.current = true;
-                    router.push("/movie");
+                    openModal("관리자만 접근 가능한 페이지입니다.", ()=>{router.push("/movie");}, ()=>{router.push("/movie");});
                 }
             }
         } catch(err) {
@@ -112,7 +112,7 @@ const MovieUploader = ({ userInfo }) => {
         const { title, titleEnglish, rate, description, runningTime, genre, director, cast, poster, wideImage, stillCut, trailer, label } = form;
 
         if (!title || !titleEnglish || !rate || !releaseDate || !description || runningTime < 1 || !genre || !director || !cast || !poster || !wideImage || !stillCut || !trailer) {
-            alert("모든 항목을 입력해주세요.");
+            openModal("모든 항목을 입력해주세요.");
             return;
         }
 
@@ -143,11 +143,11 @@ const MovieUploader = ({ userInfo }) => {
         );
 
         if (res.ok) {
-            alert("영화 업로드 성공!");
+            openModal("영화 업로드 성공!");
             router.push("/movie");
         } else {
             const error = await res.text();
-            alert("업로드 실패: " + error);
+            openModal("업로드 실패: " + error);
         }
     };
 
@@ -440,6 +440,13 @@ const MovieUploader = ({ userInfo }) => {
             </Box>
 
             <Box h="100px" />
+            {isModalOpen && (<Modal
+            isModalOpen={isModalOpen}
+            isModalVisible={isModalVisible}
+            closeModal={closeModal}
+            onConfirm={onConfirm}
+            onCancel={onCancel}
+            content={modalContent}/>)}
         </>
     )
 }
