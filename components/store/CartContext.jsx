@@ -4,10 +4,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Modal, { useModal } from '../movie/modal';
 
 const CartContext = createContext();
-const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
   //  localStorage에서 초기화
   useEffect(() => {
