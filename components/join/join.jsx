@@ -82,7 +82,7 @@ export default function Joindetail(){
     const [fontsize2,setFontSize2]=useState(14);
     const [fontsize3,setFontSize3]=useState(14);
 
-    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+    const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
     const handleCompositionStart = () => {
       setIsComposing(true);
@@ -146,7 +146,8 @@ export default function Joindetail(){
             return;
         }
 
-        openModal('회원가입이 완료되었습니다!');
+        e.preventDefault();
+        openModal('회원가입이 완료되었습니다!', ()=>{e.target.submit()}, ()=>{e.target.submit()});
     };
 
     const adjustsize1=()=>{
@@ -486,7 +487,7 @@ export default function Joindetail(){
                                         <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="birthdate"><label htmlFor="gender">성별</label></label></td>
                                         <td style={{width:605,height:50,paddingLeft:15}}>
                                             <RadioGroup.Root display='flex' alignItems='center'>
-                                                <RadioGroup.Item type="radio" value="남성" onClick={(e)=>{setGender(e.target.value)}}>
+                                                <RadioGroup.Item type="radio" value="남성" onClick={()=>{setGender('남성')}}>
                                                     <RadioGroup.ItemHiddenInput />
                                                     <RadioGroup.ItemIndicator/>
                                                     <RadioGroup.ItemText>남성</RadioGroup.ItemText>
@@ -494,7 +495,7 @@ export default function Joindetail(){
                                                 &nbsp;
                                                 &nbsp;
                                                 &nbsp;
-                                                <RadioGroup.Item type="radio" value="여성" onClick={(e)=>{setGender(e.target.value)}}>
+                                                <RadioGroup.Item type="radio" value="여성" onClick={()=>{setGender('여성')}}>
                                                     <RadioGroup.ItemHiddenInput />
                                                     <RadioGroup.ItemIndicator/>
                                                     <RadioGroup.ItemText>여성</RadioGroup.ItemText>
@@ -540,6 +541,8 @@ export default function Joindetail(){
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}
         closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
         content={modalContent}/>)}
         </>
 }
