@@ -9,7 +9,6 @@ import {
   Flex,
   Image,
   Button,
-  // Spinner,
 } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
 import { Header, Footer } from "../../../components";

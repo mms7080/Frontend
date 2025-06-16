@@ -1,6 +1,7 @@
 // "use client";
 
 // import React, { useState, useEffect } from "react";
+// import Spinner from '../../../components/Spinner';
 // import {
 //   Box,
 //   Text,
@@ -8,7 +9,6 @@
 //   Flex,
 //   Image,
 //   Button,
-//   Spinner,
 // } from "@chakra-ui/react";
 // import { useSearchParams } from "next/navigation";
 // import { Header, Footer } from "../../../components";

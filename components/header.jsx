@@ -11,7 +11,6 @@ import {
   Text,
   Button,
   Image,
-  // Spinner,
   useMediaQuery
 } from "@chakra-ui/react";
 import { FaHome } from "react-icons/fa";

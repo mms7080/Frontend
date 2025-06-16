@@ -8,7 +8,6 @@ import {
   Flex,
   Image,
   Button,
-  // Spinner,
   Grid,
 } from "@chakra-ui/react";
 import { useSearchParams, useRouter } from "next/navigation";

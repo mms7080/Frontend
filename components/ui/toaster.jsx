@@ -25,7 +25,6 @@ import Spinner from '../Spinner';
 import {
   Toaster as ChakraToaster,
   Portal,
-  // Spinner,
   Stack,
   Toast,
   createToaster,
