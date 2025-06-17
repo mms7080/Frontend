@@ -275,6 +275,14 @@ export default function Qna({ userInfo, qnaInfo, replyInfo }) {
         </Flex>
       </Box>
       <All isMobile={isMobile} setrawItems={setrawItems} setTitle={setTitle} setContent={setContent} setWhichPage={setWhichPage} userInfo={userInfo} rawItems={rawItems} setViewId={setViewId} setViewIndex={setViewIndex} setViewContent={setViewContent} currentPage={currentPage} setCurrentPage={setCurrentPage} setModifyId={setModifyId}></All>
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      isConfirm={isConfirm}
+      content={modalContent} />)}
     </>;
   }
   else {
