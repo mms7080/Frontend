@@ -15,6 +15,7 @@ import {
 import MovieCard from "./moviecard";
 import { fetch } from "../../lib/client";
 import Modal, { useModal } from '../../components/movie/modal';
+import Spinner from '../Spinner';
 
 const categories = ["전체영화", "개봉작", "상영예정작"];
 
@@ -25,20 +26,21 @@ const Movie = (userInfo) => {
   const [user, setUser] = useState(userInfo.userInfo);
   const [searchWord, setSearchWord] = useState("");
   const [displayNumber, setDisplayNumber] = useState(8);
-
-  const [loadedMovies, setLoadedMovies] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+
+  const [sortedMovieIds, setSortedMovieIds] = useState([]);
+  const [loadedMoviesData, setLoadedMoviesData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const inputRef = useRef("");
   const clearInputValue = () => {
     if (inputRef.current) {
-      inputRef.current.valueOf = "";
+      inputRef.current.value = "";
     }
   };
   const getInputValue = () => {
     if (inputRef.current) {
-      return inputRef.current.valueOf;
+      return inputRef.current.value;
     }
     return "";
   };
@@ -111,78 +113,103 @@ const Movie = (userInfo) => {
     return searched;
   }, [movies, activeCategory, searchWord]);
 
-  // 영화 데이터 로드 함수
-  const loadMovieData = async (movieList, startIndex, count) => {
-    const moviesToLoad = movieList.slice(startIndex, startIndex + count);
-    const promises = moviesToLoad.map(async (movie) => {
-      try {
-        // 리뷰 점수 가져오기
-        const reviewRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${movie.id}`);
-        // console.log(movie.id + "reviewRes")
-        // console.log(reviewRes)
-        let score = "N/A";
-          const reviewData = reviewRes;
-          // console.log(movie.id + "reviewData")
-          // console.log(reviewData)
-          if (reviewData.length > 0) {
-            let sum = 0;
-            for (let review of reviewData) sum += review.score;
-            score = (sum / reviewData.length).toFixed(1);
-          } else {
-            score = "없음";
-          }
+  // 모든 영화의 예매율을 가져와서 정렬
+  const sortAllMoviesByReserveRate = async (movieList) => {
+  const promises = movieList.map(async (movie) => {
+    try {
+      const reserveRate = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${movie.id}`);
+      return {
+        id: movie.id,
+        reserveRate: parseFloat(reserveRate) || 0
+      };
+    } catch (err) {
+      console.log(`Reserve rate fetch error for ${movie.id}:`, err.message);
+      return {
+        id: movie.id,
+        reserveRate: 0
+      };
+    }
+  });
 
-        // 예매율 가져오기
-        const reserveRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${movie.id}`);
-        // console.log(movie.id + "reserveRes")
-        // console.log(reserveRes)
-        let reserveRate = "N/A";
-
-          reserveRate = reserveRes;
-          // console.log(movie.id + "reserveRate")
-          // console.log(reserveRate);
-  
-
-        return {
-          ...movie,
-          realScore: score,
-          realReserveRate: reserveRate
-        };
-      } catch (err) {
-        console.log(`Movie data load error for ${movie.id}:`, err.message);
-        return {
-          ...movie,
-          realScore: "N/A",
-          realReserveRate: "N/A"
-        };
-      }
-    });
-
-    return Promise.all(promises);
+  const movieReserveRates = await Promise.all(promises);
+  // 예매율 순으로 정렬하고 ID만 반환
+  return movieReserveRates
+    .sort((a, b) => b.reserveRate - a.reserveRate)
+    .map(item => item.id);
   };
 
-  // filteredMovies가 변경될 때 로드된 영화 초기화
-  useEffect(() => {
-    const loadInitialMovies = async () => {
-      if (filteredMovies.length > 0) {
-        setIsLoading(true);
-        const initialMovies = await loadMovieData(filteredMovies, 0, 8);
-        // 예매율로 정렬
-        const sortedMovies = initialMovies.sort((a, b) => {
-          const aRate = parseFloat(a.realReserveRate) || 0;
-          const bRate = parseFloat(b.realReserveRate) || 0;
-          return bRate - aRate;
-        });
-        setLoadedMovies(sortedMovies);
-        setIsLoading(false);
-      } else {
-        setLoadedMovies([]);
-      }
-    };
+// 개별 영화 상세 데이터 로드
+const loadMovieDetails = async (movieIds) => {
+  const promises = movieIds.map(async (movieId) => {
+    const movie = filteredMovies.find(m => m.id === movieId);
+    if (!movie) return null;
 
-    loadInitialMovies();
-    setDisplayNumber(8);
-  }, [filteredMovies]);
+    try {
+      // 리뷰 점수 가져오기
+      const reviewData = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${movie.id}`);
+      let score = "N/A";
+        if (reviewData.length > 0) {
+          let sum = 0;
+          for (let review of reviewData) sum += review.score;
+          score = (sum / reviewData.length).toFixed(1);
+        } else {
+          score = "없음";
+        }
+
+      // 예매율 가져오기
+      const reserveRate = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${movie.id}`);
+
+      return {
+        ...movie,
+        realScore: score,
+        realReserveRate: reserveRate
+      };
+    } catch (err) {
+      console.log(`Movie details load error for ${movie.id}:`, err.message);
+      return {
+        ...movie,
+        realScore: "N/A",
+        realReserveRate: "N/A"
+      };
+    }
+  });
+
+  return Promise.all(promises);
+};
+
+// filteredMovies가 변경될 때 전체 정렬 후 초기 8개 로드
+useEffect(() => {
+  const initializeMovies = async () => {
+    if (filteredMovies.length > 0) {
+      setIsLoading(true);
+      
+      // 1. 모든 영화를 예매율 순으로 정렬
+      const sortedIds = await sortAllMoviesByReserveRate(filteredMovies);
+      setSortedMovieIds(sortedIds);
+      
+      // 2. 처음 8개 영화의 상세 데이터 로드
+      const initialIds = sortedIds.slice(0, 8);
+      const initialMoviesData = await loadMovieDetails(initialIds);
+      
+      // 3. 로드된 데이터를 객체로 저장 (ID를 키로 사용)
+      const dataMap = {};
+      initialMoviesData.forEach(movieData => {
+        if (movieData) {
+          dataMap[movieData.id] = movieData;
+        }
+      });
+      
+      setLoadedMoviesData(dataMap);
+      setIsLoading(false);
+    } else {
+      setSortedMovieIds([]);
+      setLoadedMoviesData({});
+    }
+  };
+
+  initializeMovies();
+  setDisplayNumber(8);
+}, [filteredMovies]);
 
   // 카테고리 부분
   const CategoryPart = ({ isMobile }) => {
@@ -274,40 +301,47 @@ const Movie = (userInfo) => {
   // 더보기 누를 시 이동 안하도록
   const scrollRef = useRef(0);
 
-  // 더보기 버튼
-  const MoreButton = () => {
-    if (displayNumber < filteredMovies.length)
-      return (
-        <Box pt={10}>
-          <Button
-            w="100%"
-            bg="#1e1e1e"
-            border="1px solid gray"
-            _hover={{ borderColor: "white" }}
-            disabled={isLoading}
-            onClick={async () => {
-              scrollRef.current = window.scrollY;
-              setIsLoading(true);
-
-              const newMovies = await loadMovieData(filteredMovies, displayNumber, 8);
-              setLoadedMovies(prev => {
-                const combined = [...prev, ...newMovies];
-                // 전체 다시 정렬
-                return combined.sort((a, b) => {
-                  const aRate = parseFloat(a.realReserveRate) || 0;
-                  const bRate = parseFloat(b.realReserveRate) || 0;
-                  return bRate - aRate;
-                });
+// 더보기 버튼 수정
+const MoreButton = () => {
+  if (displayNumber < sortedMovieIds.length)
+    return (
+      <Box pt={10}>
+        <Button
+          w="100%"
+          bg="#1e1e1e"
+          border="1px solid gray"
+          _hover={{ borderColor: "white" }}
+          disabled={isLoading}
+          onClick={async () => {
+            scrollRef.current = window.scrollY;
+            setIsLoading(true);
+            
+            // 다음 8개 영화 ID 가져오기
+            const nextIds = sortedMovieIds.slice(displayNumber, displayNumber + 8);
+            // 아직 로드되지 않은 영화들만 필터링
+            const unloadedIds = nextIds.filter(id => !loadedMoviesData[id]);
+            
+            if (unloadedIds.length > 0) {
+              const newMoviesData = await loadMovieDetails(unloadedIds);
+              const newDataMap = {};
+              newMoviesData.forEach(movieData => {
+                if (movieData) {
+                  newDataMap[movieData.id] = movieData;
+                }
               });
-              setDisplayNumber(prev => prev + 8);
-              setIsLoading(false);
-            }}
-          >
-            {isLoading ? "로딩 중..." : "더보기"}
-          </Button>
-        </Box>
-      );
-  };
+              
+              setLoadedMoviesData(prev => ({ ...prev, ...newDataMap }));
+            }
+            
+            setDisplayNumber(prev => prev + 8);
+            setIsLoading(false);
+          }}
+        >
+          더보기
+        </Button>
+      </Box>
+    );
+};
 
   // 렌더 후 위치 복원
   useEffect(() => {
@@ -322,53 +356,68 @@ const Movie = (userInfo) => {
     setDisplayNumber(8);
   }, [activeCategory, searchWord]);
 
-  // 영화카드들
-  const MovieCards = ({ isMobile }) => {
-    if (searchWord != "" && filteredMovies.length < 1)
-      return (
-        <Box
-          w="100%"
-          h="50vh"
-          bg="#141414"
-          fontSize={{ base: "18px", md: "4xl" }}
-          color="white"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          검색 결과가 없습니다
-        </Box>
-      );
-    else
-      return (
-        <Grid
-          w="100%"
-          bg="#141414"
-          justifyContent={isMobile ? "center" : "start"}
-          templateColumns="repeat(auto-fit, minmax(280px, auto))"
-          gap="30px"
-          overflow="visible"
-        >
-          {loadedMovies.map((movie, index) => {
-            if (index < displayNumber)
-              // console.log(movie.id + "score : " + movie.realScore)
-              // console.log(movie.id + "reserveRate : " + movie.realReserveRate)
-              return (
-                <MovieCard
-                  key={movie.id}
-                  movie={movie}
-                  user={user}
-                  crit={"예매"}
-                  rank={index + 1}
-                  preloadedData={{
-                    score: movie.realScore,
-                    reserveRate: movie.realReserveRate
-                  }}
-                />
-              );
-          })}
-        </Grid>
-      );
+// 영화카드들 수정
+const MovieCards = ({ isMobile }) => {
+  if (searchWord != "" && filteredMovies.length < 1)
+    return (
+      <Box
+        w="100%"
+        h="50vh"
+        bg="#141414"
+        fontSize={{base:"18px",md:"4xl"}}
+        color="white"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        검색 결과가 없습니다
+      </Box>
+    );
+  
+  // if (isLoading)
+  //   return (
+  //     <Box
+  //       w="100%"
+  //       h="50vh"
+  //       bg="#141414"
+  //       display="flex"
+  //       alignItems="center"
+  //       justifyContent="center"
+  //     >
+  //       <div>로딩 중...</div>
+  //     </Box>
+  //   );
+  else
+    return (
+      <Grid
+        w="100%"
+        bg="#141414"
+        justifyContent={isMobile ? "center" : "start"}
+        templateColumns="repeat(auto-fit, minmax(280px, auto))"
+        gap="30px"
+        overflow="visible"
+      >
+        {sortedMovieIds.slice(0, displayNumber).map((movieId, index) => {
+          const movieData = loadedMoviesData[movieId];
+          if (movieData) {
+            return (
+              <MovieCard
+                key={movieId}
+                movie={movieData}
+                user={user}
+                crit={"예매"}
+                rank={index + 1}
+                preloadedData={{
+                  score: movieData.realScore,
+                  reserveRate: movieData.realReserveRate
+                }}
+              />
+            );
+          }
+          return null;
+        })}
+      </Grid>
+    );
   };
 
   // 업로드 버튼
@@ -380,9 +429,19 @@ const Movie = (userInfo) => {
     </Link></Flex>
   }
 
+  const LoadingSpinner = () => {
+    return <Box
+      position="fixed" inset="0" zIndex="9999" 
+      display="flex" alignItems="center" justifyContent="center"
+      bg="blackAlpha.500"
+    >
+      <Spinner/>
+    </Box>
+  }
+
   return <>
-    {!isMobile ? (<>
-      (<Flex
+    {!isMobile ? <>
+      <Flex
         bg="#141414" minH="100vh"
         pt={20} pb={10} px={6}
         maxW="1280px" mx="auto"
@@ -396,10 +455,10 @@ const Movie = (userInfo) => {
         </Flex>
         <MovieCards isMobile={isMobile} />
         <MoreButton />
-      </Flex>);
+      </Flex>;
     </>
-    ) : (<>
-      (<Flex
+     : <>
+      <Flex
         bg="#141414" minH="100vh"
         pt={20} pb={10} px={6}
         maxW="1280px" mx="auto"
@@ -413,14 +472,15 @@ const Movie = (userInfo) => {
         </Flex>
         <MovieCards isMobile={isMobile} />
         <MoreButton />
-      </Flex>)
+      </Flex>
     </>
-  )}
+  }
   {isModalOpen && (<Modal
   isModalOpen={isModalOpen}
   isModalVisible={isModalVisible}
   closeModal={closeModal}
   content={modalContent}/>)}
+  {isLoading && <LoadingSpinner/>}
   </>
 };
 

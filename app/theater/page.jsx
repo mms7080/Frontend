@@ -14,8 +14,6 @@ export default async function TheaterPage() {
     const userRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
     const regionRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/regions`)
     const theaterRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/theaters/all`)
-    console.log(regionRes);
-    console.log(theaterRes);
 
     return <>
         <Header headerColor="white" headerBg="#1a1a1a" userInfo={userRes}/>

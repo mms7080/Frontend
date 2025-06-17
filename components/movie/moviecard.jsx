@@ -69,7 +69,8 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData }) => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${movie.id}`)
         if(res.ok) {
           const data =  await res.json();
-          console.log(data);
+          // console.log(data);
+          // setReserveRate(data);
           setReserveRate(data);
         }
       } catch(err) {
@@ -103,10 +104,11 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData }) => {
       };
   };
 
-  return (<>
-    { loaded ?
+  const roundRate = (rate) => {
+    return Math.round(rate * 10) / 10;
+  }
 
-  
+  return (<>
     <div className="movie-card">
       { rank && (
         <div className='rank-box'>
@@ -123,7 +125,7 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData }) => {
                 {movie.title} <br /> <br />
                 <span className='description'>{movie.description}</span><br /> <br />
                 관람평 <span className="score">{loaded ? score : movie.score}</span>
-                <br /> <br />예매율 <span>{loaded ? reserveRate : movie.reserveRate}%</span>
+                <br /> <br />예매율 <span>{loaded ? roundRate(reserveRate) : movie.reserveRate}%</span>
                 <br/>개봉일 <span>{movie.releaseDate}</span>
               </p>
             </div>
@@ -160,17 +162,12 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData }) => {
         </Link>
       </div>
     </div>
-  : <div className='movie-card loading'>
-      <Spinner/>
-    </div>
-  }
   {isModalOpen && (<Modal
   isModalOpen={isModalOpen}
   isModalVisible={isModalVisible}
   closeModal={closeModal}
   content={modalContent}/>)}
-    </>
-  );
+  </>);
 };
 
 export default MovieCard;

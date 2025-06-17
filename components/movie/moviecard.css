@@ -12,13 +12,6 @@
     text-align: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-
-  .loading {
-    height: 467px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
   
   .movie-card:hover {
     transform: translateY(-5px);
