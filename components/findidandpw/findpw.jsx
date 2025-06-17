@@ -78,7 +78,8 @@ export default function Findpwdetail({userData}){
             return;
         }
 
-        openModal('비밀번호가 성공적으로 변경되었습니다!');
+        e.preventDefault();
+        openModal('비밀번호가 성공적으로 변경되었습니다!', ()=>{e.target.submit()}, ()=>{e.target.submit()});
     }
 
     const EmailLayout=()=>{
@@ -142,6 +143,12 @@ export default function Findpwdetail({userData}){
                     </Box>
                 </VStack>
             </Box>
+            {isModalOpen && (<Modal
+            isModalOpen={isModalOpen}
+            isModalVisible={isModalVisible}
+            closeModal={closeModal}
+            onConfirm={onConfirm}
+            content={modalContent}/>)}
         </>;
     }else{/* 본격적으로 비밀번호를 재설정하는 과정 */
         return <>

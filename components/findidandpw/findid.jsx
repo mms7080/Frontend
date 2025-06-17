@@ -110,7 +110,13 @@ export default function Findiddetail({userData}){
                         </Flex>
                     </Box>
                 </VStack>
-            </Box>       
+            </Box>
+            {isModalOpen && (<Modal
+            isModalOpen={isModalOpen}
+            isModalVisible={isModalVisible}
+            closeModal={closeModal}
+            onConfirm={onConfirm}
+            content={modalContent}/>)}       
         </>;
     }else{/* 찾은 아이디를 보여주는 부분 */
         return <>
