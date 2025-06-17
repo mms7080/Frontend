@@ -1,7 +1,7 @@
 'use client';
 
 import React,{useState} from 'react';
-import {RadioGroup,Input,Box,VStack,Flex,Button,Text} from '@chakra-ui/react';
+import {RadioGroup,Input,Box,VStack,Flex,Button,Text,useMediaQuery} from '@chakra-ui/react';
 import {Header} from '../../components';
 import {fetch} from '../../lib/client';
 import Modal, { useModal } from '../movie/modal';
@@ -19,6 +19,7 @@ export default function Findpwdetail({userData}){
     const [isPwrAvailable,setIsPwrAvailable]=useState(null);/* 비밀번호 확인이 비밀번호와 같은지 여부 */
     const [foundID,setFoundID]=useState('');
     const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm} = useModal();
+    const [isMobile] = useMediaQuery("(max-width: 768px)");
 
     const handleFindPW=async ()=>{
 
@@ -193,8 +194,8 @@ export default function Findpwdetail({userData}){
                                                     setIsPwAvailable(null);/* 비밀번호 값이 바뀌면 다시 유효성 여부를 검사 */
                                                     if(!value||value.length<10){
                                                         setIsPwAvailable(false);
-                                                        if(value.length>=5)
-                                                            setPwMessage('⚠️ 비밀번호가 약합니다. (최소 10자 필요)');
+                                                        if(value.length>=1)
+                                                            setPwMessage(!isMobile?'⚠️ 비밀번호가 약합니다. (최소 10자 필요)':'⚠️ 비밀번호가 약합니다.');
                                                         else
                                                             setPwMessage('');
                                                     }
