@@ -55,7 +55,7 @@ export const useModal = () => {
 }
 
 const Modal = ({isModalOpen, isModalVisible, closeModal, content, 
-                isVideo=false, isConfirm=false, onConfirm, onCancel}) => {
+                isVideo=false, isConfirm=false, onConfirm, onCancel, isPaddingLarge=false}) => {
 
     const handleConfirm = () => {
         closeModal();
@@ -108,8 +108,8 @@ const Modal = ({isModalOpen, isModalVisible, closeModal, content,
                 className={`modal-content ${isModalVisible ? 'show' : ''}`}
                 position="relative" bg={!isVideo?"white":'black'} borderRadius="xl" shadow="2xl" 
                 maxW={isVideo ? "970px" : "md"} w="full" mx="4" marginTop="-5%"
-                justifyContent='center' alignItems='center'
-                pt='15px' pb={!isVideo?'30px':'0px'}
+                justifyContent='center' alignItems='center' px={isPaddingLarge?'40px':'0px'}
+                pt='15px' pb={!isVideo?'30px':'0px'} 
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 모달창 내부 */}

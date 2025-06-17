@@ -167,7 +167,7 @@ export default function ReviewWrite({isMobile=false,topindex=0,modifyid,setModif
                 </NativeSelect.Field>
                 <NativeSelect.Indicator/>
             </NativeSelect.Root>
-            {reviewOK() && (<Button w={{base:'100px',md:'126.06px'}}bg='white' color='#666666' h='60px' fontSize='16px' onClick={modifyid===-1?handleSubmit:handleModify}>✏️ {modifyid===-1?'관람평쓰기':'리뷰 수정하기'}</Button>)}
+            {reviewOK() && (<Button w={{base:'100px',md:'126.06px'}}bg='white' color='#666666' h='60px' fontSize='16px' onClick={modifyid===-1?handleSubmit:handleModify}>✏️ {modifyid===-1?'관람평쓰기':(!isMobile?'리뷰 수정하기':'리뷰 수정')}</Button>)}
         </Flex>
         </Flex>
         {isModalOpen && (<Modal

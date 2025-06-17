@@ -54,18 +54,6 @@ export default function Findiddetail({userData}){
         setFoundID(res.foundID);/* 객체에서 문자열만 꺼내서 저장 */
     }
 
-    const EmailLayout=()=>{
-        return <>
-                <Input id="email" name="email" placeholder="example@email.com"/>
-            </>;
-    }
-
-    const PhoneLayout=()=>{
-        return <>
-                <Input id="phone_number" name="phone_number" placeholder="01012345678"/>
-            </>;
-    }
-
     if(foundID===''){/* 아이디 찾기 이전에 보이는 부분 */
         return <>
             <Header userInfo={userData}></Header>
@@ -101,7 +89,7 @@ export default function Findiddetail({userData}){
                                     </tr>
                                     <tr style={{borderBottom:'1px solid #D1D5DD'}}>
                                         <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}>{<label htmlFor={layout}>{layout==='email'?'이메일':'휴대폰 번호'}</label>}</td>
-                                        <td style={{width:605,height:50,paddingLeft:15}}>{layout==='email'?<EmailLayout/>:<PhoneLayout/>}</td>
+                                        <td style={{width:605,height:50,paddingLeft:15}}>{layout==='email'?<Input id="email" name="email" placeholder="example@email.com"/>:<Input id="phone_number" name="phone_number" placeholder="01012345678"/>}</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -46,7 +46,8 @@ export default function LikePart({id,res,movieinfo,isMobile=false}){
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}
         closeModal={closeModal}
-        content={modalContent}/>)}
+        content={modalContent}
+        isPaddingLarge={true}/>)}
     </>;
 
 }

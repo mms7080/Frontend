@@ -126,7 +126,7 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                 </Flex>
                 {currentReviews.map((review,index)=>
                 {
-                    if(modifyid===review.id)return <Reviewwrite setModifyId={setModifyId} modifyid={modifyid} username={review.author} key={indexOfFirstReview+index} 
+                    if(modifyid===review.id)return <Reviewwrite isMobile={isMobile} setModifyId={setModifyId} modifyid={modifyid} username={review.author} key={indexOfFirstReview+index} 
                     reviewList={reviewList} sortkey={sortkey} 
                     setReviewList={setReviewList} movieInfo={movieInfo}
                     initialContent={review.content} initialScore={review.score}></Reviewwrite>;

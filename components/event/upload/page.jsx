@@ -30,15 +30,17 @@ export default function EventUploader({userData}) {
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   const router = useRouter();
 
-  try {
-    if (!user) throw new Error();
-    // 🔐 관리자 체크
-    if (user.auth !== "ADMIN") {
-      openModal("관리자만 접근 가능한 페이지입니다.", ()=>{router.push("/event");}, ()=>{router.push("/event");});
+  useEffect(() => {
+    try {
+      if (!user) throw new Error();
+      // 🔐 관리자 체크
+      if (user.auth !== "ADMIN") {
+        openModal("관리자만 접근 가능한 페이지입니다.", ()=>{router.push("/event");}, ()=>{router.push("/event");});
+      }
+    } catch {
+      openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
     }
-  } catch {
-    openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
-  }
+  },[user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
