@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useMemo, useRef } from "react";
+import Link from 'next/link';
 import {
   Button,
   Flex,
@@ -221,7 +222,7 @@ const Movie = (userInfo) => {
 
   // 검색 부분
   const SearchPart = ({ isMobile }) => {
-    return (
+    return <>
       <HStack
         w={isMobile ? "80%" : "40%"}
         minWidth="282px"
@@ -267,7 +268,7 @@ const Movie = (userInfo) => {
           전체
         </Button>
       </HStack>
-    );
+    </>;
   };
 
   // 더보기 누를 시 이동 안하도록
@@ -350,8 +351,8 @@ const Movie = (userInfo) => {
         >
           {loadedMovies.map((movie, index) => {
             if (index < displayNumber)
-              console.log(movie.id + "score : " + movie.realScore)
-              console.log(movie.id + "reserveRate : " + movie.realReserveRate)
+              // console.log(movie.id + "score : " + movie.realScore)
+              // console.log(movie.id + "reserveRate : " + movie.realReserveRate)
               return (
                 <MovieCard
                   key={movie.id}
@@ -370,19 +371,24 @@ const Movie = (userInfo) => {
       );
   };
 
-  return <>{!isMobile ? (
-    <>
-      (
-      <Flex
-        bg="#141414"
-        minH="100vh"
-        pt={20}
-        pb={10}
-        px={6}
-        maxW="1280px"
-        mx="auto"
+  // 업로드 버튼
+  const UploadButton = () => {
+    return <Flex justify="flex-end" pb={3}><Link href={`/movie/upload`}>
+          <Button
+            bg="#1e1e1e" border="1px solid gray" _hover={{ borderColor: "white" }}
+          >영화 등록</Button>
+    </Link></Flex>
+  }
+
+  return <>
+    {!isMobile ? (<>
+      (<Flex
+        bg="#141414" minH="100vh"
+        pt={20} pb={10} px={6}
+        maxW="1280px" mx="auto"
         flexDirection="column"
       >
+        {user?.auth === "ADMIN" && <UploadButton/>}
         {/* 카테고리 분류 */}
         <Flex flexWrap="wrap" justify={"space-between"} pb={6}>
           <CategoryPart isMobile={isMobile} />
@@ -390,22 +396,16 @@ const Movie = (userInfo) => {
         </Flex>
         <MovieCards isMobile={isMobile} />
         <MoreButton />
-      </Flex>
-      );
+      </Flex>);
     </>
-  ) : (
-    <>
-      (
-      <Flex
-        bg="#141414"
-        minH="100vh"
-        pt={20}
-        pb={10}
-        px={6}
-        maxW="1280px"
-        mx="auto"
+    ) : (<>
+      (<Flex
+        bg="#141414" minH="100vh"
+        pt={20} pb={10} px={6}
+        maxW="1280px" mx="auto"
         flexDirection="column"
       >
+        {user?.auth === "ADMIN" && <UploadButton/>}
         {/* 카테고리 분류 */}
         <Flex flexDirection={"column"} align={"center"} gap={6} pb={6}>
           <SearchPart isMobile={isMobile} />
@@ -413,8 +413,7 @@ const Movie = (userInfo) => {
         </Flex>
         <MovieCards isMobile={isMobile} />
         <MoreButton />
-      </Flex>
-      )
+      </Flex>)
     </>
   )}
   {isModalOpen && (<Modal
