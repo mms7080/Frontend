@@ -64,7 +64,8 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
             return;
         }
 
-        openModal('개인정보가 수정되었습니다!');
+        e.preventDefault();
+        openModal('개인정보가 수정되었습니다!', ()=>{e.target.submit()}, ()=>{e.target.submit()});
     };
 
     return <><form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/modify/logic`} method='post' onSubmit={handleSubmit}>
