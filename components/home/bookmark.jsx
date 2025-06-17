@@ -71,5 +71,5 @@ export default function Bookmark(){
     isModalVisible={isModalVisible}
     closeModal={closeModal}
     content={modalContent}/>)}
-    </>
+    </>;
 }
