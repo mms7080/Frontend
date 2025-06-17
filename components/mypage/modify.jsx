@@ -54,7 +54,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
 
     const handleSubmit = async (e) => {
         if(!isPwAvailable){
-            e.preventDefault();/* 비밀번호 확인과 비밀번호가 일치되지 않았으면 폼 제출 막기 */
+            e.preventDefault();
             openModal('비밀번호는 10자 이상 입력해주세요.');
             return;
         }
@@ -101,9 +101,11 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                       if(!value||value.length<10){
                                                           setIsPwAvailable(false);
                                                           if(value.length>=1)
-                                                              setPwMessage('⚠️ 비밀번호가 약합니다. (최소 10자 필요)');
-                                                          else
+                                                              setPwMessage(!isMobile?'⚠️ 비밀번호가 약합니다. (최소 10자 필요)':'⚠️ 비밀번호가 약합니다.');
+                                                          else{
                                                               setPwMessage('');
+                                                              setIsPwAvailable(true);
+                                                          }
                                                       }
                                                       else{
                                                           setIsPwAvailable(true);
@@ -206,8 +208,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                 <Box textAlign='center' display={{base:'block',md:'none'}}>
                                     PC버전 사이트에서만 입력 가능합니다.
                                 </Box>
-                                {!isMobile &&
-                                <table>
+                                <table style={{display:!isMobile?'table':'none'}}>
                                     <tbody>
                                         <tr style={{borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="birthdate">생년월일</label></td>
@@ -252,7 +253,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                             </td>
                                         </tr>
                                     </tbody>
-                                </table>}
+                                </table>
                                 <Link style={{textAlign:'right',color:'#352461',textDecoration:'underline'}}
                                 href={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/unregister`}
                                 onClick={(e) => {
