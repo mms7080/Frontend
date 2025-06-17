@@ -24,6 +24,9 @@ const Movie = (userInfo) => {
   const [searchWord, setSearchWord] = useState("");
   const [displayNumber, setDisplayNumber] = useState(8);
 
+  const [loadedMovies, setLoadedMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   const inputRef = useRef("");
   const clearInputValue = () => {
     if (inputRef.current) {
@@ -66,44 +69,117 @@ const Movie = (userInfo) => {
       activeCategory === "전체영화"
         ? movies
         : movies.filter((movie) => {
-            let rd = new Date(movie.releaseDate);
-            let nd = new Date();
-            return (activeCategory === "개봉작") === rd <= nd && !isNaN(rd);
-          });
+          let rd = new Date(movie.releaseDate);
+          let nd = new Date();
+          return (activeCategory === "개봉작") === rd <= nd && !isNaN(rd);
+        });
 
     const searched =
       searchWord === ""
         ? filtered
         : filtered.filter(
-            (movie) =>
-              movie.title
-                .replace(/\s+/g, "")
-                .toLowerCase()
-                .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
-              movie.titleEnglish
-                .replace(/\s+/g, "")
-                .toLowerCase()
-                .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
-              movie.description
-                .replace(/\s+/g, "")
-                .toLowerCase()
-                .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
-              movie.genre
-                .replace(/\s+/g, "")
-                .toLowerCase()
-                .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
-              movie.director
-                .replace(/\s+/g, "")
-                .toLowerCase()
-                .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
-              movie.cast
-                .replace(/\s+/g, "")
-                .toLowerCase()
-                .includes(searchWord.replace(/\s+/g, "").toLowerCase())
-          );
+          (movie) =>
+            movie.title
+              .replace(/\s+/g, "")
+              .toLowerCase()
+              .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
+            movie.titleEnglish
+              .replace(/\s+/g, "")
+              .toLowerCase()
+              .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
+            movie.description
+              .replace(/\s+/g, "")
+              .toLowerCase()
+              .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
+            movie.genre
+              .replace(/\s+/g, "")
+              .toLowerCase()
+              .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
+            movie.director
+              .replace(/\s+/g, "")
+              .toLowerCase()
+              .includes(searchWord.replace(/\s+/g, "").toLowerCase()) ||
+            movie.cast
+              .replace(/\s+/g, "")
+              .toLowerCase()
+              .includes(searchWord.replace(/\s+/g, "").toLowerCase())
+        );
 
-    return searched.sort((a, b) => b.reserveRate - a.reserveRate);
+    return searched;
   }, [movies, activeCategory, searchWord]);
+
+  // 영화 데이터 로드 함수
+  const loadMovieData = async (movieList, startIndex, count) => {
+    const moviesToLoad = movieList.slice(startIndex, startIndex + count);
+    const promises = moviesToLoad.map(async (movie) => {
+      try {
+        // 리뷰 점수 가져오기
+        const reviewRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${movie.id}`);
+        // console.log(movie.id + "reviewRes")
+        // console.log(reviewRes)
+        let score = "N/A";
+          const reviewData = reviewRes;
+          console.log(movie.id + "reviewData")
+          console.log(reviewData)
+          if (reviewData.length > 0) {
+            let sum = 0;
+            for (let review of reviewData) sum += review.score;
+            score = (sum / reviewData.length).toFixed(1);
+          } else {
+            score = "없음";
+          }
+
+        // 예매율 가져오기
+        const reserveRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${movie.id}`);
+        // console.log(movie.id + "reserveRes")
+        // console.log(reserveRes)
+        let reserveRate = "N/A";
+
+          reserveRate = reserveRes;
+          console.log(movie.id + "reserveRate")
+          console.log(reserveRate);
+  
+
+        return {
+          ...movie,
+          realScore: score,
+          realReserveRate: reserveRate
+        };
+      } catch (err) {
+        console.log(`Movie data load error for ${movie.id}:`, err.message);
+        return {
+          ...movie,
+          realScore: "N/A",
+          realReserveRate: "N/A"
+        };
+      }
+    });
+
+    return Promise.all(promises);
+  };
+
+  // filteredMovies가 변경될 때 로드된 영화 초기화
+  useEffect(() => {
+    const loadInitialMovies = async () => {
+      if (filteredMovies.length > 0) {
+        setIsLoading(true);
+        const initialMovies = await loadMovieData(filteredMovies, 0, 8);
+        // 예매율로 정렬
+        const sortedMovies = initialMovies.sort((a, b) => {
+          const aRate = parseFloat(a.realReserveRate) || 0;
+          const bRate = parseFloat(b.realReserveRate) || 0;
+          return bRate - aRate;
+        });
+        setLoadedMovies(sortedMovies);
+        setIsLoading(false);
+      } else {
+        setLoadedMovies([]);
+      }
+    };
+
+    loadInitialMovies();
+    setDisplayNumber(8);
+  }, [filteredMovies]);
 
   // 카테고리 부분
   const CategoryPart = ({ isMobile }) => {
@@ -205,12 +281,26 @@ const Movie = (userInfo) => {
             bg="#1e1e1e"
             border="1px solid gray"
             _hover={{ borderColor: "white" }}
-            onClick={() => {
+            disabled={isLoading}
+            onClick={async () => {
               scrollRef.current = window.scrollY;
-              setDisplayNumber((prev) => prev + 8);
+              setIsLoading(true);
+
+              const newMovies = await loadMovieData(filteredMovies, displayNumber, 8);
+              setLoadedMovies(prev => {
+                const combined = [...prev, ...newMovies];
+                // 전체 다시 정렬
+                return combined.sort((a, b) => {
+                  const aRate = parseFloat(a.realReserveRate) || 0;
+                  const bRate = parseFloat(b.realReserveRate) || 0;
+                  return bRate - aRate;
+                });
+              });
+              setDisplayNumber(prev => prev + 8);
+              setIsLoading(false);
             }}
           >
-            더보기
+            {isLoading ? "로딩 중..." : "더보기"}
           </Button>
         </Box>
       );
@@ -237,7 +327,7 @@ const Movie = (userInfo) => {
           w="100%"
           h="50vh"
           bg="#141414"
-          fontSize={{base:"18px",md:"4xl"}}
+          fontSize={{ base: "18px", md: "4xl" }}
           color="white"
           display="flex"
           alignItems="center"
@@ -256,8 +346,10 @@ const Movie = (userInfo) => {
           gap="30px"
           overflow="visible"
         >
-          {filteredMovies.map((movie, index) => {
+          {loadedMovies.map((movie, index) => {
             if (index < displayNumber)
+              console.log(movie.id + "score : " + movie.realScore)
+              console.log(movie.id + "reserveRate : " + movie.realReserveRate)
               return (
                 <MovieCard
                   key={movie.id}
@@ -265,6 +357,10 @@ const Movie = (userInfo) => {
                   user={user}
                   crit={"예매"}
                   rank={index + 1}
+                  preloadedData={{
+                    score: movie.realScore,
+                    reserveRate: movie.realReserveRate
+                  }}
                 />
               );
           })}

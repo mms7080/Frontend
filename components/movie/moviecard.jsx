@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { createIcon } from '@chakra-ui/react';
 import './moviecard.css';
 import Modal, { useModal } from './modal';
+import Spinner from '../Spinner';
 
 const HeartIcon = createIcon({
   displayName: "HeartIcon",
@@ -20,12 +21,13 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-const MovieCard = ({ movie, user, rank, crit}) => {
+const MovieCard = ({ movie, user, rank, crit, preloadedData }) => {
 
   const [liked, likedController] = useState(false);
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
-  const [score, setScore] = useState("N/A");
-  const [scoreLoaded, setScoreLoaded] = useState(false);
+  const [score, setScore] = useState(preloadedData?.score || "N/A");
+  const [reserveRate, setReserveRate] = useState(preloadedData.reserveRate?.reserveRate || "N/A");
+  const [loaded, setLoaded] = useState(!!preloadedData);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
   useEffect(() => {
@@ -35,6 +37,14 @@ const MovieCard = ({ movie, user, rank, crit}) => {
   ,[user])
 
   useEffect(() => {
+
+    if (preloadedData) {
+      setScore(preloadedData.score);
+      setReserveRate(preloadedData.reserveRate);
+      setLoaded(true);
+      return;
+    }
+
     (async() => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${movie.id}`);
@@ -49,14 +59,25 @@ const MovieCard = ({ movie, user, rank, crit}) => {
           } else {
             setScore("없음");
           }
-          setScoreLoaded(true);
         }
       } catch(err) {
         console.log("avgScore ERROR! " + err.message);
         setScore("N/A");
       }
+
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${movie.id}`)
+        if(res.ok) {
+          const data =  await res.json();
+          console.log(data);
+          setReserveRate(data);
+        }
+      } catch(err) {
+        console.log("getReserveRate ERROR! " + err.message);
+      }
+      setLoaded(true);
     })();
-  }, [movie])
+  }, [movie, preloadedData])
 
   const likeChange = async () => {
     if(!user)
@@ -83,6 +104,9 @@ const MovieCard = ({ movie, user, rank, crit}) => {
   };
 
   return (<>
+    { loaded ?
+
+  
     <div className="movie-card">
       { rank && (
         <div className='rank-box'>
@@ -98,8 +122,8 @@ const MovieCard = ({ movie, user, rank, crit}) => {
               <p>
                 {movie.title} <br /> <br />
                 <span className='description'>{movie.description}</span><br /> <br />
-                관람평 <span className="score">{scoreLoaded ? score : "N/A"}</span>
-                <br /> <br />예매율 <span>{movie.reserveRate}%</span>
+                관람평 <span className="score">{loaded ? score : "N/A"}</span>
+                <br /> <br />예매율 <span>{loaded ? reserveRate : "N/A"}%</span>
                 <br/>개봉일 <span>{movie.releaseDate}</span>
               </p>
             </div>
@@ -136,6 +160,10 @@ const MovieCard = ({ movie, user, rank, crit}) => {
         </Link>
       </div>
     </div>
+  : <div className='movie-card loading'>
+      <Spinner/>
+    </div>
+  }
   {isModalOpen && (<Modal
   isModalOpen={isModalOpen}
   isModalVisible={isModalVisible}
