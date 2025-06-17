@@ -26,7 +26,7 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData }) => {
   const [liked, likedController] = useState(false);
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
   const [score, setScore] = useState(preloadedData?.score || "N/A");
-  const [reserveRate, setReserveRate] = useState(preloadedData.reserveRate?.reserveRate || "N/A");
+  const [reserveRate, setReserveRate] = useState(preloadedData?.reserveRate?.reserveRate || "N/A");
   const [loaded, setLoaded] = useState(!!preloadedData);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
@@ -122,8 +122,8 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData }) => {
               <p>
                 {movie.title} <br /> <br />
                 <span className='description'>{movie.description}</span><br /> <br />
-                관람평 <span className="score">{loaded ? score : "N/A"}</span>
-                <br /> <br />예매율 <span>{loaded ? reserveRate : "N/A"}%</span>
+                관람평 <span className="score">{loaded ? score : movie.score}</span>
+                <br /> <br />예매율 <span>{loaded ? reserveRate : movie.reserveRate}%</span>
                 <br/>개봉일 <span>{movie.releaseDate}</span>
               </p>
             </div>
