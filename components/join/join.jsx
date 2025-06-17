@@ -537,13 +537,14 @@ export default function Joindetail(){
                     </Box>
                 </form>
             </VStack>
-        </Box>;
+        </Box>
         {isModalOpen && (<Modal
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}
         closeModal={closeModal}
         onConfirm={onConfirm}
         onCancel={onCancel}
-        content={modalContent}/>)}
-        </>
+        content={modalContent}
+        isPaddingLarge={true}/>)}
+        </>;
 }

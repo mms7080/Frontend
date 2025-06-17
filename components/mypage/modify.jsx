@@ -268,7 +268,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                 <Button mt='10px' type="submit" bg='#6B46C1' _hover={{bg:'#553C9A'}}>회원정보 수정</Button>
                             </Flex>
                         </Box>
-                    </form>;
+                    </form>
                     {isModalOpen && (<Modal
                     isModalOpen={isModalOpen}
                     isModalVisible={isModalVisible}
@@ -277,5 +277,5 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                     onCancel={onCancel}
                     isConfirm={isConfirm}
                     content={modalContent}/>)}
-                    </>
+                    </>;
 }

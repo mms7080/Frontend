@@ -65,12 +65,11 @@ export default function Bookmark(){
                 </Flex>
             </Link>
         </Flex>
-    </VStack>;
+    </VStack>
     {isModalOpen && (<Modal
     isModalOpen={isModalOpen}
     isModalVisible={isModalVisible}
     closeModal={closeModal}
-    onConfirm={onConfirm}
     content={modalContent}/>)}
     </>
 }
