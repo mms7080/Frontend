@@ -3,7 +3,7 @@ import {Button,Flex,Textarea,NativeSelect} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
 import Modal, { useModal } from '../movie/modal';
 
-export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
+export default function ReviewWrite({isMobile=false,topindex=0,modifyid,setModifyId,username,reviewList,sortkey,setReviewList,movieInfo,initialContent,initialScore}){
 
     const [content, setContent] = useState(initialContent);
     const [score, setScore] = useState(initialScore);
@@ -115,8 +115,8 @@ export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,re
 
     return <>
     <Flex w='100%' gap='15px'>
-     <Flex w='125px' h='70px' justifyContent='center' alignItems='center' mr='5px' whiteSpace="normal" wordBreak="break-word">{username?username:'로그인 필요'}</Flex>
-        <Flex h='70px' border='1px solid #666666' borderRadius='5px' alignItems='center' flex='1'>
+     {!isMobile?<Flex w='125px' h='70px' justifyContent='center' alignItems='center' mr='5px' whiteSpace="normal" wordBreak="break-word">{username?username:'로그인 필요'}</Flex>:<></>}
+        <Flex h='70px' border='1px solid #666666' borderRadius='5px' alignItems='center' flex='1' mx={{base:15,md:0}}>
             <Textarea border='none' outline='none' 
                 maxLength='150'
                 /* 1) 리사이즈 자체를 막아 사선무늬 제거 */
@@ -142,16 +142,16 @@ export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,re
                 }}
             id='content' name='content' h='70px' fontSize='16px' onKeyDown={handleKeyDown}
             placeholder={!username?'로그인이 필요합니다.'
-                :(reviewExist()?'리뷰는 한 영화당 한 개만 작성할 수 있습니다.':`${movieInfo.title} 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.(최대 150자)`)}
+                :(reviewExist()?'리뷰는 한 영화당 한 개만 작성할 수 있습니다.':(!isMobile?`${movieInfo.title} 재미있게 보셨나요? 영화의 어떤 점이 좋았는지 이야기해주세요.(최대 150자)`:''))}
             readOnly={!reviewOK()}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             _hover={{cursor:'default'}}
             />
             <span style={{overflow:'visible'}}>⭐</span>
-            <span style={{padding:5}}>:</span>
-            <NativeSelect.Root w="90px" pr='10px' flexShrink={0}>
-                <NativeSelect.Field w='90px' id='score' name='score' value={score} onChange={(e) => setScore(Number(e.target.value))} disabled={!reviewOK()} // 여기서 제어
+            <span style={{padding:!isMobile?5:3}}>:</span>
+            <NativeSelect.Root w={{base:'60px',md:"90px"}} pr={{base:'0px',md:'10px'}} flexShrink={0}>
+                <NativeSelect.Field w={{base:'60px',md:"90px"}} id='score' name='score' value={score} onChange={(e) => setScore(Number(e.target.value))} disabled={!reviewOK()} // 여기서 제어
                     style={{ cursor: !reviewOK() ? 'default' : 'pointer' }} // 금지 커서 막기
                     >
                     <option value={10}>10</option>
@@ -167,7 +167,7 @@ export default function ReviewWrite({topindex=0,modifyid,setModifyId,username,re
                 </NativeSelect.Field>
                 <NativeSelect.Indicator/>
             </NativeSelect.Root>
-            {reviewOK() && (<Button bg='white' color='#666666' h='60px' fontSize='16px' onClick={modifyid===-1?handleSubmit:handleModify}>✏️ {modifyid===-1?'관람평쓰기':'리뷰 수정하기'}</Button>)}
+            {reviewOK() && (<Button w={{base:'100px',md:'126.06px'}}bg='white' color='#666666' h='60px' fontSize='16px' onClick={modifyid===-1?handleSubmit:handleModify}>✏️ {modifyid===-1?'관람평쓰기':'리뷰 수정하기'}</Button>)}
         </Flex>
         </Flex>
         {isModalOpen && (<Modal

@@ -1,12 +1,13 @@
 'use client';
 
 import React,{useState,useEffect} from 'react';
-import {Flex,Box,VStack,Input,Button,Text,Textarea,RadioGroup} from '@chakra-ui/react';
+import {Flex,Box,VStack,Input,Button,Text,Textarea,RadioGroup,useMediaQuery} from '@chakra-ui/react';
 import {fetch} from '../../lib/client';
 import Modal, { useModal } from '../movie/modal';
 
 export default function Joindetail(){
 
+    const [isMobile] = useMediaQuery("(max-width: 768px)");
     const handleBeforeInput = (e) => {
     const inputChar = e.data;
     if (!inputChar) return;
@@ -344,7 +345,7 @@ export default function Joindetail(){
                                                 if(!value||value.length<10){
                                                     setIsPwAvailable(false);
                                                     if(value.length>=1)
-                                                        setPwMessage('⚠️ 비밀번호가 약합니다. (최소 10자 필요)');
+                                                        setPwMessage(!isMobile?'⚠️ 비밀번호가 약합니다. (최소 10자 필요)':'⚠️ 비밀번호가 약합니다.');
                                                     else
                                                         setPwMessage('');
                                                 }

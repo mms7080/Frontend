@@ -7,7 +7,7 @@ import {fetch} from '../../lib/client';
 import Modal, { useModal } from '../../components/movie/modal';
 
 
-export default function QnaAll({isMobile,setrawItems,setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
+export default function QnaAll({isMobile=false,setrawItems,setTitle,setContent,setWhichPage,userInfo,rawItems,setViewId,setViewIndex,setViewContent,currentPage,setCurrentPage,setModifyId}){
   
   const qnasPerPage = !isMobile?10:5;
   

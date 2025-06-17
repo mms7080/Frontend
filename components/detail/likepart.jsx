@@ -7,7 +7,7 @@ import Modal,{useModal} from '../movie/modal';
 import {fetch} from '../../lib/client';
 import {AiOutlineHeart,AiFillHeart} from 'react-icons/ai';
 
-export default function LikePart({id,res,movieinfo}){
+export default function LikePart({id,res,movieinfo,isMobile=false}){
   
     const address = `http://localhost:3000/detail/${id}`; // 복사할 주소
 
@@ -38,10 +38,10 @@ export default function LikePart({id,res,movieinfo}){
     };    
 
     return <>
-        <Button transition="all 0.3s" _hover={{bg:"#6B46C1"}} fontSize='15px' boxShadow='4px 4px 6px black' onClick={likeChange}>{liked?<AiFillHeart style={{width:25,height:25}} color='red'/>:<AiOutlineHeart style={{width:25,height:25}} color='red'/>}{
+        <Button w={!isMobile?'93.27px':'45%'} transition="all 0.3s" _hover={{bg:"#6B46C1"}} fontSize='15px' boxShadow='4px 4px 6px black' onClick={likeChange}>{liked?<AiFillHeart style={{width:25,height:25}} color='red'/>:<AiOutlineHeart style={{width:25,height:25}} color='red'/>}{
             likeNumber                             
         }</Button>
-        <Button transition="all 0.3s" _hover={{bg:"#6B46C1"}} fontSize='15px' boxShadow='4px 4px 6px black' onClick={handleCopy}>공유하기</Button>
+        <Button w={!isMobile?'82.22px':'45%'} transition="all 0.3s" _hover={{bg:"#6B46C1"}} fontSize='15px' boxShadow='4px 4px 6px black' onClick={handleCopy}>공유하기</Button>
         {isModalOpen && (<Modal
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}

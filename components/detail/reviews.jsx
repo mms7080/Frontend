@@ -1,7 +1,7 @@
 'use client';
 
 import React,{useState,useEffect} from 'react';
-import {Flex,VStack,ButtonGroup,IconButton,Pagination} from '@chakra-ui/react';
+import {Flex,VStack,ButtonGroup,IconButton,Pagination,useMediaQuery} from '@chakra-ui/react';
 import Detailreview from '../element/detailreview';
 import Reviewwrite from '../element/reviewwrite';
 
@@ -15,9 +15,10 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
     const [ccolor, setccolor] = useState('gray.500');
     const [sortkey, setSortkey] = useState('writetime');// writetime - 최신순 , likenumber - 공감순 , score - 평점순
     const [reviewList, setReviewList] = useState([...reviewInfo].sort((a,b) => (new Date(b.writetime)-new Date(a.writetime)!=0)?(new Date(b.writetime)-new Date(a.writetime)):(b.likenumber-a.likenumber)));
+    const [isMobile] = useMediaQuery("(max-width: 768px)");
 
     const [currentPage, setCurrentPage] = useState(1);
-    const reviewsPerPage = 10;
+    const reviewsPerPage = !isMobile?10:5;
 
     const indexOfLastReview = currentPage * reviewsPerPage;
     const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
@@ -29,9 +30,9 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
 
     return <>
         <Flex flexDirection='column'>
-            <span style={{color:'#352461',fontSize:25}}>{movieInfo.title}에 대한 <span style={{color:'#01738B'}}>{reviewList.length}</span>개의 이야기가 있어요!</span>
+            <span style={{color:'#352461',fontSize:25,paddingLeft:!isMobile?0:15,paddingRight:!isMobile?0:15}}>{movieInfo.title}에 대한 <span style={{color:'#01738B'}}>{reviewList.length}</span>개의 이야기가 있어요!</span>
             <Flex justifyContent='space-between' pt='50px' pb='15px'>
-                <span>전체 <span style={{color:'#01738B'}}>{reviewList.length}</span>건</span>
+                <span style={{paddingLeft:!isMobile?0:15}}>전체 <span style={{color:'#01738B'}}>{reviewList.length}</span>건</span>
                 <Flex w='150px' justifyContent='space-between'>
                     <Flex color={acolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
                         setSortkey('writetime');
@@ -87,7 +88,7 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                         }
                     }}>공감순</Flex>
                     <Flex color='gray.500'>|</Flex>
-                    <Flex color={ccolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
+                    <Flex pr={{base:15,md:0}} color={ccolor} _hover={{cursor:'pointer'}} onClick={(e)=>{
                         setSortkey('score');
                         setacolor('gray.500');
                         setbcolor('gray.500');
@@ -119,7 +120,7 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
             
             <Flex flexDirection='column' gap='15px'>
                 <Flex w='100%' gap='15px'>
-                    <Reviewwrite topindex={indexOfFirstReview} modifyid={-1} username={userInfo?userInfo.username:''} reviewList={reviewList} sortkey={sortkey} 
+                    <Reviewwrite isMobile={isMobile} topindex={indexOfFirstReview} modifyid={-1} username={userInfo?userInfo.username:''} reviewList={reviewList} sortkey={sortkey} 
                     setReviewList={setReviewList} movieInfo={movieInfo}
                     initialContent='' initialScore={10}></Reviewwrite>
                 </Flex>
@@ -129,7 +130,7 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
                     reviewList={reviewList} sortkey={sortkey} 
                     setReviewList={setReviewList} movieInfo={movieInfo}
                     initialContent={review.content} initialScore={review.score}></Reviewwrite>;
-                    else return <Detailreview userInfo={userInfo} key={indexOfFirstReview+index}
+                    else return <Detailreview isMobile={isMobile} userInfo={userInfo} key={indexOfFirstReview+index}
                       id={review.id} author={review.author} score={review.score} content={review.content}
                       likenum={review.likenumber} likeusers={review.likeusers} currentPage={currentPage} setCurrentPage={setCurrentPage}
                       reviewList={reviewList} setReviewList={setReviewList} setModifyId={setModifyId} movieInfo={movieInfo} isHome={false}></Detailreview>;
@@ -152,7 +153,7 @@ export default function Reviews({userInfo,movieInfo,reviewInfo}){
 {/* 10개씩 페이지 그룹 렌더링 */}
       {(() => {
         const totalPages = Math.ceil(reviewList.length / reviewsPerPage);
-        const pageGroupSize = 10;
+        const pageGroupSize = !isMobile?10:5;
         const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
         const startPage = currentGroup * pageGroupSize + 1;
         const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);

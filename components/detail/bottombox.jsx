@@ -9,8 +9,8 @@ export default function Bottombox({res,movieinfo,reviewinfo}){
     const [version, setVersion] = useState(0);
 
     return <VStack>
-            <Box w='1200px' px='30px' borderRadius='10px' bg='white'>
-                <Flex w='1140px' flexDirection='column' gap='30px' pt='40px' pb='80px'>
+            <Box w={{base:'100%',md:'1200px'}} px={{base:'0px',md:'30px'}} borderRadius='10px' bg='white'>
+                <Flex w={{base:'100%',md:'1140px'}} flexDirection='column' gap='30px' pt='40px' pb='80px'>
                     <Tabs.Root key='outline' defaultValue="trailer" variant='outline' fitted onValueChange={()=>{setVersion(version+1)}}>
                         <Tabs.List>
                             <Tabs.Trigger value="trailer">

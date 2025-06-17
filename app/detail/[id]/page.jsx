@@ -27,7 +27,7 @@ export default async function Detailpage({params}){
         return <>
             <Header userInfo={res}></Header>
             <Box mb='100px'>
-                <Flex w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage={`url(${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movieinfo.wideImage})`}>
+                <Flex display={{base:'none',md:'flex'}} w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage={`url(${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movieinfo.wideImage})`}>
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>
                     <Flex justifyContent='center' alignItems='flex-start' flexDirection='column' gap='10px' color='white' position='relative' zIndex='1'>
                         <span style={{fontSize:50,textShadow:'4px 4px 6px black'}}>{movieinfo.title}</span>
@@ -65,15 +65,37 @@ export default async function Detailpage({params}){
                         </Link>
                     </VStack>
                 </Flex>
-                <VStack my='50px'>
-                    <Box w='1200px' px='30px' m='40px' borderRadius='10px' bg='white'>
-                        <Flex w='1140px' flexDirection='column' gap='30px' px='50px' pt='40px' pb='80px'>
-                            <iframe width="100%" height="500px" src={`${movieinfo.trailer}?autoplay=1&mute=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
-                            <span style={{lineHeight:'40px'}}>
-                                {movieinfo.title}<br/><br/>
-                                {movieinfo.description}<br/><br/><br/><br/>
-                            </span>
-                            <Flex w='100%'>
+                <Flex display={{base:'flex',md:'none'}} flexDirection='column' alignItems='center' mt='50px' gap='30px'>
+                    <Image w='90%' borderRadius='10px' position='relative' boxShadow='4px 4px 6px black' zIndex='1' src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movieinfo.poster}`} loading='lazy'/>
+                    <Link style={{width:'90%',overflow:'visible'}} href={`/booking?id=${id}`}>
+                        <Button transition="all 0.3s" _hover={{bg:"#6B46C1"}} w='100%' boxShadow='4px 4px 6px black' mt='20px'>예매</Button>
+                    </Link>
+                    <Flex w='90%' h='50px' justifyContent='space-around' overflow='visible' gap='30px'>
+                        <Likepart id={id} res={res} movieinfo={movieinfo} isMobile={true}/>
+                    </Flex>
+                </Flex>
+                <VStack my={{base:'0px',md:'50px'}}>
+                    <Box w={{base:'100%',md:'1200px'}} px={{base:'0px',md:'30px'}} m={{base:'0px',md:'40px'}} borderRadius='10px' bg='white'>
+                        <Flex w={{base:'100%',md:'1140px'}} flexDirection='column' gap='30px' px={{base:'0px',md:'50px'}} pt='40px' pb={{base:'0px',md:'80px'}}>
+                            <Flex display={{base:'none',md:'flex'}}>
+                                <iframe width="100%" height="500px" src={`${movieinfo.trailer}?autoplay=1&mute=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                            </Flex>
+                            <Flex display={{base:'flex',md:'none'}}>
+                                <iframe style={{margin:'auto'}} width="90%" height="180.288px" src={`${movieinfo.trailer}?autoplay=1&mute=1`} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+                            </Flex>
+                            <Flex display={{base:'none',md:'flex'}}>
+                                <span style={{lineHeight:'40px'}}>
+                                    {movieinfo.title}<br/><br/>
+                                    {movieinfo.description}<br/><br/><br/><br/>
+                                </span>
+                            </Flex>
+                            <Flex display={{base:'flex',md:'none'}}>
+                                <span style={{lineHeight:'40px',paddingLeft:'20px',paddingRight:'20px'}}>
+                                    {movieinfo.title}<br/><br/>
+                                    {movieinfo.description}<br/><br/><br/><br/>
+                                </span>
+                            </Flex>
+                            <Flex w='100%' px={{base:'20px',md:'0px'}}>
                                 <Flex w='50%' flexDirection='column' lineHeight='40px'>
                                     <span>러닝 타임:</span>
                                     <span style={{color:'#6D6D96'}}>{Math.floor(movieinfo.runningTime/60)}시간 {movieinfo.runningTime%60}분</span>
