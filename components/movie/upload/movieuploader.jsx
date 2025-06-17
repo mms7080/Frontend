@@ -143,8 +143,7 @@ const MovieUploader = ({ userInfo }) => {
         );
 
         if (res.ok) {
-            openModal("영화 업로드 성공!");
-            router.push("/movie");
+            openModal("영화 업로드 성공!",()=>{router.push("/movie");},()=>{router.push("/movie");});
         } else {
             const error = await res.text();
             openModal("업로드 실패: " + error);

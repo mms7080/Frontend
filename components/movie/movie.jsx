@@ -13,6 +13,7 @@ import {
 
 import MovieCard from "./moviecard";
 import { fetch } from "../../lib/client";
+import Modal, { useModal } from '../../components/movie/modal';
 
 const categories = ["전체영화", "개봉작", "상영예정작"];
 
@@ -26,16 +27,17 @@ const Movie = (userInfo) => {
 
   const [loadedMovies, setLoadedMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
 
   const inputRef = useRef("");
   const clearInputValue = () => {
     if (inputRef.current) {
-      inputRef.current.value = "";
+      inputRef.current.valueOf = "";
     }
   };
   const getInputValue = () => {
     if (inputRef.current) {
-      return inputRef.current.value;
+      return inputRef.current.valueOf;
     }
     return "";
   };
@@ -119,8 +121,8 @@ const Movie = (userInfo) => {
         // console.log(reviewRes)
         let score = "N/A";
           const reviewData = reviewRes;
-          console.log(movie.id + "reviewData")
-          console.log(reviewData)
+          // console.log(movie.id + "reviewData")
+          // console.log(reviewData)
           if (reviewData.length > 0) {
             let sum = 0;
             for (let review of reviewData) sum += review.score;
@@ -136,8 +138,8 @@ const Movie = (userInfo) => {
         let reserveRate = "N/A";
 
           reserveRate = reserveRes;
-          console.log(movie.id + "reserveRate")
-          console.log(reserveRate);
+          // console.log(movie.id + "reserveRate")
+          // console.log(reserveRate);
   
 
         return {
@@ -368,7 +370,7 @@ const Movie = (userInfo) => {
       );
   };
 
-  return !isMobile ? (
+  return <>{!isMobile ? (
     <>
       (
       <Flex
@@ -414,7 +416,13 @@ const Movie = (userInfo) => {
       </Flex>
       )
     </>
-  );
+  )}
+  {isModalOpen && (<Modal
+  isModalOpen={isModalOpen}
+  isModalVisible={isModalVisible}
+  closeModal={closeModal}
+  content={modalContent}/>)}
+  </>
 };
 
 export default Movie;
