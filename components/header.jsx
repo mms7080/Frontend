@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Spinner from './Spinner';
+import Spinner from "./Spinner";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Flex, 
+  Flex,
   Box,
   Icon,
   Text,
   Button,
   Image,
-  useMediaQuery
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { FaHome } from "react-icons/fa";
 import { FiUser } from "react-icons/fi";
@@ -98,20 +98,24 @@ export default function Header() {
   }, []);
 
   // countdown 상태 초기화 (닫힘 여부 및 위치)
-useEffect(() => {
-  if (!userId) return;
-  const savedClosed = localStorage.getItem(`countdownClosed_${userId}`) === "true";
-  setCountdownClosed(savedClosed);
-  const savedPosition = localStorage.getItem(`countdownPosition_${userId}`);
-  if (savedPosition) setPosition(JSON.parse(savedPosition));
-  setIsCountdownInit(true);
-}, [userId]);
+  useEffect(() => {
+    if (!userId) return;
+    const savedClosed =
+      localStorage.getItem(`countdownClosed_${userId}`) === "true";
+    setCountdownClosed(savedClosed);
+    const savedPosition = localStorage.getItem(`countdownPosition_${userId}`);
+    if (savedPosition) setPosition(JSON.parse(savedPosition));
+    setIsCountdownInit(true);
+  }, [userId]);
 
-useEffect(() => {
-  if (isCountdownInit && userId) {
-    localStorage.setItem(`countdownClosed_${userId}`, countdownClosed.toString());
-  }
-}, [countdownClosed, isCountdownInit, userId]);
+  useEffect(() => {
+    if (isCountdownInit && userId) {
+      localStorage.setItem(
+        `countdownClosed_${userId}`,
+        countdownClosed.toString()
+      );
+    }
+  }, [countdownClosed, isCountdownInit, userId]);
 
   // 화면 리사이즈 시 타이머 위치 제한
   useEffect(() => {
@@ -123,7 +127,10 @@ useEffect(() => {
           x: Math.min(prev.x, maxX),
           y: Math.min(prev.y, maxY),
         };
-        localStorage.setItem(`latestReservationCountdown_${userId}`, JSON.stringify(clamped));
+        localStorage.setItem(
+          `latestReservationCountdown_${userId}`,
+          JSON.stringify(clamped)
+        );
         return clamped;
       });
     };
@@ -132,85 +139,95 @@ useEffect(() => {
   }, []);
 
   // 스토리지에서 예매 알림 감지 (다른 탭 연동용)
-useEffect(() => {
-  const handleStorage = () => {
-    const alertData = localStorage.getItem(`latestReservationShowAlert_${userId}`);
-    if (alertData) {
-      const { title } = JSON.parse(alertData);
-      setShowingAlert({ title });
-      localStorage.removeItem(`latestReservationShowAlert_${userId}`);
-    }
-  };
-  window.addEventListener("storage", handleStorage);
-  return () => window.removeEventListener("storage", handleStorage);
-}, [userId]);
+  useEffect(() => {
+    const handleStorage = () => {
+      const alertData = localStorage.getItem(
+        `latestReservationShowAlert_${userId}`
+      );
+      if (alertData) {
+        const { title } = JSON.parse(alertData);
+        setShowingAlert({ title });
+        localStorage.removeItem(`latestReservationShowAlert_${userId}`);
+      }
+    };
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, [userId]);
 
   // 카운트다운 동작 설정 및 알림 체크
- useEffect(() => {
-  if (!user || countdownClosed) return;
+  useEffect(() => {
+    if (!user || countdownClosed) return;
 
-  const alertData = localStorage.getItem(`latestReservationAlert_${userId}`);
-  if (alertData) setReservationAlert(JSON.parse(alertData));
+    const alertData = localStorage.getItem(`latestReservationAlert_${userId}`);
+    if (alertData) setReservationAlert(JSON.parse(alertData));
 
-  const applyCountdown = () => {
-    const data = localStorage.getItem(`latestReservationCountdown_${userId}`);
-    if (!data) return;
+    const applyCountdown = () => {
+      const data = localStorage.getItem(`latestReservationCountdown_${userId}`);
+      if (!data) return;
 
-    const { title, showTime, movieId } = JSON.parse(data);
-    const now = Date.now();
-    const target = new Date(showTime).getTime();
-    const diff = target - now;
+      const { title, showTime, movieId } = JSON.parse(data);
+      const now = Date.now();
+      const target = new Date(showTime).getTime();
+      const diff = target - now;
 
-    if (diff <= 0) {
-      setCountdown(null);
-      localStorage.removeItem(`latestReservationCountdown_${userId}`);
-    } else {
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      setCountdown({
-        title,
-        timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
-      });
+      if (diff <= 0) {
+        setCountdown(null);
+        localStorage.removeItem(`latestReservationCountdown_${userId}`);
+      } else {
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        setCountdown({
+          title,
+          timeLeft: `${hours}시간 ${minutes}분 ${seconds}초`,
+        });
 
-      if (diff <= 30 * 60 * 1000) setShowingAlert({ title });
-
-      if (!posterUrl && !posterFetched) {
-        if (!movieId) {
-          setPosterFetched(true);
-          return;
+        if (diff <= 30 * 60 * 1000) {
+          const dismissed =
+            localStorage.getItem(`showingAlertDismissed_${userId}`) === "true";
+          if (!dismissed) setShowingAlert({ title });
         }
 
-        fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
-          .then((res) => res.json())
-          .then((data) => {
-            if (data?.poster) {
-              setPosterUrl(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`);
-            }
+        if (!posterUrl && !posterFetched) {
+          if (!movieId) {
             setPosterFetched(true);
-          })
-          .catch(() => setPosterFetched(true));
-      }
-    }
-  };
+            return;
+          }
 
-  applyCountdown();
-
-  const interval = setInterval(() => {
-    const alertData = localStorage.getItem(`latestReservationAlert_${userId}`);
-    if (alertData) {
-      const { title, notifyTime } = JSON.parse(alertData);
-      if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
-        setShowingAlert({ title });
-        localStorage.removeItem(`latestReservationAlert_${userId}`);
-        setReservationAlert(null);
+          fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`)
+            .then((res) => res.json())
+            .then((data) => {
+              if (data?.poster) {
+                setPosterUrl(
+                  `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${data.poster}`
+                );
+              }
+              setPosterFetched(true);
+            })
+            .catch(() => setPosterFetched(true));
+        }
       }
-    }
+    };
+
     applyCountdown();
-  }, 1000);
 
-  return () => clearInterval(interval);
-}, [user, countdownClosed, userId, posterFetched, posterUrl]);
+    const interval = setInterval(() => {
+      const alertData = localStorage.getItem(
+        `latestReservationAlert_${userId}`
+      );
+      if (alertData) {
+        const { title, notifyTime } = JSON.parse(alertData);
+        if (notifyTime && Date.now() >= new Date(notifyTime).getTime()) {
+          setShowingAlert({ title });
+          localStorage.removeItem(`latestReservationAlert_${userId}`);
+          setReservationAlert(null);
+        }
+      }
+      applyCountdown();
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [user, countdownClosed, userId, posterFetched, posterUrl]);
 
   // 타이머 드래그 관련 함수
   const startDrag = (e) => {
@@ -251,12 +268,18 @@ useEffect(() => {
     window.removeEventListener("touchmove", onDrag);
     window.removeEventListener("touchend", endDrag);
   };
-
-const clearReservationAlert = () => {
-  localStorage.removeItem(`latestReservationAlert_${userId}`);
-  setReservationAlert(null);
-  router.push("/mypage");
-};
+  // 예매알림 누르면 삭제
+  const clearReservationAlert = () => {
+    localStorage.removeItem(`latestReservationAlert_${userId}`);
+    setReservationAlert(null);
+  };
+  // 30분전알림 누르면삭제
+  const clearShowingAlert = () => {
+    if (showingAlert?.title) {
+      localStorage.setItem(`showingAlertDismissed_${userId}`, "true");
+    }
+    setShowingAlert(null);
+  };
 
   //  컴포넌트 리턴
   return (
@@ -281,7 +304,6 @@ const clearReservationAlert = () => {
           onClick={clearReservationAlert}
         >
           🔔 <strong>[{reservationAlert.title}]</strong> 예매가 완료되었습니다!
-          (마이페이지로 이동)
         </Box>
       )}
 
@@ -302,7 +324,7 @@ const clearReservationAlert = () => {
           textAlign="center"
           cursor="pointer"
           _hover={{ bg: "#bae6fd" }}
-          onClick={() => router.push("/mypage")}
+          onClick={clearShowingAlert}
         >
           ⏰ <strong>[{showingAlert.title}]</strong> 상영 30분 전입니다! 입장
           부탁드립니다
@@ -384,7 +406,7 @@ const clearReservationAlert = () => {
         <Button
           position="fixed"
           right="20px"
-          bottom={{base:"80px",md:"20px"}}
+          bottom={{ base: "80px", md: "20px" }}
           zIndex="9999"
           size="sm"
           colorScheme="purple"
@@ -475,13 +497,17 @@ const clearReservationAlert = () => {
           <Flex
             direction="row"
             align={{ base: "flex-end", md: "center" }}
-            gap={{ base:'10px', md:'15px' }}
+            gap={{ base: "10px", md: "15px" }}
             fontSize="15px"
           >
             {user === undefined ? (
               <Spinner size="sm" color={headerColor} />
             ) : user ? (
-              <Flex direction="row" align={{ base: "flex-end", md: "center" }} gap={{ base:'10px', md:'15px' }}>
+              <Flex
+                direction="row"
+                align={{ base: "flex-end", md: "center" }}
+                gap={{ base: "10px", md: "15px" }}
+              >
                 {user.auth === "ADMIN" && (
                   <Text
                     as={Link}
@@ -534,7 +560,10 @@ const clearReservationAlert = () => {
               />
             </Link>
           ) : (
-            <Box w={{base:"0px",md:"24px"}} h={{base:"0px",md:"24px"}} />
+            <Box
+              w={{ base: "0px", md: "24px" }}
+              h={{ base: "0px", md: "24px" }}
+            />
           )}
 
           {/* 햄버거 버튼 (모바일 전용) */}
@@ -590,56 +619,70 @@ const clearReservationAlert = () => {
         )}
       </Flex>
 
-      {isMobile && 
-      <Box
-      position="fixed"
-      bottom="0"
-      left="0"
-      right="0"
-      borderTop="1px gray"
-      boxShadow="0 -2px 4px rgba(0, 0, 0, 0.05)"
-      zIndex="1000"
-      h='50px'
-      bg='white'
-      // Safe area 지원 (iOS 등)
-      paddingBottom="env(safe-area-inset-bottom)"
-      overflow='visible'
-      >
-      <Flex justifyContent="space-around" align="center" overflow='visible'>
-
-        <Flex w='50%' justifyContent='center'>
-          <Link href="/home">
-            <Flex flexDirection='column' alignItems='center' justifyContent='center'>
-            <Icon
-              as={FaHome}
-              boxSize={6}
-            />
-            <Text>홈</Text>
+      {isMobile && (
+        <Box
+          position="fixed"
+          bottom="0"
+          left="0"
+          right="0"
+          borderTop="1px gray"
+          boxShadow="0 -2px 4px rgba(0, 0, 0, 0.05)"
+          zIndex="1000"
+          h="50px"
+          bg="white"
+          // Safe area 지원 (iOS 등)
+          paddingBottom="env(safe-area-inset-bottom)"
+          overflow="visible"
+        >
+          <Flex justifyContent="space-around" align="center" overflow="visible">
+            <Flex w="50%" justifyContent="center">
+              <Link href="/home">
+                <Flex
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Icon as={FaHome} boxSize={6} />
+                  <Text>홈</Text>
+                </Flex>
+              </Link>
             </Flex>
-          </Link>
-        </Flex>
-        <Link href="/booking" style={{overflow:'visible'}}>
-          <Flex style={{background: "linear-gradient(to bottom, #6b46c1, black)"}} w='50px' h='50px' borderRadius='50%' position='relative' bottom='25px' justifyContent='center' alignItems='center' overflow='visible'>
-            <Text color='white' whiteSpace="pre-line" fontSize='13px'>
-              빠른<br/>
-              예매
-            </Text>
+            <Link href="/booking" style={{ overflow: "visible" }}>
+              <Flex
+                style={{
+                  background: "linear-gradient(to bottom, #6b46c1, black)",
+                }}
+                w="50px"
+                h="50px"
+                borderRadius="50%"
+                position="relative"
+                bottom="25px"
+                justifyContent="center"
+                alignItems="center"
+                overflow="visible"
+              >
+                <Text color="white" whiteSpace="pre-line" fontSize="13px">
+                  빠른
+                  <br />
+                  예매
+                </Text>
+              </Flex>
+            </Link>
+            <Flex w="50%" justifyContent="center">
+              <Link href="/mypage">
+                <Flex
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Icon as={FiUser} boxSize={6} />
+                  <Text>마이</Text>
+                </Flex>
+              </Link>
+            </Flex>
           </Flex>
-        </Link>
-        <Flex w='50%' justifyContent='center'>
-          <Link href="/mypage">
-            <Flex flexDirection='column' alignItems='center' justifyContent='center'>
-            <Icon
-              as={FiUser}
-              boxSize={6}
-            />
-            <Text>마이</Text>
-            </Flex>
-          </Link>
-        </Flex>
-        
-      </Flex>
-      </Box>}
+        </Box>
+      )}
     </>
   );
 }
