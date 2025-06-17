@@ -569,7 +569,7 @@ export default function AdminDashboard({ userData }) {
               openModal("삭제 중 오류 발생");
             }
           }
-          , () => { }, true)
+          , () => {}, true)
 
       };
 
@@ -2000,7 +2000,7 @@ export default function AdminDashboard({ userData }) {
             } catch {
               openModal("삭제 중 오류 발생");
             }
-          }, ()=>{}, null
+          }, ()=>{}, true
         )
       };
 
