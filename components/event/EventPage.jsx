@@ -187,7 +187,7 @@ export default function EventPage({ serverEvents, userData }) {
   </Text>
 
   {/* 이미지 */}
-  <Box mb={5}>
+  <Box mb={5} overflow='visible'>
     <Image
       src="http://localhost:9999/images/coupon.png" // 이미지 경로는 원하는 것으로 교체
       alt="₩1,000 쿠폰 이미지"

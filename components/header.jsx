@@ -406,7 +406,7 @@ export default function Header() {
         <Button
           position="fixed"
           right="20px"
-          bottom={{ base: "80px", md: "20px" }}
+          bottom={{ base: "160px", md: "20px" }}
           zIndex="9999"
           size="sm"
           colorScheme="purple"
