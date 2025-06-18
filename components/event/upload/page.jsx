@@ -35,7 +35,7 @@ export default function EventUploader({userData}) {
       if (!user) throw new Error();
       // 🔐 관리자 체크
       if (user.auth !== "ADMIN") {
-        openModal("관리자만 접근 가능한 페이지입니다.", ()=>{router.push("/event");}, ()=>{router.push("/event");});
+        openModal("접근 권한이 없습니다.", ()=>{router.push("/event");}, ()=>{router.push("/event");});
       }
     } catch {
       openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});

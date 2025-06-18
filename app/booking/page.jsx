@@ -185,7 +185,6 @@
 
 //     const handleBooking = () => {
 //         if (!user) {
-//             alert("로그인 후 이용해주세요.");
 //             router.push("/signin"); // 원하는 로그인 페이지 경로로 수정
 //             return;
 //         }

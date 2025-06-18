@@ -51,7 +51,7 @@ const MovieUploader = ({ userInfo }) => {
                 }
                 else if (user.auth !== "ADMIN") {
                     alerted.current = true;
-                    openModal("관리자만 접근 가능한 페이지입니다.", ()=>{router.push("/movie");}, ()=>{router.push("/movie");});
+                    openModal("접근 권한이 없습니다.", ()=>{router.push("/movie");}, ()=>{router.push("/movie");});
                 }
             }
         } catch(err) {

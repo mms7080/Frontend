@@ -21,7 +21,7 @@ export default function NoticeCreatePage({userData}) {
 
     // 🔐 관리자 외에는 접근 불가
     if (user.auth !== 'ADMIN') {
-      openModal('관리자만 접근 가능한 페이지입니다.', ()=>{router.push('/notice');}, ()=>{router.push('/notice');});
+      openModal('접근 권한이 없습니다.', ()=>{router.push('/notice');}, ()=>{router.push('/notice');});
     }
   } catch (e) {
     openModal('로그인이 필요합니다.', ()=>{router.push('/signin');}, ()=>{router.push('/signin');});

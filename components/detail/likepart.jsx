@@ -26,7 +26,7 @@ export default function LikePart({id,res,movieinfo,isMobile=false}){
     
     const likeChange = async () => {
         if(!res){
-            openModal('로그인 후 이용해주세요.');
+            openModal('로그인이 필요합니다.');
             return;
         }
         else{

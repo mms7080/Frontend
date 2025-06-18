@@ -187,7 +187,7 @@ export default function mobilePage() {
     const handleBooking = () => {
         if (!user) {
                                             // 원하는 로그인 페이지 경로로 수정
-            openModal("로그인 후 이용해주세요.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");})
+            openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");})
             return;
         }
         // if (!selectedDate || !selectedTime) return;

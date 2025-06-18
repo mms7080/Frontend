@@ -24,7 +24,7 @@ export default function StoreUploadPage({userData}) {
     if (!user) throw new Error();
     // 🔐 관리자 체크
     if (user.auth !== "ADMIN") {
-      openModal("관리자만 접근 가능한 페이지입니다.", ()=>{router.push("/store");}, ()=>{router.push("/store");});
+      openModal("접근 권한이 없습니다.", ()=>{router.push("/store");}, ()=>{router.push("/store");});
       return;
     }
   } catch {

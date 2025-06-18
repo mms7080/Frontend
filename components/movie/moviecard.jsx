@@ -82,7 +82,7 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData }) => {
 
   const likeChange = async () => {
     if(!user)
-      openModal('로그인 후 이용해주세요.');
+      openModal('로그인이 필요합니다.');
     else
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/update/like?id=${movie.id}&updown=${liked ? "down" : "up"}`);

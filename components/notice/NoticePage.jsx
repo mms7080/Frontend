@@ -5,6 +5,16 @@ import { Header } from "..";
 import Modal, { useModal } from '../movie/modal';
 
 export default function NoticePage({ notices, userData }) {
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   const [searchOption, setSearchOption] = useState("title");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
@@ -12,7 +22,7 @@ export default function NoticePage({ notices, userData }) {
   const [user, setUser] = useState(userData);
   const [currentPage, setCurrentPage] = useState(1);
   const { isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm } = useModal();
-  const itemsPerPage = 10;
+  const itemsPerPage = !isMobile?10:5;
 
   useEffect(() => {
     document.title = "공지 - FILMORA";
@@ -44,7 +54,7 @@ export default function NoticePage({ notices, userData }) {
     return Math.max(1, Math.ceil(filtered.length / itemsPerPage));
   }, [filtered]);
 
-  const pageGroupSize = 10;
+  const pageGroupSize = !isMobile?10:5;
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
@@ -84,15 +94,6 @@ export default function NoticePage({ notices, userData }) {
     const diff = (now - created) / (1000 * 60 * 60 * 24);
     return diff <= 2;
   };
-
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   return (
     <>

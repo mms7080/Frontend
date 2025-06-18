@@ -21,7 +21,7 @@ export default function NoticeEditIdPage({userData}) {
             
         }
   } catch (e) {
-    openModal("로그인 후 이용해주세요.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
+    openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
   }
   },[user]);
   

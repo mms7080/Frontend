@@ -12,7 +12,7 @@ export default function Notloginalert({userInfo}){
 
     useEffect(() => {
         if (!userInfo)
-            openModal('로그인 후 이용해주세요.');
+            openModal('로그인이 필요합니다.');
     }, []);
 
     const handleConfirm = () => {

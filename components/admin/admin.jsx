@@ -83,7 +83,7 @@ export default function AdminDashboard({ userData }) {
   useEffect(() => {
     if (!redirected.current) {
       if (!user) {
-        openModal("로그인 후 이용해주세요.", () => { router.push("/signin"); }, () => { router.push("/signin"); });
+        openModal("로그인이 필요합니다.", () => { router.push("/signin"); }, () => { router.push("/signin"); });
       } else if (user.auth !== "ADMIN") {
         openModal("접근 권한이 없습니다.", () => { router.push("/home"); }, () => { router.push("/home"); });
       }
