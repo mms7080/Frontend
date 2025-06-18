@@ -1,4 +1,5 @@
 import EventPage from '../../components/event/EventPage';
+import {Footer} from '../../components';
 import {fetch as serverfetch} from "../../lib/server";
 
 export default async function Eventmainpage() {
@@ -9,5 +10,8 @@ export default async function Eventmainpage() {
   });
   const eventData = await res.json();
 
-  return <EventPage serverEvents={eventData} userData={userres}/>;
+  return <>
+  <EventPage serverEvents={eventData} userData={userres}/>
+  <Footer/>
+  </>;
 }

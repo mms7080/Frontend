@@ -621,5 +621,5 @@ import BookingDesktop from './desktopPage';
 export default function BookingPage() {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
 
-  return isMobile ? <BookingMobile /> : <BookingDesktop />;
+  return isMobile ?<BookingMobile /> : <BookingDesktop />;
 }

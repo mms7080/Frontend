@@ -588,5 +588,5 @@ import SeatsDesktop from '././desktopPage';
 export default function BookingPage() {
   const [isMobile] = useMediaQuery('(max-width: 768px)');
 
-  return isMobile ? <SeatsMobile /> : <SeatsDesktop />;
+  return isMobile ?<SeatsMobile /> :<SeatsDesktop />;
 }

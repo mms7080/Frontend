@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Search from '../../../components/search/page'
+import {Footer} from '../../../components'
 import {fetch} from '../../../lib/server';
 
 export const metadata = {
@@ -13,5 +14,8 @@ export default async function Searchpage({params}){
     const movieres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);
     const eventres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/event`);
     const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/all`);
-    return <Search userData={userres} movieData={movieres} serverEvents={eventres} reviewInfo={reviewinfo} keywordData={decodeURIComponent(params.keyword)}/>;
+    return <>
+    <Search userData={userres} movieData={movieres} serverEvents={eventres} reviewInfo={reviewinfo} keywordData={decodeURIComponent(params.keyword)}/>
+    <Footer/>
+    </>;
 }

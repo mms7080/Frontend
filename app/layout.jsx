@@ -1,8 +1,6 @@
 import React, { Suspense } from 'react';
 import '../styles/globals.css';
 import { Provider } from '../components/ui/provider';
-import { Footer } from '../components';
-
 
 export default function Layout({ children }) {
   return (
@@ -23,7 +21,7 @@ export default function Layout({ children }) {
                 {children}
               </Suspense>
             </main>
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </Provider>
         <script

@@ -6,11 +6,14 @@
 
 'use client';
 import { Box } from '@chakra-ui/react';
+import {Footer} from '../../../components';
 
 export default function Layout({ children }) {
-  return (
+  return (<>
     <Box bg="#141414" minH="100vh" color="white">
       {children}
     </Box>
+    <Footer/>
+    </>
   );
 }

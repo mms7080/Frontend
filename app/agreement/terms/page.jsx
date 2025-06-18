@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Box,VStack,Text,Button} from '@chakra-ui/react';
 import Link from "next/link";
-import {Header} from '../../../components';
+import {Header,Footer} from '../../../components';
 import {fetch} from '../../../lib/server';
 
 export const metadata = {
@@ -28,5 +28,6 @@ export default async function Terms(){
                 </Button>
             </VStack>
         </Box>
+        <Footer/>
     </>;
 }

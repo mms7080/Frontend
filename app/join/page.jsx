@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Header} from '../../components';
+import {Header,Footer} from '../../components';
 import {fetch} from '../../lib/server';
 import Join from '../../components/join/join';
 
@@ -15,5 +15,6 @@ export default async function Joinpage(){
     return <>
         <Header userInfo={res}></Header>
         <Join></Join>
+        <Footer/>
         </>;
 }

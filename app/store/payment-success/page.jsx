@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Header } from "../../../components";
+import { Header,Footer } from "../../../components";
 
 export default function CartPaymentSuccessPage() {
   const searchParams = useSearchParams();
@@ -168,6 +168,7 @@ export default function CartPaymentSuccessPage() {
           </button>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

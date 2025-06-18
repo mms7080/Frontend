@@ -2,7 +2,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { Header } from "../components";
+import { Header,Footer } from "../components";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -29,6 +29,7 @@ export default function NotFound() {
           ⬅ 홈으로 돌아가기
         </Link>
       </div>
+      <Footer/>
     </>
   );
 }
