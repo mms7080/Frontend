@@ -9,6 +9,7 @@ export default function NotFound() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    document.title = "페이지 없음 - FILMORA";
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
       credentials: 'include',
     })

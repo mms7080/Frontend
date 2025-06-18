@@ -9,6 +9,7 @@ export default function Error({ error, reset }) {
 
 
   useEffect(() => {
+    document.title = "오류 - FILMORA";
     fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
       credentials: 'include',
     })

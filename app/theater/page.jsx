@@ -5,7 +5,7 @@ import {fetch} from '../../lib/server';
 import Theater from '../../components/theater/theater';
 
 export const metadata = {
-    title: '영화관 - 필모라',
+    title: '영화관 - FILMORA',
     description: ''
 };
 

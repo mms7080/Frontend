@@ -8,6 +8,7 @@ export default function StorePaymentFailPage() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    document.title = "결제 - FILMORA";
     // 로그인된 유저 정보 불러오기
     const fetchUser = async () => {
       try {

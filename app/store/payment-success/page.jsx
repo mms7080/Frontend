@@ -20,6 +20,7 @@ export default function CartPaymentSuccessPage() {
 
   // ✅ 유저 정보 불러오기
   useEffect(() => {
+    document.title = "결제 - FILMORA";
     const fetchUser = async () => {
       try {
         const res = await fetch("http://localhost:9999/userinfo", {
