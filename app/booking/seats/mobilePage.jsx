@@ -174,6 +174,7 @@ export default function SeatsPageMobile() {
                     setPersonCounts(prev => ({ ...prev, [key]: Math.max(0, prev[key] - 1) }));
                     setClickedButton(key + "-" + "minus");
                     setTimeout(() => setClickedButton(null), 200); // 200ms 후 원래색으로
+                    setSelectedSeats([]);
                   }}
                   >
                     -
@@ -190,6 +191,7 @@ export default function SeatsPageMobile() {
                         setPersonCounts(prev => ({ ...prev, [key]: prev[key] + 1 }));
                         setClickedButton(key + "-" + "plus");
                         setTimeout(() => setClickedButton(null), 200);
+                        setSelectedSeats([]);
                     }}
                     >
                     +
@@ -197,6 +199,17 @@ export default function SeatsPageMobile() {
                 </Flex>
               </Flex>
             ))}
+            <Flex justifyContent='flex-end' pt='15px'>
+              <Text fontSize="20px" fontWeight="normal" mb={2}>
+                    최종결제금액 :
+                  </Text>
+              <Text fontSize="20px" fontWeight="normal" mb={2}>
+                {personCounts.adult*15000 +
+                personCounts.teen*12000 +
+                personCounts.senior*10000 +
+                personCounts.special*8000}원
+              </Text>
+            </Flex>
             <Text fontSize="xs" color="gray.400" mt={1} textAlign="right">
               ※ 최대 8매까지 예매가능
             </Text>
