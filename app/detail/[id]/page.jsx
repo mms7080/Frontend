@@ -17,6 +17,7 @@ export default async function Detailpage({params}){
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
         const movieinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${id}`);
         const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${id}`);
+        const reserverate = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${id}`);
         let sum=0;
 
         for(let i=0;i<reviewinfo.length;i++)sum+=reviewinfo[i].score;
@@ -49,7 +50,7 @@ export default async function Detailpage({params}){
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>예매율</span>
-                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>{movieinfo.rank}위 ({movieinfo.reserveRate+'%'})</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>{movieinfo.rank}위 ({reserverate+'%'})</span>
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>누적관객수</span>

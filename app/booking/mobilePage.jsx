@@ -375,6 +375,9 @@ export default function mobilePage() {
                                 {availableTimes.map((showtime) => {
                                     const time = showtime.startTime.split(" ")[1];
                                     const isSelected = selectedShowtime && selectedShowtime.showtimeId === showtime.showtimeId;
+                                    const now = new Date(); // 현재 시간
+                                    const movieTime = new Date(showtime.startTime.replace(" ", "T")); // ISO 형식으로 변환
+                                    let enabled=movieTime > now; // 현재보다 후이면 true
                                     return (
                                         <GridItem key={showtime.showtimeId}>
                                             <Button
@@ -386,6 +389,7 @@ export default function mobilePage() {
                                                 borderRadius="md"
                                                 p={2}
                                                 onClick={() => handleTimeClick(showtime)}
+                                                disabled={!enabled}
                                             >
                                                 <Text>{time}</Text>
                                                 <Text fontSize="sm" color="gray.400">{showtime.auditoriumName}</Text>
