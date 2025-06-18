@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Header } from "@/components"; 
+import { Header } from "../../../../components"; 
 
 export default function StorePaymentFailPage() {
   const [user, setUser] = useState(null);
