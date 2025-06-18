@@ -17,11 +17,6 @@ export default function NoticeIdPage({ userData }) {
   const [nextId, setNextId] = useState(null);
   const { isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm } = useModal();
 
-
-  useEffect(() => {
-    document.title = "공지 - FILMORA";
-  }, []);
-
   useEffect(() => {
     const fetchData = async () => {
       try {

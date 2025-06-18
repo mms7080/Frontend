@@ -25,7 +25,7 @@ export default function NoticePage({ notices, userData }) {
   const itemsPerPage = !isMobile?10:5;
 
   useEffect(() => {
-    document.title = "공지 - FILMORA";
+    document.title = "공지사항 - FILMORA";
   }, []);
 
   useEffect(() => {
