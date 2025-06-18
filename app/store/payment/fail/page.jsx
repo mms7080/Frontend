@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Header,Footer } from "@/components"; 
+import { Header } from "@/components"; 
 
 export default function StorePaymentFailPage() {
   const [user, setUser] = useState(null);
@@ -49,7 +49,6 @@ export default function StorePaymentFailPage() {
           </button>
         </Link>
       </div>
-      <Footer/>
     </>
   );
 }

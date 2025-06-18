@@ -1,13 +1,9 @@
 import React from "react";
 import {fetch} from "../../../../lib/server";
 import NoticeEditID from '../../../../components/notice/noticeeditid';
-import {Footer} from '../../../../components';
 
 export default async function NoticeEditPage() {
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-  return <>
-  <NoticeEditID userData={res}/>
-  <Footer/>
-  </>;
+  return <NoticeEditID userData={res}/>;
 }

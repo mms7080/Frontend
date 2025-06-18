@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Header,Footer} from '../../components';
+import {Header} from '../../components';
 import Mypage from '../../components/mypage/page';
 import Notloginalert from '../../components/mypage/notloginalert';
 import {fetch} from '../../lib/server';
@@ -29,6 +29,5 @@ export default async function Mypagemain(){
         <Header userInfo={res}></Header>
         <Notloginalert userInfo={res}/>
         <Mypage userInfo={res} qnaInfo={qnares1} replyInfo={qnares2} reservationInfo={reservationres} paymentInfo={paymentres}/>
-        <Footer/>
     </>
 };

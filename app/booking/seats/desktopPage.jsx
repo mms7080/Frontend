@@ -11,7 +11,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
-import { Header, Footer } from "../../../components";
+import { Header } from "../../../components";
 import { movies } from "../../../components/moviePoster";
 import { useRouter } from "next/navigation";
 import Modal, { useModal } from '../../../components/movie/modal';

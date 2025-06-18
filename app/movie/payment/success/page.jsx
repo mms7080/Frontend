@@ -2,7 +2,7 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { Header,Footer } from "../../../../components";
+import { Header } from "../../../../components";
 import Link from "next/link";
 import { VStack, Text, Button } from "@chakra-ui/react";
 import { QRCodeCanvas } from "qrcode.react";
@@ -288,7 +288,6 @@ export default function MoviePaymentSuccessPage() {
           )}
         </div>
       </div>
-      <Footer/>
       <style jsx>{`
         .wrapper {
           display: flex;

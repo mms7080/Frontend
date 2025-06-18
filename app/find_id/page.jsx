@@ -2,7 +2,6 @@ import React from 'react';
 
 import {fetch} from '../../lib/server';
 import Findid from '../../components/findidandpw/findid';
-import {Footer} from '../../components';
 
 export const metadata = {
     title: '아이디 찾기 - FILMORA',
@@ -13,8 +12,5 @@ export default async function Find_id(){
         
     const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
 
-    return <>
-    <Findid userData={res}/>
-    <Footer/>
-    </>;
+    return <Findid userData={res}/>;
 }

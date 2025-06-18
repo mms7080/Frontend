@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Header,Footer} from '../../components';
+import {Header} from '../../components';
 import {fetch} from '../../lib/server';
 import Movie from '../../components/movie/movie'
 
@@ -16,6 +16,5 @@ export default async function Moviepage(){
     return <div className="bg-[#141414]">
         <Header userInfo={userRes}/>
         <Movie userInfo={userRes}/>
-        <Footer/>
     </div>;
 }

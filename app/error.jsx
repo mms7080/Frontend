@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Header,Footer } from '../components';
+import { Header } from '../components';
 import Link from 'next/link';
 
 export default function Error({ error, reset }) {
@@ -37,8 +37,6 @@ export default function Error({ error, reset }) {
           다시 시도
         </button>
       </div>
-
-      <Footer/>
     </>
   );
 }

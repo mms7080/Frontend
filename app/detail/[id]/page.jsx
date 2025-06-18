@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {Box,Flex,VStack,Image,Button} from '@chakra-ui/react';
-import {Header,Footer} from '../../../components';
+import {Header} from '../../../components';
 import {Likepart,Bottombox} from '../../../components/detail';
 import {fetch} from '../../../lib/server';
 
@@ -130,6 +130,5 @@ export default async function Detailpage({params}){
                 </VStack>
                 <Bottombox res={res} movieinfo={movieinfo} reviewinfo={reviewinfo}></Bottombox>
             </Box>
-            <Footer/>
         </>;
 }
