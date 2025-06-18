@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { Header } from "../../components";
 import Modal, { useModal } from '../movie/modal';
@@ -11,6 +11,10 @@ export default function RandomBoxPage({ userData }) {
   const [result, setResult] = useState(null);
   const [showBox, setShowBox] = useState(false);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+
+  useEffect(()=>{
+    if (!userData)openModal('로그인이 필요합니다.');
+  },[userData]);
 
   const openBox = async () => {
     if (!user) {

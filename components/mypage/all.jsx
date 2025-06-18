@@ -154,6 +154,10 @@ export default function QnaAll({isMobile=false,setrawItems,setTitle,setContent,s
                                   break;
                                 }
                             }
+                            if(isMobile)window.scrollBy({
+                              top: -450, // 위로 450px
+                              behavior: 'smooth' // 부드럽게 스크롤
+                            });
                             setWhichPage('view');
                         }
                         }
@@ -302,6 +306,10 @@ export default function QnaAll({isMobile=false,setrawItems,setTitle,setContent,s
               setContent('');
               setModifyId(null);
               setWhichPage('write');
+              if(isMobile)window.scrollBy({
+                top: -300, // 위로 300px
+                behavior: 'smooth' // 부드럽게 스크롤
+              });
             }}
           >
             질문글쓰기

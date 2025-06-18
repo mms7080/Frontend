@@ -12,6 +12,7 @@ export default function NoticeEditIdPage({userData}) {
   const [notice, setNotice] = useState({ title: "", content: "", writer: "" });
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
+  useEffect(() => {
   try {
       if (!user) throw new Error();
       // ✅ 관리자 권한이 아닌 경우 접근 제한
@@ -22,7 +23,8 @@ export default function NoticeEditIdPage({userData}) {
   } catch (e) {
     openModal("로그인 후 이용해주세요.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
   }
-
+  },[user]);
+  
   useEffect(() => {
     (async () => {
       const res = await fetch(

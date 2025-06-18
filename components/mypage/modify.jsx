@@ -64,8 +64,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
             return;
         }
 
-        e.preventDefault();
-        openModal('개인정보가 수정되었습니다!', ()=>{e.target.submit()}, ()=>{e.target.submit()});
+        openModal('개인정보가 수정되었습니다!');
     };
 
     return <><form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/modify/logic`} method='post' onSubmit={handleSubmit}>
@@ -118,7 +117,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                               setIsPwrAvailable(true);
                                                           }
                                                           else{
-                                                              setPwrMessage('❌ 비밀번호가 일치하지 않습니다.');
+                                                              setPwrMessage(!isMobile?'❌ 비밀번호가 일치하지 않습니다.':'❌ 비밀번호 불일치');
                                                               setIsPwrAvailable(false);
                                                           }
                                                       }else{
@@ -158,7 +157,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                            setIsPwrAvailable(true);
                                                        }
                                                        else{
-                                                           setPwrMessage('❌ 비밀번호가 일치하지 않습니다.');
+                                                           setPwrMessage(!isMobile?'❌ 비밀번호가 일치하지 않습니다.':'❌ 비밀번호 불일치');
                                                            setIsPwrAvailable(false);
                                                        }
                                                    }else{
@@ -278,6 +277,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                     onConfirm={onConfirm}
                     onCancel={onCancel}
                     isConfirm={isConfirm}
-                    content={modalContent}/>)}
+                    content={modalContent}
+                    isPaddingLarge={true}/>)}
                     </>;
 }

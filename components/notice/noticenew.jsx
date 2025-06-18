@@ -10,11 +10,12 @@ import Header from '../header';
 export default function NoticeCreatePage({userData}) {
   const router = useRouter();
   const [title, setTitle] = useState('');
-  const [writer, setWriter] = useState(userData.name||'');
+  const [writer, setWriter] = useState(userData?.name||'');
   const [content, setContent] = useState('');
   const [user, setUser] = useState(userData);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
+  useEffect(()=>{
   try {
     if (!user) throw new Error();
 
@@ -24,7 +25,7 @@ export default function NoticeCreatePage({userData}) {
     }
   } catch (e) {
     openModal('로그인이 필요합니다.', ()=>{router.push('/signin');}, ()=>{router.push('/signin');});
-  }
+  }},[user]);
 
   const handleSubmit = async () => {
     if (!title || !writer || !content) {

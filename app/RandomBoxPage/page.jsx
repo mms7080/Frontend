@@ -12,11 +12,6 @@ export default async function Page() {
   });
 
   const text = await res.text();
-  if (!res.ok || !text) {
-    return (
-      <meta httpEquiv="refresh" content="0;url=/signin" />
-    );
-  }
 
   const userData = JSON.parse(text);
   return <RandomBoxPage userData={userData} />;
