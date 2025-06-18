@@ -39,6 +39,10 @@ export default function SeatsPageMobile() {
   const bookedSeats = seatData.filter(seat => seat.status === "RESERVED").map(seat => seat.fullSeatName);
   const disabledSeats = seatData.filter(seat => seat.status === "UNAVAILABLE").map(seat => seat.fullSeatName);
 
+  useEffect(()=>{
+    document.title = "좌석선택 - FILMORA";
+  },[]);
+
   const toggleSeat = (seatId) => {
     if (bookedSeats.includes(seatId)) return; // 예약 완료 좌석 클릭 막기
     const isDisabledSeat = disabledSeats.includes(seatId);

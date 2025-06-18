@@ -45,7 +45,7 @@ export default function mobilePage() {
 
     useEffect(() => {
         setSwiperReady(true);
-        document.title = "예매 - 영화선택";
+        document.title = "예매 - FILMORA";
         (async () => {
           try {
             const res = await fetch(

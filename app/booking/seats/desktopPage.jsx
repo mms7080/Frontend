@@ -184,7 +184,7 @@ export default function SeatsPage() {
   };
 
   useEffect(() => {
-    document.title = "예매 - 좌석선택";
+    document.title = "좌석선택 - FILMORA";
     (async () => {
       try {
         const res = await fetch(
