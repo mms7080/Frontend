@@ -2261,14 +2261,15 @@ export default function AdminDashboard({ userData }) {
   return (<>
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
       <Header headerColor="black" headerBg="white" userInfo={user} />
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <div style={{ display: "flex", flex: 1 }}>
         <aside
           style={{
             width: 220,
             background: "#fff",
             color: "#333",
             padding: "40px 20px",
-            borderRight: "1px solid #ddd",
+            borderRight: "1px solid #ddd"
           }}
         >
           <h2 style={{ fontSize: 20, marginBottom: 40 }}>🎬 FILMORA 관리자</h2>
@@ -2344,6 +2345,7 @@ export default function AdminDashboard({ userData }) {
           {renderList()}
         </main>
       </div>
+    </div>
     </div>
     {isModalOpen && (<Modal
       isModalOpen={isModalOpen}
