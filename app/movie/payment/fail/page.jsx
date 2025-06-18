@@ -6,7 +6,7 @@ import { Header } from "../../../../components";
 
 export default function MoviePaymentFailPage() {
   const [user, setUser] = useState(null);
-
+  document.title = "결제 - FILMORA";
   useEffect(() => {
     const fetchUser = async () => {
       try {

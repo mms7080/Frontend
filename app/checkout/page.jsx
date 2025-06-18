@@ -46,7 +46,7 @@ export default function CheckoutPage() {
 
 
   useEffect(() => {
-    document.title = "예매 - 결제";
+    document.title = "결제 - FILMORA";
     (async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, { credentials: "include" });

@@ -42,6 +42,7 @@ export default function MoviePaymentSuccessPage() {
   };
 
   useEffect(() => {
+    document.title = "결제 - FILMORA";
     const fetchUser = async () => {
       try {
         const res = await fetch(
