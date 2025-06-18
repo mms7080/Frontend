@@ -215,7 +215,10 @@ export default function EventPage({ serverEvents, userData }) {
     fontSize="md"
     transition="all 0.3s"
     _hover={{ bg: "#553C9A", transform: "scale(1.05)" }}
-    onClick={() => router.push("/RandomBoxPage")}
+    onClick={() => {
+      if(userData)router.push("/RandomBoxPage");
+      else openModal('로그인이 필요합니다.');
+    }}
   >
     지금 뽑기
   </Button>

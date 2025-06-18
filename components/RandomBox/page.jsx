@@ -258,8 +258,6 @@ setTimeout(() => {
       isModalOpen={isModalOpen}
       isModalVisible={isModalVisible}
       closeModal={closeModal}
-      onConfirm={onConfirm}
-      onCancel={onCancel}
       content={modalContent}/>)}
     </>
   );

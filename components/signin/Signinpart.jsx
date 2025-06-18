@@ -62,6 +62,7 @@ export default function SigninClientAlert() {
         closeModal={closeModal}
         onConfirm={onConfirm}
         onCancel={onCancel}
-        content={modalContent}/>)}
+        content={modalContent}
+        isPaddingLarge={true}/>)}
         </>
 }
