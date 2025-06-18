@@ -21,6 +21,12 @@ export default function PaymentPage({ userData }) {
   const [discountAmount, setDiscountAmount] = useState(0);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
+  useEffect(()=>{
+    if (!userData) {
+      openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
+    }
+  },[]);
+
   useEffect(() => {
     let didCancel = false;
 
@@ -78,7 +84,16 @@ export default function PaymentPage({ userData }) {
     setDiscountAmount(coupon ? coupon.discountAmount : 0);
   };
 
-  if (!product) return <div>Loading...</div>;
+  if (!product) return <>
+      <div>Loading...</div>
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      content={modalContent}/>)}
+  </>;
 
   const unitPrice = parseInt(product.price.replace(/[^0-9]/g, ""));
   const totalPrice = unitPrice * qty;

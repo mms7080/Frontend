@@ -19,6 +19,7 @@ export default function StoreUploadPage({userData}) {
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   const router = useRouter();
 
+  useEffect(()=>{
   try {
     if (!user) throw new Error();
     // 🔐 관리자 체크
@@ -29,6 +30,7 @@ export default function StoreUploadPage({userData}) {
   } catch {
     openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
   }
+  },[userData]);
 
   const handleSubmit = async () => {
     if (!category) {

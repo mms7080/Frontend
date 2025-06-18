@@ -172,7 +172,8 @@ export default function StoreDetailPage({ userData }) {
                 color="white"
                 _hover={{ bg: "#5A38A6" }}
                 onClick={() => {
-                  router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
+                  if(userData)router.push(`/store/buy?id=${product.id}&qty=${quantity}`);
+                  else openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
                 }}
               >
                 구매

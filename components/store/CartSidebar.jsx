@@ -126,7 +126,7 @@ export default function CartSidebar() {
 
   const handleCheckout = async () => {
     if (!user || !user.username) {
-      openModal("로그인이 필요합니다. 로그인 후 다시 시도해 주세요.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
+      openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
       return;
     }
 
