@@ -227,9 +227,9 @@ export default function mobilePage() {
       
       return (
         <>
-            <Box position="relative" zIndex={2} bg="#1a1a1a">
-                <Header headerColor={headerColor} headerBg={headerBg} userInfo={user} />
-            </Box>
+            
+            <Header headerColor={headerColor} headerBg={headerBg} userInfo={user} />
+            
             {/* 맨위에 포스터와 제목 */}
             <Box bg="#141414" color="white" py={4}>
             <Flex align="center" px={4} mb={2}>
