@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "../../components";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
-import Modal, { useModal } from '../../components/movie/modal';
+import Modal, { useModal } from "../../components/movie/modal";
 
 export default function CheckoutPage() {
   const [user, setUser] = useState(null);
@@ -16,7 +16,8 @@ export default function CheckoutPage() {
 
   const router = useRouter();
   const params = useSearchParams();
-  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+  const { isModalOpen, isModalVisible, openModal, closeModal, modalContent } =
+    useModal();
 
   const movieId = parseInt(params.get("movieId"));
   const region = params.get("region");
@@ -31,7 +32,8 @@ export default function CheckoutPage() {
   const senior = parseInt(params.get("senior") || "0");
   const special = parseInt(params.get("special") || "0");
 
-  const totalPrice = adult * 15000 + teen * 12000 + senior * 10000 + special * 8000;
+  const totalPrice =
+    adult * 15000 + teen * 12000 + senior * 10000 + special * 8000;
   const finalAmount = Math.max(0, totalPrice - discountAmount);
 
   const priceDetails = [
@@ -41,15 +43,14 @@ export default function CheckoutPage() {
     { label: "우대", count: special, price: 8000 },
   ].filter((item) => item.count > 0);
 
-
-
-
-
   useEffect(() => {
     document.title = "결제 - FILMORA";
     (async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, { credentials: "include" });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+          { credentials: "include" }
+        );
         const data = await res.json();
         setUser(data);
       } catch {
@@ -61,7 +62,9 @@ export default function CheckoutPage() {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
+        );
         const data = await res.json();
         const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
         setMovie({
@@ -80,9 +83,12 @@ export default function CheckoutPage() {
     if (!user) return;
     (async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons?userId=${user.username}`, {
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons?userId=${user.username}`,
+          {
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         setCoupons(data.filter((c) => !c.used));
       } catch (e) {
@@ -91,99 +97,105 @@ export default function CheckoutPage() {
     })();
   }, [user]);
 
-const handlePayment = async () => {
-  setLoading(true);
-  const orderId = `movie-${Date.now()}`;
+  const handlePayment = async () => {
+    setLoading(true);
+    const orderId = `movie-${Date.now()}`;
 
-  const params = new URLSearchParams({
-    orderId,
-    amount: finalAmount.toString(),
-    userId: user?.username || "guest",
-    movieId: movieId.toString(),
-    region,
-    theater,
-    date,
-    time,
-    seats: seats.join(","),
-    adult: adult.toString(),
-    teen: teen.toString(),
-    senior: senior.toString(),
-    special: special.toString(),
-    showtimeId: showtimeId?.toString() || "",
-  });
+    const queryParams = new URLSearchParams({
+  orderId,
+  amount: finalAmount.toString(),
+  userId: user?.username || "guest",
+  movieId: movieId.toString(),
+  region,
+  theater,
+  date,
+  time,
+  seats: seats.join(","),
+  adult: adult.toString(),
+  teen: teen.toString(),
+  senior: senior.toString(),
+  special: special.toString(),
+  showtimeId: showtimeId ?? "",
+});
 
-  if (selectedCouponId) {
-    params.append("couponId", selectedCouponId);
-  }
+if (selectedCouponId) {
+  queryParams.append("couponId", selectedCouponId);
+}
 
-  const queryString = params.toString();
+    const params = new URLSearchParams({
+      orderId,
+      amount: finalAmount.toString(),
+      userId: user?.username || "guest",
+      movieId: movieId.toString(),
+      region,
+      theater,
+      date,
+      time,
+      seats: seats.join(","),
+      adult: adult.toString(),
+      teen: teen.toString(),
+      senior: senior.toString(),
+      special: special.toString(),
+      showtimeId: showtimeId?.toString() || "",
+    });
 
-  try {
-    // 무료 결제 처리
-    if (finalAmount === 0) {
-      for (let seat of seats) {
-        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
-      }
-      if (selectedCouponId) {
-        await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ couponId: selectedCouponId }),
-        });
-      }
-      router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
-      return;
+    if (selectedCouponId) {
+      params.append("couponId", selectedCouponId);
     }
 
-    const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
+    const queryString = params.toString();
 
-    // 모바일과 PC 분기
-    if (navigator.userAgent.includes("Mobile")) {
-      console.log("모바일");
-      await toss.requestPayment("카드", {
-        amount: finalAmount,
-        orderId,
-        orderName: "Movie Ticket",
-        customerName: user?.name || "비회원",
-        successUrl: `${window.location.origin}/movie/payment/success?${queryString}`,
-        failUrl: `${window.location.origin}/movie/payment/fail`,
-      });
-    } else {
-      await toss.requestPayment("카드", {
-        amount: finalAmount,
-        orderId,
-        orderName: "Movie Ticket",
-        customerName: user?.name || "비회원",
-      }).then(async () => {
+    try {
+      if (finalAmount === 0) {
+        // 무료 결제 처리
         for (let seat of seats) {
-          await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`);
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`
+          );
         }
         if (selectedCouponId) {
-          await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ couponId: selectedCouponId }),
-          });
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ couponId: selectedCouponId }),
+            }
+          );
         }
-        router.push(`${window.location.origin}/movie/payment/success?${queryString}`);
-      }).catch(() => {
-        router.push(`${window.location.origin}/movie/payment/fail`);
+        router.push(
+          `${window.location.origin}/movie/payment/success?${queryString}`
+        );
+        return;
+      }
+
+      const toss = await loadTossPayments(
+        "test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm"
+      );
+
+      // 모바일과 PC 모두 공통 처리로 successUrl/failUrl 포함
+      await toss.requestPayment("카드", {
+        amount: finalAmount,
+        orderId,
+        orderName: "Movie Ticket",
+        customerName: user?.name || "비회원",
+        successUrl: `${window.location.origin}/movie/payment/success?${queryParams.toString()}`,
+        failUrl: `${window.location.origin}/movie/payment/fail`,
       });
+    } catch (error) {
+      openModal("Toss 결제 실패: " + error.message);
+    } finally {
+      setLoading(false);
     }
-
-  } catch (error) {
-    openModal("Toss 결제 실패: " + error.message);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   if (!movie) {
     return (
       <>
         <Header headerColor="black" headerBg="white" userInfo={user} />
-        <div style={{ color: "white", textAlign: "center", marginTop: "100px" }}>
+        <div
+          style={{ color: "white", textAlign: "center", marginTop: "100px" }}
+        >
           🎬 영화 정보를 불러오는 중입니다...
         </div>
       </>
@@ -197,7 +209,7 @@ const handlePayment = async () => {
         <h2>결제하기</h2>
         <div className="purchase-info">
           <div className="product">
-            <img src={movie.poster} alt={movie.title} loading='lazy' />
+            <img src={movie.poster} alt={movie.title} loading="lazy" />
             <div className="details">
               <strong>{movie.title}</strong>
               <p>{movie.titleEnglish}</p>
@@ -206,11 +218,21 @@ const handlePayment = async () => {
               <p>{time}</p>
             </div>
           </div>
-          <strong>{seats.length > 0 ? seats.join(", ") : "좌석 정보 없음"}</strong>
+          <strong>
+            {seats.length > 0 ? seats.join(", ") : "좌석 정보 없음"}
+          </strong>
         </div>
 
         <div style={{ margin: "40px 0" }}>
-          <label htmlFor="coupon" style={{ display: "block", marginBottom: "8px", fontWeight: "bold", color: "white" }}>
+          <label
+            htmlFor="coupon"
+            style={{
+              display: "block",
+              marginBottom: "8px",
+              fontWeight: "bold",
+              color: "white",
+            }}
+          >
             쿠폰 선택
           </label>
           <select
@@ -228,13 +250,15 @@ const handlePayment = async () => {
               border: "1px solid #ccc",
               width: "100%",
               fontSize: "16px",
-              color: 'white',
-              outline: "none" // 기본 outline 제거
+              color: "white",
+              outline: "none", // 기본 outline 제거
             }}
           >
-            <option style={{ color: 'black' }} value="none">선택 안함</option>
+            <option style={{ color: "black" }} value="none">
+              선택 안함
+            </option>
             {coupons.map((c) => (
-              <option key={c.id} style={{ color: 'black' }} value={c.id}>
+              <option key={c.id} style={{ color: "black" }} value={c.id}>
                 {c.description} ({c.discountAmount.toLocaleString()}원 할인)
               </option>
             ))}
@@ -244,20 +268,34 @@ const handlePayment = async () => {
         <div className="payment-summary">
           {priceDetails.map((item, idx) => (
             <div className="summary-row" key={idx}>
-              <span>{item.label} x {item.count}</span>
+              <span>
+                {item.label} x {item.count}
+              </span>
               <span>{(item.price * item.count).toLocaleString()}원</span>
             </div>
           ))}
-          <div className="summary-row"><span>총 금액</span><span>{totalPrice.toLocaleString()}원</span></div>
-          <div className="summary-row"><span>할인</span><span>- {discountAmount.toLocaleString()}원</span></div>
+          <div className="summary-row">
+            <span>총 금액</span>
+            <span>{totalPrice.toLocaleString()}원</span>
+          </div>
+          <div className="summary-row">
+            <span>할인</span>
+            <span>- {discountAmount.toLocaleString()}원</span>
+          </div>
           <hr />
           <div className="summary-total">
             <span>최종 결제금액</span>
             <strong>{finalAmount.toLocaleString()}원</strong>
           </div>
           <div className="button-group">
-            <button onClick={() => router.back()} disabled={loading}>이전</button>
-            <button className="confirm" onClick={handlePayment} disabled={loading}>
+            <button onClick={() => router.back()} disabled={loading}>
+              이전
+            </button>
+            <button
+              className="confirm"
+              onClick={handlePayment}
+              disabled={loading}
+            >
               {loading ? "결제 중..." : "결제하기"}
             </button>
           </div>
@@ -341,11 +379,14 @@ const handlePayment = async () => {
           cursor: not-allowed;
         }
       `}</style>
-      {isModalOpen && (<Modal
-      isModalOpen={isModalOpen}
-      isModalVisible={isModalVisible}
-      closeModal={closeModal}
-      content={modalContent}/>)}
+      {isModalOpen && (
+        <Modal
+          isModalOpen={isModalOpen}
+          isModalVisible={isModalVisible}
+          closeModal={closeModal}
+          content={modalContent}
+        />
+      )}
     </>
   );
 }
