@@ -9,7 +9,7 @@ import {AiOutlineHeart,AiFillHeart} from 'react-icons/ai';
 
 export default function LikePart({id,res,movieinfo,isMobile=false}){
   
-    const address = `http://localhost:3000/detail/${id}`; // 복사할 주소
+    const address = `https://filmora.kafolio.kr/detail/${id}`; // 복사할 주소
 
     const handleCopy = async () => {
       try {

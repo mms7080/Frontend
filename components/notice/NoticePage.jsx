@@ -122,7 +122,7 @@ export default function NoticePage({ notices, userData }) {
           }}
         >
           <img
-            src="http://localhost:9999/images/logo.png"
+            src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/logo.png`}
             alt="logo"
             style={{ width: "141px", height: "68px", objectFit: "contain" }}
             loading="lazy"

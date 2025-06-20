@@ -155,7 +155,7 @@
 
 //       const fetchAvailableDates = async (movieId, theaterId) => {
 //         try {
-//           const res = await fetch(`http://localhost:9999/api/booking/available-dates?movieId=${movieId}&theaterId=${theaterId}`);
+//           const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/available-dates?movieId=${movieId}&theaterId=${theaterId}`);
 //           const result = await res.json();
 //           if (result.success && Array.isArray(result.data)) {
 //             setAvailableDates(result.data);

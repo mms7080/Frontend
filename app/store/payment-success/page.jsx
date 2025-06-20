@@ -23,7 +23,7 @@ export default function CartPaymentSuccessPage() {
     document.title = "결제 - FILMORA";
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:9999/userinfo", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
           credentials: "include",
         });
         if (!res.ok) throw new Error();
@@ -52,7 +52,7 @@ export default function CartPaymentSuccessPage() {
         const items = JSON.parse(sessionStorage.getItem("cartItems") || "[]");
 
         const res = await fetch(
-          "http://localhost:9999/store/purchase/cart/success",
+          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/purchase/cart/success`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

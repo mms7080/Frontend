@@ -127,7 +127,7 @@ export default function EventPage({ serverEvents, userData }) {
   }}
 >
   <img
-    src="http://localhost:9999/images/logo.png" 
+    src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/logo.png`}
     alt="logo"
     style={{ width: "141px", height: "68px", objectFit: "contain" }}
     loading='lazy'
@@ -189,7 +189,7 @@ export default function EventPage({ serverEvents, userData }) {
   {/* 이미지 */}
   <Box mb={5} overflow='visible'>
     <Image
-      src="http://localhost:9999/images/coupon.png" // 이미지 경로는 원하는 것으로 교체
+      src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/coupon.png`} // 이미지 경로는 원하는 것으로 교체
       alt="₩1,000 쿠폰 이미지"
       mx="auto"
       borderRadius="12px"

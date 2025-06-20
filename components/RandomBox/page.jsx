@@ -35,7 +35,7 @@ export default function RandomBoxPage({ userData }) {
     setResult(null);
     setShowBox(true); 
 
-    const boxSound = new Audio("http://localhost:9999/sounds/box.mp3");
+    const boxSound = new Audio(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/sounds/box.mp3`);
 boxSound.play().catch(() => {});
 setTimeout(() => {
   boxSound.pause();
@@ -57,10 +57,10 @@ setTimeout(() => {
 
         if (data.result === "당첨!") {
           confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
-        new Audio("http://localhost:9999/sounds/win.mp3").play().catch(() => {});
-      } else {
-        new Audio("http://localhost:9999/sounds/lose.mp3").play().catch(() => {});
-      }
+          new Audio(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/sounds/win.mp3`).play().catch(() => {});
+        } else {
+          new Audio(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/sounds/lose.mp3`).play().catch(() => {});
+        }
         // ✅ 실제 사용 시 주석 해제
         // localStorage.setItem("lastOpenedDate", today);
       } catch (err) {
@@ -92,7 +92,7 @@ setTimeout(() => {
         {showBox && (
           <div className="box-animation-wrapper">
             <img
-              src="http://localhost:9999/images/box.gif"
+              src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/box.gif`}
               alt="상자 열기"
               className="shaking-box"
               loading='lazy'

@@ -109,7 +109,7 @@ export default function CartSidebar() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:9999/userinfo", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
           credentials: "include",
         });
         if (!res.ok) throw new Error();
