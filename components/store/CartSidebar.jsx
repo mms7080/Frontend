@@ -4,11 +4,12 @@ import React, { useEffect, useState, useRef } from "react";
 import { useCart } from "./CartContext";
 import { useRouter } from "next/navigation";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
-import { useMediaQuery } from "@chakra-ui/react";
+import { useMediaQuery, Flex } from "@chakra-ui/react";
 import Modal, { useModal } from '../movie/modal';
 
 export default function CartSidebar() {
 
+  const [isMinimized, setIsMinimized] = useState(false);
   const [isMobile] = useMediaQuery("(max-width: 768px)");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const toggleCollapse = () => setIsCollapsed((prev) => !prev);
@@ -186,12 +187,13 @@ export default function CartSidebar() {
     >
 
       <h3 style={titleStyle}>장바구니 🛒</h3>
-      <div style={{ maxHeight: "240px", overflowY: "auto" }}>
+      <div style={{ maxHeight: !isMobile?"240px":"60px", overflowY: "auto" }}>
         {cartItems.length === 0 ? (
           <p style={{ color: "#777" }}>장바구니가 비어 있습니다</p>
         ) : (
-          cartItems.map((item) => (
-            <div key={item.id} style={itemStyle}>
+          cartItems.map((item,index) =>(
+
+           <div key={item.id} style={itemStyle}>
               <div style={{ flex: 1 }}>
                 <p style={{ margin: "0 0 4px 0" }}>{item.title}</p>
                 <div>
@@ -230,8 +232,9 @@ export default function CartSidebar() {
                 삭제
               </button>
             </div>
+            )
           ))
-        )}
+        }
       </div>
 
       {cartItems.length > 0 && (
