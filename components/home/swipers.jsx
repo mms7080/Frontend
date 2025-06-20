@@ -1,6 +1,6 @@
 "use client";
 
-import React,{useState} from "react";
+import React,{useState,useRef} from "react";
 import Slider from "react-slick";
 import {IconButton,Image,Box,useMediaQuery} from "@chakra-ui/react";
 import {FaChevronLeft,FaChevronRight} from "react-icons/fa";
@@ -77,6 +77,41 @@ export default function SimpleSlider() {
     prevArrow: <PrevArrow />,
   };
 
+  const downPosition = useRef({ x: 0, y: 0 });
+  const handleMouseDown = (e) => {
+    downPosition.current = { x: e.clientX, y: e.clientY };
+  };
+  const handleMouseUp1 = (e) => {
+    const deltaX = Math.abs(e.clientX - downPosition.current.x);
+    const deltaY = Math.abs(e.clientY - downPosition.current.y);
+
+    if (deltaX < 5 && deltaY < 5) {
+      setTrailerContent(trailer[0]);
+      if(!isMobile)openModal();
+      else window.open(mobiletrailer[0], "_blank");
+    }
+  };
+  const handleMouseUp2 = (e) => {
+    const deltaX = Math.abs(e.clientX - downPosition.current.x);
+    const deltaY = Math.abs(e.clientY - downPosition.current.y);
+
+    if (deltaX < 5 && deltaY < 5) {
+      setTrailerContent(trailer[1]);
+      if(!isMobile)openModal();
+      else window.open(mobiletrailer[1], "_blank");
+    }
+  };
+  const handleMouseUp3 = (e) => {
+    const deltaX = Math.abs(e.clientX - downPosition.current.x);
+    const deltaY = Math.abs(e.clientY - downPosition.current.y);
+
+    if (deltaX < 5 && deltaY < 5) {
+      setTrailerContent(trailer[2]);
+      if(!isMobile)openModal();
+      else window.open(mobiletrailer[2], "_blank");
+    }
+  };
+
   return (
     <Box w="100%" h={{base:"200px",md:"700px"}} position="relative" overflow='visible'>
       <Slider {...settings}>
@@ -88,11 +123,9 @@ export default function SimpleSlider() {
             objectFit='cover'
             loading="lazy"
             _hover={{cursor:'pointer'}}
-            onClick={()=>{
-              setTrailerContent(trailer[0]);
-              if(!isMobile)openModal();
-              else window.open(mobiletrailer[0], "_blank");
-            }}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp1}
+            outline='none'
           />
         </div>
         <div>
@@ -103,11 +136,9 @@ export default function SimpleSlider() {
             objectFit='cover'
             loading="lazy"
             _hover={{cursor:'pointer'}}
-            onClick={()=>{
-              setTrailerContent(trailer[1]);
-              if(!isMobile)openModal();
-              else window.open(mobiletrailer[1], "_blank");
-            }}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp2}
+            outline='none'
           />
         </div>
         <div>
@@ -118,11 +149,9 @@ export default function SimpleSlider() {
             objectFit='cover'
             loading="lazy"
             _hover={{cursor:'pointer'}}
-            onClick={()=>{
-              setTrailerContent(trailer[2]);
-              if(!isMobile)openModal();
-              else window.open(mobiletrailer[2], "_blank");
-            }}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp3}
+            outline='none'
           />
         </div>
       </Slider>
