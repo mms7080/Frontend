@@ -191,7 +191,6 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
                               setReservations(dataarr);
                               setCurrentPage1(1);
                             } else {
-                              console.log(res);
                               openModal("환불 실패");
                             }
                           } catch (e) {

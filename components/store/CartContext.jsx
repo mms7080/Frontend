@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import Modal, { useModal } from '../movie/modal';
 
 const CartContext = createContext();
@@ -8,12 +9,20 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+  const pathname = usePathname();
 
   //  localStorage에서 초기화
   useEffect(() => {
     const stored = localStorage.getItem("cartItems");
     if (stored) setCartItems(JSON.parse(stored));
   }, []);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("cartItems");
+    if (!stored) {
+      setCartItems([]);
+    }
+  }, [pathname]); // ✅ 경로 바뀔 때마다 실행됨
 
   //  localStorage에 반영
   useEffect(() => {
