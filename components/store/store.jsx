@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Box, Text, Image, SimpleGrid, Flex, Button } from "@chakra-ui/react";
+import { Box, Text, Image, SimpleGrid, Flex, Button, useMediaQuery } from "@chakra-ui/react";
 import { Header } from "..";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
@@ -15,6 +15,7 @@ export default function MegaboxStorePage({ userData }) {
   const [user, setUser] = useState(userData);
   const router = useRouter();
   const { addToCart } = useCart();
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     document.title = "스토어 - FILMORA";
@@ -189,6 +190,7 @@ export default function MegaboxStorePage({ userData }) {
                       px={2}
                       py={1}
                       borderRadius="6px"
+                      h={isMobile?'65px':'35px'}
                     >
                       {item.originalPrice && (
                         <>
