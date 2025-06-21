@@ -97,7 +97,6 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
       <thead>
         <tr style={{ background: "#f1f1f1" }}>
           <th style={thStyle}>주문번호</th>
-          {!isMobile && <th style={thStyle}>유저</th>}
           <th style={thStyle}>영화</th>
           {!isMobile && <th style={thStyle}>지역</th>}
           {!isMobile && <th style={thStyle}>극장</th>}
@@ -114,7 +113,7 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
         {reservations.length === 0 ? (
           <tr>
             <td
-              colSpan={!isMobile ? "12" : "3"}
+              colSpan={!isMobile ? "11" : "3"}
               style={{
                 textAlign: "center",
                 padding: "20px",
@@ -128,7 +127,6 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
           paginatedReservations.map((r, idx) => (
             <tr key={idx}>
               <td style={tdStyle}>{r.orderId}</td>
-              {!isMobile && <td style={tdStyle}>{r.userId}</td>}
               <td style={tdStyle}>{movieMap[r.movieId] || r.movieId}</td>
               {!isMobile && <td style={tdStyle}>{r.region}</td>}
               {!isMobile && <td style={tdStyle}>{r.theater}</td>}
@@ -276,7 +274,6 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
         <tr style={{ background: "#f1f1f1" }}>
           <th style={thStyle}>주문번호</th>
           <th style={thStyle}>상품명</th>
-          {!isMobile && <th style={thStyle}>유저ID</th>}
           <th style={thStyle}>결제금액</th>
           {!isMobile && <th style={thStyle}>결제일</th>}
           {!isMobile && <th style={thStyle}>결제수단</th>}
@@ -289,7 +286,7 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
         {payments.length === 0 ? (
           <tr>
             <td
-              colSpan={!isMobile ? "9" : "3"}
+              colSpan={!isMobile ? "8" : "3"}
               style={{
                 textAlign: "center",
                 padding: "20px",
@@ -304,7 +301,6 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
             <tr key={idx}>
               <td style={tdStyle}>{p.orderId}</td>
               <td style={tdStyle}>{p.orderName}</td>
-              {!isMobile && <td style={tdStyle}>{p.userId}</td>}
               <td style={tdStyle}>{p.amount.toLocaleString()}원</td>
               {!isMobile && <td style={tdStyle}>
                 {new Date(p.approvedAt).toLocaleString()}
@@ -343,7 +339,7 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
                               });
 
                               const data2 = await refreshed2.json();
-                              const dataarr2 = data2.filter((item) => (item.userId === userInfo?.username && item.orderName !== "영화 예매")).sort((a, b) => {
+                              const dataarr2 = data2.filter((item) => (item.userId === userInfo?.username && item.orderName !== "Movie Ticket" && item.orderName !== "영화 예매")).sort((a, b) => {
                                 const dateA = new Date(a.approvedAt);
                                 const dateB = new Date(b.approvedAt);
                                 return dateB - dateA;
