@@ -54,14 +54,14 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
   }, [movies]);
 
   const thStyle = {
-    padding: "10px",
+    padding: "8px",
     borderBottom: "1px solid #ddd",
     textAlign: "left",
     cursor: "pointer",
   };
 
   const tdStyle = {
-    padding: "10px",
+    padding: "8px",
     borderBottom: "1px solid #eee",
   };
 
