@@ -26,10 +26,10 @@ export default function RandomBoxPage({ userData }) {
     const lastOpened = localStorage.getItem("lastOpenedDate");
 
     // ✅ 실제 사용 시 주석 해제
-    // if (lastOpened === today) {
-    //   alert("오늘은 이미 열었습니다.");
-    //   return;
-    // }
+     if (lastOpened === today) {
+       alert("오늘은 이미 열었습니다.");
+      return;
+     }
 
     setLoading(true);
     setResult(null);
@@ -62,7 +62,7 @@ setTimeout(() => {
           new Audio(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/sounds/lose.mp3`).play().catch(() => {});
         }
         // ✅ 실제 사용 시 주석 해제
-        // localStorage.setItem("lastOpenedDate", today);
+       localStorage.setItem("lastOpenedDate", today);
       } catch (err) {
         openModal("에러 발생: " + err.message);
       } finally {
