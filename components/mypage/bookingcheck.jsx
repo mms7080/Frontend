@@ -273,7 +273,7 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
       <thead>
         <tr style={{ background: "#f1f1f1" }}>
           <th style={thStyle}>주문번호</th>
-          <th style={thStyle}>상품명</th>
+          <th style={{...thStyle,width:!isMobile?'default':'70px'}}>상품명</th>
           <th style={thStyle}>결제금액</th>
           {!isMobile && <th style={thStyle}>결제일</th>}
           {!isMobile && <th style={thStyle}>결제수단</th>}
