@@ -2,7 +2,6 @@
 
 import React,{useEffect,useState} from 'react';
 import {VStack,Button,Flex,Grid,Box,Input,Text,useMediaQuery} from '@chakra-ui/react';
-import {useRouter} from 'next/navigation';
 import Link from "next/link";
 
 import {Header} from '..';
@@ -12,7 +11,6 @@ import Detailreview from '../element/detailreview';
 import Modal, { useModal } from '../movie/modal';
 
 export default function Searchdetail({userData,movieData,serverEvents,reviewInfo,keywordData}){
-    const router = useRouter();
     const [movies, setMovies] = useState(movieData);
     const [searchWord, setSearchWord] = useState(keywordData);
     const [displayNumber, setDisplayNumber] = useState(8);/* 검색된 영화 더보기 버튼 */
@@ -27,7 +25,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
             openModal('유효한 검색어를 입력해주세요!');
             return;
         }
-        router.push(`/search/${document.querySelector('#keyword').value}`);
+        setSearchWord(document.querySelector('#keyword').value);
     }    
     
     // 검색어 포함 유무로 분류
@@ -68,7 +66,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
-        else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap={!isMobile?'4px':'25px'} placeItems={isMobile ? "center" : "stretch"}>
+        else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap='25px' placeItems={isMobile ? "center" : "stretch"}>
                         {searchedMovies.map((movie,index) => {
                             if(index < displayNumber)
                                 return (<MovieCard 
@@ -112,7 +110,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
                     검색 결과가 없습니다
                     </Box>;
-        else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap={!isMobile?'4px':'25px'}  placeItems={isMobile ? "center" : "stretch"} overflow='visible'>
+        else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap='25px'  placeItems={isMobile ? "center" : "stretch"} overflow='visible'>
                     {searchedEvents.flat().filter((_,index)=>index%2=== 1).flat().map((items,index) =>{
                         if(index<displayNumber2)
                             return <Box overflow='visible' key={items.id} scroll={true} passHref>
