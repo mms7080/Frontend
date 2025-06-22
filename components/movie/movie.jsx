@@ -32,17 +32,8 @@ const Movie = (userInfo) => {
   const [loadedMoviesData, setLoadedMoviesData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
-  const inputRef = useRef("");
   const clearInputValue = () => {
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-  };
-  const getInputValue = () => {
-    if (inputRef.current) {
-      return inputRef.current.value;
-    }
-    return "";
+    setSearchWord("");
   };
 
   useEffect(() => {
@@ -60,14 +51,6 @@ const Movie = (userInfo) => {
       }
     })();
   }, []);
-
-  const handleSearch = (inputValue) => {
-    if (inputValue.replace(/\s+/g, "") === "") {
-      openModal("유효한 검색어를 입력해주세요!");
-      return;
-    }
-    setSearchWord(inputValue);
-  };
 
   const filteredMovies = useMemo(() => {
     const filtered =
@@ -247,57 +230,6 @@ useEffect(() => {
     );
   };
 
-  // 검색 부분
-  const SearchPart = ({ isMobile }) => {
-    return <>
-      <HStack
-        w={isMobile ? "80%" : "40%"}
-        minWidth="282px"
-        gap="16px"
-        overflow="visible"
-      >
-        <Input
-          placeholder="영화명 검색"
-          w="80%"
-          minW="150px"
-          p="10px"
-          bg="#1e1e1e"
-          border="1px solid gray"
-          fontSize="15px"
-          color="white"
-          _hover={{ borderColor: "white" }}
-          ref={inputRef}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSearch(getInputValue());
-          }}
-        />
-        <Button
-          w="10%"
-          px={6}
-          bg="#1e1e1e"
-          border="1px solid gray"
-          _hover={{ borderColor: "white" }}
-          onClick={() => {
-            handleSearch(getInputValue());
-          }}
-        >
-          검색
-        </Button>
-
-        <Button
-          w="10%"
-          px={6}
-          bg="#1e1e1e"
-          border="1px solid gray"
-          _hover={{ borderColor: "white" }}
-          onClick={() => setSearchWord("")}
-        >
-          전체
-        </Button>
-      </HStack>
-    </>;
-  };
-
   // 더보기 누를 시 이동 안하도록
   const scrollRef = useRef(0);
 
@@ -451,7 +383,63 @@ const MovieCards = ({ isMobile }) => {
         {/* 카테고리 분류 */}
         <Flex flexWrap="wrap" justify={"space-between"} pb={6}>
           <CategoryPart isMobile={isMobile} />
-          <SearchPart isMobile={isMobile} />
+          <>
+      <HStack
+        w={isMobile ? "80%" : "40%"}
+        minWidth="282px"
+        gap="16px"
+        overflow="visible"
+      >
+        <Input
+          id="keyword1"
+          placeholder="영화명 검색"
+          w="80%"
+          minW="150px"
+          p="10px"
+          bg="#1e1e1e"
+          border="1px solid gray"
+          fontSize="15px"
+          color="white"
+          _hover={{ borderColor: "white" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter"){
+              if (e.target.value.replace(/\s+/g, "") === "") {
+                openModal("유효한 검색어를 입력해주세요!");
+                return;
+              }
+              setSearchWord(e.target.value);
+            }
+          }}
+        />
+        <Button
+          w="10%"
+          px={6}
+          bg="#1e1e1e"
+          border="1px solid gray"
+          _hover={{ borderColor: "white" }}
+          onClick={() => {
+            if (document.querySelector('#keyword1').value.replace(/\s+/g, "") === "") {
+              openModal("유효한 검색어를 입력해주세요!");
+              return;
+            }
+            setSearchWord(document.querySelector('#keyword1').value);
+          }}
+        >
+          검색
+        </Button>
+
+        <Button
+          w="10%"
+          px={6}
+          bg="#1e1e1e"
+          border="1px solid gray"
+          _hover={{ borderColor: "white" }}
+          onClick={() => setSearchWord("")}
+        >
+          전체
+        </Button>
+      </HStack>
+    </>
         </Flex>
         <MovieCards isMobile={isMobile} />
         <MoreButton />
@@ -467,7 +455,63 @@ const MovieCards = ({ isMobile }) => {
         {user?.auth === "ADMIN" && <UploadButton/>}
         {/* 카테고리 분류 */}
         <Flex flexDirection={"column"} align={"center"} gap={6} pb={6}>
-          <SearchPart isMobile={isMobile} />
+          <>
+      <HStack
+        w={isMobile ? "80%" : "40%"}
+        minWidth="282px"
+        gap="16px"
+        overflow="visible"
+      >
+        <Input
+          id="keyword2"
+          placeholder="영화명 검색"
+          w="80%"
+          minW="150px"
+          p="10px"
+          bg="#1e1e1e"
+          border="1px solid gray"
+          fontSize="15px"
+          color="white"
+          _hover={{ borderColor: "white" }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter"){
+              if (e.target.value.replace(/\s+/g, "") === "") {
+                openModal("유효한 검색어를 입력해주세요!");
+                return;
+              }
+              setSearchWord(e.target.value);
+            }
+          }}
+        />
+        <Button
+          w="10%"
+          px={6}
+          bg="#1e1e1e"
+          border="1px solid gray"
+          _hover={{ borderColor: "white" }}
+          onClick={() => {
+            if (document.querySelector('#keyword2').value.replace(/\s+/g, "") === "") {
+              openModal("유효한 검색어를 입력해주세요!");
+              return;
+            }
+            setSearchWord(document.querySelector('#keyword2').value);
+          }}
+        >
+          검색
+        </Button>
+
+        <Button
+          w="10%"
+          px={6}
+          bg="#1e1e1e"
+          border="1px solid gray"
+          _hover={{ borderColor: "white" }}
+          onClick={() => setSearchWord("")}
+        >
+          전체
+        </Button>
+      </HStack>
+    </>
           <CategoryPart isMobile={isMobile} />
         </Flex>
         <MovieCards isMobile={isMobile} />
