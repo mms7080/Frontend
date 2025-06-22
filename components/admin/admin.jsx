@@ -1623,14 +1623,16 @@ export default function AdminDashboard({ userData }) {
     }
 
     if (selectedSection === "매출") {
-      const filteredPayments = payments.filter((p) =>
-        [p.orderName, p.userId, p.cardCompany, p.method].some((v) =>
-          v
-            ?.replace(/\s+/g, "")
-            .toLowerCase()
-            .includes(paymentConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
-        )
-      );
+const filteredPayments = payments
+  .filter((p) => !p.orderName?.includes("Movie Ticket")) 
+  .filter((p) =>
+    [p.orderName, p.userId, p.cardCompany, p.method].some((v) =>
+      v
+        ?.replace(/\s+/g, "")
+        .toLowerCase()
+        .includes(paymentConfirmedKeyword.replace(/\s+/g, "").toLowerCase())
+    )
+  );
 
       // 🔽 최신 결제순 정렬
       const sortedPayments = [...filteredPayments].sort((a, b) => {
