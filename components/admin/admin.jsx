@@ -1624,7 +1624,6 @@ export default function AdminDashboard({ userData }) {
 
     if (selectedSection === "매출") {
 const filteredPayments = payments
-  .filter((p) => !p.orderName?.includes("Movie Ticket")) 
   .filter((p) =>
     [p.orderName, p.userId, p.cardCompany, p.method].some((v) =>
       v
@@ -2302,6 +2301,7 @@ const filteredPayments = payments
               gridTemplateColumns: "repeat(auto-fill, minmax(400px, 1fr))",
               gap: 24,
               marginBottom: 50,
+              overflow:'visible'
             }}
           >
             <SummaryCard
