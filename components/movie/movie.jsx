@@ -443,7 +443,7 @@ const MovieCards = ({ isMobile }) => {
         </Flex>
         <MovieCards isMobile={isMobile} />
         <MoreButton />
-      </Flex>;
+      </Flex>
     </>
      : <>
       <Flex
