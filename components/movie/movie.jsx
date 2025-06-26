@@ -334,6 +334,8 @@ const MovieCards = ({ isMobile }) => {
           if (movieData) {
             return (
               <MovieCard
+                movies={movies}
+                setMovies={setMovies}
                 key={movieId}
                 movie={movieData}
                 user={user}
