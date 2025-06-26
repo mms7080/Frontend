@@ -642,8 +642,8 @@ export default function Header() {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <Icon as={FaHome} boxSize={6} />
-                  <Text>홈</Text>
+                  <Icon color='black' as={FaHome} boxSize={6} />
+                  <Text color='black'>홈</Text>
                 </Flex>
               </Link>
             </Flex>
@@ -675,8 +675,8 @@ export default function Header() {
                   alignItems="center"
                   justifyContent="center"
                 >
-                  <Icon as={FiUser} boxSize={6} />
-                  <Text>마이</Text>
+                  <Icon color='black' as={FiUser} boxSize={6} />
+                  <Text color='black'>마이</Text>
                 </Flex>
               </Link>
             </Flex>
