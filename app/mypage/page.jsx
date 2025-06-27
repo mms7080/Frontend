@@ -25,6 +25,10 @@ export default async function Mypagemain(){
     reservationres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reservations`);
     paymentres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`);
 
+    if(!res) return <>
+    <Header userInfo={res}></Header>
+    <Notloginalert userInfo={res}/>
+    </>;
     return <>
         <Header userInfo={res}></Header>
         <Notloginalert userInfo={res}/>
