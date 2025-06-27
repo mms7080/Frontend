@@ -23,7 +23,7 @@ const HeartIcon = createIcon({
 
 const MovieCard = ({ movie, user, rank, crit, preloadedData}) => {
 
-  const [liked, setLiked] = useState(user.likemovies.includes(movie.id));
+  const [liked, setLiked] = useState(user?.likemovies.includes(movie.id));
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
   const [score, setScore] = useState(preloadedData?.score || "N/A");
   const [reserveRate, setReserveRate] = useState(preloadedData?.reserveRate?.reserveRate || "N/A");
