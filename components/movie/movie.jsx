@@ -32,6 +32,35 @@ const Movie = (userInfo) => {
   const [loadedMoviesData, setLoadedMoviesData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const syncUserData = async () => {
+      if (userInfo.userInfo) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+            method: 'GET',
+            credentials: 'include'
+          });
+            const updatedUser = res;
+            setUser(updatedUser);
+        } catch (err) {
+          console.log('Error syncing user data:', err.message);
+        }
+      }
+    };
+    syncUserData();
+
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        syncUserData();
+      }
+    };
+    window.addEventListener('pageshow', handlePageShow);
+
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow);
+    };
+  }, [userInfo.userInfo]);
+
   const clearInputValue = () => {
     setSearchWord("");
   };
@@ -334,12 +363,9 @@ const MovieCards = ({ isMobile }) => {
           if (movieData) {
             return (
               <MovieCard
-                movies={movies}
-                setMovies={setMovies}
                 key={movieId}
                 movie={movieData}
                 user={user}
-                setUser={setUser}
                 crit={"예매"}
                 rank={index + 1}
                 preloadedData={{

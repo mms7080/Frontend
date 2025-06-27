@@ -21,20 +21,14 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-const MovieCard = ({ movie, user, rank, crit, preloadedData, movies, setMovies, setUser }) => {
+const MovieCard = ({ movie, user, rank, crit, preloadedData}) => {
 
-  const [liked, likedController] = useState(false);
+  const [liked, setLiked] = useState(user.likemovies.includes(movie.id));
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
   const [score, setScore] = useState(preloadedData?.score || "N/A");
   const [reserveRate, setReserveRate] = useState(preloadedData?.reserveRate?.reserveRate || "N/A");
   const [loaded, setLoaded] = useState(!!preloadedData);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
-
-  useEffect(() => {
-    if(user && user.likemovies.includes(movie.id))
-      {likedController(true);}
-  }
-  ,[user])
 
   useEffect(() => {
 
@@ -88,16 +82,7 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData, movies, setMovies, 
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/update/like?id=${movie.id}&updown=${liked ? "down" : "up"}`);
         if(res.ok) {
           const data = await res.json();
-          const copymovies=[...movies].map((item)=>{
-            if(item.id===movie.id){
-              if(liked)item.likeNumber--;
-              else item.likeNumber++;
-              return item;
-            }
-            else return item;
-          });
-          setMovies(copymovies);
-          likedController(!liked);
+          setLiked(!liked);
           setLikeNumber(data > 999 ? Math.floor(data / 100) / 10 + 'k' : data);
           const res2 = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${movie.id}`, {
             method: 'GET',
@@ -105,7 +90,7 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData, movies, setMovies, 
           });
           if(res2.ok) {
             const data2 = await res2.json();
-            setUser(prev => ({...prev, likemovies: data2}));;
+            user.likemovies = data2;
           }
         }
       } catch (err) {
