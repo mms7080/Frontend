@@ -150,6 +150,16 @@ const MovieUploader = ({ userInfo }) => {
         }
     };
 
+    if(!user)return <>
+    {isModalOpen && (<Modal
+            isModalOpen={isModalOpen}
+            isModalVisible={isModalVisible}
+            closeModal={closeModal}
+            onConfirm={onConfirm}
+            onCancel={onCancel}
+            content={modalContent}/>)}
+            </>;
+
     return (
         <>
             <Box

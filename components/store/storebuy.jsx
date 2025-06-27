@@ -122,6 +122,19 @@ export default function PaymentPage({ userData }) {
     }
   };
 
+  if(!userData){
+    return <>
+      <Header headerColor="black" headerBg="white" userInfo={userData} />
+      {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      content={modalContent}/>)}
+    </>;
+  }
+
   return (
     <>
       <Header headerColor="black" headerBg="white" userInfo={userData} />

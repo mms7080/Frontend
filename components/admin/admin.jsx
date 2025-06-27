@@ -2259,6 +2259,18 @@ const filteredPayments = payments
     return null;
   };
 
+  if(!user)return <>
+  <Header headerColor="black" headerBg="white" userInfo={user} />
+  {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      isConfirm={isConfirm}
+      content={modalContent} />)}
+  </>;
+
   return (<>
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
       <Header headerColor="black" headerBg="white" userInfo={user} />

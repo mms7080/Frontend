@@ -96,6 +96,17 @@ export default function EventUploader({userData}) {
     }
   };
 
+  if(!user) return <>
+    <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
+    {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      content={modalContent}/>)}
+  </>;
+  
   return (
     <>
       <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />

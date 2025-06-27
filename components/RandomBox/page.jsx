@@ -3,22 +3,24 @@
 import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
 import { Header } from "../../components";
+import {useRouter} from 'next/navigation';
 import Modal, { useModal } from '../movie/modal';
 
 export default function RandomBoxPage({ userData }) {
+  const router=useRouter();
   const [user] = useState(userData);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [showBox, setShowBox] = useState(false);
-  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel, isConfirm} = useModal();
 
   useEffect(()=>{
-    if (!userData)openModal('로그인이 필요합니다.');
+    if (!userData)openModal("로그인이 필요합니다.", () => { router.push("/signin"); }, () => { router.push("/signin"); });
   },[userData]);
 
   const openBox = async () => {
     if (!user) {
-      openModal("로그인이 필요합니다.");
+      openModal("로그인이 필요합니다.", () => { router.push("/signin"); }, () => { router.push("/signin"); });
       return;
     }
 
@@ -71,6 +73,18 @@ setTimeout(() => {
       }
     }, 3000);
   };
+
+  if(!user)return <>
+    <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
+    {isModalOpen && (<Modal
+      isModalOpen={isModalOpen}
+      isModalVisible={isModalVisible}
+      closeModal={closeModal}
+      onConfirm={onConfirm}
+      onCancel={onCancel}
+      isConfirm={isConfirm}
+      content={modalContent} />)}
+  </>;
 
   return (
     <>
