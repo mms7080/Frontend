@@ -339,6 +339,7 @@ const MovieCards = ({ isMobile }) => {
                 key={movieId}
                 movie={movieData}
                 user={user}
+                setUser={setUser}
                 crit={"예매"}
                 rank={index + 1}
                 preloadedData={{

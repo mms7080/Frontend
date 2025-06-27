@@ -21,7 +21,7 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-const MovieCard = ({ movie, user, rank, crit, preloadedData, movies, setMovies }) => {
+const MovieCard = ({ movie, user, rank, crit, preloadedData, movies, setMovies, setUser }) => {
 
   const [liked, likedController] = useState(false);
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
@@ -32,7 +32,7 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData, movies, setMovies }
 
   useEffect(() => {
     if(user && user.likemovies.includes(movie.id))
-      likedController(true);
+      {likedController(true);}
   }
   ,[user])
 
@@ -105,7 +105,7 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData, movies, setMovies }
           });
           if(res2.ok) {
             const data2 = await res2.json();
-            user.likemovies = data2;
+            setUser(prev => ({...prev, likemovies: data2}));;
           }
         }
       } catch (err) {
