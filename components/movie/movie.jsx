@@ -317,7 +317,6 @@ const MoreButton = () => {
     setDisplayNumber(8);
   }, [activeCategory, searchWord]);
 
-// 영화카드들 수정
 const MovieCards = ({ isMobile }) => {
   if (searchWord != "" && filteredMovies.length < 1)
     return (
@@ -334,20 +333,6 @@ const MovieCards = ({ isMobile }) => {
         검색 결과가 없습니다
       </Box>
     );
-  
-  // if (isLoading)
-  //   return (
-  //     <Box
-  //       w="100%"
-  //       h="50vh"
-  //       bg="#141414"
-  //       display="flex"
-  //       alignItems="center"
-  //       justifyContent="center"
-  //     >
-  //       <div>로딩 중...</div>
-  //     </Box>
-  //   );
   else
     return (
       <Grid
@@ -372,6 +357,7 @@ const MovieCards = ({ isMobile }) => {
                   score: movieData.realScore,
                   reserveRate: movieData.realReserveRate
                 }}
+                setMovies={setMovies}
               />
             );
           }

@@ -21,7 +21,7 @@ const HeartIcon = createIcon({
   viewBox: "0 0 28 28"
 });
 
-const MovieCard = ({ movie, user, rank, crit, preloadedData}) => {
+const MovieCard = ({ movie, user, rank, crit, preloadedData, setMovies}) => {
 
   const [liked, setLiked] = useState(user?.likemovies.includes(movie.id));
   const [likeNumber, setLikeNumber] = useState(movie.likeNumber > 999 ? Math.floor(movie.likeNumber / 100) / 10 + 'k' : movie.likeNumber);
@@ -84,6 +84,14 @@ const MovieCard = ({ movie, user, rank, crit, preloadedData}) => {
           const data = await res.json();
           setLiked(!liked);
           setLikeNumber(data > 999 ? Math.floor(data / 100) / 10 + 'k' : data);
+setMovies(prevMovies => {
+    const newMovies = prevMovies.map(m => 
+        m.id === movie.id 
+            ? { ...m, likeNumber: data}
+            : m
+    );
+    return newMovies;
+});
           const res2 = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movieLikeToggle/${movie.id}`, {
             method: 'GET',
             credentials: 'include' 
