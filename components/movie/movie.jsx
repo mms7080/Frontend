@@ -23,7 +23,7 @@ const Movie = (userInfo) => {
   const [isMobile] = useMediaQuery("(max-width: 768px)");
   const [activeCategory, setActiveCategory] = useState("전체영화");
   const [movies, setMovies] = useState([]);
-  const [user, setUser] = useState(userInfo.userInfo);
+  const [user, setUser] = useState(userInfo?.userInfo);
   const [searchWord, setSearchWord] = useState("");
   const [displayNumber, setDisplayNumber] = useState(8);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
@@ -34,7 +34,7 @@ const Movie = (userInfo) => {
 
   useEffect(() => {
     const syncUserData = async () => {
-      if (userInfo.userInfo) {
+      if (userInfo?.userInfo) {
         try {
           const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
             method: 'GET',
@@ -59,7 +59,7 @@ const Movie = (userInfo) => {
     return () => {
       window.removeEventListener('pageshow', handlePageShow);
     };
-  }, [userInfo.userInfo]);
+  }, [userInfo?.userInfo]);
 
   const clearInputValue = () => {
     setSearchWord("");
