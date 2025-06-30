@@ -125,6 +125,8 @@ export default function CartSidebar() {
     fetchUser();
   }, []);
 
+  const userId = user?.id ?? "guest";
+
   const handleCheckout = async () => {
     if (!user || !user.username) {
       openModal("로그인이 필요합니다.", ()=>{router.push("/signin");}, ()=>{router.push("/signin");});
@@ -139,7 +141,7 @@ export default function CartSidebar() {
         ? cartItems[0].title
         : `${cartItems[0].title} 외 ${cartItems.length - 1}건`;
     //장바구니에 항목으로 저장
-    sessionStorage.setItem("cartItems", JSON.stringify(cartItems));
+    sessionStorage.setItem(`cartItems_${userId}`, JSON.stringify(cartItems));
 
     try {
       await toss.requestPayment("카드", {

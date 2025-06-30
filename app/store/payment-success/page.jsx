@@ -39,6 +39,8 @@ export default function CartPaymentSuccessPage() {
     fetchUser();
   }, []);
 
+  const userId = user?.id ?? "guest";
+
   // 장바구니 결제 승인 처리
   useEffect(() => {
     const confirmPayment = async () => {
@@ -49,7 +51,7 @@ export default function CartPaymentSuccessPage() {
           setMessage("✅ 결제가 이미 처리되었습니다.");
           return;
         }
-        const items = JSON.parse(sessionStorage.getItem("cartItems") || "[]");
+        const items = JSON.parse(sessionStorage.getItem(`cartItems_${userId}`) || "[]");
 
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/purchase/cart/success`,
@@ -77,8 +79,8 @@ export default function CartPaymentSuccessPage() {
         sessionStorage.setItem(`paid_${orderId}`, "true");
         setMessage("✅ 결제가 완료되었습니다!");
 
-        sessionStorage.removeItem("cartItems");
-        localStorage.removeItem("cartItems");
+        sessionStorage.removeItem(`cartItems_${userId}`);
+        localStorage.removeItem(`cartItems_${userId}`);
       } catch (e) {
         console.error("❌ 결제 처리 실패:", e);
         setMessage("❌ 결제 승인 중 오류가 발생했습니다.");

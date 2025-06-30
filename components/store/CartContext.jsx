@@ -7,18 +7,49 @@ import Modal, { useModal } from '../movie/modal';
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+
+  const [user, setUser] = useState(null);
+
+  useEffect(()=>{
+    (async () => {
+          try {
+            const res = await fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+              {
+                credentials: "include",
+              }
+            );
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            setUser(data);
+          } catch (e) {
+            setUser(null);
+          }
+        })();
+  },[]);
+
+  const userId = user?.id ?? "guest";
+
   const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || user === null) return;
+
+    const stored = localStorage.getItem(`cartItems_${user.id ?? "guest"}`);
+    setCartItems(stored ? JSON.parse(stored) : []);
+  }, [user]);
+
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
   const pathname = usePathname();
 
   //  localStorage에서 초기화
   useEffect(() => {
-    const stored = localStorage.getItem("cartItems");
+    const stored = localStorage.getItem(`cartItems_${userId}`);
     if (stored) setCartItems(JSON.parse(stored));
   }, []);
 
   useEffect(() => {
-    const stored = localStorage.getItem("cartItems");
+    const stored = localStorage.getItem(`cartItems_${userId}`);
     if (!stored) {
       setCartItems([]);
     }
@@ -26,7 +57,7 @@ export const CartProvider = ({ children }) => {
 
   //  localStorage에 반영
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    localStorage.setItem(`cartItems_${userId}`, JSON.stringify(cartItems));
   }, [cartItems]);
 
   // ✅ 중복 방지 + 초기 수량 추가
