@@ -35,7 +35,7 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     if (typeof window === "undefined" || user === null) return;
 
-    const stored = localStorage.getItem(`cartItems_${user.id ?? "guest"}`);
+    const stored = localStorage.getItem(`cartItems_${user?.id ?? "guest"}`);
     setCartItems(stored ? JSON.parse(stored) : []);
   }, [user]);
 
