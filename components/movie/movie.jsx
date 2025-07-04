@@ -371,7 +371,7 @@ const MovieCards = ({ isMobile }) => {
   const UploadButton = () => {
     return <Flex justify="flex-end" pb={3}><Link href={`/movie/upload`}>
           <Button
-            bg="#1e1e1e" border="1px solid gray" _hover={{ borderColor: "white" }}
+            mr={{base:'21px',md:0}} bg="#1e1e1e" border="1px solid gray" _hover={{ borderColor: "white" }}
           >영화 등록</Button>
     </Link></Flex>
   }
