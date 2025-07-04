@@ -1808,7 +1808,7 @@ const filteredPayments = payments
                               async () => {
                                 try {
                                   const res = await fetch(
-                                    `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/${p.id}`,
+                                    `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/refund/order/${p.orderId}`,
                                     {
                                       method: "PATCH",
                                       credentials: "include",
