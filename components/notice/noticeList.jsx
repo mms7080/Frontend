@@ -2,6 +2,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import Modal, { useModal } from '../movie/modal';
+import { useMediaQuery } from "@chakra-ui/react";
+
 
 export default function NoticeList({
   items,
@@ -16,7 +18,8 @@ export default function NoticeList({
   const [confirmedKeyword, setConfirmedKeyword] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
-  const itemsPerPage = 10;
+  const [isMobile] = useMediaQuery("(max-width: 768px)");
+  const itemsPerPage = !isMobile?10:5;
 
   const highlightKeyword = (text) => {
     if (!confirmedKeyword.trim()) return [text];
@@ -65,7 +68,7 @@ export default function NoticeList({
     1,
     Math.ceil(filteredItems.length / itemsPerPage)
   );
-  const pageGroupSize = 10;
+  const pageGroupSize = !isMobile?10:5;
   const currentGroup = Math.floor((currentPage - 1) / pageGroupSize);
   const startPage = currentGroup * pageGroupSize + 1;
   const endPage = Math.min(startPage + pageGroupSize - 1, totalPages);
@@ -378,7 +381,7 @@ const deleteBtn = {
 };
 
 const pageBtnStyle = (disabled) => ({
-  margin: "0 8px",
+  margin: "0 4px",
   padding: "6px 12px",
   fontSize: "16px",
   backgroundColor: "white",

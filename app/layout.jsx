@@ -10,20 +10,20 @@ export default function Layout({ children }) {
       <head />
       <body>
         <Provider>
-          <div
+          <Suspense fallback={<div></div>}>
+            <div
             style={{
               display: 'flex',
               flexDirection: 'column',
               minHeight: '100vh',
             }}
-          >
-            <main style={{ flex: 1 }}>
-              <Suspense fallback={<div></div>}>
+            >
+              <main style={{ flex: 1 }}>
                 {children}
-              </Suspense>
-            </main>
-            <Footer />
-          </div>
+              </main>
+              <Footer/>
+            </div>
+          </Suspense>
         </Provider>
         <script
           type="text/javascript"

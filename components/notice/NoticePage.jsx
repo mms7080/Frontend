@@ -262,6 +262,22 @@ export default function NoticePage({ notices, userData }) {
             >
               전체보기
             </button>
+            {user?.auth === "ADMIN" && isMobile && (
+            <button
+              style={{
+                backgroundColor: "black",
+                color: "white",
+                padding: "8px 20px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+                fontSize: "15px",
+              }}
+              onClick={() => (window.location.href = "/notice/new")}
+            >
+              공지 등록
+            </button>
+        )}
           </div>
         </div>
 

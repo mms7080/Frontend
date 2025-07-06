@@ -45,8 +45,6 @@ export default function NoticeIdPage({ userData }) {
     fetchData();
   }, [id]);
 
-  if (!notice) return <div>로딩 중...</div>;
-
   return (
     <>
       <Header headerColor="black" headerBg="#ffffff" userInfo={user} />
@@ -92,16 +90,16 @@ export default function NoticeIdPage({ userData }) {
           <tbody>
             <tr>
               <th style={thStyle}>제목</th>
-              <td style={{ ...tdStyle, color: "#000" }}>{notice.title}</td>
+              <td style={{ ...tdStyle, color: "#000" }}>{notice?.title}</td>
             </tr>
             <tr>
               <th style={thStyle}>작성자</th>
-              <td style={{ ...tdStyle, color: "#000" }}>{notice.writer}</td>
+              <td style={{ ...tdStyle, color: "#000" }}>{notice?.writer}</td>
             </tr>
             <tr>
               <th style={thStyle}>작성일</th>
               <td style={{ ...tdStyle, color: "#000" }}>
-                {notice.createdAt?.slice(0, 10)}
+                {notice?.createdAt?.slice(0, 10)}
               </td>
             </tr>
           </tbody>
@@ -121,7 +119,7 @@ export default function NoticeIdPage({ userData }) {
             fontWeight: 400,
           }}
         >
-          {notice.content}
+          {notice?.content}
         </div>
 
         <div
@@ -189,7 +187,7 @@ export default function NoticeIdPage({ userData }) {
           </div>
         </div>
 
-        {user?.name === notice.writer && (
+        {user?.name === notice?.writer && (
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               style={editBtn}
