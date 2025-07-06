@@ -4,7 +4,6 @@ import Link from "next/link";
 import Modal, { useModal } from '../movie/modal';
 import { useMediaQuery } from "@chakra-ui/react";
 
-
 export default function NoticeList({
   items,
   user,
