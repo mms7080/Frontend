@@ -30,12 +30,25 @@ export const CartProvider = ({ children }) => {
 
   const userId = user?.id ?? "guest";
 
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState((localStorage.getItem(`cartItems_${userId}`) && localStorage.getItem(`cartItems_${userId}`)!=='[]')
+                                    ?JSON.parse(localStorage.getItem(`cartItems_${userId}`))
+                                    :(
+                                      (localStorage.getItem(`cartItems_guest`) && localStorage.getItem(`cartItems_guest`)!=='[]')
+                                      ?JSON.parse(localStorage.getItem(`cartItems_guest`))
+                                      :[]
+                                    )
+                                  );
 
   useEffect(() => {
     if (typeof window === "undefined" || user === null) return;
 
-    const stored = localStorage.getItem(`cartItems_${user?.id ?? "guest"}`);
+    let stored;
+    if(localStorage.getItem(`cartItems_${userId}`) && localStorage.getItem(`cartItems_${userId}`)!=='[]')
+      stored=localStorage.getItem(`cartItems_${userId}`);
+    else if(localStorage.getItem(`cartItems_guest`) && localStorage.getItem(`cartItems_guest`)!=='[]')
+      stored=localStorage.getItem(`cartItems_guest`);
+    else
+      stored=null;
     setCartItems(stored ? JSON.parse(stored) : []);
   }, [user]);
 
@@ -44,12 +57,24 @@ export const CartProvider = ({ children }) => {
 
   //  localStorage에서 초기화
   useEffect(() => {
-    const stored = localStorage.getItem(`cartItems_${userId}`);
+    let stored;
+    if(localStorage.getItem(`cartItems_${userId}`) && localStorage.getItem(`cartItems_${userId}`)!=='[]')
+      stored=localStorage.getItem(`cartItems_${userId}`);
+    else if(localStorage.getItem(`cartItems_guest`) && localStorage.getItem(`cartItems_guest`)!=='[]')
+      stored=localStorage.getItem(`cartItems_guest`);
+    else
+      stored=null;
     if (stored) setCartItems(JSON.parse(stored));
   }, []);
 
   useEffect(() => {
-    const stored = localStorage.getItem(`cartItems_${userId}`);
+    let stored;
+    if(localStorage.getItem(`cartItems_${userId}`) && localStorage.getItem(`cartItems_${userId}`)!=='[]')
+      stored=localStorage.getItem(`cartItems_${userId}`);
+    else if(localStorage.getItem(`cartItems_guest`) && localStorage.getItem(`cartItems_guest`)!=='[]')
+      stored=localStorage.getItem(`cartItems_guest`);
+    else
+      stored=null;
     if (!stored) {
       setCartItems([]);
     }

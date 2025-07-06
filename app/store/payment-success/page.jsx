@@ -80,7 +80,9 @@ export default function CartPaymentSuccessPage() {
         setMessage("✅ 결제가 완료되었습니다!");
 
         sessionStorage.removeItem(`cartItems_${userId}`);
+        sessionStorage.removeItem(`cartItems_guest`);
         localStorage.removeItem(`cartItems_${userId}`);
+        localStorage.removeItem(`cartItems_guest`);
       } catch (e) {
         console.error("❌ 결제 처리 실패:", e);
         setMessage("❌ 결제 승인 중 오류가 발생했습니다.");
