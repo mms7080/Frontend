@@ -115,16 +115,16 @@ const Modal = ({isModalOpen, isModalVisible, closeModal, content,
                 {/* 모달창 내부 */}
                 <Flex flexDirection='column' textAlign="center" w='100%' justifyContent='center' alignItems='center'>
                     {/* 동영상 모달창 닫기 버튼 */}
-                    {isVideo && <Button
-                        position='absolute'
-                        top='-3px'
-                        right='-8px'
-                        fontSize=''
-                        bg='transparent'
-                        onClick={handleCancel}
-                    >
-                        <CloseButton color='white' width='15px' height='15px' position='relative' left='12px' _hover={{bg:'transparent'}}></CloseButton>
-                    </Button>}
+                    {isVideo && <CloseButton
+                                   color='white'
+                                   width='15px'
+                                   height='15px'
+                                   position='absolute'
+                                   top='5px'
+                                   right='-5px'
+                                   onClick={handleCancel}
+                                   _hover={{ bg: 'transparent' }}
+                                 />}
 
                     {/* 메인 내용 */}
                     <Box mb="6" fontSize="xl" color="black" pt='10px' pb='0px'>
