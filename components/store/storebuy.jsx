@@ -85,7 +85,7 @@ export default function PaymentPage({ userData }) {
   };
 
   if (!product) return <>
-      <div>Loading...</div>
+      <Header headerColor="black" headerBg="white" userInfo={userData} />
       {isModalOpen && (<Modal
       isModalOpen={isModalOpen}
       isModalVisible={isModalVisible}
