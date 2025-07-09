@@ -32,7 +32,7 @@ export default function MoviePaymentFailPage() {
         <p style={{ marginTop: "20px", color: "#888" }}>
           영화 예매 결제에 실패했습니다. 다시 시도해 주세요.
         </p>
-        <Link href="/movie">
+        <Link href="/booking">
           <button
             style={{
               marginTop: "40px",
@@ -44,7 +44,7 @@ export default function MoviePaymentFailPage() {
               cursor: "pointer",
             }}
           >
-            영화 목록으로
+            예매 페이지로
           </button>
         </Link>
       </div>
