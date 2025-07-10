@@ -8,9 +8,10 @@ import {Flex,Input,Button} from '@chakra-ui/react';
 
 import Modal, { useModal } from '../movie/modal';
 
-export default function SigninClientAlert() {
+export default function SigninClientAlert({userInfo}) {
     const searchParams = useSearchParams();
     const hasRun = useRef(false);
+    const hasLogin = useRef(false);
     const fail = searchParams.get("error");
     const router = useRouter();
 
@@ -26,6 +27,10 @@ export default function SigninClientAlert() {
         const savedId = decodeURIComponent(savedIdCookie.split('=')[1]);
         setId(savedId);
         setRememberId(true);
+      }
+      if(userInfo && !hasLogin.current){
+        hasLogin.current=true;
+        openModal("잘못된 접근입니다.", ()=>{router.push('/home');}, ()=>{router.push('/home');});
       }
     }, []);
 
@@ -45,6 +50,19 @@ export default function SigninClientAlert() {
             document.cookie = 'remember-me-id=; path=/; max-age=0';
         }
     };
+
+    if(userInfo){
+      return <>
+      {isModalOpen && (<Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        isPaddingLarge={true}/>)}
+        </>;
+    }
 
     return <><form action={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/signin/logic`} method='post' onSubmit={handleSubmit}>
             <Flex w={{base:'330px',md:'400px'}} flexDirection='column' gap='15px'>
