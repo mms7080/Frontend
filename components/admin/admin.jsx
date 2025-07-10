@@ -2259,7 +2259,7 @@ const filteredPayments = payments
     return null;
   };
 
-  if(!user)return <>
+  if(!user || user?.auth !== "ADMIN")return <>
   <Header headerColor="black" headerBg="white" userInfo={user} />
   {isModalOpen && (<Modal
       isModalOpen={isModalOpen}

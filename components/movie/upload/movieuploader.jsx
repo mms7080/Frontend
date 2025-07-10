@@ -150,7 +150,7 @@ const MovieUploader = ({ userInfo }) => {
         }
     };
 
-    if(!user)return <>
+    if(!user || user?.auth !== "ADMIN") return <>
     {isModalOpen && (<Modal
             isModalOpen={isModalOpen}
             isModalVisible={isModalVisible}

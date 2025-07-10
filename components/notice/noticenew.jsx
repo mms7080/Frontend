@@ -48,7 +48,7 @@ export default function NoticeCreatePage({userData}) {
     }
   };
 
-  if(!user)return <>
+  if(!user || user?.auth !== "ADMIN")return <>
     <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
     {isModalOpen && (<Modal
     isModalOpen={isModalOpen}
