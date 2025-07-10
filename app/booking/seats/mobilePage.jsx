@@ -144,7 +144,6 @@ export default function SeatsPageMobile() {
       document.title = "좌석선택 - FILMORA";
       (async () => {
         try {
-          console.log(sessionStorage.getItem('canAccess2'));
           const allowed = sessionStorage.getItem('canAccess2');
           if (allowed !== 'true') {
             openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
