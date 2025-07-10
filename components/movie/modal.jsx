@@ -1,6 +1,6 @@
 'use client';
 
-import {Box, Button, Flex, CloseButton} from '@chakra-ui/react'
+import {Box, Button, Flex, CloseButton, Portal} from '@chakra-ui/react'
 import React, {useState, useEffect, useRef} from 'react'
 
 // 모달 애니메이션 CSS
@@ -96,6 +96,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal, content,
     return <>
         <style>{modalStyles}</style>
         {/* 모달창 바깥부분 흐려지도록 */}
+        <Portal>
         <Box      
             className={`modal-overlay ${isModalVisible ? 'show' : ''}`}
             position="fixed" inset="0" zIndex="9999" 
@@ -109,7 +110,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal, content,
                 position="relative" bg={!isVideo?"white":'black'} borderRadius="xl" shadow="2xl" 
                 maxW={isVideo ? "970px" : "md"} w="full" mx="4" marginTop="-5%"
                 justifyContent='center' alignItems='center' px={isPaddingLarge?'40px':'0px'}
-                pt='15px' pb={!isVideo?'30px':'0px'} 
+                pt='15px' pb={!isVideo?'30px':'0px'}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* 모달창 내부 */}
@@ -157,6 +158,7 @@ const Modal = ({isModalOpen, isModalVisible, closeModal, content,
                 </Flex>
             </Flex>
         </Box>
+        </Portal>
     </>
 }
 
