@@ -46,9 +46,9 @@ export default function NoticeEditIdPage({userData}) {
       }
     );
     if (res.ok) {
-      openModal("수정 완료", ()=>{router.push(`/notice/${id}`);}, ()=>{router.push(`/notice/${id}`);});
+      openModal("공지사항이 수정되었습니다!", ()=>{router.push(`/notice/${id}`);}, ()=>{router.push(`/notice/${id}`);});
     } else {
-      openModal("수정 실패");
+      openModal("공지사항 수정에 실패했습니다.");
     }
   };
 
