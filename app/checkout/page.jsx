@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "../../components";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import Modal, { useModal } from "../../components/movie/modal";
 
 export default function CheckoutPage() {
+  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('canAccessSecret')==='true');
+  const redirected = useRef(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [movie, setMovie] = useState(null);
@@ -44,19 +46,27 @@ export default function CheckoutPage() {
   ].filter((item) => item.count > 0);
 
   useEffect(() => {
-    document.title = "결제 - FILMORA";
-    (async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          { credentials: "include" }
-        );
-        const data = await res.json();
-        setUser(data);
-      } catch {
-        setUser(null);
-      }
-    })();
+    if (!redirected.current) {
+      document.title = "결제 - FILMORA";
+      (async () => {
+        try {
+          const allowed = sessionStorage.getItem('canAccessSecret');
+          if (allowed !== 'true') {
+            router.replace('/booking') // 허용되지 않으면 예매 페이지로
+          }
+          sessionStorage.removeItem('canAccessSecret')
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+            { credentials: "include" }
+          );
+          const data = await res.json();
+          setUser(data);
+        } catch {
+          setUser(null);
+        }
+      })();
+      redirected.current = true;
+    }
   }, []);
 
   useEffect(() => {
@@ -188,6 +198,14 @@ if (selectedCouponId) {
       setLoading(false);
     }
   };
+
+  if(!realaccess){
+    return (
+    <>
+      <Header headerColor="black" headerBg="white" userInfo={user} />
+    </>
+    );
+  }
 
   if (!movie) {
     return (

@@ -114,6 +114,7 @@ export default function SeatsPageMobile() {
   }, [showtimeId]);
 
   const handlePayment = () => {
+    sessionStorage.setItem('canAccessSecret', 'true');
     router.push(
       `/checkout?movieId=${movieId}` +
         `&region=${encodeURIComponent(region)}` +
