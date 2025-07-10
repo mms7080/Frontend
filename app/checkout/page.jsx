@@ -18,8 +18,7 @@ export default function CheckoutPage() {
 
   const router = useRouter();
   const params = useSearchParams();
-  const { isModalOpen, isModalVisible, openModal, closeModal, modalContent } =
-    useModal();
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
   const movieId = parseInt(params.get("movieId"));
   const region = params.get("region");
@@ -52,7 +51,7 @@ export default function CheckoutPage() {
         try {
           const allowed = sessionStorage.getItem('canAccessSecret');
           if (allowed !== 'true') {
-            router.replace('/booking') // 허용되지 않으면 예매 페이지로
+            openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
           }
           sessionStorage.removeItem('canAccessSecret')
           const res = await fetch(
@@ -203,6 +202,16 @@ if (selectedCouponId) {
     return (
     <>
       <Header headerColor="black" headerBg="white" userInfo={user} />
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
     </>
     );
   }
@@ -216,6 +225,16 @@ if (selectedCouponId) {
         >
           🎬 영화 정보를 불러오는 중입니다...
         </div>
+        {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
       </>
     );
   }
@@ -399,10 +418,12 @@ if (selectedCouponId) {
       `}</style>
       {isModalOpen && (
         <Modal
-          isModalOpen={isModalOpen}
-          isModalVisible={isModalVisible}
-          closeModal={closeModal}
-          content={modalContent}
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
         />
       )}
     </>
