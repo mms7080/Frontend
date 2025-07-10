@@ -201,6 +201,7 @@ export default function Booking2Page() {
             return;
         }
         if (!selectedDate || !selectedTime) return;
+        sessionStorage.setItem('canAccess', 'true');
         router.push(
             `/booking/seats?movieId=${activeMovie.id}` +
             `&showtimeId=${selectedShowtime.showtimeId}` +

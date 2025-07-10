@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Spinner from '../../../components/Spinner';
 import {
   Box,
@@ -51,7 +51,7 @@ export default function SeatsPage() {
 
   const [seatData, setSeatData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
   const bookedSeats = seatData
     .filter((seat) => seat.status === "RESERVED")
@@ -184,25 +184,54 @@ export default function SeatsPage() {
     return "gray.600"; // 일반 좌석
   };
 
+  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('canAccess')==='true');
+  const redirected = useRef(false);
+
   useEffect(() => {
-    document.title = "좌석선택 - FILMORA";
-    (async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          {
-            credentials: "include",
+    if (!redirected.current) {
+      document.title = "좌석선택 - FILMORA";
+      (async () => {
+        try {
+          const allowed = sessionStorage.getItem('canAccess');
+          if (allowed !== 'true') {
+            openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
           }
-        );
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setUser(data);
-      } catch (e) {
-        setUser(null);
-      }
-    })();
+          sessionStorage.removeItem('canAccess');
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+            {
+              credentials: "include",
+            }
+          );
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          setUser(data);
+        } catch (e) {
+          setUser(null);
+        }
+      })();
+      redirected.current = true;
+    }
   }, []);
 
+  if(!realaccess){
+    return (
+    <>
+      <Header headerColor="black" headerBg="white" userInfo={user} />
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
+    </>
+    );
+  }
+  
   return (
     <>
       {/* 헤더 */}
@@ -578,11 +607,16 @@ export default function SeatsPage() {
           </Box>
         </Flex>
       </Box>
-        {isModalOpen && (<Modal
+        {isModalOpen && (
+        <Modal
         isModalOpen={isModalOpen}
         isModalVisible={isModalVisible}
         closeModal={closeModal}
-        content={modalContent}/>)}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
     </>
   );
 }

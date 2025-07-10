@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Spinner from '../../../components/Spinner';
 import {
   Box,
@@ -22,7 +22,7 @@ export default function SeatsPageMobile() {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [personCounts, setPersonCounts] = useState({ adult: 0, teen: 0, senior: 0, special: 0 });
-  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent} = useModal();
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
   const searchParams = useSearchParams();
   const movieId = parseInt(searchParams.get("movieId"));
@@ -38,10 +38,6 @@ export default function SeatsPageMobile() {
 
   const bookedSeats = seatData.filter(seat => seat.status === "RESERVED").map(seat => seat.fullSeatName);
   const disabledSeats = seatData.filter(seat => seat.status === "UNAVAILABLE").map(seat => seat.fullSeatName);
-
-  useEffect(()=>{
-    document.title = "좌석선택 - FILMORA";
-  },[]);
 
   const toggleSeat = (seatId) => {
     if (bookedSeats.includes(seatId)) return; // 예약 완료 좌석 클릭 막기
@@ -139,6 +135,46 @@ export default function SeatsPageMobile() {
         //     special: 0,
         // });
     };
+
+  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('canAccess2')==='true');
+  const redirected = useRef(false);
+
+  useEffect(()=>{
+    if (!redirected.current) {
+      document.title = "좌석선택 - FILMORA";
+      (async () => {
+        try {
+          console.log(sessionStorage.getItem('canAccess2'));
+          const allowed = sessionStorage.getItem('canAccess2');
+          if (allowed !== 'true') {
+            openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
+          }
+          sessionStorage.removeItem('canAccess2');
+        } catch (e) {
+          console.log(e);
+        }
+      })();
+      redirected.current = true;
+    }
+  },[]);
+
+  if(!realaccess){
+    return (
+    <>
+      <Header headerColor="black" headerBg="white" userInfo={user} />
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
+    </>
+    );
+  }
 
   return (<>
     <Box bg="#141414" color="white" minH="100vh" pb={12}>
@@ -373,10 +409,15 @@ export default function SeatsPageMobile() {
         </Box>
       </Box>
     </Box>
-    {isModalOpen && (<Modal
-    isModalOpen={isModalOpen}
-    isModalVisible={isModalVisible}
-    closeModal={closeModal}
-    content={modalContent}/>)}
+    {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
   </>);
 }

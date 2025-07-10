@@ -53,7 +53,7 @@ export default function CheckoutPage() {
           if (allowed !== 'true') {
             openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
           }
-          sessionStorage.removeItem('canAccessSecret')
+          sessionStorage.removeItem('canAccessSecret');
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
             { credentials: "include" }
