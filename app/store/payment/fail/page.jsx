@@ -45,7 +45,7 @@ export default function StorePaymentFailPage() {
   if(!realaccess && !realaccess2){
     return (
     <>
-      <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
+      <Header headerColor="black" headerBg="white" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
