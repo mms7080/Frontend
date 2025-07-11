@@ -12,7 +12,8 @@ import {
     VStack,
     HStack,
     RadioCard,
-    CheckboxCard
+    CheckboxCard,
+    useMediaQuery
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
@@ -41,6 +42,7 @@ const MovieUploader = ({ userInfo }) => {
     const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
     const router = useRouter()
     const alerted = useRef(false);
+    const [isMobile] = useMediaQuery("(max-width: 768px)");
 
     useEffect(()=>{
         try {
@@ -268,7 +270,7 @@ const MovieUploader = ({ userInfo }) => {
                         {/* mb 증가 */}
                         <HStack>
                             <Input
-                                w="39%"
+                                w={!isMobile?"45%":"39%"}
                                 name="runningTime-hour"
                                 type="number"
                                 value={Math.floor(form.runningTime / 60)}
@@ -277,7 +279,7 @@ const MovieUploader = ({ userInfo }) => {
                             />
                             <Text>시간</Text>
                             <Input
-                                w="39%"
+                                w={!isMobile?"45%":"39%"}
                                 name="runningTime-minute"
                                 type="number"
                                 value={form.runningTime % 60}
