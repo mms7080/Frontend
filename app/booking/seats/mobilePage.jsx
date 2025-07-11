@@ -169,6 +169,7 @@ export default function SeatsPageMobile() {
         onConfirm={onConfirm}
         onCancel={onCancel}
         content={modalContent}
+        isPaddingLarge={true}
         />
       )}
     </>
@@ -416,6 +417,7 @@ export default function SeatsPageMobile() {
         onConfirm={onConfirm}
         onCancel={onCancel}
         content={modalContent}
+        isPaddingLarge={true}
         />
       )}
   </>);

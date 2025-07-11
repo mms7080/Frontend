@@ -228,56 +228,61 @@ export default function NoticePage({ notices, userData }) {
                 fontSize: "15px",
               }}
             />
-            <button
-              onClick={() => {
-                if (searchKeyword.replace(/\s+/g, "") === "") {
-                  openModal("유효한 검색어를 입력해주세요!");
-                  return;
-                }
-                setConfirmedKeyword(searchKeyword);
-              }}
-              style={{
-                backgroundColor: "black",
-                color: "white",
-                padding: "8px 20px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "15px",
-              }}
-            >
-              검색
-            </button>
-            <button
-              onClick={() => setConfirmedKeyword("")}
-              style={{
-                backgroundColor: "black",
-                color: "white",
-                padding: "8px 20px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "15px",
-              }}
-            >
-              전체보기
-            </button>
-            {user?.auth === "ADMIN" && isMobile && (
-            <button
-              style={{
-                backgroundColor: "black",
-                color: "white",
-                padding: "8px 20px",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-                fontSize: "15px",
-              }}
-              onClick={() => (window.location.href = "/notice/new")}
-            >
-              공지 등록
-            </button>
-        )}
+            <div style={{ display: "flex",gap:'15px'}}>
+              <button
+                onClick={() => {
+                  if (searchKeyword.replace(/\s+/g, "") === "") {
+                    openModal("유효한 검색어를 입력해주세요!");
+                    return;
+                  }
+                  setConfirmedKeyword(searchKeyword);
+                }}
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  padding: "8px 20px",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  fontSize: "15px",
+                  height:'44.5px'
+                }}
+              >
+                검색
+              </button>
+              <button
+                onClick={() => setConfirmedKeyword("")}
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  padding: "8px 20px",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  fontSize: "15px",
+                  height:'44.5px'
+                }}
+              >
+                전체보기
+              </button>
+              {user?.auth === "ADMIN" && isMobile && (
+              <button
+                style={{
+                  backgroundColor: "black",
+                  color: "white",
+                  padding: "8px 20px",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  fontSize: "15px",
+                  height:'44.5px'
+                }}
+                onClick={() => (window.location.href = "/notice/new")}
+              >
+                공지 등록
+              </button>
+              )}
+            </div>
           </div>
         </div>
 

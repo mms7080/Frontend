@@ -34,7 +34,7 @@ export default function StoreDetailPage({ userData }) {
       .then(setProduct);
   }, [id]);
 
-  if (!product) return <div>Loading...</div>;
+  if (!product) return <><Header headerColor="black" headerBg="white" userInfo={user} /></>;
 
   const unitPrice = parseInt(product.price.replace(/[^0-9]/g, ""));
   const totalPrice = (unitPrice * quantity).toLocaleString();

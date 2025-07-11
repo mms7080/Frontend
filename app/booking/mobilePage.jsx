@@ -194,7 +194,7 @@ export default function mobilePage() {
         if (!selectedDate || !selectedTime || !selectedShowtime) {
           openModal("날짜와 시간을 모두 선택해주세요.");
           return;
-      }
+        }
         sessionStorage.setItem('canAccess2', 'true');
         router.push(
             `/booking/seats?movieId=${activeMovie.id}` +

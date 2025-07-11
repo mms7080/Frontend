@@ -1,6 +1,6 @@
 'use client';
 
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 
 import Link from "next/link";
 import { Flex, Button, HStack, Image, Box, Text, useMediaQuery } from '@chakra-ui/react';
@@ -17,7 +17,15 @@ export default function Footer() {
   const [BoxBwidth,setBoxBwidth]=useState(10);
   const [BoxCwidth,setBoxCwidth]=useState(10);
   const [BoxDwidth,setBoxDwidth]=useState(10);
+  const [isMounted, setIsMounted] = useState(false);
   const [isMobile] = useMediaQuery("(max-width: 768px)");
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // ↓ 클라이언트가 마운트되기 전에는 모바일 여부 판단하지 않고 렌더링도 하지 않음
+  if (!isMounted) return null;
 
   return (
     <Flex

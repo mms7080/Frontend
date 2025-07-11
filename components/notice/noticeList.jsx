@@ -257,7 +257,7 @@ export default function NoticeList({
                 }
                 setConfirmedKeyword(searchKeyword);
               }}
-              style={buttonStyle}
+              style={{...buttonStyle,width:(isMobile?'144.05px':'default')}}
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#333")
               }
@@ -269,7 +269,7 @@ export default function NoticeList({
             </button>
             <button
               onClick={() => setConfirmedKeyword("")}
-              style={buttonStyle}
+              style={{...buttonStyle,width:(isMobile?'144.05px':'default')}}
               onMouseOver={(e) =>
                 (e.currentTarget.style.backgroundColor = "#333")
               }

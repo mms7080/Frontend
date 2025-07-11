@@ -226,6 +226,7 @@ export default function SeatsPage() {
         onConfirm={onConfirm}
         onCancel={onCancel}
         content={modalContent}
+        isPaddingLarge={true}
         />
       )}
     </>
@@ -615,6 +616,7 @@ export default function SeatsPage() {
         onConfirm={onConfirm}
         onCancel={onCancel}
         content={modalContent}
+        isPaddingLarge={true}
         />
       )}
     </>
