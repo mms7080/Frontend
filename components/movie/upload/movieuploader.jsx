@@ -268,7 +268,7 @@ const MovieUploader = ({ userInfo }) => {
                         {/* mb 증가 */}
                         <HStack>
                             <Input
-                                w="45%"
+                                w="39%"
                                 name="runningTime-hour"
                                 type="number"
                                 value={Math.floor(form.runningTime / 60)}
@@ -277,7 +277,7 @@ const MovieUploader = ({ userInfo }) => {
                             />
                             <Text>시간</Text>
                             <Input
-                                w="45%"
+                                w="39%"
                                 name="runningTime-minute"
                                 type="number"
                                 value={form.runningTime % 60}

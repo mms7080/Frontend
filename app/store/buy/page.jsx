@@ -5,7 +5,7 @@ import Storebuy from '../../../components/store/storebuy';
 
 export const metadata = {
     title: '스토어 - FILMORA',
-    description: ''
+    description: '상품을 구매할 수 있는 페이지입니다.'
 };
 
 export default async function StoreBuyMain(){

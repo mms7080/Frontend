@@ -22,7 +22,7 @@ export default function NotFound() {
     <>
       <Header userInfo={user} />
       <div style={styles.wrapper}>
-        <h1 style={styles.title}>🚫 404 - 페이지를 찾을 수 없습니다</h1>
+        <h1 style={styles.title}>🚫 404 - 페이지를 찾을 수 없습니다.</h1>
         <p style={styles.text}>
           요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.
         </p>

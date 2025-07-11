@@ -4,7 +4,7 @@ import Signinmain from '../../components/signin/signinmain';
 
 export const metadata = {
     title: "로그인 - FILMORA",
-    description: "영화 예매 사이트 로그인 페이지"
+    description: "로그인 페이지입니다."
 };
 
 export default async function Signin(){

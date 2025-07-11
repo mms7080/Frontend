@@ -330,7 +330,7 @@ const MovieCards = ({ isMobile }) => {
         alignItems="center"
         justifyContent="center"
       >
-        검색 결과가 없습니다
+        검색 결과가 없습니다.
       </Box>
     );
   else

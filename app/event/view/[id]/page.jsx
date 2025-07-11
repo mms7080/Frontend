@@ -5,7 +5,7 @@ import View from '../../../../components/event/view/page';
 
 export const metadata = {
     title: '이벤트 - FILMORA',
-    description: ''
+    description: '이벤트를 열람할 수 있는 페이지입니다.'
 };
 
 export default async function EventviewPage() {

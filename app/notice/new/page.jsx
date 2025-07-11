@@ -4,7 +4,7 @@ import Noticenew from '../../../components/notice/noticenew';
 
 export const metadata = {
     title: '공지사항 작성 - FILMORA',
-    description: ''
+    description: '공지사항을 작성할 수 있는 페이지입니다.'
 };
 
 export default async function NoticeCreateMainPage() {

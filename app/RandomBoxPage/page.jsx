@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 
 export const metadata = {
     title: '랜덤박스 - FILMORA',
-    description: ''
+    description: '랜덤박스를 열 수 있는 페이지입니다.'
 };
 
 export default async function RandomboxMainPage() {

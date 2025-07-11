@@ -6,7 +6,7 @@ import Theater from '../../components/theater/theater';
 
 export const metadata = {
     title: '영화관 - FILMORA',
-    description: ''
+    description: '영화관 정보를 볼 수 있는 페이지입니다.'
 };
 
 export default async function TheaterPage() {

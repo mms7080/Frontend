@@ -64,7 +64,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
         if(searchWord != "" && searchedMovies.length < 1)
             return <Box w='100%' h='50vh' bg='#141414' fontSize={{base:"18px",md:"4xl"}} color='white'
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
-                    검색 결과가 없습니다
+                    검색 결과가 없습니다.
                     </Box>;
         else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap='25px' placeItems={isMobile ? "center" : "stretch"}>
                         {searchedMovies.map((movie,index) => {
@@ -108,7 +108,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
         if(searchWord != "" && searchedEvents.length < 1)
             return <Box w='100%' h='50vh' bg='#141414' fontSize={{base:"18px",md:"4xl"}} color='white'
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
-                    검색 결과가 없습니다
+                    검색 결과가 없습니다.
                     </Box>;
         else return (<Grid templateColumns={!isMobile?"repeat(4, 1fr)":"1fr"} gap='25px'  placeItems={isMobile ? "center" : "stretch"} overflow='visible'>
                     {searchedEvents.flat().filter((_,index)=>index%2=== 1).flat().map((items,index) =>{
@@ -155,7 +155,7 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
         if(searchWord != "" && searchedReviews.length < 1)
             return <Box w='100%' h='50vh' bg='#141414' fontSize={{base:"18px",md:"4xl"}} color='white'
                     display='flex' alignItems='center' justifyContent='center' pb='50px'>
-                    검색 결과가 없습니다
+                    검색 결과가 없습니다.
                     </Box>;
         else return (<Flex w='100%' direction='column' gap='30px' overflow='visible'>
             {searchedReviews.map((review,index)=>{

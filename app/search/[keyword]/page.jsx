@@ -5,7 +5,7 @@ import {fetch} from '../../../lib/server';
 
 export const metadata = {
     title: '검색 결과 - FILMORA',
-    description: '영화, 이벤트, 리뷰를 검색할 수 있는 사이트입니다.',
+    description: '영화, 이벤트, 리뷰를 검색할 수 있는 페이지입니다.',
 };
 
 export default async function Searchpage({params}){

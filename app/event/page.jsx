@@ -3,7 +3,7 @@ import {fetch as serverfetch} from "../../lib/server";
 
 export const metadata = {
     title: '이벤트 - FILMORA',
-    description: ''
+    description: '영화 관련 이벤트 페이지입니다.'
 };
 
 export default async function Eventmainpage() {

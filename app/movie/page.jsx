@@ -6,7 +6,7 @@ import Movie from '../../components/movie/movie'
 
 export const metadata = {
     title: '영화 - FILMORA',
-    description: ''
+    description: '영화를 살펴볼 수 있는 페이지입니다.'
 };
 
 export default async function Moviepage(){

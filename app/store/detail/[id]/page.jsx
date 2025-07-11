@@ -5,7 +5,7 @@ import Storedetail from '../../../../components/store/storedetail';
 
 export const metadata = {
     title: '스토어 - FILMORA',
-    description: ''
+    description: '상품에 대한 상세정보를 볼 수 있는 페이지입니다.'
 };
 
 export default async function StoreDetailMain() {

@@ -41,7 +41,7 @@ export default function NoticeCreatePage({userData}) {
     });
 
     if (res.ok) {
-      openModal('공지사항이 등록되었습니다.', ()=>{router.push('/notice');}, ()=>{router.push('/notice');});
+      openModal('공지사항이 등록되었습니다!', ()=>{router.push('/notice');}, ()=>{router.push('/notice');});
       
     } else {
       openModal('등록 실패');

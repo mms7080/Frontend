@@ -77,7 +77,7 @@ export default function Booking2Page() {
         (async () => {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);
-                if (!res.ok) throw new Error("영화 데이터를 불러오는 데 실패했습니다");
+                if (!res.ok) throw new Error("영화 데이터를 불러오는 데 실패했습니다.");
                 const movieList = await res.json();
                 const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
                 const updatedMovieList = movieList.map(movie => ({

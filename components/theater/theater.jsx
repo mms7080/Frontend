@@ -223,7 +223,7 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                     activeInfo === "교통안내" ? 
                     <Flex flexDirection="column" gap={6} p={6} style={{ whiteSpace: 'pre-wrap' }}>
                         {(!activeTheater.subway && !activeTheater.bus) 
-                            && (<Text>관련 정보가 없습니다</Text>)}
+                            && (<Text>관련 정보가 없습니다.</Text>)}
                         {activeTheater.subway && (
                             <>
                                 <Text
@@ -254,7 +254,7 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                     : activeInfo === "주차안내" ? 
                     <Flex flexDirection="column" p={6} gap={6} style={{ whiteSpace: 'pre-wrap' }}>
                         {(!activeTheater.parkGuide && !activeTheater.parkCheck && !activeTheater.parkFee) 
-                            && (<Text>관련 정보가 없습니다</Text>)}
+                            && (<Text>관련 정보가 없습니다.</Text>)}
                         {activeTheater.parkGuide && (
                             <>
                                 <Text
@@ -303,7 +303,7 @@ const Theater = ({ userInfo, regionInfo, theaterInfo }) => {
                     </Box>
                     : activeInfo === "영화관 변경" ? <MobileChangeTheater/>
                     // : activeInfo === "상영시간표" ? <Box>
-                    //     <Text>관련 정보가 없습니다</Text>
+                    //     <Text>관련 정보가 없습니다.</Text>
                     // </Box>
                     : <Text>activeInfo error : {activeInfo}</Text>
                 } />)}

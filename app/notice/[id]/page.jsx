@@ -4,7 +4,7 @@ import NoticeID from "../../../components/notice/noticeid";
 
 export const metadata = {
     title: '공지사항 - FILMORA',
-    description: ''
+    description: '공지사항을 열람할 수 있는 페이지입니다.'
 };
 
 export default async function NoticeDetailPage() {

@@ -7,7 +7,7 @@ import {fetch} from '../../../lib/server';
 
 export const metadata = {
     title: "이용약관 - FILMORA",
-    description: "영화 예매 사이트 이용약관"
+    description: "이용약관을 볼 수 있는 페이지입니다."
 };
 
 export default async function Terms(){

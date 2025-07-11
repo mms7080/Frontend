@@ -7,7 +7,7 @@ import {fetch} from '../../../lib/server';
 
 export const metadata = {
     title: "개인정보처리방침 - FILMORA",
-    description: "영화 예매 사이트 개인정보처리방침"
+    description: "개인정보처리방침을 볼 수 있는 페이지입니다."
 };
 
 export default async function Personalinfo(){

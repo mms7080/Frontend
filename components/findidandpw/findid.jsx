@@ -50,7 +50,7 @@ export default function Findiddetail({userData}){
             return;
         }
 
-        openModal(`회원님의 아이디는 [${res.foundID}]입니다.]`)
+        openModal(`회원님의 아이디는 [${res.foundID}]입니다.`)
         setFoundID(res.foundID);/* 객체에서 문자열만 꺼내서 저장 */
     }
 
@@ -104,7 +104,8 @@ export default function Findiddetail({userData}){
             isModalVisible={isModalVisible}
             closeModal={closeModal}
             onConfirm={onConfirm}
-            content={modalContent}/>)}       
+            content={modalContent}
+            isPaddingLarge={true}/>)}       
         </>;
     }else{/* 찾은 아이디를 보여주는 부분 */
         return <>
@@ -137,7 +138,8 @@ export default function Findiddetail({userData}){
             isModalVisible={isModalVisible}
             closeModal={closeModal}
             onConfirm={onConfirm}
-            content={modalContent}/>)}
+            content={modalContent}
+            isPaddingLarge={true}/>)}
         </>;
     }
 }
