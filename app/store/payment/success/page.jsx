@@ -5,7 +5,7 @@ import Storepayment from '../../../../components/store/storepayment';
 
 export const metadata = {
     title: '결제 - FILMORA',
-    description: '결제 성공시 뜨는 페이지입니다.'
+    description: '결제 성공시 보여지는 페이지입니다.'
 };
 
 export default async function StorePaymentMain() {
