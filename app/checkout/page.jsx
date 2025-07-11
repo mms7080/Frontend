@@ -172,6 +172,7 @@ if (selectedCouponId) {
             }
           );
         }
+        sessionStorage.setItem('movieps', 'true');
         router.push(
           `${window.location.origin}/movie/payment/success?${queryString}`
         );
@@ -183,6 +184,7 @@ if (selectedCouponId) {
       );
 
       // 모바일과 PC 모두 공통 처리로 successUrl/failUrl 포함
+      sessionStorage.setItem('movieps', 'true');
       await toss.requestPayment("카드", {
         amount: finalAmount,
         orderId,

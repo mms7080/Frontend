@@ -8,8 +8,11 @@ import { VStack, Text, Button } from "@chakra-ui/react";
 import { QRCodeCanvas } from "qrcode.react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import Modal, { useModal } from "../../../../components/movie/modal";
 
 export default function MoviePaymentSuccessPage() {
+  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('movieps')==='true');
+  const redirected = useRef(false);
   const [status, setStatus] = useState("🎬 결제 확인 중입니다...");
   const [reservationInfo, setReservationInfo] = useState(null);
   const [user, setUser] = useState(null);
@@ -20,6 +23,8 @@ export default function MoviePaymentSuccessPage() {
   const executedRef = useRef(false); // ✅ 중복 실행 방지용
   const couponId = params.get("couponId");
   const userLocalKey = user?.id ?? "guest";
+
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
   const requestNotificationPermission = async () => {
     if (!("Notification" in window)) return false;
@@ -42,21 +47,29 @@ export default function MoviePaymentSuccessPage() {
   };
 
   useEffect(() => {
-    document.title = "결제 - FILMORA";
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-          { credentials: "include" }
-        );
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setUser(data);
-      } catch {
-        setUser(null);
-      }
-    };
-    fetchUser();
+    if (!redirected.current) {
+      document.title = "결제 - FILMORA";
+      const fetchUser = async () => {
+        try {
+          const allowed = sessionStorage.getItem('movieps');
+          if (allowed !== 'true') {
+            openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
+          }
+          sessionStorage.removeItem('movieps');
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
+            { credentials: "include" }
+          );
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          setUser(data);
+        } catch {
+          setUser(null);
+        }
+      };
+      fetchUser();
+      redirected.current = true;
+    }
   }, []);
 
   useEffect(() => {
@@ -217,6 +230,24 @@ export default function MoviePaymentSuccessPage() {
     win.document.close();
     win.print();
   };
+
+  if(!realaccess){
+    return (
+    <>
+      <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
+    </>
+    );
+  }
 
   return (
     <>
@@ -383,6 +414,16 @@ export default function MoviePaymentSuccessPage() {
           background-color: #553c9a;
         }
       `}</style>
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
     </>
   );
 }

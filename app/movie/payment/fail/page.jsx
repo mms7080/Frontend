@@ -1,27 +1,59 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Header } from "../../../../components"; 
+import Modal, { useModal } from "../../../../components/movie/modal";
 
 export default function MoviePaymentFailPage() {
+  const router = useRouter();
+  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('movieps')==='true');
+  const redirected = useRef(false);
   const [user, setUser] = useState(null);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   document.title = "결제 - FILMORA";
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: "include",
-        });
-        const data = await res.json();
-        setUser(data);
-      } catch (e) {
-        setUser(null);
-      }
-    };
+    if (!redirected.current) {
+      const fetchUser = async () => {
+        try {
+          const allowed = sessionStorage.getItem('movieps');
+          if (allowed !== 'true') {
+            openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
+          }
+          sessionStorage.removeItem('movieps');
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+            credentials: "include",
+          });
+          const data = await res.json();
+          setUser(data);
+        } catch (e) {
+          setUser(null);
+        }
+      };
 
-    fetchUser();
+      fetchUser();
+      redirected.current = true;
+    }
   }, []);
+
+  if(!realaccess){
+    return (
+    <>
+      <Header headerColor="black" headerBg="white" userInfo={user} />
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
+    </>
+    );
+  }
 
   return (
     <>
@@ -48,6 +80,16 @@ export default function MoviePaymentFailPage() {
           </button>
         </Link>
       </div>
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
     </>
   );
 }
