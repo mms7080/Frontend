@@ -155,23 +155,25 @@ export default function MoviePaymentSuccessPage() {
         const showKST = new Date(`${date}T${time}:00`);
         const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000);
 
-        localStorage.setItem(
-          `latestReservationAlert_${userLocalKey}`,
-          JSON.stringify({
-            title: data.title,
-            movieId,
-            notifyTime: notifyTime.toISOString(),
-          })
-        );
+        if(realaccess){
+          localStorage.setItem(
+            `latestReservationAlert_${userLocalKey}`,
+            JSON.stringify({
+              title: data.title,
+              movieId,
+              notifyTime: notifyTime.toISOString(),
+            })
+          );
 
-        localStorage.setItem(
-          `latestReservationCountdown_${userLocalKey}`,
-          JSON.stringify({
-            title: data.title,
-            movieId,
-            showTime: showKST.toISOString(),
-          })
-        );
+          localStorage.setItem(
+            `latestReservationCountdown_${userLocalKey}`,
+            JSON.stringify({
+              title: data.title,
+              movieId,
+              showTime: showKST.toISOString(),
+            })
+          );
+        }
 
         const permissionGranted = await requestNotificationPermission();
         if (permissionGranted) {

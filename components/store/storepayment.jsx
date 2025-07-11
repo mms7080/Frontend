@@ -1,10 +1,14 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Header } from "..";
+import Modal, { useModal } from "../movie/modal";
 
 export default function PaymentSuccessPage({ userData }) {
+  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('storeps')==='true');
+  const redirected = useRef(false);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -18,6 +22,25 @@ export default function PaymentSuccessPage({ userData }) {
   const [user, setUser] = useState(userData);
   const [payment, setPayment] = useState(null);
   const [product, setProduct] = useState(null);
+
+  useEffect(() => {
+    if (!redirected.current) {
+      const checkingaccess = async () => {
+        try {
+          const allowed = sessionStorage.getItem('storeps');
+          if (allowed !== 'true') {
+            openModal("잘못된 접근입니다.", ()=>{router.push('/store');}, ()=>{router.push('/store');}); // 허용되지 않으면 스토어 페이지로
+          }
+          sessionStorage.removeItem('storeps');
+        } catch (e) {
+          console.log(e);
+        }
+      };
+
+      checkingaccess();
+      redirected.current = true;
+    }
+  }, []);
 
   useEffect(() => {
     const confirmPayment = async () => {
@@ -95,6 +118,24 @@ export default function PaymentSuccessPage({ userData }) {
       .then((res) => (res.ok ? res.json() : null))
       .then(setProduct);
   }, [productId]);
+
+  if(!realaccess){
+    return (
+    <>
+      <Header headerColor="black" headerBg="white" userInfo={user} />
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
+    </>
+    );
+  }
 
   return (
     <>
@@ -195,6 +236,16 @@ export default function PaymentSuccessPage({ userData }) {
           </button>
         </div>
       </div>
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
     </>
   );
 }

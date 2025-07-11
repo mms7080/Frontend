@@ -1,10 +1,14 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Header } from "../../../components";
+import Modal, { useModal } from "../../../components/movie/modal";
 
 export default function CartPaymentSuccessPage() {
+  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('cartps')==='true');
+  const redirected = useRef(false);
+  const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   const searchParams = useSearchParams();
   const router = useRouter();
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -20,23 +24,31 @@ export default function CartPaymentSuccessPage() {
 
   // ✅ 유저 정보 불러오기
   useEffect(() => {
-    document.title = "결제 - FILMORA";
-    const fetchUser = async () => {
-      try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-        setUser(data);
-      } catch {
-        setUser(null);
-      } finally {
-        setIsUserLoaded(true); // ✅ 이거 꼭 필요!
-      }
-    };
+    if (!redirected.current) {
+      document.title = "결제 - FILMORA";
+      const fetchUser = async () => {
+        try {
+          const allowed = sessionStorage.getItem('cartps');
+          if (allowed !== 'true') {
+            openModal("잘못된 접근입니다.", ()=>{router.push('/store');}, ()=>{router.push('/store');}); // 허용되지 않으면 스토어 페이지로
+          }
+          sessionStorage.removeItem('cartps');
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
+            credentials: "include",
+          });
+          if (!res.ok) throw new Error();
+          const data = await res.json();
+          setUser(data);
+        } catch {
+          setUser(null);
+        } finally {
+          setIsUserLoaded(true); // ✅ 이거 꼭 필요!
+        }
+      };
 
-    fetchUser();
+      fetchUser();
+      redirected.current = true;
+    }
   }, []);
 
   const userId = user?.id ?? "guest";
@@ -94,6 +106,25 @@ export default function CartPaymentSuccessPage() {
       confirmPayment()
     }
   }, [paymentKey, orderId, amount, user, isUserLoaded]);
+
+  
+  if(!realaccess){
+    return (
+    <>
+      <Header headerColor="black" headerBg="white" userInfo={user} />
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
+    </>
+    );
+  }
 
   return (
     <>
@@ -173,6 +204,16 @@ export default function CartPaymentSuccessPage() {
           </button>
         </div>
       </div>
+      {isModalOpen && (
+        <Modal
+        isModalOpen={isModalOpen}
+        isModalVisible={isModalVisible}
+        closeModal={closeModal}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+        content={modalContent}
+        />
+      )}
     </>
   );
 }

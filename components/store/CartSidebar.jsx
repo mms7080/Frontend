@@ -144,13 +144,14 @@ export default function CartSidebar() {
     sessionStorage.setItem(`cartItems_${userId}`, JSON.stringify(cartItems));
 
     try {
+      sessionStorage.setItem('cartps', 'true');
       await toss.requestPayment("카드", {
         amount: totalPrice,
         orderId,
         orderName,
         customerName: user.name || "회원",
         successUrl: `http://localhost:3000/store/payment-success?userId=${user.username}&orderId=${orderId}&amount=${totalPrice}`,
-        failUrl: `http://localhost:3000/store/payment-fail`,
+        failUrl: `http://localhost:3000/store/payment/fail`,
       });
     } catch (error) {
       openModal("결제 실패: " + error.message);

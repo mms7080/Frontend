@@ -105,6 +105,7 @@ export default function PaymentPage({ userData }) {
       const toss = await loadTossPayments("test_ck_KNbdOvk5rkmzvKYA97Ey3n07xlzm");
       const orderId = `order-${Date.now()}`;
 
+      sessionStorage.setItem('storeps', 'true');
       toss.requestPayment("카드", {
         amount: finalPrice,
         orderId,
