@@ -7,7 +7,8 @@ import { loadTossPayments } from "@tosspayments/payment-sdk";
 import Modal, { useModal } from "../../components/movie/modal";
 
 export default function CheckoutPage() {
-  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('canAccessSecret')==='true');
+  const [realaccess,setRealAccess]=useState(sessionStorage.getItem('canAccessSecret1')==='true');
+  const [realaccess2,setRealAccess2]=useState(sessionStorage.getItem('canAccessSecret2')==='true');
   const redirected = useRef(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -49,11 +50,13 @@ export default function CheckoutPage() {
       document.title = "결제 - FILMORA";
       (async () => {
         try {
-          const allowed = sessionStorage.getItem('canAccessSecret');
-          if (allowed !== 'true') {
+          const allowed = sessionStorage.getItem('canAccessSecret1');
+          const allowed2 = sessionStorage.getItem('canAccessSecret2');
+          if (allowed !== 'true' && allowed2 !== 'true') {
             openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
           }
-          sessionStorage.removeItem('canAccessSecret');
+          if(allowed==='true')sessionStorage.removeItem('canAccessSecret1');
+          else if(allowed2==='true')sessionStorage.removeItem('canAccessSecret2');
           const res = await fetch(
             `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
             { credentials: "include" }
@@ -200,7 +203,7 @@ if (selectedCouponId) {
     }
   };
 
-  if(!realaccess){
+  if(!realaccess && !realaccess2){
     return (
     <>
       <Header headerColor="black" headerBg="white" userInfo={user} />
@@ -327,7 +330,11 @@ if (selectedCouponId) {
             <strong>{finalAmount.toLocaleString()}원</strong>
           </div>
           <div className="button-group">
-            <button onClick={() => router.back()} disabled={loading}>
+            <button onClick={() => {
+              if(realaccess)sessionStorage.setItem('canAccess', 'true');
+              if(realaccess2)sessionStorage.setItem('canAccess2', 'true');
+              router.back();
+              }} disabled={loading}>
               이전
             </button>
             <button

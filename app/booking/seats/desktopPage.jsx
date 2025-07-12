@@ -149,7 +149,7 @@ export default function SeatsPage() {
   };
 
   const handlePayment = () => {
-    sessionStorage.setItem('canAccessSecret', 'true');
+    sessionStorage.setItem('canAccessSecret1', 'true');
     router.push(
       `/checkout?movieId=${movieId}` +
         `&region=${encodeURIComponent(region)}` +
