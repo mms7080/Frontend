@@ -100,62 +100,68 @@ export default function MoviePaymentSuccessPage() {
       }
 
       try {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/reservation`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ paymentKey, orderId, amount, userId }),
-          }
-        );
-
-        await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({
-              userId,
-              movieId,
-              region,
-              theater,
-              date,
-              time,
-              seats: seats.join(","),
-              adultCount: adult,
-              teenCount: teen,
-              seniorCount: senior,
-              specialCount: special,
-              totalPrice: amount,
-              orderId,
-            }),
-          }
-        );
-
-        for (let seat of seats) {
+        if(realaccess){
           await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/reservation`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ paymentKey, orderId, amount, userId }),
+            }
           );
         }
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
-        );
-        const data = await res.json();
-        const base = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
-        const fullMovie = {
-          ...data,
-          poster: base + data.poster,
-          wideImage: data.wideImage ? base + data.wideImage : null,
-        };
-        setMovie(fullMovie);
-
-        const showKST = new Date(`${date}T${time}:00`);
-        const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000);
+        if(realaccess){
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/reservations`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({
+                userId,
+                movieId,
+                region,
+                theater,
+                date,
+                time,
+                seats: seats.join(","),
+                adultCount: adult,
+                teenCount: teen,
+                seniorCount: senior,
+                specialCount: special,
+                totalPrice: amount,
+                orderId,
+              }),
+            }
+          );
+        }
 
         if(realaccess){
+          for (let seat of seats) {
+            await fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/showtimes/${showtimeId}/seat/${seat}/RESERVED`
+            );
+          }
+        }
+
+        if(realaccess){
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${movieId}`
+          );
+          const data = await res.json();
+          const base = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
+          const fullMovie = {
+            ...data,
+            poster: base + data.poster,
+            wideImage: data.wideImage ? base + data.wideImage : null,
+          };
+          setMovie(fullMovie);
+
+          const showKST = new Date(`${date}T${time}:00`);
+          const notifyTime = new Date(showKST.getTime() - 30 * 60 * 1000);
+
           localStorage.setItem(
             `latestReservationAlert_${userLocalKey}`,
             JSON.stringify({
@@ -173,39 +179,40 @@ export default function MoviePaymentSuccessPage() {
               showTime: showKST.toISOString(),
             })
           );
+
+          const permissionGranted = await requestNotificationPermission();
+          if (permissionGranted) {
+            scheduleNotification(data.title, notifyTime);
+          }
+
+          setReservationInfo({
+            movie: fullMovie,
+            region,
+            theater,
+            date,
+            time,
+            seats: seats.join(", "),
+            people: `성인 ${adult}, 청소년 ${teen}, 경로 ${senior}, 우대 ${special}`,
+            amount,
+            orderId,
+          });
         }
 
-        const permissionGranted = await requestNotificationPermission();
-        if (permissionGranted) {
-          scheduleNotification(data.title, notifyTime);
+        if(realaccess){
+          if (couponId) {
+            await fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ couponId }),
+              }
+            );
+          }
+          sessionStorage.setItem(paidKey, "true");
+          setStatus("✅ 예매가 완료되었습니다.");
         }
-
-        setReservationInfo({
-          movie: fullMovie,
-          region,
-          theater,
-          date,
-          time,
-          seats: seats.join(", "),
-          people: `성인 ${adult}, 청소년 ${teen}, 경로 ${senior}, 우대 ${special}`,
-          amount,
-          orderId,
-        });
-
-        if (couponId) {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons/use`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify({ couponId }),
-            }
-          );
-        }
-
-        sessionStorage.setItem(paidKey, "true");
-        setStatus("✅ 예매가 완료되었습니다.");
       } catch (err) {
         console.error("❌ 처리 중 오류 발생:", err);
         setStatus("❌ 오류가 발생했습니다. 관리자에게 문의하세요.");

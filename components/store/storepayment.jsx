@@ -52,53 +52,56 @@ export default function PaymentSuccessPage({ userData }) {
           return;
         }
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/store`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              paymentKey,
-              orderId,
-              amount: parseInt(amount),
-              userId: username,
-            }),
-          }
-        );
-
-        if (!res.ok) throw new Error("승인 실패");
-
-        const result = await res.json();
-        setPayment(result);
-
-        const couponId = searchParams.get("couponId");
-        if (couponId) {
-          await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/use-coupon`,
+        if(realaccess){
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/payments/confirm/store`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ couponId: parseInt(couponId) }),
+              body: JSON.stringify({
+                paymentKey,
+                orderId,
+                amount: parseInt(amount),
+                userId: username,
+              }),
             }
           );
-        }
 
-        await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/purchase/success`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              username: username,
-              title: result.orderName,
-            }),
+          if (!res.ok) throw new Error("승인 실패");
+
+          const result = await res.json();
+          setPayment(result);
+
+          const couponId = searchParams.get("couponId");
+          if (couponId) {
+            await fetch(
+              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/use-coupon`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ couponId: parseInt(couponId) }),
+              }
+            );
           }
-        );
 
-        // 중복 방지를 위해 저장
-        sessionStorage.setItem(`paid_${orderId}`, "true");
-
-        setMessage("✅ 결제가 완료되었습니다!");
+          await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/purchase/success`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                username: username,
+                title: result.orderName,
+              }),
+            }
+          );
+          
+          // 중복 방지를 위해 저장
+          sessionStorage.setItem(`paid_${orderId}`, "true");
+          
+          setMessage("✅ 결제가 완료되었습니다!");
+        }
+        
       } catch (e) {
         console.error("결제 승인 오류:", e);
         setMessage("❌ 결제 승인 중 오류가 발생했습니다.");

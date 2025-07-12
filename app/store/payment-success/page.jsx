@@ -65,36 +65,38 @@ export default function CartPaymentSuccessPage() {
         }
         const items = JSON.parse(sessionStorage.getItem(`cartItems_${userId}`) || "[]");
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/purchase/cart/success`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              paymentKey,
-              orderId,
-              amount: parseInt(amount),
-              userId: user ? user.username : userIdFromQuery,
-              items: items.map(({ title, price }) => ({
-                title,
-                price,
-              })),
-            }),
-          }
-        );
+        if(realaccess){
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/purchase/cart/success`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                paymentKey,
+                orderId,
+                amount: parseInt(amount),
+                userId: user ? user.username : userIdFromQuery,
+                items: items.map(({ title, price }) => ({
+                  title,
+                  price,
+                })),
+              }),
+            }
+          );
 
-        if (!res.ok) throw new Error("승인 실패");
+          if (!res.ok) throw new Error("승인 실패");
 
-        const result = await res.json();
-        setPayment(result);
-        // 중복 방지를 위해 저장
-        sessionStorage.setItem(`paid_${orderId}`, "true");
-        setMessage("✅ 결제가 완료되었습니다!");
+          const result = await res.json();
+          setPayment(result);
+          // 중복 방지를 위해 저장
+          sessionStorage.setItem(`paid_${orderId}`, "true");
+          setMessage("✅ 결제가 완료되었습니다!");
 
-        sessionStorage.removeItem(`cartItems_${userId}`);
-        sessionStorage.removeItem(`cartItems_guest`);
-        localStorage.removeItem(`cartItems_${userId}`);
-        localStorage.removeItem(`cartItems_guest`);
+          sessionStorage.removeItem(`cartItems_${userId}`);
+          sessionStorage.removeItem(`cartItems_guest`);
+          localStorage.removeItem(`cartItems_${userId}`);
+          localStorage.removeItem(`cartItems_guest`);
+        }
       } catch (e) {
         console.error("❌ 결제 처리 실패:", e);
         setMessage("❌ 결제 승인 중 오류가 발생했습니다.");
