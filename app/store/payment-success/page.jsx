@@ -76,9 +76,10 @@ export default function CartPaymentSuccessPage() {
                 orderId,
                 amount: parseInt(amount),
                 userId: user ? user.username : userIdFromQuery,
-                items: items.map(({ title, price }) => ({
+                items: items.map(({ title, price, quantity }) => ({
                   title,
                   price,
+                  quantity
                 })),
               }),
             }

@@ -17,6 +17,7 @@ export default function PaymentSuccessPage({ userData }) {
   const amount = searchParams.get("amount");
   const username = searchParams.get("userId") || "guest";
   const productId = searchParams.get("productId");
+  const qty = searchParams.get("qty");
 
   const [message, setMessage] = useState("결제 승인 중...");
   const [user, setUser] = useState(userData);
@@ -72,18 +73,6 @@ export default function PaymentSuccessPage({ userData }) {
           const result = await res.json();
           setPayment(result);
 
-          const couponId = searchParams.get("couponId");
-          if (couponId) {
-            await fetch(
-              `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/use-coupon`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ couponId: parseInt(couponId) }),
-              }
-            );
-          }
-
           await fetch(
             `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/store/purchase/success`,
             {
@@ -92,6 +81,7 @@ export default function PaymentSuccessPage({ userData }) {
               body: JSON.stringify({
                 username: username,
                 title: result.orderName,
+                qty:qty
               }),
             }
           );

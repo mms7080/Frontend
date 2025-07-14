@@ -16,8 +16,6 @@ export default function PaymentPage({ userData }) {
   const [product, setProduct] = useState(null);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [coupons, setCoupons] = useState([]);
-  const [selectedCouponId, setSelectedCouponId] = useState(null);
   const [discountAmount, setDiscountAmount] = useState(0);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
 
@@ -43,15 +41,6 @@ export default function PaymentPage({ userData }) {
         if (!didCancel) {
           setUser(data);
 
-          // 🎟️ 쿠폰 가져오기
-          const couponRes = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/coupons?userId=${data.username}`
-          );
-          if (couponRes.ok) {
-            const list = await couponRes.json();
-            setCoupons(list);
-          }
-
           // 🛒 상품 가져오기
           if (id) {
             const productRes = await fetch(
@@ -75,14 +64,6 @@ export default function PaymentPage({ userData }) {
       didCancel = true;
     };
   }, [id]);
-
-  const handleCouponChange = (e) => {
-    const selectedId = e.target.value;
-    setSelectedCouponId(selectedId);
-
-    const coupon = coupons.find((c) => c.id.toString() === selectedId);
-    setDiscountAmount(coupon ? coupon.discountAmount : 0);
-  };
 
   if (!product) return <>
       <Header headerColor="black" headerBg="white" userInfo={userData} />
@@ -111,9 +92,9 @@ export default function PaymentPage({ userData }) {
         orderId,
         orderName: product.title,
         customerName: user?.name || "비회원",
-        successUrl: `${window.location.origin}/store/payment/success?userId=${
+        successUrl: `${window.location.origin}/store/payment/success?qty=${qty}&userId=${
           user?.username || "guest"
-        }&productId=${product.id}${selectedCouponId ? `&couponId=${selectedCouponId}` : ""}`,
+        }&productId=${product.id}`,
         failUrl: `${window.location.origin}/store/payment/fail`,
       });
     } catch (error) {
