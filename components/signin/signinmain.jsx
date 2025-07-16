@@ -1,7 +1,7 @@
 import React from 'react';
 import {Flex,Box,VStack,Image,Text} from '@chakra-ui/react';
 import Link from 'next/link';
-import Signinpart from './signinpart';
+import Signinparts from './signinparts';
 import {Header} from '..';
 
 export default function Signinmain(){
@@ -17,7 +17,7 @@ export default function Signinmain(){
                             <span style={{color:'#555'}}>&gt;로그인</span>
                         </span>
                         <span style={{fontSize:28,marginBottom:10}}>로그인</span>
-                        <Signinpart/>
+                        <Signinparts/>
                         <Flex w='100%' gap='10px' justifyContent='center'>
                             <Link href='/join'>
                                 <Text _hover={{textDecoration:'underline'}}>
