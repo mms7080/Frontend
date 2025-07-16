@@ -1,5 +1,5 @@
 import React from 'react';
-import {Tabs,Box} from "@chakra-ui/react"
+import {Tabs,Box,Flex,Text} from "@chakra-ui/react"
 import {FaFilm,FaQuestion} from 'react-icons/fa';
 import {FiUser} from 'react-icons/fi';
 import {Bookingcheck,Modify,Qna} from '.';
@@ -10,27 +10,34 @@ export default function Mypage({userInfo,qnaInfo,replyInfo,reservationInfo,payme
     paymentInfo=[...paymentInfo].filter((item)=>(item.userId===userInfo?.username&&item.orderName!=="Movie Ticket"&&item.orderName!=="영화 예매"));
     console.log(paymentInfo);
      return <>
-     <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
-      <h1
+        <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
+        <h1
           style={{
-            fontSize: "24px",
-            fontWeight: "normal",
-            color: "#222",
             borderBottom: "2px solid #ccc",
             paddingBottom: "12px",
             marginBottom: "40px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: "12px"
+            gap: "12px",
+            textAlign:'center'
           }}
         >
-        <img
-          src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/logo.png`}
-          alt="logo"
-          style={{ width: "141px", height: "68px", objectFit: "contain" }}
-          loading='lazy'
-        />
+        
+        <Flex flexDirection='column' justifyContent='center'>
+          <Text
+            color='black'
+            fontSize={{ base: 20, md: 24 }}
+            fontWeight="bold"
+            letterSpacing={3}
+          >
+            FILMORA
+          </Text>
+          <Text color="#ccc" fontSize="10px" letterSpacing="2">
+            MEET PLAY SHARE
+          </Text>
+        </Flex>
+        
         </h1>
 
         <Tabs.Root key='outline' defaultValue="booking" variant='outline' fitted overflow='visible'>

@@ -262,7 +262,7 @@ export default function MoviePaymentSuccessPage() {
     <>
       <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
       <div className="wrapper">
-        <div className="container">
+        <div className="container" style={{overflow:'visible'}}>
           <h1 className="status">{status}</h1>
           {reservationInfo && reservationInfo.movie && (
             <>
@@ -353,7 +353,7 @@ export default function MoviePaymentSuccessPage() {
           display: flex;
           flex-direction: column;
           gap: 20px;
-          padding: 20px;
+          padding: 15px;
           border-radius: 16px;
           background: #ffffff;
           box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);

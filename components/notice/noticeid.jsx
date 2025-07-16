@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Header from "../header";
+import { Text, Flex } from "@chakra-ui/react";
 import NoticeList from "../../components/notice/noticeList";
 import Modal, { useModal } from '../movie/modal';
 
@@ -60,9 +61,6 @@ export default function NoticeIdPage({ userData }) {
       >
         <h1
           style={{
-            fontSize: "24px",
-            fontWeight: "normal",
-            color: "#222",
             borderBottom: "2px solid #ccc",
             paddingBottom: "12px",
             marginBottom: "40px",
@@ -70,14 +68,24 @@ export default function NoticeIdPage({ userData }) {
             alignItems: "center",
             justifyContent: "center",
             gap: "12px",
+            textAlign:'center'
           }}
         >
-          <img
-            src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/logo.png`}
-            alt="logo"
-            style={{ width: "141px", height: "68px", objectFit: "contain" }}
-            loading="lazy"
-          />
+        
+        <Flex flexDirection='column' justifyContent='center'>
+          <Text
+            color='black'
+            fontSize={{ base: 20, md: 24 }}
+            fontWeight="bold"
+            letterSpacing={3}
+          >
+            FILMORA
+          </Text>
+          <Text color="#ccc" fontSize="10px" letterSpacing="2">
+            MEET PLAY SHARE
+          </Text>
+        </Flex>
+        
         </h1>
 
         <table

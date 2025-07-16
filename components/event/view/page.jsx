@@ -60,28 +60,35 @@ export default function EventDetailPage({ userData }) {
         pt={{ base: 10, md: 20 }}
         px={{ base: 4 }}
         pb={10}
+        textAlign='center'
       >
         <h1
-          style={{
-            fontSize: "24px",
-            fontWeight: "normal",
-            color: "#222",
-            borderBottom: "2px solid #ccc",
-            paddingBottom: "12px",
-            marginBottom: "40px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "12px",
-          }}
-        >
-          <img
-            src={`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/images/logo.png`}
-            alt="logo"
-            style={{ width: "141px", height: "68px", objectFit: "contain" }}
-            loading="lazy"
-          />
-        </h1>
+  style={{
+    borderBottom: "2px solid #ccc",
+    paddingBottom: "12px",
+    marginBottom: "40px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "12px",
+  }}
+>
+
+<Flex flexDirection='column' justifyContent='center'>
+  <Text
+    color='black'
+    fontSize={{ base: 20, md: 24 }}
+    fontWeight="bold"
+    letterSpacing={3}
+  >
+    FILMORA
+  </Text>
+  <Text color="#ccc" fontSize="10px" letterSpacing="2">
+    MEET PLAY SHARE
+  </Text>
+</Flex>
+
+</h1>
       </Box>
 
       <Box maxW="1000px" w="100%" mx="auto" mt={10} px={{ base: 4, md: 6 }}>
