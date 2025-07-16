@@ -1,7 +1,7 @@
 import React from 'react';
 import {Flex,Box,VStack,Image,Text} from '@chakra-ui/react';
 import Link from 'next/link';
-import Signinpart from './Signinpart';
+import Signinpart from './signinpart';
 import {Header} from '..';
 
 export default function Signinmain(){
