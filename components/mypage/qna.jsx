@@ -222,6 +222,7 @@ export default function Qna({ userInfo, qnaInfo, replyInfo }) {
           <Text fontSize='15px' mb='4px'>제목</Text>
           <Input
             placeholder="제목을 입력하세요"
+            maxLength='50'
             value={title}
             p='12px'
             fontSize='15px'
@@ -250,7 +251,7 @@ export default function Qna({ userInfo, qnaInfo, replyInfo }) {
           <Text fontSize='15px' mb='4px'>내용</Text>
           <Textarea
             placeholder="QnA 내용을 입력하세요(1000글자 제한)"
-            maxLength='999'
+            maxLength='1000'
             value={content}
             p='12px'
             fontSize='15px'

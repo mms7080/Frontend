@@ -91,10 +91,11 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                             <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pw'>비밀번호</label></td>
                                             <td style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
                                                 <Input 
+                                                  maxLength='20'
                                                   id="pw"
                                                   name="pw"
                                                   type="password"
-                                                  placeholder='새 비밀번호를 입력 (변경하지 않으려면 비워두세요)'
+                                                  placeholder={!isMobile?'새 비밀번호를 입력 (변경하지 않으려면 비워두세요)':'변경하지 않으려면 비워두세요'}
                                                   onChange={(e)=>{
                                                       const value=e.target.value;
                                                       setPw(value);
@@ -145,6 +146,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                             <td style={{width:235,height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pwr'>비밀번호 확인</label></td>
                                             <td style={{width:605,height:90,paddingLeft:15,position:'relative'}}>
                                             <Input 
+                                               maxLength='20'
                                                id="pwr"
                                                name="pwr"
                                                type="password"
@@ -194,13 +196,13 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='phone_number'>전화번호<span style={{color:'#FF0000'}}>*</span></label></td>
                                             <td style={{width:605,height:50,paddingLeft:15}}>
-                                                <Input id="phone_number" name="phone_number" value={phone} onChange={(e) => setPhone(e.target.value)} required/>
+                                                <Input maxLength='15' id="phone_number" name="phone_number" value={phone} onChange={(e) => setPhone(e.target.value)} required/>
                                             </td>
                                         </tr>
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
                                             <td style={{width:235,height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="email">이메일<span style={{color:'#FF0000'}}>*</span></label></td>
                                             <td style={{width:605,height:50,paddingLeft:15}}>
-                                                <Input id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                                                <Input maxLength='50' id="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required/>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -249,7 +251,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                         </Button>
                                                     </Flex>
                                                     <Input id="address" name="address" value={form.address} readOnly onClick={() => handlePostcodeSearch()}/>
-                                                    <Input id="address_detail" name="address_detail" value={address_detail} onChange={(e)=>setAddressDetail(e.target.value)}/>
+                                                    <Input maxLength='100' id="address_detail" name="address_detail" value={address_detail} onChange={(e)=>setAddressDetail(e.target.value)}/>
                                                 </Flex>
                                             </td>
                                         </tr>

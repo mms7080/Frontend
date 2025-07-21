@@ -29,7 +29,7 @@ export default function Bookmark(){
                         router.push(`/search/${e.target.value}`);
                     }
                  }}
-                 placeholder='검색 키워드 입력(영화, 이벤트, 리뷰검색)'
+                 placeholder={!isMobile?'검색 키워드 입력(영화, 이벤트, 리뷰검색)':'검색 키워드 입력'}
                  />
                 
                 <Button h='24px' bg='none' onClick={()=>{

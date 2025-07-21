@@ -64,7 +64,7 @@ export default function QnaAll({isMobile=false,setrawItems,setTitle,setContent,s
                   style={{
                     padding: "14px",
                     borderBottom: "1px solid #ddd",
-                    width: "30%",
+                    width: !isMobile?"200px":'100px',
                   }}
                 >
                   작성자

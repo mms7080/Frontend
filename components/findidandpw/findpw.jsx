@@ -177,8 +177,9 @@ export default function Findpwdetail(){
                                                 id="pw"
                                                 name="pw"
                                                 minLength='10'
+                                                maxLength='20'
                                                 type="password"
-                                                placeholder='비밀번호를 입력하세요 (10자 이상)'
+                                                placeholder={!isMobile?'비밀번호를 입력하세요 (10자 이상 20자 이하)':'10자 이상 20자 이하'}
                                                 required
                                                 onChange={(e)=>{
                                                     const value=e.target.value;
@@ -231,6 +232,7 @@ export default function Findpwdetail(){
                                                  id="pwr"
                                                  name="pwr"
                                                  minLength='10'
+                                                 maxLength='20'
                                                  type="password"
                                                  placeholder='비밀번호를 다시 입력하세요'
                                                  required

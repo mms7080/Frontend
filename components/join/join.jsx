@@ -203,7 +203,7 @@ export default function Joindetail(){
                                                     name="id"
                                                     minLength="4"
                                                     maxLength="16"
-                                                    placeholder="영문 대소문자와 숫자 조합 (4~16자)"
+                                                    placeholder={!isMobile?"영문 대소문자와 숫자 조합 (4~16자)":"4자 이상 16자 이하"}
                                                     value={inputsvalue}
                                                     onChange={(e)=>{
                                                         handleChange(e);
@@ -245,8 +245,9 @@ export default function Joindetail(){
                                             id="pw"
                                             name="pw"
                                             minLength='10'
+                                            maxLength='20'
                                             type="password"
-                                            placeholder='비밀번호를 입력하세요 (10자 이상)'
+                                            placeholder={!isMobile?'비밀번호를 입력하세요 (10자 이상 20자 이하)':'10자 이상 20자 이하'}
                                             required
                                             onChange={(e)=>{
                                                 const value=e.target.value;
@@ -299,6 +300,7 @@ export default function Joindetail(){
                                             id="pwr"
                                             name="pwr"
                                             minLength='10'
+                                            maxLength='20'
                                             type="password"
                                             placeholder='비밀번호를 다시 입력하세요'
                                             required
@@ -342,7 +344,7 @@ export default function Joindetail(){
                                     <tr style={{width:isMobile?'335px':'default',borderTop:'1px solid #555555',borderBottom:'1px solid #D1D5DD'}}>
                                         <td style={{width:isMobile?'50px':'235px',height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='name'>이름<span style={{color:'#FF0000'}}>*</span></label></td>
                                         <td style={{width:isMobile?'100px':'605px',height:50,paddingLeft:15}}>
-                                            <Input id="name" name="name" placeholder='이름을 입력하세요' required/>
+                                            <Input maxLength='30' id="name" name="name" placeholder='이름을 입력하세요' required/>
                                         </td>
                                     </tr>
                                     <tr style={{width:isMobile?'335px':'default',borderBottom:'1px solid #D1D5DD'}}>
@@ -366,7 +368,7 @@ export default function Joindetail(){
                                         <td style={{width:isMobile?'110px':'235px',height:50,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="email_id">이메일<span style={{color:'#FF0000'}}>*</span></label></td>
                                         <td style={{width:isMobile?'100px':'605px',height:50,paddingLeft:15}}>
                                             <Flex justifyContent='space-between'>
-                                                <Input w={{base:"100px",md:'280px'}} id="email_id" name="email_id" placeholder="example" required/>
+                                                <Input maxLength='30' w={{base:"100px",md:'280px'}} id="email_id" name="email_id" placeholder="example" required/>
                                                 <span style={{lineHeight:'40px'}}>@</span>
                                                 <select id="email_address" name="email_address" style={{width:isMobile?'100px':'280px',border:'1px solid #E4E4E7',borderRadius:5,fontSize:14}} defaultValue='naver.com' required>
                                                     <option value="naver.com">&nbsp;&nbsp;naver.com</option>
@@ -426,7 +428,7 @@ export default function Joindetail(){
                                                     </Button>
                                                 </Flex>
                                                 <Input id="address" name="address" placeholder="기본 주소" value={form.address} readOnly onClick={() => handlePostcodeSearch()}/>
-                                                <Input id="address_detail" name="address_detail" value={form.address_detail}
+                                                <Input maxLength='100' id="address_detail" name="address_detail" value={form.address_detail}
                                                 onChange={(e) => setForm({ ...form, address_detail: e.target.value })}
                                                  placeholder="상세 주소"/>
                                             </Flex>
