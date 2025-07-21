@@ -74,6 +74,7 @@ export default function QnaAll({isMobile=false,setrawItems,setTitle,setContent,s
                     padding: "14px",
                     borderBottom: "1px solid #ddd",
                     width: "10%",
+                    width:'140px'
                   }}
                 >
                   작성일
@@ -83,6 +84,7 @@ export default function QnaAll({isMobile=false,setrawItems,setTitle,setContent,s
                     padding: "14px",
                     borderBottom: "1px solid #ddd",
                     width: "12%",
+                    width:'150px'
                   }}
                 >
                   관리
@@ -202,7 +204,7 @@ export default function QnaAll({isMobile=false,setrawItems,setTitle,setContent,s
                         padding: "14px",
                         textAlign: "center",
                         fontSize: "13px",
-                        color: "#999",
+                        color: "#999"
                       }}
                     >
                       {formatDate(qna.writetime)}

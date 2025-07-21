@@ -195,7 +195,7 @@ export default function NoticeIdPage({ userData }) {
           </div>
         </div>
 
-        {user?.name === notice?.writer && (
+        {(user?.name === notice?.writer && user?.name !== undefined && user?.name !== null) && (
           <div style={{ display: "flex", gap: "10px" }}>
             <button
               style={editBtn}

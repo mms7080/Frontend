@@ -395,7 +395,7 @@ export default function Qna({ userInfo, qnaInfo, replyInfo }) {
                 다음글
               </button>
             </div> : <></>}
-          <div style={{ display: "flex", gap: "20px", justifyContent: !isMobile ? 'flex-start' : 'flex-end', width: !isMobile ? 204.73 : '100%' }}>
+          <div style={{ display: "flex", gap: "20px", justifyContent: 'flex-end', width: !isMobile ? 204.73 : '100%' }}>
             <button
               style={editBtn}
               onClick={() => {
