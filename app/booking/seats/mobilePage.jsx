@@ -11,12 +11,10 @@ import {
   Grid,
 } from "@chakra-ui/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Header } from "../../../components";
 import Modal, { useModal } from '../../../components/movie/modal';
 
 export default function SeatsPageMobile() {
   const router = useRouter();
-  const [user, setUser] = useState(null);
   const [movie, setMovie] = useState(null);
   const [seatData, setSeatData] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -160,7 +158,6 @@ export default function SeatsPageMobile() {
   if(!realaccess){
     return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
@@ -178,7 +175,6 @@ export default function SeatsPageMobile() {
 
   return (<>
     <Box bg="#141414" color="white" minH="100vh" pb={12}>
-      <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
 
       <Box px={4} pt={6}>
         <Text fontSize="3xl" fontWeight="normal" textAlign="center">{movie?.title}</Text>

@@ -12,7 +12,6 @@ import {
   useBreakpointValue,
   Image,
 } from "@chakra-ui/react";
-import { Header } from "../..";
 import Modal, { useModal } from '../../movie/modal';
 
 export default function EventDetailPage({ userData }) {
@@ -52,7 +51,6 @@ export default function EventDetailPage({ userData }) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
 
       <Box
         maxW="1200px"

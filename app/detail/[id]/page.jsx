@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import {Box,Flex,VStack,Image,Button} from '@chakra-ui/react';
-import {Header} from '../../../components';
 import {Likepart,Bottombox} from '../../../components/detail';
 import {fetch} from '../../../lib/server';
 
@@ -26,7 +25,6 @@ export default async function Detailpage({params}){
         else sum=Math.round(sum*10)/10;
 
         return <>
-            <Header userInfo={res}></Header>
             <Box mb='100px'>
                 <Flex display={{base:'none',md:'flex'}} w='100vw' h='660px' position='relative' backgroundSize='cover' justifyContent='space-around' backgroundRepeat='no-repeat' backgroundImage={`url(${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}${movieinfo.wideImage})`}>
                     <Box w='100%' h='100%' position='absolute' bg='rgba(0,0,0,0.6)'></Box>

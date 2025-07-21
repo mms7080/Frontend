@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Header from "../header";
 import { Text, Flex } from "@chakra-ui/react";
 import NoticeList from "../../components/notice/noticeList";
 import Modal, { useModal } from '../movie/modal';
@@ -48,7 +47,6 @@ export default function NoticeIdPage({ userData }) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#ffffff" userInfo={user} />
 
       <div
         style={{

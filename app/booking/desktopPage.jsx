@@ -4,7 +4,6 @@ import React, {useState, useEffect} from 'react';
 import { Flex, Box, Text, Button, Image, Wrap, Grid, GridItem } from '@chakra-ui/react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, EffectCoverflow, Autoplay } from 'swiper/modules';
-import { Header } from '../../components';
 import { useRouter } from 'next/navigation';
 import DateSelector from '../../components/date';
 import TimeSelector from '../../components/time';
@@ -51,9 +50,6 @@ export default function Booking2Page() {
             default: return "gray.400";
         }
     };
-
-    let headerColor='white';
-    let headerBg='#1a1a1a';
 
     useEffect(() => {
         setSwiperReady(true);
@@ -224,9 +220,6 @@ export default function Booking2Page() {
 
     return (
     <>
-        <Box position="relative" zIndex={2} bg="#1a1a1a">
-            <Header headerColor={headerColor} headerBg={headerBg} userInfo={user}/>
-        </Box>
 
         <Flex flex="1" align="center" justify="center" pt="5vh">
             <style jsx global>{`

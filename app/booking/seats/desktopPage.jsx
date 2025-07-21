@@ -11,17 +11,12 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useSearchParams } from "next/navigation";
-import { Header } from "../../../components";
-import { movies } from "../../../components/moviePoster";
 import { useRouter } from "next/navigation";
 import Modal, { useModal } from '../../../components/movie/modal';
 
 export default function SeatsPage() {
-  let headerColor = "white";
-  let headerBg = "#1a1a1a";
 
   const router = useRouter();
-  const [user, setUser] = useState(null);
   const searchParams = useSearchParams();
   const movieId = parseInt(searchParams.get("movieId"));
   const showtimeId = searchParams.get("showtimeId");
@@ -197,17 +192,8 @@ export default function SeatsPage() {
             openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
           }
           sessionStorage.removeItem('canAccess');
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`,
-            {
-              credentials: "include",
-            }
-          );
-          if (!res.ok) throw new Error();
-          const data = await res.json();
-          setUser(data);
         } catch (e) {
-          setUser(null);
+          console.log(e);
         }
       })();
       redirected.current = true;
@@ -217,7 +203,6 @@ export default function SeatsPage() {
   if(!realaccess){
     return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
@@ -235,10 +220,6 @@ export default function SeatsPage() {
   
   return (
     <>
-      {/* 헤더 */}
-      <Box position="relative" zIndex={2} bg="#1a1a1a">
-        <Header headerColor={headerColor} headerBg={headerBg} userInfo={user} />
-      </Box>
 
       <Box p={8} color="white" minH="100vh" bg="#141414">
         <Flex

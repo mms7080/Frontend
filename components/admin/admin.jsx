@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "../../components";
 import {
   BarChart,
   Bar,
@@ -2260,7 +2259,6 @@ const filteredPayments = payments
   };
 
   if(!user || user?.auth !== "ADMIN")return <>
-  <Header headerColor="black" headerBg="white" userInfo={user} />
   {isModalOpen && (<Modal
       isModalOpen={isModalOpen}
       isModalVisible={isModalVisible}
@@ -2273,7 +2271,6 @@ const filteredPayments = payments
 
   return (<>
     <div style={{ fontFamily: "'Noto Sans KR', sans-serif" }}>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <div style={{ display: "flex", flex: 1 }}>
         <aside

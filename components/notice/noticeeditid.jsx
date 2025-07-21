@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Header from "../header";
 import Modal, { useModal } from '../movie/modal';
 
 export default function NoticeEditIdPage({userData}) {
@@ -54,7 +53,6 @@ export default function NoticeEditIdPage({userData}) {
 
   if(!user || user?.auth !== "ADMIN"){
     return <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
       {isModalOpen && (<Modal
       isModalOpen={isModalOpen}
       isModalVisible={isModalVisible}
@@ -67,8 +65,6 @@ export default function NoticeEditIdPage({userData}) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-
       <main className="form-container">
         <h1>🛠️ 공지사항 수정</h1>
 

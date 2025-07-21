@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { Box, Text, Image, SimpleGrid, Flex, Button, useMediaQuery } from "@chakra-ui/react";
-import { Header } from "..";
 import { useRouter } from "next/navigation";
 import { useCart } from "./CartContext";
 import CartSidebar from "./CartSidebar";
@@ -48,7 +47,6 @@ export default function MegaboxStorePage({ userData }) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
       
       <Box
         maxW="1200px"

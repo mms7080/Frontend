@@ -1,6 +1,5 @@
 import React from 'react';
 
-import {Header} from '../../components';
 import {fetch} from '../../lib/server';
 import Theater from '../../components/theater/theater';
 
@@ -15,8 +14,5 @@ export default async function TheaterPage() {
     const regionRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/regions`)
     const theaterRes = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/api/booking/theaters/all`)
 
-    return <>
-        <Header headerColor="white" headerBg="#1a1a1a" userInfo={userRes}/>
-        <Theater userInfo={userRes} regionInfo={regionRes} theaterInfo={theaterRes}/>
-    </>
+    return <Theater userInfo={userRes} regionInfo={regionRes} theaterInfo={theaterRes}/>;
 }

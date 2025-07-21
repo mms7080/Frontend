@@ -4,7 +4,6 @@ import React,{useEffect,useState} from 'react';
 import {VStack,Button,Flex,Grid,Box,Input,Text,useMediaQuery} from '@chakra-ui/react';
 import Link from "next/link";
 
-import {Header} from '..';
 import MovieCard from '../movie/moviecard';
 import Event from '../element/event';
 import Detailreview from '../element/detailreview';
@@ -182,7 +181,6 @@ export default function Searchdetail({userData,movieData,serverEvents,reviewInfo
     }
 
     return <>
-        <Header userInfo={userData}></Header>
         <div style={{width:'100%'}} className="bg-[#141414]">
             <Box w={!isMobile?'70%':'100%'} bg="#141414" pt={20} pb={10} px={!isMobile?'6px':0} mx="auto">
                 <Box pb={6}>

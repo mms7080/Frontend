@@ -1,6 +1,5 @@
 import React from 'react';
 
-import {Header} from '../../components';
 import Mypage from '../../components/mypage/page';
 import Notloginalert from '../../components/mypage/notloginalert';
 import {fetch} from '../../lib/server';
@@ -25,12 +24,8 @@ export default async function Mypagemain(){
     reservationres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/reservations`);
     paymentres=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/admin/payments`);
 
-    if(!res) return <>
-    <Header userInfo={res}></Header>
-    <Notloginalert userInfo={res}/>
-    </>;
+    if(!res) return <Notloginalert userInfo={res}/>;
     return <>
-        <Header userInfo={res}></Header>
         <Notloginalert userInfo={res}/>
         <Mypage userInfo={res} qnaInfo={qnares1} replyInfo={qnares2} reservationInfo={reservationres} paymentInfo={paymentres}/>
     </>

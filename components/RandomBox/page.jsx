@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import confetti from "canvas-confetti";
-import { Header } from "../../components";
 import {useRouter} from 'next/navigation';
 import Modal, { useModal } from '../movie/modal';
 
@@ -75,7 +74,6 @@ setTimeout(() => {
   };
 
   if(!user)return <>
-    <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
     {isModalOpen && (<Modal
       isModalOpen={isModalOpen}
       isModalVisible={isModalVisible}
@@ -87,9 +85,7 @@ setTimeout(() => {
   </>;
 
   return (
-    <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-      
+    <>      
 
       <div className="random-box-container">
         <div className="event-banner">

@@ -10,7 +10,6 @@ import {
   Button,
   Spacer,
 } from "@chakra-ui/react";
-import { Header } from "..";
 import { useParams, useRouter } from "next/navigation";
 import { useCart } from "../../components/store/CartContext";
 import CartSidebar from "../../components/store/CartSidebar";
@@ -34,14 +33,13 @@ export default function StoreDetailPage({ userData }) {
       .then(setProduct);
   }, [id]);
 
-  if (!product) return <><Header headerColor="black" headerBg="white" userInfo={user} /></>;
+  if (!product) return <></>;
 
   const unitPrice = parseInt(product.price.replace(/[^0-9]/g, ""));
   const totalPrice = (unitPrice * quantity).toLocaleString();
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
 
       <div
         style={{

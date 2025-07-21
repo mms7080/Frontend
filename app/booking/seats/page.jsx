@@ -11,13 +11,10 @@
 //   Button,
 // } from "@chakra-ui/react";
 // import { useSearchParams } from "next/navigation";
-// import { Header } from "../../../components";
 // import { movies } from "../../../components/moviePoster";
 // import { useRouter } from "next/navigation";
 
 // export default function SeatsPage() {
-//   let headerColor = "white";
-//   let headerBg = "#1a1a1a";
 
 //   const router = useRouter();
 //   const [user, setUser] = useState(null);
@@ -202,10 +199,6 @@
 
 //   return (
 //     <>
-//       {/* 헤더 */}
-//       <Box position="relative" zIndex={2} bg="#1a1a1a">
-//         <Header headerColor={headerColor} headerBg={headerBg} userInfo={user} />
-//       </Box>
 
 //       <Box p={8} color="white" minH="100vh" bg="#141414">
 //         <Flex

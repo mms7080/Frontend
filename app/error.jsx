@@ -1,26 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Header } from '../components';
+import { useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Error({ error, reset }) {
-  const [user, setUser] = useState(null);
-
 
   useEffect(() => {
     document.title = "오류 - FILMORA";
-    fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-      credentials: 'include',
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .then(setUser)
-      .catch(() => setUser(null));
   }, []);
 
   return (
     <>
-      <Header userInfo={user} />
 
       <div style={styles.wrapper}>
         <h1 style={styles.title}>💥 500 - 서버 오류</h1>

@@ -11,7 +11,6 @@ import {
   Image,
   Flex,
 } from "@chakra-ui/react";
-import { Header } from "../../";
 import { useRouter } from "next/navigation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -97,7 +96,6 @@ export default function EventUploader({userData}) {
   };
 
   if(!user || user?.auth !== "ADMIN") return <>
-    <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
     {isModalOpen && (<Modal
       isModalOpen={isModalOpen}
       isModalVisible={isModalVisible}
@@ -109,8 +107,6 @@ export default function EventUploader({userData}) {
   
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
-
       <Box
         maxW="700px"
         mx="auto"

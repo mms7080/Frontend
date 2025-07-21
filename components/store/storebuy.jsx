@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Header } from "..";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import Modal, { useModal } from '../movie/modal';
 
@@ -66,7 +65,6 @@ export default function PaymentPage({ userData }) {
   }, [id]);
 
   if (!product) return <>
-      <Header headerColor="black" headerBg="white" userInfo={userData} />
       {isModalOpen && (<Modal
       isModalOpen={isModalOpen}
       isModalVisible={isModalVisible}
@@ -106,7 +104,6 @@ export default function PaymentPage({ userData }) {
 
   if(!userData){
     return <>
-      <Header headerColor="black" headerBg="white" userInfo={userData} />
       {isModalOpen && (<Modal
       isModalOpen={isModalOpen}
       isModalVisible={isModalVisible}
@@ -119,7 +116,6 @@ export default function PaymentPage({ userData }) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={userData} />
       <div className="payment-container">
         <h2>결제하기</h2>
 

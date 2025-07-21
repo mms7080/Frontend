@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import {Box,Flex,Text,Input,Textarea,Button} from '@chakra-ui/react';
 import Modal, { useModal } from '../movie/modal';
 
-import Header from '../header';
-
 export default function NoticeCreatePage({userData}) {
   const router = useRouter();
   const [title, setTitle] = useState('');
@@ -49,7 +47,6 @@ export default function NoticeCreatePage({userData}) {
   };
 
   if(!user || user?.auth !== "ADMIN")return <>
-    <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
     {isModalOpen && (<Modal
     isModalOpen={isModalOpen}
     isModalVisible={isModalVisible}
@@ -61,7 +58,6 @@ export default function NoticeCreatePage({userData}) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
 
       <Box maxWidth='800px' my='40px' mx='auto' py='0' px='20px' fontFamily='Segoe UI, sans-serif'>
         <Text textAlign='center' fontSize='30px' mb='40px' borderBottom='2px solid #ccc' pb='10px'>📝 공지사항 작성</Text>

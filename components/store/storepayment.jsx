@@ -2,7 +2,6 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { Header } from "..";
 import Modal, { useModal } from "../movie/modal";
 
 export default function PaymentSuccessPage({ userData }) {
@@ -20,7 +19,6 @@ export default function PaymentSuccessPage({ userData }) {
   const qty = searchParams.get("qty");
 
   const [message, setMessage] = useState("결제 승인 중...");
-  const [user, setUser] = useState(userData);
   const [payment, setPayment] = useState(null);
   const [product, setProduct] = useState(null);
 
@@ -115,7 +113,6 @@ export default function PaymentSuccessPage({ userData }) {
   if(!realaccess){
     return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
@@ -132,7 +129,6 @@ export default function PaymentSuccessPage({ userData }) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
 
       <div
         style={{

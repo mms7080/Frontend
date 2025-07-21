@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import '../styles/globals.css';
 import { Provider } from '../components/ui/provider';
-import { Footer } from '../components';
+import { Header,Footer } from '../components';
 
 export default function Layout({ children }) {
   return (
@@ -18,6 +18,7 @@ export default function Layout({ children }) {
               minHeight: '100vh',
             }}
             >
+              <Header/>
               <main style={{ flex: 1 }}>
                 {children}
               </main>

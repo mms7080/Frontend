@@ -2,7 +2,6 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { Header } from "../../../../components";
 import Link from "next/link";
 import { VStack, Text, Button } from "@chakra-ui/react";
 import { QRCodeCanvas } from "qrcode.react";
@@ -243,7 +242,6 @@ export default function MoviePaymentSuccessPage() {
   if(!realaccess){
     return (
     <>
-      <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
@@ -260,7 +258,6 @@ export default function MoviePaymentSuccessPage() {
 
   return (
     <>
-      <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
       <div className="wrapper">
         <div className="container" style={{overflow:'visible'}}>
           <h1 className="status">{status}</h1>

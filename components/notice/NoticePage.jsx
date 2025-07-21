@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Header } from "..";
 import Modal, { useModal } from '../movie/modal';
 import { Flex, Text } from '@chakra-ui/react';
 
@@ -98,7 +97,6 @@ export default function NoticePage({ notices, userData }) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
       <div
         style={{
           maxWidth: "1200px",

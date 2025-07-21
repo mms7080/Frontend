@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Header } from "../../../../components"; 
 import Modal, { useModal } from "../../../../components/movie/modal";
 
 export default function StorePaymentFailPage() {
@@ -12,13 +11,12 @@ export default function StorePaymentFailPage() {
   const redirected = useRef(false);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   const router = useRouter();
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (!redirected.current) {
       document.title = "결제 - FILMORA";
       // 로그인된 유저 정보 불러오기
-      const fetchUser = async () => {
+      const checkoutaccess = async () => {
         try {
           const allowed = sessionStorage.getItem('storeps');
           const allowed2 = sessionStorage.getItem('cartps');
@@ -27,17 +25,12 @@ export default function StorePaymentFailPage() {
           }
           sessionStorage.removeItem('storeps');
           sessionStorage.removeItem('cartps');
-          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-            credentials: "include",
-          });
-          const data = await res.json();
-          setUser(data);
         } catch (e) {
-          setUser(null);
+          console.log(e);
         }
       };
 
-      fetchUser();
+      checkoutaccess();
       redirected.current = true;
     }
   }, []);
@@ -45,7 +38,6 @@ export default function StorePaymentFailPage() {
   if(!realaccess && !realaccess2){
     return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
@@ -62,7 +54,6 @@ export default function StorePaymentFailPage() {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
 
       <div style={{ padding: "60px", textAlign: "center" }}>
         <h1>❌ 결제 실패</h1>

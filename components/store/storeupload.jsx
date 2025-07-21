@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Header } from "..";
 import Modal, { useModal } from '../movie/modal';
 
 export default function StoreUploadPage({userData}) {
@@ -78,7 +77,6 @@ export default function StoreUploadPage({userData}) {
   };
 
   if(!user || user?.auth !== "ADMIN")return <>
-    <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
     {isModalOpen && (<Modal
     isModalOpen={isModalOpen}
     isModalVisible={isModalVisible}
@@ -90,7 +88,6 @@ export default function StoreUploadPage({userData}) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="#f5f5f5" userInfo={user} />
       <div
         style={{
           maxWidth: "700px",

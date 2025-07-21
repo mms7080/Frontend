@@ -2,7 +2,6 @@ import React from 'react';
 import {Flex,Box} from '@chakra-ui/react';
 
 import {Swipers,Movies,Bookmark,Events,Reviews} from '../../components/home';
-import {Header} from '../../components';
 
 import {fetch} from '../../lib/server';
 
@@ -20,7 +19,6 @@ export default async function Homepage(){
     const entiremovieinfo=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/all`);;
 
     return <>
-        <Header userInfo={userres} />
         <Box w='100vw' minW={{base:'0px',md:'1000px'}}>
             <Flex w='100%' flexDirection='column'>
                 <Swipers></Swipers>

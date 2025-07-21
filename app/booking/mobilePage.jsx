@@ -1,7 +1,6 @@
 "use client";
 
 import React, {useState, useEffect} from 'react';
-import { Header } from '../../components';
 import { Flex, Box, Text, Button, Image, Wrap, Grid, GridItem, Select } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
@@ -39,9 +38,6 @@ export default function mobilePage() {
             default: return "gray.400";
         }
     };
-
-    let headerColor='white';
-    let headerBg='#1a1a1a';
 
     useEffect(() => {
         setSwiperReady(true);
@@ -228,8 +224,6 @@ export default function mobilePage() {
       
       return (
         <>
-            
-            <Header headerColor={headerColor} headerBg={headerBg} userInfo={user} />
             
             {/* 맨위에 포스터와 제목 */}
             <Box bg="#141414" color="white" py={4}>

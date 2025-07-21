@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Box, Flex, Text, Button, Image, SimpleGrid, IconButton } from "@chakra-ui/react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { Header } from "..";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -102,8 +101,6 @@ export default function EventPage({ serverEvents, userData }) {
 
   return (
     <>
-      <Header headerColor="white" headerBg="#1a1a1a" userInfo={user} />
-
       <Box
         maxW="1200px"
         mx="auto"

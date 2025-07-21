@@ -3,14 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Header } from "../../../../components"; 
 import Modal, { useModal } from "../../../../components/movie/modal";
 
 export default function MoviePaymentFailPage() {
   const router = useRouter();
   const [realaccess,setRealAccess]=useState(sessionStorage.getItem('movieps')==='true');
   const redirected = useRef(false);
-  const [user, setUser] = useState(null);
   const {isModalOpen, isModalVisible, openModal, closeModal, modalContent, onConfirm, onCancel} = useModal();
   document.title = "결제 - FILMORA";
   useEffect(() => {
@@ -22,13 +20,8 @@ export default function MoviePaymentFailPage() {
             openModal("잘못된 접근입니다.", ()=>{router.push('/booking');}, ()=>{router.push('/booking');}); // 허용되지 않으면 예매 페이지로
           }
           sessionStorage.removeItem('movieps');
-          const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`, {
-            credentials: "include",
-          });
-          const data = await res.json();
-          setUser(data);
         } catch (e) {
-          setUser(null);
+          console.log(e);
         }
       };
 
@@ -40,7 +33,6 @@ export default function MoviePaymentFailPage() {
   if(!realaccess){
     return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
@@ -57,7 +49,6 @@ export default function MoviePaymentFailPage() {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
 
       <div style={{ padding: "60px", textAlign: "center" }}>
         <h1>❌ 예매 실패</h1>

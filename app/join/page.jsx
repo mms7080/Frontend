@@ -1,7 +1,5 @@
 import React from 'react';
 
-import {Header} from '../../components';
-import {fetch} from '../../lib/server';
 import Join from '../../components/join/join';
 
 export const metadata = {
@@ -10,10 +8,5 @@ export const metadata = {
 };
 
 export default async function Joinpage(){
-
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
-    return <>
-        <Header userInfo={res}></Header>
-        <Join></Join>
-        </>;
+    return <Join></Join>;
 }

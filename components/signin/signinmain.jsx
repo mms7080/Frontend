@@ -2,12 +2,10 @@ import React from 'react';
 import {Flex,Box,VStack,Image,Text} from '@chakra-ui/react';
 import Link from 'next/link';
 import Signinparts from './signinparts';
-import {Header} from '..';
 
 export default function Signinmain(){
 
     return <>
-        <Header/>
         <Box w='100vw' minW={{base:0,md:'1000px'}} h='540px'>
             <Flex w='100%' flexDirection='column'>
                 <VStack w='100%'>

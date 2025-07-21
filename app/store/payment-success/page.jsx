@@ -2,7 +2,6 @@
 
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
-import { Header } from "../../../components";
 import Modal, { useModal } from "../../../components/movie/modal";
 
 export default function CartPaymentSuccessPage() {
@@ -114,7 +113,6 @@ export default function CartPaymentSuccessPage() {
   if(!realaccess){
     return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
@@ -131,7 +129,6 @@ export default function CartPaymentSuccessPage() {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
 
       <div
         style={{

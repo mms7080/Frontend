@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Header } from "../../components";
 import { loadTossPayments } from "@tosspayments/payment-sdk";
 import Modal, { useModal } from "../../components/movie/modal";
 
@@ -206,7 +205,6 @@ if (selectedCouponId) {
   if(!realaccess && !realaccess2){
     return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       {isModalOpen && (
         <Modal
         isModalOpen={isModalOpen}
@@ -224,7 +222,6 @@ if (selectedCouponId) {
   if (!movie) {
     return (
       <>
-        <Header headerColor="black" headerBg="white" userInfo={user} />
         <div
           style={{ color: "white", textAlign: "center", marginTop: "100px" }}
         >
@@ -246,7 +243,6 @@ if (selectedCouponId) {
 
   return (
     <>
-      <Header headerColor="black" headerBg="white" userInfo={user} />
       <div className="payment-container">
         <h2>결제하기</h2>
         <div className="purchase-info">

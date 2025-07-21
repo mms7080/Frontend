@@ -8,7 +8,7 @@ export default function Mypage({userInfo,qnaInfo,replyInfo,reservationInfo,payme
 
     reservationInfo=[...reservationInfo].filter((item)=>item.userId===userInfo?.username);
     paymentInfo=[...paymentInfo].filter((item)=>(item.userId===userInfo?.username&&item.orderName!=="Movie Ticket"&&item.orderName!=="영화 예매"));
-    console.log(paymentInfo);
+    
      return <>
         <Box maxW="1200px" mx="auto" pt={{ base: 10, md: 20 }} px={{ base: 4 }} pb={10}>
         <h1

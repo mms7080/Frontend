@@ -3,12 +3,11 @@
 import React,{useState} from 'react';
 
 import {RadioGroup,Input,Box,VStack,Flex,Button} from '@chakra-ui/react';
-import {Header} from '../../components';
 import Link from 'next/link';
 import {fetch} from '../../lib/client';
 import Modal, { useModal } from '../movie/modal';
 
-export default function Findiddetail({userData}){
+export default function Findiddetail(){
     const [foundID,setFoundID]=useState('');
     const [layout,setLayout]=useState('email');
     const [formData,setFormData]=useState({method:'email',name:'',email:'',phone_number:''});
@@ -56,7 +55,6 @@ export default function Findiddetail({userData}){
 
     if(foundID===''){/* 아이디 찾기 이전에 보이는 부분 */
         return <>
-            <Header userInfo={userData}></Header>
             <Box w='100vw' minW={{base:'0px',md:'1000px'}} h='540px'>
                 <VStack w='100%' h='540px'>
                     <Box w={{base:'100%',md:'900px'}} px='30px' m='40px' borderRadius='10px' bg='white'>
@@ -109,7 +107,6 @@ export default function Findiddetail({userData}){
         </>;
     }else{/* 찾은 아이디를 보여주는 부분 */
         return <>
-            <Header userInfo={userData}></Header>
             <Box w='100vw' minW={{base:'0px',md:'1000px'}} h='540px'>
                 <VStack w='100%' h='540px'>
                     <Box w={{base:'100%',md:'900px'}} px='30px' m='40px' borderRadius='10px' bg='white'>
