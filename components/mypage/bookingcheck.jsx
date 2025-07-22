@@ -99,7 +99,7 @@ export default function Bookingcheck({ userInfo, reservationInfo, paymentInfo })
           <th style={thStyle}>주문번호</th>
           <th style={thStyle}>영화</th>
           {!isMobile && <th style={{...thStyle,width:60}}>지역</th>}
-          {!isMobile && <th style={{...thStyle,width:60}}>극장</th>}
+          {!isMobile && <th style={{...thStyle,width:120}}>극장</th>}
           {!isMobile && <th style={thStyle}>날짜</th>}
           <th style={thStyle}>시간</th>
           {!isMobile && <th style={thStyle}>좌석</th>}
