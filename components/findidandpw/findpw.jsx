@@ -138,22 +138,6 @@ export default function Findpwdetail(){
         </>;
     }else{/* 본격적으로 비밀번호를 재설정하는 과정 */
         return <>
-            <style jsx>{`
-                .pw,.pwr{
-                    width:35%
-                }
-                .pw2,.pwr2{
-                    width:65%
-                }
-                @media (min-width: 768px) {
-                    .pw,.pwr{
-                        width:235px
-                    }
-                    .pw2,.pwr2{
-                        width:605px
-                    }
-                }
-            `}</style>
             <Box w='100vw' minW={{base:'0px',md:'1000px'}} h='540px'>
                 <VStack w='100%' h='540px'>
                     <Box w={{base:'100%',md:'900px'}} px='30px' m='40px' borderRadius='10px' bg='white'>
@@ -171,8 +155,8 @@ export default function Findpwdetail(){
                                             </td>
                                         </tr>
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
-                                            <td className='pw' style={{height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pw'>새 비밀번호</label></td>
-                                            <td className='pw2' style={{height:90,paddingLeft:15,position:'relative'}}>
+                                            <td style={{width:!isMobile?'235px':'35%',height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor='pw'>새 비밀번호</label></td>
+                                            <td style={{width:!isMobile?'605px':'65%',height:90,paddingLeft:15,position:'relative'}}>
                                                 <Input
                                                 id="pw"
                                                 name="pw"
@@ -226,8 +210,8 @@ export default function Findpwdetail(){
                                             </td>
                                         </tr>
                                         <tr style={{borderBottom:'1px solid #D1D5DD'}}>
-                                            <td className='pwr' style={{height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="pwr">비밀번호 확인</label></td>
-                                            <td className='pwr2' style={{height:90,paddingLeft:15,position:'relative'}}>
+                                            <td style={{width:!isMobile?'235px':'35%',height:90,backgroundColor:'#F7F8F9',paddingLeft:15}}><label htmlFor="pwr">비밀번호 확인</label></td>
+                                            <td style={{width:!isMobile?'605px':'65%',height:90,paddingLeft:15,position:'relative'}}>
                                                 <Input 
                                                  id="pwr"
                                                  name="pwr"
