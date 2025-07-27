@@ -14,9 +14,28 @@ export default async function Detailpage({params}){
         const {id} = await params;
         
         const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/userinfo`);
+        const allmovies = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);
         const movieinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/${id}`);
         const reviewinfo = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/review/${id}`);
         const reserverate = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${id}`);
+        let ranking='-';
+
+        let reserverateArray = new Array(100);
+        for(let i=0;i<allmovies.length;i++){
+            const reserverate_of_movie = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${allmovies[i].id}`);
+            reserverateArray[i]={id:allmovies[i].id,reserverate:reserverate_of_movie}
+        }
+
+        // 예매율 기준으로 내림차순 정렬
+        reserverateArray.sort((a, b) => b.reserverate - a.reserverate);
+
+        for(let i=0;i<allmovies.length;i++){
+            if(reserverateArray[i].id===parseInt(id)){
+                ranking=i+1;
+                break;
+            }
+        }
+
         let sum=0;
 
         for(let i=0;i<reviewinfo.length;i++)sum+=reviewinfo[i].score;
@@ -48,7 +67,7 @@ export default async function Detailpage({params}){
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>예매율</span>
-                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>{movieinfo.rank}위 ({reserverate+'%'})</span>
+                                <span style={{fontSize:20,textShadow:'4px 4px 6px black'}}>{ranking}위 ({reserverate+'%'})</span>
                             </Flex>
                             <Flex flexDirection='column'>
                                 <span style={{textShadow:'4px 4px 6px black'}}>누적관객수</span>

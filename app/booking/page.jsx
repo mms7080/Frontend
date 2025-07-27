@@ -19,6 +19,7 @@
 // import 'swiper/css/autoplay';
 
 // export default function Booking2Page() {
+//     let reserverateArray = new Array(100);
 //     const [movies, setMovies] = useState([]);
 //     const [regionList, setRegionList] = useState([]);
 //     const [theaterList, setTheaterList] = useState([]);
@@ -64,11 +65,18 @@
 //                 const res = await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie`);
 //                 if (!res.ok) throw new Error("영화 데이터를 불러오는 데 실패했습니다.");
 //                 const movieList = await res.json();
+//                 for(let i=0;i<movieList.length;i++){
+//                    const res2=await fetch(`${process.env.NEXT_PUBLIC_SPRING_SERVER_URL}/movie/reserveRate/${movieList[i].id}`);
+//                    if (!res2.ok) throw new Error("예매율 데이터를 불러오는 데 실패했습니다.");
+//                    const reserverate2=await res2.json();
+//                    reserverateArray[movieList[i].id]=reserverate2;
+//                 }
 //                 const baseURL = process.env.NEXT_PUBLIC_SPRING_SERVER_URL;
 //                 const updatedMovieList = movieList.map(movie => ({
 //                     ...movie,
 //                     poster: baseURL + movie.poster,
 //                     wideImage: movie.wideImage ? baseURL + movie.wideImage : null,
+//                     reserveRate:reserverateArray[movie.id]
 //                 }));
             
 //                 setMovies(updatedMovieList);
@@ -326,7 +334,7 @@
 //                             </GridItem>
 //                             <GridItem>
 //                                 <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">예매율</Text>
-//                                 <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.reserveRate || '-'}%</Text>
+//                                 <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">{movies[activeIndex]?.reserveRate}%</Text>
 //                             </GridItem>
 //                             <GridItem>
 //                                 <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">누적관객수</Text>
