@@ -338,7 +338,7 @@
 //                             </GridItem>
 //                             <GridItem>
 //                                 <Text fontSize="2xl" fontWeight="normal" textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">누적관객수</Text>
-//                                 <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">👥 {movies[activeIndex]?.totalView || '-'}만명</Text>
+//                                 <Text fontSize="xl" mt={1} textAlign="left" textShadow="6px 6px 6px rgba(0,0,0,0.6)">👥 {movies[activeIndex]?.totalView || '-'}명</Text>
 //                             </GridItem>
 //                         </Grid>
 //                     </Box>
