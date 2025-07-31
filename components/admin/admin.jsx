@@ -1422,8 +1422,8 @@ export default function AdminDashboard({ userData }) {
                   <th style={thStyle}>좌석</th>
                   <th style={thStyle}>총액</th>
                   <th style={thStyle}>결제 시각</th>
-                  <th style={thStyle}>상태</th>
-                  <th style={thStyle}>환불</th>
+                  <th style={{...thStyle,width:60}}>상태</th>
+                  <th style={{...thStyle,width:60}}>환불</th>
                 </tr>
               </thead>
               <tbody>
