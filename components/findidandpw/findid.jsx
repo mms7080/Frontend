@@ -111,7 +111,7 @@ export default function Findiddetail(){
                 <VStack w='100%' h='540px'>
                     <Box w={{base:'100%',md:'900px'}} px='30px' m='40px' borderRadius='10px' bg='white'>
                         <Flex w={{base:'100%',md:'840px'}} flexDirection='column' alignItems='center' gap='15px' py='50px'>
-                            <Button bg='#6B46C1' _hover={{bg:'#553C9A'}} onClick={()=>{setFoundID('');setLayout('email');}}>
+                            <Button bg='#6B46C1' _hover={{bg:'#553C9A'}} onClick={()=>{setFoundID('');setLayout('email');setFormData({method:'email',name:'',email:'',phone_number:''});}}>
                                 <Link href='/find_id'>
                                     아이디 다시 찾기
                                 </Link>
