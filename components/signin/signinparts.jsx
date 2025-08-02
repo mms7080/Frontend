@@ -32,7 +32,7 @@ export default function SigninClientAlert() {
     useEffect(() => {
       if (fail==='true' && !hasRun.current) {
         hasRun.current=true;
-        openModal("로그인에 실패했습니다.\n아이디 또는 비밀번호를 확인해주세요.", ()=>{router.push('/signin');}, ()=>{router.push('/signin');});
+        openModal("로그인에 실패했습니다.<br/>아이디 또는 비밀번호를 확인해주세요.", ()=>{router.push('/signin');}, ()=>{router.push('/signin');});
       }
     }, [fail]);
 

@@ -73,7 +73,7 @@ export default function Findpwdetail(){
     const changePassword=async (e)=>{
         if(!isPwrAvailable){
             e.preventDefault();/* 비밀번호 확인과 비밀번호가 일치되지 않았으면 폼 제출 막기 */
-            openModal('비밀번호 확인과 비밀번호가 일치하나 확인해주세요.');
+            openModal('비밀번호 확인과 비밀번호가<br/>일치하나 확인해주세요.');
             return;
         }
 
