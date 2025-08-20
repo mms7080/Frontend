@@ -55,7 +55,7 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
     const handleSubmit = async (e) => {
         if(!isPwAvailable){
             e.preventDefault();
-            openModal('비밀번호는 10자 이상 입력해주세요.');
+            openModal(!isMobile?'비밀번호는 10자 이상 입력해주세요.':'비밀번호는 10자 이상<br/>입력해주세요.');
             return;
         }
         if(!isPwrAvailable){

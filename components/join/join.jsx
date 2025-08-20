@@ -17,7 +17,7 @@ export default function Joindetail(){
 
     if (forbiddenRegex.test(inputChar)) {
       e.preventDefault();
-      openModal('한글 및 특수문자는 입력할 수 없습니다!');
+      openModal(!isMobile?'한글 및 특수문자는 입력할 수 없습니다!':'한글 및 특수문자는<br/>입력할 수 없습니다!');
     }
   };
 

@@ -78,7 +78,7 @@ export default function Findpwdetail(){
         }
 
         e.preventDefault();
-        openModal('비밀번호가 성공적으로 변경되었습니다!', ()=>{e.target.submit()}, ()=>{e.target.submit()});
+        openModal(!isMobile?'비밀번호가 성공적으로 변경되었습니다!':'비밀번호가 성공적으로<br/>변경되었습니다!', ()=>{e.target.submit()}, ()=>{e.target.submit()});
     }
 
     if(!found){/* 비밀번호 재설정 이전에 보이는 부분 */

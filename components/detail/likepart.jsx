@@ -14,7 +14,7 @@ export default function LikePart({id,res,movieinfo,isMobile=false}){
     const handleCopy = async () => {
       try {
         await navigator.clipboard.writeText(address);
-        openModal('현재 페이지의 주소가 클립보드에 복사되었습니다!');
+        openModal('현재 페이지의 주소가 클립보드에<br/>복사되었습니다!');
       } catch (err) {
         openModal('클립보드 접근이 차단되었습니다.');
       }

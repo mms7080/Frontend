@@ -56,7 +56,7 @@ export default function SeatsPageMobile() {
         }
       } else {
         if (normalSeats.length >= totalPeople - personCounts.special) {
-          openModal("선택한 일반 좌석이 인원 수를 초과했습니다.");
+          openModal("선택한 일반 좌석이 인원 수를<br/>초과했습니다.");
           return;
         }
       }
