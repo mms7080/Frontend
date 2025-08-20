@@ -124,7 +124,12 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                           }
                                                       }else{
                                                           setPwrMessage('');
-                                                          setIsPwrAvailable(false);
+                                                          if(pwr!==value){
+                                                            setIsPwrAvailable(false);
+                                                          }
+                                                          else{
+                                                            setIsPwrAvailable(true);
+                                                          }
                                                       }
                                                   }}
                                                 />
@@ -165,7 +170,12 @@ export default function Modify({userInfo}) {/* 마이페이지에서 수정할 �
                                                        }
                                                    }else{
                                                        setPwrMessage('');
-                                                       setIsPwrAvailable(false);
+                                                       if(pw!==value){
+                                                            setIsPwrAvailable(false);
+                                                       }
+                                                       else{
+                                                            setIsPwrAvailable(true);
+                                                       }
                                                    }
                                                }}
                                                />
